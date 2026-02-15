@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rebalancing Helper</title>
+
+  <style>
+    :root{
+      --bg:#0b0b0f;
+      --line:#24262d;
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+
+      --gold:#c9a24d;
+      --gold-soft:#e6c97a;
+
+      --buy:#7aa2ff;
+      --sell:#e05a5a;
+      --hold:#9ca3af;
+
+      --toast-bg:rgba(15,16,22,.92);
+      --toast-line:rgba(201,162,77,.35);
+
+      --card:#101116;
+      --card2:#14151b;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      padding:28px;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",Arial,sans-serif;
+      background:radial-gradient(circle at top,#121317,#0b0b0f);
+      color:var(--text);
+    }
+    .container{max-width:1200px;margin:0 auto}
+    h1{
+      font-size:22px;font-weight:700;margin:0 0 14px;letter-spacing:.3px;text-align:center
+    }
+
+    .card{
+      background:linear-gradient(180deg,var(--card2),var(--card));
+      border-radius:16px;
+      border:1px solid var(--line);
+      padding:16px;
+      margin-bottom:16px;
+      box-shadow:0 18px 36px rgba(0,0,0,.45);
+    }
+    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    label{
+      font-size:13px;color:var(--muted);
+      display:flex;align-items:center;gap:8px;
+    }
+
+    input{
+      box-sizing:border-box;
+      height:40px;
+      line-height:40px;
+      padding:0 12px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      background:#0e0f14;
+      color:var(--text);
+      font-size:14px;
+      font-variant-numeric:tabular-nums;
+      transition:border-color .12s ease, box-shadow .12s ease, opacity .12s ease, filter .12s ease;
+    }
+    input::placeholder{color:rgba(156,163,175,.55)}
+    input:focus{
+      outline:none;
+      border-color:var(--gold);
+      box-shadow:0 0 0 1px rgba(201,162,77,.35);
+    }
+
+    button{
+      height:38px;
+      padding:0 14px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      cursor:pointer;
+      font-size:14px;
+      background:#0e0f14;
+      color:var(--text);
+      white-space:nowrap;
+      transition:transform .1s ease, border-color .12s ease, filter .12s ease;
+    }
+    button:active{transform:translateY(1px)}
+    button.primary{
+      background:linear-gradient(135deg,#c9a24d,#e6c97a);
+      color:#111;
+      border:none;
+      font-weight:700;
+    }
+    button.secondary:hover{border-color:var(--gold)}
+    .small{font-size:12px;color:var(--muted)}
+
+    /* ===== Summary bar ===== */
+    .summaryBar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(36,38,45,.9);
+      background:linear-gradient(180deg, rgba(15,16,22,.9), rgba(12,13,18,.9));
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.02);
+      margin:10px 0 12px;
+    }
+.summaryLeft{
+  display:flex;gap:10px;align-items:center;
+  flex-wrap:nowrap;              /* ✅ 줄바꿈 금지 */
+  overflow-x:auto;               /* ✅ 부족하면 좌우 스크롤(필요시) */
+  -webkit-overflow-scrolling:touch;
+  color:rgba(229,231,235,.92);
+  font-size:13px;
+}
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(36,38,45,.9);
+      background:rgba(255,255,255,.02);
+      font-variant-numeric:tabular-nums;
+    }
+    .pill .k{color:rgba(156,163,175,.85);font-weight:600}
+    .pill .v{color:rgba(229,231,235,.95);font-weight:800}
+    .pill.buy .v{color:var(--buy)}
+    .pill.sell .v{color:var(--sell)}
+    .pill.hold .v{color:rgba(156,163,175,.95)}
+    .pill.cash .v{color:rgba(230,201,122,.95)}
+    .pill.cash.negative .v{color:var(--sell)}
+    .summaryRight{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:rgba(156,163,175,.85);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    /* ===== Target Progress ===== */
+    .progressWrap{
+      width:230px;
+      height:10px;
+      border-radius:999px;
+      border:1px solid rgba(36,38,45,.95);
+      background:rgba(255,255,255,.03);
+      overflow:hidden;
+      position:relative;
+    }
+    .progressBar{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, rgba(201,162,77,.55), rgba(230,201,122,.95));
+      box-shadow:0 0 18px rgba(201,162,77,.25);
+      transition:width .15s ease, filter .15s ease;
+    }
+    .progressWrap.over{
+      border-color:rgba(224,90,90,.55);
+    }
+    .progressWrap.over .progressBar{
+      background:linear-gradient(90deg, rgba(224,90,90,.55), rgba(224,90,90,.95));
+      filter:saturate(1.1);
+      box-shadow:0 0 18px rgba(224,90,90,.25);
+    }
+
+    /* ===== Table ===== */
+    .tableWrap{
+      overflow-x:auto;
+      border-radius:16px;
+      border:1px solid var(--line);
+    }
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      font-size:13px;
+      font-variant-numeric:tabular-nums;
+      table-layout:fixed;
+      min-width:1040px;
+    }
+    thead th{
+      background:#0f1016;
+      color:var(--gold-soft);
+      padding:10px 6px;
+      border-bottom:1px solid var(--line);
+      text-align:center;
+      white-space:nowrap;
+    }
+    thead tr.group th{
+      font-size:12px;font-weight:800;color:rgba(230,201,122,.95);
+      border-bottom:1px solid rgba(36,38,45,.75);
+    }
+    thead tr.sub th{
+      font-size:12px;font-weight:700;color:rgba(230,201,122,.90);
+    }
+    thead th.col-del{
+      color:rgba(156,163,175,.75);
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+
+    tbody td{
+      padding:10px 6px;
+      border-bottom:1px solid var(--line);
+      text-align:right;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      transition:opacity .12s ease, filter .12s ease;
+    }
+    tbody tr:hover{background:rgba(201,162,77,.05)}
+    th.left, td.left{text-align:left}
+
+    /* Column widths */
+    th.col-name, td.col-name{width:220px}
+    th.col-target, td.col-target{width:96px}
+    th.col-price, td.col-price{width:140px;min-width:140px}
+    th.col-qty, td.col-qty{width:110px;min-width:110px}
+
+    th.col-val, td.col-val{width:110px}
+    th.col-w, td.col-w{width:92px}
+
+    th.col-decision, td.col-decision{width:70px;text-align:center}
+    th.col-trade, td.col-trade{width:110px}
+    th.col-afterqty, td.col-afterqty{width:95px}
+    th.col-afterval, td.col-afterval{width:120px}
+    th.col-afterw, td.col-afterw{width:85px}
+
+    th.col-del, td.col-del{width:58px;text-align:center}
+
+    td.col-name input{width:100%;max-width:200px}
+    td.col-target input, td.col-price input, td.col-qty input{width:100%;text-align:right}
+
+/* ===== Unit suffix for inputs (현재가: 원, 수량: 주) ===== */
+td.col-price, td.col-qty{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:inherit;
+}
+td.col-price input, td.col-qty input{
+  flex:1 1 auto;
+  min-width:0;
+  height:40px;
+  line-height:40px;
+  padding:0 10px;
+}
+
+td.col-price::after,
+td.col-qty::after{
+  flex:0 0 auto;
+  font-size:12px;
+  color:rgba(156,163,175,.75);
+  pointer-events:none;
+}
+td.col-price::after{
+  content:"원";
+}
+td.col-qty::after{
+  content:"주";
+}
+
+    .buy{color:var(--buy);font-weight:800}
+    .sell{color:var(--sell);font-weight:800}
+    .hold{color:var(--hold);font-weight:800}
+
+    tfoot th{
+      padding:12px 6px;
+      font-weight:800;
+      border-top:2px solid var(--gold);
+      background:#0f1016;
+      color:var(--gold-soft);
+      text-align:center;
+      white-space:nowrap;
+    }
+
+    .hide{display:none!important}
+
+    /* ===== Mode UX ===== */
+    .mode-current .hintMode{
+      color:rgba(230,201,122,.85);
+      font-weight:900;
+    }
+
+    .mode-result tbody td .name,
+    .mode-result tbody td .target,
+    .mode-result tbody td .price,
+    .mode-result tbody td .qty{
+      opacity:.55;
+      filter:saturate(.9);
+      pointer-events:none;
+    }
+    .mode-result tbody td .name:focus,
+    .mode-result tbody td .target:focus,
+    .mode-result tbody td .price:focus,
+    .mode-result tbody td .qty:focus{
+      box-shadow:none;
+    }
+    .mode-result tbody td.g-current{
+      opacity:.35;
+      filter:saturate(.8);
+    }
+    .mode-result tbody td.g-result{
+      opacity:1;
+      filter:none;
+    }
+
+    /* ===== Delete button ===== */
+    .delBtn{
+      width:30px;height:30px;
+      border-radius:10px;
+      border:1px solid rgba(156,163,175,.18);
+      background:rgba(255,255,255,.01);
+      color:rgba(156,163,175,.55);
+      cursor:pointer;
+      line-height:28px;
+      font-weight:900;
+      font-size:14px;
+      padding:0;
+      opacity:.25;
+      transition:opacity .12s ease, transform .12s ease, background .12s ease, border-color .12s ease, color .12s ease;
+    }
+    tbody tr:hover .delBtn{opacity:.9}
+    .delBtn:hover{
+      background:rgba(224,90,90,.14);
+      border-color:rgba(224,90,90,.55);
+      color:rgba(224,90,90,.95);
+      transform:translateY(-1px);
+    }
+    .delBtn:active{transform:translateY(0) scale(.98)}
+
+    /* ===== Trade icon alignment fix ===== */
+    td.col-trade{ text-align:left; } /* ✅ 트레이드 칸 자체를 좌측 정렬 */
+    .tradeCell{
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;  /* ✅ 아이콘/숫자 라인업 좌측 정렬 */
+      gap:8px;
+      font-variant-numeric:tabular-nums;
+      width:100%;
+    }
+    .tradeIcon{
+      width:18px;height:18px;
+      border-radius:6px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid rgba(36,38,45,.9);
+      background:rgba(255,255,255,.02);
+      font-size:12px;
+      line-height:1;
+      user-select:none;
+      flex:0 0 18px; /* ✅ 아이콘 폭 고정(정렬 흔들림 방지) */
+    }
+    .tradeIcon.buy{color:var(--buy); border-color:rgba(122,162,255,.35); background:rgba(122,162,255,.08)}
+    .tradeIcon.sell{color:var(--sell); border-color:rgba(224,90,90,.35); background:rgba(224,90,90,.08)}
+    .tradeIcon.hold{color:rgba(156,163,175,.9); border-color:rgba(156,163,175,.25); background:rgba(156,163,175,.06)}
+    .tradeNum{min-width:44px; text-align:right; font-weight:800;} /* ✅ 숫자 폭 고정 */
+
+    /* ===== Toast ===== */
+    .toast{
+      position:fixed;left:50%;bottom:22px;
+      transform:translateX(-50%) translateY(12px);
+      background:var(--toast-bg);
+      border:1px solid var(--toast-line);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:12px;
+      box-shadow:0 18px 40px rgba(0,0,0,.55);
+      opacity:0;pointer-events:none;
+      transition:opacity .18s ease, transform .18s ease;
+      min-width:280px;min-height:44px;
+      display:flex;align-items:center;gap:10px;
+      z-index:9999;
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .toast .badge{
+      flex:0 0 auto;
+      padding:3px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      background:rgba(201,162,77,.18);
+      border:1px solid rgba(201,162,77,.35);
+      color:var(--gold-soft);
+      line-height:1;
+      width:52px;text-align:center;
+    }
+    .toast .msg{
+      font-size:13px;color:rgba(229,231,235,.95);
+      line-height:1.25;
+      display:flex;align-items:center;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <h1>Rebalancing Helper</h1>
+
+  <div class="card">
+    <div class="row">
+      <label>
+        유지 허용오차 (%p)
+        <input id="eps" type="number" min="0" step="0.01" value="0.1">
+      </label>
+      <span class="small">0.1 = 0.1%p</span>
+    </div>
+    <div class="row" style="margin-top:12px;">
+      <button class="secondary" id="addRow">종목 추가</button>
+      <button class="primary" id="calcBtn">계산</button>
+      <button class="secondary" id="reset">초기화</button>
+    </div>
+  </div>
+
+  <div class="card" id="tableCard">
+    <!-- Summary bar -->
+    <div class="summaryBar" id="summaryBar">
+      <div class="summaryLeft">
+        <span class="pill">
+          <span class="k">상태</span>
+          <span class="v hintMode" id="modeLabel">입력</span>
+        </span>
+
+        <span class="pill">
+          <span class="k" id="sumTotalKey">현재 보유액</span>
+          <span class="v" id="sumTotalLabel">₩ 0</span>
+        </span>
+
+        <span class="pill cash" id="cashPill">
+          <span class="k">현금 잔액</span>
+          <span class="v" id="cashLabel">₩ 0</span>
+        </span>
+<span class="pill sell">
+          <span class="k">매도</span>
+          <span class="v" id="sellCount">0</span>
+        </span>
+        <span class="pill buy">
+          <span class="k">매수</span>
+          <span class="v" id="buyCount">0</span>
+        </span>
+        <span class="pill hold">
+          <span class="k">유지</span>
+          <span class="v" id="holdCount">0</span>
+        </span>
+      </div>
+
+      <div class="summaryRight">
+        <span>기준% 합계</span>
+        <div class="progressWrap" id="progressWrap" aria-label="기준% 합계 진행">
+          <div class="progressBar" id="progressBar"></div>
+        </div>
+        <span id="progressText">0.00%</span>
+      </div>
+    </div>
+
+    <div class="tableWrap">
+      <table id="tbl">
+        <thead>
+          <tr class="group">
+            <th class="col-name" rowspan="2">종목명</th>
+            <th class="col-target" rowspan="2">목표비중</th>
+            <th class="col-price" rowspan="2">현재가 [원]</th>
+            <th class="col-qty" rowspan="2">수량 [주]</th>
+
+            <th class="g-current" colspan="2">현재</th>
+            <th class="g-result" colspan="2">매도/매수</th>
+            <th class="g-result" colspan="3">리밸런싱 후</th>
+
+            <th class="col-del" rowspan="2">삭제</th>
+          </tr>
+          <tr class="sub">
+            <th class="g-current col-val">보유액 [원]</th>
+            <th class="g-current col-w">비중</th>
+
+            <th class="g-result col-decision">판단</th>
+            <th class="g-result col-trade">수량</th>
+
+            <th class="g-result col-afterqty">수량</th>
+            <th class="g-result col-afterval">보유액</th>
+            <th class="g-result col-afterw">비중</th>
+          </tr>
+        </thead>
+
+        <tbody></tbody>
+
+        <tfoot>
+          <tr>
+            <th class="left col-name">합계</th>
+            <th class="col-target" id="sumTarget">0.00%</th>
+            <th class="col-price"></th>
+            <th class="col-qty"></th>
+            <th class="g-current col-val" id="sumValue">₩ 0</th>
+            <th class="g-current col-w" id="sumWeight">0.00%</th>
+
+            <th class="g-result col-decision"></th>
+            <th class="g-result col-trade"></th>
+
+            <th class="g-result col-afterqty"></th>
+            <th class="g-result col-afterval" id="sumAfterValue">₩ 0</th>
+            <th class="g-result col-afterw" id="sumAfterWeight">0.00%</th>
+
+            <th class="col-del"></th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+</div>
+
+<div class="toast" id="toast">
+  <div class="badge">경고</div>
+  <div class="msg" id="toastMsg"></div>
+</div>
+
+<script>
+  const tbody = document.querySelector("#tbl tbody");
+  const tableCard = document.querySelector("#tableCard");
+  const calcBtn = document.querySelector("#calcBtn");
+  const sumTargetEl = document.querySelector("#sumTarget");
+
+  // Summary UI
+  const modeLabel = document.querySelector("#modeLabel");
+  const sumTotalKey = document.querySelector("#sumTotalKey");
+  const sumTotalLabel = document.querySelector("#sumTotalLabel");
+  const cashLabel = document.querySelector("#cashLabel");
+  const cashPill = document.querySelector("#cashPill");
+
+  const buyCountEl = document.querySelector("#buyCount");
+  const sellCountEl = document.querySelector("#sellCount");
+  const holdCountEl = document.querySelector("#holdCount");
+
+  // Progress UI
+  const progressWrap = document.querySelector("#progressWrap");
+  const progressBar = document.querySelector("#progressBar");
+  const progressText = document.querySelector("#progressText");
+
+  // Toast
+  const toast = document.querySelector("#toast");
+  const toastMsg = document.querySelector("#toastMsg");
+  let toastTimer = null;
+
+  let mode = "current"; // "current" | "result"
+
+  function parseNum(v){
+    const n = Number(String(v).replaceAll(",", "").trim());
+    return isFinite(n) ? n : 0;
+  }
+  function clampMin0(n){ return n < 0 ? 0 : n; }
+
+  function fmt(n){ return isFinite(n) ? n.toLocaleString("ko-KR") : "0"; }
+  function fmtKRW(n){ return "₩ " + fmt(Math.round(n)); }
+  function fmtPct01(x){ return isFinite(x) ? (x * 100).toFixed(2) + "%" : "0.00%"; }
+
+  function showToast(message){
+    toastMsg.textContent = message;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>toast.classList.remove("show"), 1700);
+  }
+
+  function resetSummaryCounts(){
+    buyCountEl.textContent = "0";
+    sellCountEl.textContent = "0";
+    holdCountEl.textContent = "0";
+  }
+
+  function setMode(nextMode){
+    mode = nextMode;
+
+    const currentEls = document.querySelectorAll(".g-current");
+    const resultEls  = document.querySelectorAll(".g-result");
+
+    if(mode === "current"){
+      currentEls.forEach(el=>el.classList.remove("hide"));
+      resultEls.forEach(el=>el.classList.add("hide"));
+      calcBtn.textContent = "계산";
+      tableCard.classList.add("mode-current");
+      tableCard.classList.remove("mode-result");
+      modeLabel.textContent = "입력";
+
+      // 입력 모드: 결과/현금은 의미가 약하니 0으로 정리
+      cashPill.classList.remove("negative");
+      cashLabel.textContent = fmtKRW(0);
+      sumTotalKey.textContent = "현재 보유액";
+      resetSummaryCounts();
+    }else{
+      currentEls.forEach(el=>el.classList.add("hide"));
+      resultEls.forEach(el=>el.classList.remove("hide"));
+      calcBtn.textContent = "현재 보기";
+      tableCard.classList.add("mode-result");
+      tableCard.classList.remove("mode-current");
+      modeLabel.textContent = "결과";
+    }
+  }
+
+  function sumTargets(exceptInput=null){
+    let sum = 0;
+    const inputs = tbody.querySelectorAll(".target");
+    inputs.forEach(inp=>{
+      if(inp === exceptInput) return;
+      sum += clampMin0(parseNum(inp.value));
+    });
+    return sum;
+  }
+
+  function updateProgress(sumPct){
+    const clamped = Math.max(0, sumPct);
+    const widthPct = Math.min(100, clamped);
+    progressBar.style.width = widthPct + "%";
+    progressText.textContent = clamped.toFixed(2) + "%";
+    progressWrap.classList.toggle("over", clamped > 100.0001);
+  }
+
+  function updateTargetSumUI(){
+    const sum = sumTargets(null);
+    sumTargetEl.textContent = sum.toFixed(2) + "%";
+    sumTargetEl.style.color = (sum > 100.0001) ? "#e05a5a" : "rgba(230,201,122,.95)";
+    updateProgress(sum);
+  }
+
+  function attachTargetGuard(targetInput){
+    targetInput.addEventListener("input", ()=>{
+      let v = clampMin0(parseNum(targetInput.value));
+
+      const others = sumTargets(targetInput);
+      const allowedMax = Math.max(0, 100 - others);
+
+      if(v > allowedMax + 1e-9){
+        v = allowedMax;
+        targetInput.value = (Math.round(v * 100) / 100).toString();
+        showToast(`기준% 합계는 100%를 넘을 수 없어요. (이 행 최대 ${allowedMax.toFixed(2)}%)`);
+      }else{
+        if(parseNum(targetInput.value) < 0) targetInput.value = "0";
+      }
+      updateTargetSumUI();
+    });
+
+    targetInput.addEventListener("blur", ()=>{
+      if(String(targetInput.value).trim() === ""){
+        updateTargetSumUI();
+        return;
+      }
+      let v = clampMin0(parseNum(targetInput.value));
+      const others = sumTargets(targetInput);
+      const allowedMax = Math.max(0, 100 - others);
+      if(v > allowedMax) v = allowedMax;
+      targetInput.value = (Math.round(v * 100) / 100).toString();
+      updateTargetSumUI();
+    });
+  }
+
+  function rowCount(){
+    return tbody.querySelectorAll("tr").length;
+  }
+
+  function deleteRow(tr){
+    if(rowCount() <= 1){
+      showToast("최소 1개 행은 남겨야 해요.");
+      return;
+    }
+    tr.remove();
+    updateTargetSumUI();
+    updateCurrentUI();
+
+    if(mode === "result"){
+      setMode("current");
+      showToast("행이 변경되어 현재 보기로 돌아왔어요. 다시 계산하세요.");
+    }
+  }
+
+  function setTradeCell(tr, tradeQty, decision){
+    const cell = tr.querySelector(".tradeQtyCell");
+    const numEl = cell.querySelector(".tradeNum");
+    const iconEl = cell.querySelector(".tradeIcon");
+
+    numEl.textContent =
+  (tradeQty === 0) ? "0주"
+  : (tradeQty < 0 ? "-" : "") + fmt(Math.abs(tradeQty)) + "주";
+
+    iconEl.className = "tradeIcon " + (decision === "매수" ? "buy" : decision === "매도" ? "sell" : "hold");
+    iconEl.textContent = (decision === "매수") ? "▲" : (decision === "매도") ? "▼" : "·";
+  }
+
+  function addRow(){
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="left col-name"><input class="name" placeholder="종목명"></td>
+
+      <td class="col-target">
+        <input class="target" type="number" min="0" max="100" step="0.1" placeholder="예: 30%">
+      </td>
+
+      <td class="col-price"><input class="price" type="number" min="0" step="1" placeholder="예: 1,234"></td>
+      <td class="col-qty"><input class="qty" type="number" min="0" step="1" placeholder="예: 123"></td>
+
+      <td class="g-current col-val val">₩ 0</td>
+      <td class="g-current col-w w">0.00%</td>
+
+      <td class="g-result col-decision decision hold">유지</td>
+      <td class="g-result col-trade tradeQtyCell">
+        <div class="tradeCell">
+          <span class="tradeIcon hold">·</span>
+          <span class="tradeNum">0</span>
+        </div>
+      </td>
+
+      <td class="g-result col-afterqty afterQty">0</td>
+      <td class="g-result col-afterval afterVal">₩ 0</td>
+      <td class="g-result col-afterw afterW">0.00%</td>
+
+      <td class="col-del">
+        <button class="delBtn" type="button" title="행 삭제">×</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+
+attachTargetGuard(tr.querySelector(".target"));
+tr.querySelector(".delBtn").addEventListener("click", ()=>deleteRow(tr));
+
+// ✅ 현재가/수량 입력 즉시 "현재 보유액/비중" 갱신
+const priceEl = tr.querySelector(".price");
+const qtyEl   = tr.querySelector(".qty");
+[priceEl, qtyEl].forEach(el=>{
+  el.addEventListener("input", ()=>{
+    if(mode === "current") updateCurrentUI();
+  });
+});
+
+updateTargetSumUI();
+updateCurrentUI();
+
+  }
+
+function updateCurrentUI(){
+  const { rows, total } = snapshotRows();
+
+  // 행별 현재 보유액/비중
+  rows.forEach(r=>{
+    r.tr.querySelector(".val").textContent = fmtKRW(r.value);
+    r.tr.querySelector(".w").textContent = fmtPct01(r.weight);
+  });
+
+  // 하단 합계(현재)
+  document.querySelector("#sumValue").textContent = fmtKRW(total);
+  document.querySelector("#sumWeight").textContent = fmtPct01(rows.reduce((s,r)=>s+r.weight,0));
+
+  // 상단 현재 보유액
+  sumTotalLabel.textContent = fmtKRW(total);
+}
+
+  function snapshotRows(){
+    const rows = [...tbody.querySelectorAll("tr")].map(tr=>{
+      const targetInput = tr.querySelector(".target");
+      const targetPctRaw = String(targetInput.value).trim() === "" ? 0 : clampMin0(parseNum(targetInput.value));
+      const price = clampMin0(parseNum(tr.querySelector(".price").value));
+      const qty = clampMin0(parseNum(tr.querySelector(".qty").value));
+      const value = price * qty;
+
+      const active = (targetPctRaw > 0) || (price > 0 && qty > 0); // ✅ 목표가 있거나 실제 보유가 있으면 활성
+return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw };
+    });
+
+    const total = rows.reduce((s,r)=>s+r.value,0);
+    rows.forEach(r=>r.weight = total ? r.value/total : 0);
+
+    return { rows, total };
+  }
+
+  // 현금 중립(부족분이 있으면 매수 수량 자동 감액)
+  function enforceCashNeutral(trades){
+    let buyCost = 0;
+    let sellProceeds = 0;
+
+    for(const t of trades){
+      if(t.tradeQty > 0) buyCost += t.tradeQty * t.price;
+      if(t.tradeQty < 0) sellProceeds += (-t.tradeQty) * t.price;
+    }
+
+    let residual = sellProceeds - buyCost; // +면 현금 남음, -면 현금 부족
+
+    if(residual >= 0) return { trades, buyCost, sellProceeds, residual };
+
+    // 부족하면: 가장 비싼 매수부터 1주씩 줄여가며 맞춤(작은 N이라 충분히 빠름)
+    let shortfall = -residual;
+
+    const buys = trades
+      .filter(t => t.tradeQty > 0 && t.price > 0)
+      .sort((a,b)=> b.price - a.price);
+
+    for(const t of buys){
+      if(shortfall <= 0) break;
+      if(t.tradeQty <= 0) continue;
+
+      const maxReduce = t.tradeQty;
+      // 한 번에 줄일 수 있는 수량(ceil(shortfall/price))만큼 줄임
+      const needReduce = Math.min(maxReduce, Math.ceil(shortfall / t.price));
+      t.tradeQty -= needReduce;
+      buyCost -= needReduce * t.price;
+      shortfall -= needReduce * t.price;
+    }
+
+    residual = sellProceeds - buyCost;
+    return { trades, buyCost, sellProceeds, residual };
+  }
+
+  function calc(){
+    const epsEl = document.querySelector("#eps");
+    if(parseNum(epsEl.value) < 0) epsEl.value = 0;
+    const eps = clampMin0(parseNum(epsEl.value)) / 100;
+
+    const { rows, total } = snapshotRows();
+
+    // 현재 영역 업데이트(입력값만으로 즉시 맞춰줌)
+    rows.forEach(r=>{
+      r.tr.querySelector(".val").textContent = fmtKRW(r.value);
+      r.tr.querySelector(".w").textContent = fmtPct01(r.weight);
+    });
+
+    // --- 1) 1차(이상적) 트레이드 계산 ---
+    const trades = rows.map(r=>{
+       if(!r.active){
+         return { ...r, decision: "-", tradeQty: 0, inactive: true };
+      }
+      let decision = "유지";
+      if(Math.abs(r.weight - r.target) > eps){
+        decision = r.weight > r.target ? "매도" : "매수";
+      }
+
+      const targetValue = total * r.target;
+      let tradeQty = 0;
+
+      if(decision === "매수" && r.price > 0){
+        tradeQty = Math.floor((targetValue - r.value) / r.price);
+        if(tradeQty < 0) tradeQty = 0;
+      }
+      if(decision === "매도" && r.price > 0){
+        tradeQty = -Math.floor((r.value - targetValue) / r.price);
+        if(tradeQty > 0) tradeQty = 0;
+      }
+
+      return { ...r, decision, tradeQty };
+    });
+
+    // --- 2) 현금 중립 강제(부족분 있으면 매수 자동 감액) ---
+    const beforeBuyCost = trades.reduce((s,t)=> s + (t.tradeQty>0 ? t.tradeQty*t.price : 0), 0);
+    const beforeSell = trades.reduce((s,t)=> s + (t.tradeQty<0 ? (-t.tradeQty)*t.price : 0), 0);
+
+    const neutral = enforceCashNeutral(trades);
+
+    // 부족분이 있어서 조정이 일어난 경우, 사용자에게 한 번 알려주기
+    if(neutral.residual >= 0 && beforeBuyCost > 0 && beforeSell - beforeBuyCost < 0){
+      showToast("현금 중립을 위해 일부 매수 수량을 자동으로 줄였어요.");
+    }
+
+    const buyCost = neutral.buyCost;
+    const sellProceeds = neutral.sellProceeds;
+    const cashResidual = neutral.residual; // 항상 >= 0이 되도록 조정됨(가능한 범위에서)
+
+    // 리밸런싱 후 “보유액(주식 합계)” 계산
+    const afterHoldings = total + (buyCost - sellProceeds); // total - cashResidual
+    // after 비중은 afterHoldings로 나눠서 100%가 되도록(현금은 별도 표시)
+    const denomAfter = afterHoldings > 0 ? afterHoldings : 0;
+
+    // Summary counts
+    let buyCnt = 0, sellCnt = 0, holdCnt = 0;
+
+    // --- 3) 결과 렌더링 ---
+    neutral.trades.forEach(t=>{
+// ✅ [추가] 비활성 행은 완전히 제외
+  if(t.inactive){
+    const d = t.tr.querySelector(".decision");
+    d.textContent = "-";
+    d.className = "g-result col-decision decision hold";
+
+    const cell = t.tr.querySelector(".tradeQtyCell");
+    cell.querySelector(".tradeIcon").textContent = "·";
+    cell.querySelector(".tradeNum").textContent = "-";
+
+    t.tr.querySelector(".afterQty").textContent = "-";
+    t.tr.querySelector(".afterVal").textContent = "-";
+    t.tr.querySelector(".afterW").textContent = "-";
+    return; // ⭐ 여기서 끝 → 카운트도 안 되고 계산도 안 됨
+  }
+
+      let decision = t.decision;
+      if(t.tradeQty === 0){
+        decision = "유지";
+      }
+
+      if(decision === "매수") buyCnt++;
+      else if(decision === "매도") sellCnt++;
+      else holdCnt++;
+
+      const afterQty = t.qty + t.tradeQty;
+      const afterVal = t.price * afterQty;
+      const afterW = (denomAfter > 0) ? (afterVal / denomAfter) : 0;
+
+      const d = t.tr.querySelector(".decision");
+      d.textContent = decision;
+      d.className = "g-result col-decision decision " + (decision === "매도" ? "sell" : decision === "매수" ? "buy" : "hold");
+
+      setTradeCell(t.tr, t.tradeQty, decision);
+
+      t.tr.querySelector(".afterQty").textContent = fmt(afterQty) + "주";
+      t.tr.querySelector(".afterVal").textContent = fmtKRW(afterVal);
+      t.tr.querySelector(".afterW").textContent = fmtPct01(afterW);
+    });
+
+    // --- 4) 하단 합계(정합성) ---
+    document.querySelector("#sumValue").textContent = fmtKRW(total);
+    document.querySelector("#sumWeight").textContent = fmtPct01(rows.reduce((s,r)=>s+r.weight,0));
+    document.querySelector("#sumAfterValue").textContent = fmtKRW(afterHoldings);
+    document.querySelector("#sumAfterWeight").textContent = fmtPct01(1); // afterW 분모를 afterHoldings로 쓰니 항상 100%
+
+    // --- 5) Summary bar 업데이트 ---
+    sumTotalKey.textContent = "매매 후 보유액";
+    sumTotalLabel.textContent = fmtKRW(afterHoldings);
+
+    // 현금 잔액 표시(+만 존재하도록 조정했지만, 혹시 모를 방어)
+    if(cashResidual >= 0){
+      cashPill.classList.remove("negative");
+      cashLabel.textContent = fmtKRW(cashResidual);
+    }else{
+      cashPill.classList.add("negative");
+      cashLabel.textContent = "₩ -" + fmt(Math.round(-cashResidual));
+    }
+
+    buyCountEl.textContent = String(buyCnt);
+    sellCountEl.textContent = String(sellCnt);
+    holdCountEl.textContent = String(holdCnt);
+
+    // 기준% 합계
+    updateTargetSumUI();
+  }
+
+  document.querySelector("#addRow").onclick = addRow;
+
+  calcBtn.onclick = ()=>{
+    if(mode === "current"){
+      const sum = sumTargets(null);
+      if(sum > 100.0001){
+        showToast("기준% 합계가 100%를 초과했어요. 입력을 조정하세요.");
+        return;
+      }
+      calc();
+      setMode("result");
+    }else{
+      setMode("current");
+    }
+  };
+
+  document.querySelector("#reset").onclick = ()=>{
+    tbody.innerHTML = "";
+    for(let i=0;i<7;i++) addRow();
+    setMode("current");
+    sumTotalKey.textContent = "현재 보유액";
+    sumTotalLabel.textContent = fmtKRW(0);
+    cashLabel.textContent = fmtKRW(0);
+    cashPill.classList.remove("negative");
+    updateTargetSumUI();
+    updateCurrentUI();
+  };
+
+  // init
+  for(let i=0;i<7;i++) addRow();
+  setMode("current");
+  sumTotalKey.textContent = "현재 보유액";
+  sumTotalLabel.textContent = fmtKRW(0);
+  cashLabel.textContent = fmtKRW(0);
+  updateTargetSumUI();
+  updateCurrentUI();
+
+  // eps 음수 방지
+  const epsEl = document.querySelector("#eps");
+  epsEl.addEventListener("input", ()=>{
+    const v = parseNum(epsEl.value);
+    if(v < 0) epsEl.value = 0;
+  });
+</script>
+</body>
+</html>
