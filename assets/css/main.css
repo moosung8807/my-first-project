@@ -1,5 +1,6 @@
     :root{
-      --bg:#0b0b0f;
+      --bg-top:#121317;
+      --bg-bottom:#0b0b0f;
       --line:#24262d;
       --text:#e5e7eb;
       --muted:#9ca3af;
@@ -13,9 +14,132 @@
 
       --toast-bg:rgba(15,16,22,.92);
       --toast-line:rgba(201,162,77,.35);
+      --toast-shadow:rgba(0,0,0,.55);
+      --toast-badge-bg:rgba(201,162,77,.18);
+      --toast-badge-line:rgba(201,162,77,.35);
+      --toast-msg:rgba(229,231,235,.95);
 
       --card:#101116;
       --card2:#14151b;
+      --surface:#0e0f14;
+      --card-shadow:rgba(0,0,0,.45);
+
+      --summary-border:rgba(36,38,45,.9);
+      --summary-bg1:rgba(15,16,22,.9);
+      --summary-bg2:rgba(12,13,18,.9);
+      --summary-left:rgba(229,231,235,.92);
+      --summary-right:rgba(156,163,175,.85);
+      --pill-border:rgba(36,38,45,.9);
+      --pill-bg:rgba(255,255,255,.02);
+      --pill-k:rgba(156,163,175,.85);
+      --pill-v:rgba(229,231,235,.95);
+      --pill-hold:rgba(156,163,175,.95);
+      --pill-cash:rgba(230,201,122,.95);
+
+      --progress-border:rgba(36,38,45,.95);
+      --progress-bg:rgba(255,255,255,.03);
+      --progress-ok-1:rgba(201,162,77,.55);
+      --progress-ok-2:rgba(230,201,122,.95);
+
+      --thead-bg:#0f1016;
+      --thead-group:rgba(230,201,122,.95);
+      --thead-sub:rgba(230,201,122,.90);
+      --thead-del:rgba(156,163,175,.75);
+      --tfoot-bg:#0f1016;
+
+      --row-hover:rgba(201,162,77,.05);
+      --unit:rgba(156,163,175,.75);
+      --sum-ok:rgba(230,201,122,.95);
+      --mode-hint:rgba(230,201,122,.85);
+
+      --del-border:rgba(156,163,175,.18);
+      --del-bg:rgba(255,255,255,.01);
+      --del-color:rgba(156,163,175,.55);
+
+      --trade-border:rgba(36,38,45,.9);
+      --trade-bg:rgba(255,255,255,.02);
+      --trade-hold-color:rgba(156,163,175,.9);
+      --trade-hold-border:rgba(156,163,175,.25);
+      --trade-hold-bg:rgba(156,163,175,.06);
+
+      --footer-bg:rgba(0,0,0,.55);
+      --footer-border:rgba(229,231,235,.14);
+      --footer-link:#eaeaea;
+      --footer-link-hover:#fff;
+      --footer-link-under:rgba(255,255,255,.9);
+      --footer-sep:rgba(234,234,234,.65);
+    }
+
+    html[data-theme="light"]{
+      --bg-top:#ffffff;
+      --bg-bottom:#ffffff;
+      --line:#d7dbe4;
+      --text:#111827;
+      --muted:#5b6472;
+
+      --gold:#1f6feb;
+      --gold-soft:#5b9bff;
+
+      --buy:#1d63d8;
+      --sell:#c13f3f;
+      --hold:#64748b;
+
+      --toast-bg:rgba(255,255,255,.98);
+      --toast-line:rgba(31,111,235,.28);
+      --toast-shadow:rgba(15,23,42,.18);
+      --toast-badge-bg:rgba(31,111,235,.12);
+      --toast-badge-line:rgba(31,111,235,.25);
+      --toast-msg:#1f2937;
+
+      --card:#ffffff;
+      --card2:#f8fafc;
+      --surface:#ffffff;
+      --card-shadow:rgba(15,23,42,.08);
+
+      --summary-border:#d7ddeb;
+      --summary-bg1:#ffffff;
+      --summary-bg2:#f8fbff;
+      --summary-left:#1f2937;
+      --summary-right:#5b6472;
+      --pill-border:#d8e0ee;
+      --pill-bg:#f8fafc;
+      --pill-k:#64748b;
+      --pill-v:#111827;
+      --pill-hold:#64748b;
+      --pill-cash:#0f766e;
+
+      --progress-border:#cdd7e6;
+      --progress-bg:#edf2fb;
+      --progress-ok-1:rgba(31,111,235,.35);
+      --progress-ok-2:rgba(31,111,235,.85);
+
+      --thead-bg:#f3f6fb;
+      --thead-group:#24539b;
+      --thead-sub:#3563ae;
+      --thead-del:#6b7280;
+      --tfoot-bg:#f3f6fb;
+
+      --row-hover:rgba(31,111,235,.08);
+      --unit:#6b7280;
+      --sum-ok:#24539b;
+      --mode-hint:#1f6feb;
+
+      --del-border:rgba(100,116,139,.35);
+      --del-bg:#ffffff;
+      --del-color:rgba(100,116,139,.75);
+
+      --trade-border:#cdd6e5;
+      --trade-bg:#f8fafc;
+      --trade-hold-color:#64748b;
+      --trade-hold-border:#c5cfdf;
+      --trade-hold-bg:#eef2f7;
+
+      --footer-bg:rgba(255,255,255,.92);
+      --footer-border:rgba(148,163,184,.35);
+      --footer-link:#334155;
+      --footer-link-hover:#0f172a;
+      --footer-link-under:rgba(15,23,42,.7);
+      --footer-sep:rgba(71,85,105,.6);
     }
 
     *{box-sizing:border-box}
@@ -23,12 +147,19 @@
       margin:0;
       padding:28px 28px 96px;
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",Arial,sans-serif;
-      background:radial-gradient(circle at top,#121317,#0b0b0f);
+      background:radial-gradient(circle at top,var(--bg-top),var(--bg-bottom));
       color:var(--text);
     }
     .container{max-width:1200px;margin:0 auto}
+    .topBar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin:0 0 14px;
+    }
     h1{
-      font-size:22px;font-weight:700;margin:0 0 14px;letter-spacing:.3px;text-align:center
+      font-size:22px;font-weight:700;margin:0;letter-spacing:.3px;text-align:center;flex:1
     }
 
     .card{
@@ -37,7 +168,7 @@
       border:1px solid var(--line);
       padding:16px;
       margin-bottom:16px;
-      box-shadow:0 18px 36px rgba(0,0,0,.45);
+      box-shadow:0 18px 36px var(--card-shadow);
     }
     .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
     label{
@@ -50,7 +181,7 @@
       padding:0 12px;
       border-radius:10px;
       border:1px solid var(--line);
-      background:#0e0f14;
+      background:var(--surface);
       color:var(--text);
       font-size:14px;
       font-variant-numeric:tabular-nums;
@@ -70,18 +201,19 @@
       border:1px solid var(--line);
       cursor:pointer;
       font-size:14px;
-      background:#0e0f14;
+      background:var(--surface);
       color:var(--text);
       white-space:nowrap;
       transition:transform .1s ease, border-color .12s ease, filter .12s ease;
     }
     button:active{transform:translateY(1px)}
     button.primary{
-      background:linear-gradient(135deg,#c9a24d,#e6c97a);
-      color:#111;
+      background:linear-gradient(135deg,var(--gold),var(--gold-soft));
+      color:#fff;
       border:none;
       font-weight:700;
     }
+    .themeToggle{min-width:116px}
     button.secondary:hover{border-color:var(--gold)}
     .small{font-size:12px;color:var(--muted)}
 
@@ -93,8 +225,8 @@
       justify-content:space-between;
       padding:10px 12px;
       border-radius:14px;
-      border:1px solid rgba(36,38,45,.9);
-      background:linear-gradient(180deg, rgba(15,16,22,.9), rgba(12,13,18,.9));
+      border:1px solid var(--summary-border);
+      background:linear-gradient(180deg, var(--summary-bg1), var(--summary-bg2));
       box-shadow:inset 0 1px 0 rgba(255,255,255,.02);
       margin:10px 0 12px;
     }
@@ -103,7 +235,7 @@
   flex-wrap:nowrap;              /* ✅ 줄바꿈 금지 */
   overflow-x:auto;               /* ✅ 부족하면 좌우 스크롤(필요시) */
   -webkit-overflow-scrolling:touch;
-  color:rgba(229,231,235,.92);
+  color:var(--summary-left);
   font-size:13px;
 }
     .pill{
@@ -112,22 +244,22 @@
       gap:8px;
       padding:6px 10px;
       border-radius:999px;
-      border:1px solid rgba(36,38,45,.9);
-      background:rgba(255,255,255,.02);
+      border:1px solid var(--pill-border);
+      background:var(--pill-bg);
       font-variant-numeric:tabular-nums;
     }
-    .pill .k{color:rgba(156,163,175,.85);font-weight:600}
-    .pill .v{color:rgba(229,231,235,.95);font-weight:800}
+    .pill .k{color:var(--pill-k);font-weight:600}
+    .pill .v{color:var(--pill-v);font-weight:800}
     .pill.buy .v{color:var(--buy)}
     .pill.sell .v{color:var(--sell)}
-    .pill.hold .v{color:rgba(156,163,175,.95)}
-    .pill.cash .v{color:rgba(230,201,122,.95)}
+    .pill.hold .v{color:var(--pill-hold)}
+    .pill.cash .v{color:var(--pill-cash)}
     .pill.cash.negative .v{color:var(--sell)}
     .summaryRight{
       display:flex;
       align-items:center;
       gap:10px;
-      color:rgba(156,163,175,.85);
+      color:var(--summary-right);
       font-size:12px;
       white-space:nowrap;
     }
@@ -137,15 +269,15 @@
       width:230px;
       height:10px;
       border-radius:999px;
-      border:1px solid rgba(36,38,45,.95);
-      background:rgba(255,255,255,.03);
+      border:1px solid var(--progress-border);
+      background:var(--progress-bg);
       overflow:hidden;
       position:relative;
     }
     .progressBar{
       height:100%;
       width:0%;
-      background:linear-gradient(90deg, rgba(201,162,77,.55), rgba(230,201,122,.95));
+      background:linear-gradient(90deg, var(--progress-ok-1), var(--progress-ok-2));
       box-shadow:0 0 18px rgba(201,162,77,.25);
       transition:width .15s ease, filter .15s ease;
     }
@@ -174,7 +306,7 @@
       min-width:980px;
     }
     thead th{
-      background:#0f1016;
+      background:var(--thead-bg);
       color:var(--gold-soft);
       padding:10px 6px;
       border-bottom:1px solid var(--line);
@@ -182,14 +314,14 @@
       white-space:nowrap;
     }
     thead tr.group th{
-      font-size:12px;font-weight:800;color:rgba(230,201,122,.95);
+      font-size:12px;font-weight:800;color:var(--thead-group);
       border-bottom:1px solid rgba(36,38,45,.75);
     }
     thead tr.sub th{
-      font-size:12px;font-weight:700;color:rgba(230,201,122,.90);
+      font-size:12px;font-weight:700;color:var(--thead-sub);
     }
     thead th.col-del{
-      color:rgba(156,163,175,.75);
+      color:var(--thead-del);
       font-weight:700;
       letter-spacing:.2px;
     }
@@ -203,7 +335,7 @@
       text-overflow:ellipsis;
       transition:opacity .12s ease, filter .12s ease;
     }
-    tbody tr:hover{background:rgba(201,162,77,.05)}
+    tbody tr:hover{background:var(--row-hover)}
     th.left, td.left{text-align:left}
 
     /* Column widths */
@@ -237,7 +369,7 @@ td.col-price::after{
   top:50%;
   transform:translateY(-50%);
   font-size:12px;
-  color:rgba(156,163,175,.75);
+  color:var(--unit);
   pointer-events:none;
 }
 td.col-qty::after{
@@ -247,7 +379,7 @@ td.col-qty::after{
   top:50%;
   transform:translateY(-50%);
   font-size:12px;
-  color:rgba(156,163,175,.75);
+  color:var(--unit);
   pointer-events:none;
 }
 
@@ -259,7 +391,7 @@ td.col-qty::after{
       padding:12px 6px;
       font-weight:800;
       border-top:2px solid var(--gold);
-      background:#0f1016;
+      background:var(--tfoot-bg);
       color:var(--gold-soft);
       text-align:center;
       white-space:nowrap;
@@ -269,7 +401,7 @@ td.col-qty::after{
 
     /* ===== Mode UX ===== */
     .mode-current .hintMode{
-      color:rgba(230,201,122,.85);
+      color:var(--mode-hint);
       font-weight:900;
     }
 
@@ -300,9 +432,9 @@ td.col-qty::after{
     .delBtn{
       width:30px;height:30px;
       border-radius:10px;
-      border:1px solid rgba(156,163,175,.18);
-      background:rgba(255,255,255,.01);
-      color:rgba(156,163,175,.55);
+      border:1px solid var(--del-border);
+      background:var(--del-bg);
+      color:var(--del-color);
       cursor:pointer;
       line-height:28px;
       font-weight:900;
@@ -336,8 +468,8 @@ td.col-qty::after{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      border:1px solid rgba(36,38,45,.9);
-      background:rgba(255,255,255,.02);
+      border:1px solid var(--trade-border);
+      background:var(--trade-bg);
       font-size:12px;
       line-height:1;
       user-select:none;
@@ -345,7 +477,7 @@ td.col-qty::after{
     }
     .tradeIcon.buy{color:var(--buy); border-color:rgba(122,162,255,.35); background:rgba(122,162,255,.08)}
     .tradeIcon.sell{color:var(--sell); border-color:rgba(224,90,90,.35); background:rgba(224,90,90,.08)}
-    .tradeIcon.hold{color:rgba(156,163,175,.9); border-color:rgba(156,163,175,.25); background:rgba(156,163,175,.06)}
+    .tradeIcon.hold{color:var(--trade-hold-color); border-color:var(--trade-hold-border); background:var(--trade-hold-bg)}
     .tradeNum{min-width:44px; text-align:right; font-weight:800;} /* ✅ 숫자 폭 고정 */
 
     /* ===== Toast ===== */
@@ -357,7 +489,7 @@ td.col-qty::after{
       color:var(--text);
       padding:10px 14px;
       border-radius:12px;
-      box-shadow:0 18px 40px rgba(0,0,0,.55);
+      box-shadow:0 18px 40px var(--toast-shadow);
       opacity:0;pointer-events:none;
       transition:opacity .18s ease, transform .18s ease;
       min-width:280px;min-height:44px;
@@ -371,14 +503,14 @@ td.col-qty::after{
       border-radius:999px;
       font-size:12px;
       font-weight:900;
-      background:rgba(201,162,77,.18);
-      border:1px solid rgba(201,162,77,.35);
+      background:var(--toast-badge-bg);
+      border:1px solid var(--toast-badge-line);
       color:var(--gold-soft);
       line-height:1;
       width:52px;text-align:center;
     }
     .toast .msg{
-      font-size:13px;color:rgba(229,231,235,.95);
+      font-size:13px;color:var(--toast-msg);
       line-height:1.25;
       display:flex;align-items:center;
     }
@@ -391,29 +523,31 @@ td.col-qty::after{
       right:0;
       padding:14px 16px;
       text-align:center;
-      background:rgba(0,0,0,.55);
+      background:var(--footer-bg);
       backdrop-filter:blur(8px);
       -webkit-backdrop-filter:blur(8px);
-      border-top:1px solid rgba(229,231,235,.14);
+      border-top:1px solid var(--footer-border);
       z-index:1000;
     }
     .siteFooter a{
-      color:#eaeaea;
+      color:var(--footer-link);
       text-decoration:none;
       transition:color .15s ease, text-decoration-color .15s ease, opacity .15s ease;
     }
     .siteFooter a:hover{
-      color:#fff;
+      color:var(--footer-link-hover);
       text-decoration:underline;
-      text-decoration-color:rgba(255,255,255,.9);
+      text-decoration-color:var(--footer-link-under);
     }
     .siteFooter .sep{
-      color:rgba(234,234,234,.65);
+      color:var(--footer-sep);
       margin:0 6px;
     }
 
     @media (max-width: 640px){
       body{padding:20px 16px 88px;}
+      .topBar{flex-wrap:wrap;justify-content:center}
+      .themeToggle{width:100%}
       .siteFooter{padding:12px 10px;font-size:13px;}
       .siteFooter .sep{margin:0 4px;}
     }

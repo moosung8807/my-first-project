@@ -2,6 +2,7 @@
   const tableCard = document.querySelector("#tableCard");
   const calcBtn = document.querySelector("#calcBtn");
   const sumTargetEl = document.querySelector("#sumTarget");
+  const themeToggle = document.querySelector("#themeToggle");
 
   // Summary UI
   const modeLabel = document.querySelector("#modeLabel");
@@ -25,6 +26,7 @@
   let toastTimer = null;
 
   let mode = "current"; // "current" | "result"
+  const THEME_KEY = "rb-theme";
 
   function parseNum(v){
     const n = Number(String(v).replaceAll(",", "").trim());
@@ -41,6 +43,19 @@
     toast.classList.add("show");
     clearTimeout(toastTimer);
     toastTimer = setTimeout(()=>toast.classList.remove("show"), 1700);
+  }
+
+  function setTheme(theme){
+    const nextTheme = theme === "light" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", nextTheme);
+    localStorage.setItem(THEME_KEY, nextTheme);
+
+    if(themeToggle){
+      const nextLabel = nextTheme === "dark" ? "화이트 테마" : "블랙 테마";
+      themeToggle.textContent = nextLabel;
+      themeToggle.setAttribute("aria-label", `${nextLabel}로 전환`);
+      themeToggle.setAttribute("title", `${nextLabel}로 전환`);
+    }
   }
 
   function resetSummaryCounts(){
@@ -99,7 +114,7 @@
   function updateTargetSumUI(){
     const sum = sumTargets(null);
     sumTargetEl.textContent = sum.toFixed(2) + "%";
-    sumTargetEl.style.color = (sum > 100.0001) ? "#e05a5a" : "rgba(230,201,122,.95)";
+    sumTargetEl.style.color = (sum > 100.0001) ? "var(--sell)" : "var(--sum-ok)";
     updateProgress(sum);
   }
 
@@ -447,6 +462,15 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
   };
 
   // init
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  setTheme(savedTheme || "dark");
+  if(themeToggle){
+    themeToggle.addEventListener("click", ()=>{
+      const currentTheme = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+      setTheme(currentTheme === "dark" ? "light" : "dark");
+    });
+  }
+
   for(let i=0;i<7;i++) addRow();
   setMode("current");
   sumTotalKey.textContent = "현재 보유액";
