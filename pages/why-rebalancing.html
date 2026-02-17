@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>리밸런싱(Rebalancing) 이해하기</title>
-  <meta name="description" content="포트폴리오 리밸런싱의 개념, 필요성, 기대 효과를 반응형 레이아웃으로 설명합니다." />
+  <title>포트폴리오 리밸런싱이란? 왜 필요한가 | 장기투자 전략 가이드</title>
+  <meta name="description" content="포트폴리오 리밸런싱이란 무엇이며 왜 필요한지, 위험 관리와 장기 수익률 관점에서 쉽게 정리했습니다." />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="/pages/why-rebalancing.html" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9973322388801174"
      crossorigin="anonymous"></script>
   <script>
@@ -15,9 +17,65 @@
   </script>
 
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="리밸런싱(Rebalancing) 이해하기" />
-  <meta property="og:description" content="목표 비중 유지, 위험 관리, 장기 투자 원칙 관점에서 리밸런싱의 필요성을 정리합니다." />
+  <meta property="og:title" content="포트폴리오 리밸런싱이란? 왜 필요한가 | 장기투자 가이드" />
+  <meta property="og:description" content="리밸런싱의 개념과 필요성을 목표 비중 유지, 위험 관리, 장기 투자 관점에서 설명합니다." />
   <meta property="og:url" content="/pages/why-rebalancing.html" />
+  <meta property="og:site_name" content="Rebalancing Helper" />
+  <meta property="og:locale" content="ko_KR" />
+  <meta property="og:image" content="/assets/og/rebalancing-guide-og.svg" />
+  <meta property="og:image:alt" content="포트폴리오 리밸런싱 개념과 필요성 설명 영상 썸네일" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="포트폴리오 리밸런싱이란? 왜 필요한가 | 장기투자 가이드" />
+  <meta name="twitter:description" content="리밸런싱의 개념과 필요성을 목표 비중 유지, 위험 관리, 장기 투자 관점에서 설명합니다." />
+  <meta name="twitter:image" content="/assets/og/rebalancing-guide-og.svg" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "리밸런싱을 꼭 해야 하나요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "리밸런싱은 필수는 아니지만, 장기 투자에서 위험 관리와 자산 비중 유지를 위해 권장되는 전략입니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "리밸런싱을 하지 않으면 어떻게 되나요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "특정 자산 비중이 과도하게 커질 수 있으며, 시장 하락 시 포트폴리오 변동성이 크게 증가할 수 있습니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "리밸런싱은 수익률을 높여주나요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "리밸런싱의 목적은 단기 수익 극대화보다는 위험 대비 안정적인 장기 성과를 유지하는 데 있습니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "초보 투자자도 리밸런싱을 해야 하나요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "오히려 초보 투자자일수록 감정적 매매를 줄이기 위해 정해진 기준에 따른 리밸런싱이 도움이 됩니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "ETF만 투자해도 리밸런싱이 필요한가요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ETF 역시 자산군별 비중이 변할 수 있기 때문에 포트폴리오 관점에서는 리밸런싱이 필요합니다."
+          }
+        }
+      ]
+    }
+  </script>
 
   <style>
     :root {
@@ -94,9 +152,21 @@
       border-bottom: 2px solid var(--line);
       padding-bottom: 6px;
     }
+    h3 {
+      margin: 18px 0 8px;
+      font-size: 20px;
+      line-height: 1.4;
+    }
     p, ul { margin: 0 0 14px; }
     ul { padding-left: 20px; }
     li { margin-bottom: 6px; }
+    .faqAnswer {
+      padding-left: 10px;
+      text-indent: 0.7em;
+    }
+    .faqQuestion {
+      padding-left: 10px;
+    }
     .highlight {
       background: var(--accent-soft);
       border-left: 4px solid var(--accent);
@@ -111,6 +181,49 @@
       border-radius: 8px;
       padding: 11px 12px;
       margin: 16px 0;
+    }
+    .guideHub {
+      margin: 18px 0 12px;
+      padding: 14px 14px 10px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--accent-soft) 58%, var(--panel) 42%);
+    }
+    .guideHubTitle {
+      display: inline-block;
+      margin: 0 0 10px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 16%, var(--panel) 84%);
+    }
+    .guideHubList {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    .guideHubItem {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    .guideHubTag {
+      display: inline-block;
+      min-width: 72px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .guideHub a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .guideHub a:hover { text-decoration: underline; }
+    .guideCurrent {
+      color: var(--text);
+      font-weight: 700;
     }
     .docFooter {
       margin-top: 16px;
@@ -134,6 +247,7 @@
       .docMeta { white-space: normal; }
       h1 { font-size: 29px; }
       h2 { font-size: 21px; }
+      h3 { font-size: 19px; }
       p, li { font-size: 17px; }
       main { padding: 16px 14px; }
     }
@@ -147,6 +261,7 @@
     </header>
 
     <main>
+      <article>
       <h1>리밸런싱(Rebalancing) 이해하기</h1>
 
       <p class="highlight">
@@ -186,6 +301,52 @@
         이 리밸런싱 계산 도구는 사용자가 입력한 목표 비중과 현재
         보유 현황을 기반으로 재조정 방향을 계산해, 이해하기 쉬운 형태로 제공합니다.
       </p>
+      <h2>5. 자주 묻는 질문 (FAQ)</h2>
+
+      <h3 class="faqQuestion">Q1. 리밸런싱을 꼭 해야 하나요?</h3>
+      <p class="faqAnswer">
+      리밸런싱은 필수는 아니지만,
+      장기 투자에서 위험 관리와 자산 비중 유지를 위해
+      권장되는 전략입니다.
+      </p>
+
+      <h3 class="faqQuestion">Q2. 리밸런싱을 하지 않으면 어떻게 되나요?</h3>
+      <p class="faqAnswer">
+      특정 자산 비중이 과도하게 커질 수 있으며,
+      시장 하락 시 포트폴리오 변동성이 크게 증가할 수 있습니다.
+      </p>
+
+      <h3 class="faqQuestion">Q3. 리밸런싱은 수익률을 높여주나요?</h3>
+      <p class="faqAnswer">
+      리밸런싱의 목적은 단기 수익 극대화보다는
+      위험 대비 안정적인 장기 성과를 유지하는 데 있습니다.
+      </p>
+
+      <h3 class="faqQuestion">Q4. 초보 투자자도 리밸런싱을 해야 하나요?</h3>
+      <p class="faqAnswer">
+      오히려 초보 투자자일수록
+      감정적 매매를 줄이기 위해
+      정해진 기준에 따른 리밸런싱이 도움이 됩니다.
+      </p>
+
+      <h3 class="faqQuestion">Q5. ETF만 투자해도 리밸런싱이 필요한가요?</h3>
+      <p class="faqAnswer">
+      ETF 역시 자산군별 비중이 변할 수 있기 때문에
+      포트폴리오 관점에서는 리밸런싱이 필요합니다.
+      </p>
+      <section class="guideHub" aria-label="관련 가이드">
+        <p class="guideHubTitle">관련 가이드</p>
+        <ul class="guideHubList">
+          <li class="guideHubItem">
+            <span class="guideHubTag">함께 읽기</span>
+            <span class="guideCurrent">리밸런싱을 해야 하는 이유 (현재 읽는 글)</span>
+          </li>
+          <li class="guideHubItem">
+            <span class="guideHubTag">다음 가이드</span>
+            <a href="./rebalancing-frequency.html">리밸런싱 주기 정하는 법</a>
+          </li>
+        </ul>
+      </section>
       <h2>📺 리밸런싱 이해를 돕는 영상</h2>
 <p>
   아래 영상은 리밸런싱의 개념과 왜 필요한지를
@@ -202,8 +363,8 @@
     allowfullscreen
     style="position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 12px;"
   ></iframe>
-</div>
-
+      </div>
+      </article>
     </main>
 
     <footer class="docFooter">
