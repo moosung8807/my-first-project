@@ -2,73 +2,211 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>리밸런싱(Rebalancing)이란?</title>
-  <meta name="description" content="포트폴리오 리밸런싱의 정의, 필요성, 기대 효과를 전문적인 시각으로 설명합니다." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>리밸런싱(Rebalancing) 이해하기</title>
+  <meta name="description" content="포트폴리오 리밸런싱의 개념, 필요성, 기대 효과를 반응형 레이아웃으로 설명합니다." />
+  <script>
+    (function () {
+      var theme = localStorage.getItem("rb-theme") || "dark";
+      document.documentElement.setAttribute("data-theme", theme === "light" ? "light" : "dark");
+    })();
+  </script>
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="리밸런싱(Rebalancing) 이해하기" />
+  <meta property="og:description" content="목표 비중 유지, 위험 관리, 장기 투자 원칙 관점에서 리밸런싱의 필요성을 정리합니다." />
+  <meta property="og:url" content="/pages/why-rebalancing.html" />
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --text: #111827;
+      --muted: #4b5563;
+      --line: #d7dbe4;
+      --accent: #1f6feb;
+      --accent-soft: #eaf2ff;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0b0b0f;
+      --panel: #11131a;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --line: #24262d;
+      --accent: #c9a24d;
+      --accent-soft: #1a1920;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px 18px 84px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
+      line-height: 1.72;
+    }
+    .shell {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    .docNav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .backLink {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 12px;
+      background: var(--panel);
+    }
+    .backLink:hover { text-decoration: underline; }
+    .docMeta {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    main {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px 18px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: 33px;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+    h2 {
+      margin: 26px 0 8px;
+      font-size: 24px;
+      line-height: 1.32;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 6px;
+    }
+    p, ul { margin: 0 0 14px; }
+    ul { padding-left: 20px; }
+    li { margin-bottom: 6px; }
+    .highlight {
+      background: var(--accent-soft);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+    .note {
+      color: var(--muted);
+      border-left: 3px solid var(--line);
+      background: color-mix(in srgb, var(--panel) 84%, var(--text) 4%);
+      border-radius: 8px;
+      padding: 11px 12px;
+      margin: 16px 0;
+    }
+    .docFooter {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: right;
+    }
+    .docFooter a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .docFooter a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      body { padding: 18px 14px 78px; }
+      .docNav {
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .docMeta { white-space: normal; }
+      h1 { font-size: 29px; }
+      h2 { font-size: 21px; }
+      p, li { font-size: 17px; }
+      main { padding: 16px 14px; }
+    }
+  </style>
 </head>
 <body>
-  <h1>포트폴리오 리밸런싱(Rebalancing)이란?</h1>
+  <div class="shell">
+    <header class="docNav">
+      <a class="backLink" href="../index.html">메인으로 돌아가기</a>
+      <div class="docMeta">Rebalancing Helper 안내 문서</div>
+    </header>
 
-  <p>
-    포트폴리오 리밸런싱은 사전 설정한 목표 자산 배분 비율을 유지하기 위해
-    투자 비중이 변동된 이후 다시 원래의 목표 비중으로 재조정하는 작업을 의미합니다.
-    자산 가격은 시장 흐름에 따라 상승하거나 하락하기 때문에,
-    시간이 지나면 최초의 투자 비중과 현재 비중 사이에 괴리가 발생할 수 있습니다.
-  </p>
+    <main>
+      <h1>리밸런싱(Rebalancing) 이해하기</h1>
 
-  <h2>왜 리밸런싱이 필요한가?</h2>
+      <p class="highlight">
+        리밸런싱은 포트폴리오 목표 비중을 유지하며 위험을 관리하고
+        장기 성과 개선을 돕는 투자 전략입니다.
+      </p>
 
-  <h3>1. 위험 관리(Risk Control)</h3>
-  <p>
-    서로 다른 자산 클래스는 변동성(Volatility) 특성이 다릅니다.
-    예를 들어 주식 자산이 급격히 상승하면서 포트폴리오 내 비중이 의도보다 커질 경우,
-    전체 포트폴리오의 위험 수준이 설계한 것보다 높아질 수 있습니다.
-    이런 상황에서 리밸런싱은 비중을 조정하여 위험을 분산시키고,
-    비합리적인 위험 집중을 예방하는 효과가 있습니다.
-  </p>
+      <h2>1. 리밸런싱이란 무엇인가?</h2>
+      <p>
+        리밸런싱은 특정 자산의 가격 변동으로 인해 포트폴리오의
+        비중이 변했을 때, 다시 목표 비중으로 재조정하는 절차입니다.
+        시장 상황에 따라 자산 가격이 변화할 때 비중 차가 발생하면,
+        그 차이를 해소하기 위한 것이 리밸런싱입니다.
+      </p>
 
-  <h3>2. 계획 기반의 자산 운용</h3>
-  <p>
-    투자 전략은 사전에 수립한 목표 비중에 따라 수행되어야 합니다.
-    리밸런싱은 자동화된 매매가 아니라 의도된 재조정 수단으로, 투자 계획에 따라
-    자산 구성 비율을 유지함으로써 투자 원칙을 실제 운용에 반영합니다.
-    이는 장기적인 수익 성과에 긍정적인 영향을 미치는 것으로 평가됩니다.
-  </p>
+      <h2>2. 리밸런싱이 왜 필요한가?</h2>
+      <ul>
+        <li><strong>위험 분산:</strong> 편중된 자산 비중으로 인한 위험을 줄입니다.</li>
+        <li><strong>계획 기반 운용:</strong> 처음 세운 투자 계획을 지속적으로 유지합니다.</li>
+        <li><strong>감정적 판단 최소화:</strong> 충동 매매를 줄이고 규칙적 관리를 돕습니다.</li>
+      </ul>
 
-  <h3>3. 감정적 판단 최소화</h3>
-  <p>
-    시장 상황이 좋을 때 과도한 확신에 의한 추가 매수,
-    시장 하락 시 공포에 의한 일시적 손절매 등
-    인간의 감정적 반응은 투자 결과에 부정적인 영향을 줄 수 있습니다.
-    리밸런싱은 이런 감정적 판단을 기계적이고 규칙적인 절차로 대체하여,
-    투자 원칙의 일관성을 확보하게 합니다.
-  </p>
+      <h2>3. 리밸런싱의 기대 효과</h2>
+      <p>
+        리밸런싱은 위험 관리를 통해 포트폴리오 안정성을 높이고,
+        장기적으로 투자 성과를 개선하는 데 도움이 됩니다. 특히
+        서로 다른 자산 간 상관관계가 낮을 때 그 효과가 더 뚜렷합니다.
+      </p>
 
-  <h2>리밸런싱의 기대 효과</h2>
+      <div class="note">
+        본 도구는 투자 자문이 아닌 계산 지원 도구입니다.
+        투자 판단 및 결정은 사용자의 책임입니다.
+      </div>
 
-  <p>
-    리밸런싱은 단순히 비중을 맞추는 작업을 넘어서,
-    안정적인 위험 관리를 통해 포트폴리오 전체의 수익성과 안정성을 동시에 개선하는 전략으로 평가됩니다.
-    특히 자산 클래스 간의 상관관계가 낮은 상황에서 리밸런싱 전략은 장기 투자 성과 측면에서 효과적인 것으로 여겨집니다.
-  </p>
+      <h2>4. 본 도구의 역할</h2>
+      <p>
+        이 리밸런싱 계산 도구는 사용자가 입력한 목표 비중과 현재
+        보유 현황을 기반으로 재조정 방향을 계산해, 이해하기 쉬운 형태로 제공합니다.
+      </p>
+      <h2>📺 리밸런싱 이해를 돕는 영상</h2>
+<p>
+  아래 영상은 리밸런싱의 개념과 왜 필요한지를
+  실제 예시 중심으로 설명합니다.
+  글과 함께 보면 이해에 도움이 됩니다.
+</p>
 
-  <h2>리밸런싱 도구의 역할</h2>
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; margin-top: 10px;">
+  <iframe
+    src="https://www.youtube.com/embed/mD3GtYKpOQI"
+    title="리밸런싱 설명 영상"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+    style="position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 12px;"
+  ></iframe>
+</div>
 
-  <p>
-    본 웹사이트에서 제공하는 리밸런싱 계산 도구는
-    사용자가 입력한 현재 보유 자산과 목표 비중을 바탕으로
-    최적의 재조정 방향을 산출합니다.
-    이는 복잡한 수치 계산을 자동화하며, 결과를 이해하기 쉬운 형태로 시각화합니다.
-    본 도구는 특정 투자 자산에 대한 매매 권유를 하지 않으며,
-    투자 결정은 사용자의 판단과 책임 하에 이루어져야 합니다.
-  </p>
+    </main>
 
-  <h2>결론</h2>
-
-  <p>
-    리밸런싱은 단순한 비율 조정 이상의 의미를 가지며,
-    체계적인 위험 관리와 투자 계획의 실현을 위해 필요한 전략적 절차입니다.
-    투자 목적 및 기간에 따라 리밸런싱 주기·방법은 달라질 수 있으므로,
-    본 도구를 참고하여 자신의 투자 철학에 맞는 운용 방식을 선택하시기 바랍니다.
-  </p>
+    <footer class="docFooter">
+      <a href="../index.html">메인 화면으로 이동</a>
+    </footer>
+  </div>
 </body>
 </html>
