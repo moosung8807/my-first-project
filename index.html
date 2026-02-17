@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="google-site-verification" content="5g5AcTOjil33qdaWezjG0weJJZELLCCcjsSV54CNWro" />
+  <meta name="description" content="리밸런싱 계산기: 포트폴리오 목표 비중과 실제 비중을 입력하면 자동으로 재조정 방향을 계산해주는 도구입니다." />
   <title>Rebalancing Helper</title>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9973322388801174"
      crossorigin="anonymous"></script>
@@ -14,22 +15,28 @@
 <body>
 <div class="container">
   <div class="topBar">
-    <h1>Rebalancing Helper</h1>
+    <h1>리밸런싱 계산기</h1>
     <button class="secondary themeToggle" id="themeToggle" type="button" aria-label="테마 전환">화이트 테마</button>
   </div>
 
+  <p class="introText">
+    이 리밸런싱 계산기는 포트폴리오의 현재 비중과 목표 비중을 입력하면,
+    자동으로 재조정 방향을 계산해주는 도구입니다.
+    리밸런싱은 장기 투자 전략에서 위험 관리를 돕는 중요한 절차입니다.
+  </p>
+
   <div class="card">
-    <div class="row">
-      <label>
-        유지 허용오차 (%p)
+    <div class="controlBar">
+      <div class="controlTolerance">
+        <label for="eps">유지 허용오차 (%p)</label>
         <input id="eps" type="number" min="0" step="0.01" value="0.1">
-      </label>
-      <span class="small">0.1 = 0.1%p</span>
-    </div>
-    <div class="row" style="margin-top:12px;">
-      <button class="secondary" id="addRow">종목 추가</button>
-      <button class="primary" id="calcBtn">계산</button>
-      <button class="secondary" id="reset">초기화</button>
+        <span class="small">0.1 = 0.1%p</span>
+      </div>
+      <div class="controlActions">
+        <button class="secondary" id="addRow">종목 추가</button>
+        <button class="primary" id="calcBtn">계산</button>
+        <button class="secondary" id="reset">초기화</button>
+      </div>
     </div>
   </div>
 

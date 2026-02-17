@@ -161,6 +161,13 @@
     h1{
       font-size:22px;font-weight:700;margin:0;letter-spacing:.3px;text-align:center;flex:1
     }
+    .introText{
+      margin:0 0 14px;
+      color:var(--muted);
+      line-height:1.6;
+      font-size:14px;
+      text-align:center;
+    }
 
     .card{
       background:linear-gradient(180deg,var(--card2),var(--card));
@@ -216,6 +223,38 @@
     .themeToggle{min-width:116px}
     button.secondary:hover{border-color:var(--gold)}
     .small{font-size:12px;color:var(--muted)}
+    .controlBar{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .controlTolerance{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex:1;
+      min-width:280px;
+    }
+    .controlTolerance label{
+      white-space:nowrap;
+    }
+    .controlTolerance input{
+      width:90px;
+      flex:0 0 auto;
+      text-align:right;
+    }
+    .controlTolerance .small{
+      white-space:nowrap;
+    }
+    .controlActions{
+      display:flex;
+      gap:8px;
+      flex-shrink:0;
+    }
+    .controlActions button{
+      flex-shrink:0;
+    }
 
     /* ===== Summary bar ===== */
     .summaryBar{
@@ -303,7 +342,7 @@
       font-size:13px;
       font-variant-numeric:tabular-nums;
       table-layout:fixed;
-      min-width:980px;
+      min-width:1040px;
     }
     thead th{
       background:var(--thead-bg);
@@ -340,9 +379,9 @@
 
     /* Column widths */
     th.col-name, td.col-name{width:220px}
-    th.col-target, td.col-target{width:96px}
-    th.col-price, td.col-price{width:120px}
-    th.col-qty, td.col-qty{width:110px}
+    th.col-target, td.col-target{width:108px}
+    th.col-price, td.col-price{width:132px}
+    th.col-qty, td.col-qty{width:118px}
 
     th.col-val, td.col-val{width:110px}
     th.col-w, td.col-w{width:92px}
@@ -357,6 +396,10 @@
 
     td.col-name input{width:100%;max-width:200px}
     td.col-target input, td.col-price input, td.col-qty input{width:100%;text-align:right}
+    td.col-target input, td.col-price input, td.col-qty input{min-width:0;box-sizing:border-box}
+    td.col-target input::placeholder, td.col-price input::placeholder, td.col-qty input::placeholder{
+      font-size:12px;
+    }
 
 /* ===== Unit suffix for inputs (현재가: 원, 수량: 주) ===== */
 td.col-price, td.col-qty{ position:relative; }
@@ -552,6 +595,9 @@ td.col-qty::after{
       body{padding:20px 16px 88px;}
       .topBar{flex-wrap:wrap;justify-content:center}
       .themeToggle{width:100%}
+      .introText{font-size:13px;text-align:left;}
+      .controlTolerance{min-width:100%;}
+      .controlActions{width:100%;}
       .siteFooter{padding:12px 10px;font-size:13px;}
       .siteFooter .sep{margin:0 4px;}
     }

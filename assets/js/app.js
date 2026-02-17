@@ -32,6 +32,32 @@
     const n = Number(String(v).replaceAll(",", "").trim());
     return isFinite(n) ? n : 0;
   }
+  function toDigits(str){
+    return String(str || "").replace(/[^\d]/g, "");
+  }
+  function withComma(numStr){
+    if(!numStr) return "";
+    return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+  function formatInputWithComma(el){
+    const before = el.value;
+    const start = el.selectionStart ?? before.length;
+    const digitsBeforeCursor = toDigits(before.slice(0, start)).length;
+
+    const digits = toDigits(before);
+    const formatted = withComma(digits);
+    el.value = formatted;
+
+    if(document.activeElement !== el) return;
+    let pos = 0;
+    let digitCount = 0;
+    while(pos < formatted.length){
+      if(/\d/.test(formatted[pos])) digitCount++;
+      pos++;
+      if(digitCount >= digitsBeforeCursor) break;
+    }
+    el.setSelectionRange(pos, pos);
+  }
   function clampMin0(n){ return n < 0 ? 0 : n; }
 
   function fmt(n){ return isFinite(n) ? n.toLocaleString("ko-KR") : "0"; }
@@ -190,8 +216,8 @@
         <input class="target" type="number" min="0" max="100" step="0.1" placeholder="예: 30%">
       </td>
 
-      <td class="col-price"><input class="price" type="number" min="0" step="1" placeholder="예: 1,234"></td>
-      <td class="col-qty"><input class="qty" type="number" min="0" step="1" placeholder="예: 123"></td>
+      <td class="col-price"><input class="price" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 1,234"></td>
+      <td class="col-qty"><input class="qty" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 123"></td>
 
       <td class="g-current col-val val">₩ 0</td>
       <td class="g-current col-w w">0.00%</td>
@@ -217,11 +243,16 @@
 attachTargetGuard(tr.querySelector(".target"));
 tr.querySelector(".delBtn").addEventListener("click", ()=>deleteRow(tr));
 
-// ✅ 현재가/수량 입력 즉시 "현재 보유액/비중" 갱신
+// ✅ 현재가/수량: 편집 중엔 숫자, blur 시 천 단위 콤마 포맷
 const priceEl = tr.querySelector(".price");
 const qtyEl   = tr.querySelector(".qty");
 [priceEl, qtyEl].forEach(el=>{
   el.addEventListener("input", ()=>{
+    formatInputWithComma(el);
+    if(mode === "current") updateCurrentUI();
+  });
+  el.addEventListener("blur", ()=>{
+    formatInputWithComma(el);
     if(mode === "current") updateCurrentUI();
   });
 });
