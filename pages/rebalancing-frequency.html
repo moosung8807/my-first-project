@@ -237,6 +237,16 @@
       font-weight: 700;
     }
     .docFooter a:hover { text-decoration: underline; }
+    .inlineLink {
+      color: var(--accent);
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+    .inlineLink:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
 
     @media (max-width: 768px) {
       body { padding: 18px 14px 78px; }
@@ -256,7 +266,7 @@
 <body>
   <div class="shell">
     <header class="docNav">
-      <a class="backLink" href="../index.html">메인으로 돌아가기</a>
+      <a class="backLink" href="../index.html">리밸런싱 계산기로 가기</a>
       <div class="docMeta">Rebalancing Helper 안내 문서</div>
     </header>
 
@@ -305,7 +315,7 @@
         조정이 필요한지 판단하는 것이 현실적인 방법입니다.
       </p>
       <p>
-        리밸런싱 계산기를 활용하면
+        <a class="inlineLink" href="../index.html">리밸런싱 계산기</a>를 활용하면
         비중 변화와 조정 규모를 객관적으로 확인할 수 있어,
         감정적인 판단을 줄이는 데 도움이 됩니다.
       </p>
@@ -376,7 +386,7 @@
     </main>
 
     <footer class="docFooter">
-      <a href="../index.html">메인 화면으로 이동</a>
+      <a href="../index.html">리밸런싱 계산기로 가기</a>
     </footer>
   </div>
 </body>
