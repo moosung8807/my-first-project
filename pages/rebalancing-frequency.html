@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>리밸런싱은 언제 해야 할까? (주기 정하는 방법)</title>
+  <meta name="description" content="리밸런싱은 언제, 얼마나 자주 해야 할까요? 정기 리밸런싱과 비중 기준 리밸런싱의 차이와 현실적인 주기 설정 방법을 정리합니다." />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9973322388801174"
+     crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      var theme = localStorage.getItem("rb-theme") || "dark";
+      document.documentElement.setAttribute("data-theme", theme === "light" ? "light" : "dark");
+    })();
+  </script>
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="리밸런싱은 언제 해야 할까?" />
+  <meta property="og:description" content="리밸런싱 주기에는 정답이 없습니다. 대표적인 기준과 현실적인 선택 방법을 설명합니다." />
+  <meta property="og:url" content="/pages/rebalancing-frequency.html" />
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --text: #111827;
+      --muted: #4b5563;
+      --line: #d7dbe4;
+      --accent: #1f6feb;
+      --accent-soft: #eaf2ff;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0b0b0f;
+      --panel: #11131a;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --line: #24262d;
+      --accent: #c9a24d;
+      --accent-soft: #1a1920;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px 18px 84px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
+      line-height: 1.72;
+    }
+    .shell {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    .docNav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .backLink {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 12px;
+      background: var(--panel);
+    }
+    .backLink:hover { text-decoration: underline; }
+    .docMeta {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    main {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px 18px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: 33px;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+    h2 {
+      margin: 26px 0 8px;
+      font-size: 24px;
+      line-height: 1.32;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 6px;
+    }
+    p, ul { margin: 0 0 14px; }
+    ul { padding-left: 20px; }
+    li { margin-bottom: 6px; }
+    .highlight {
+      background: var(--accent-soft);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+    .note {
+      color: var(--muted);
+      border-left: 3px solid var(--line);
+      background: color-mix(in srgb, var(--panel) 84%, var(--text) 4%);
+      border-radius: 8px;
+      padding: 11px 12px;
+      margin: 16px 0;
+    }
+    .docFooter {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: right;
+    }
+    .docFooter a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .docFooter a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      body { padding: 18px 14px 78px; }
+      .docNav {
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .docMeta { white-space: normal; }
+      h1 { font-size: 29px; }
+      h2 { font-size: 21px; }
+      p, li { font-size: 17px; }
+      main { padding: 16px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="docNav">
+      <a class="backLink" href="../index.html">메인으로 돌아가기</a>
+      <div class="docMeta">Rebalancing Helper 안내 문서</div>
+    </header>
+
+    <main>
+      <h1>리밸런싱은 언제 해야 할까?</h1>
+
+      <p class="highlight">
+        리밸런싱에는 정해진 정답이 없습니다.
+        중요한 것은 자산 비중이 얼마나 변했는지,
+        그리고 그 변화를 언제 관리할 것인지에 대한 기준을
+        미리 정해두는 것입니다.
+      </p>
+
+      <h2>1. 리밸런싱 주기에 정답은 없다</h2>
+      <p>
+        많은 투자자들이 “리밸런싱은 언제 해야 하나요?”라는 질문을 합니다.
+        하지만 리밸런싱 주기는 투자 성향, 자산 구성, 거래 비용 등에 따라
+        달라지기 때문에 하나의 정답이 존재하지 않습니다.
+      </p>
+
+      <h2>2. 가장 많이 사용하는 리밸런싱 방식</h2>
+      <ul>
+        <li><strong>정기 리밸런싱:</strong> 연 1회, 반기, 분기 등 일정한 시점에 비중을 조정하는 방식</li>
+        <li><strong>비중 기준 리밸런싱:</strong> 목표 비중에서 ±5% 등 일정 범위를 벗어났을 때 조정</li>
+        <li><strong>혼합 방식:</strong> 정기 점검 + 비중 이탈 시 조정</li>
+      </ul>
+
+      <h2>3. 너무 자주 리밸런싱하면 생기는 문제</h2>
+      <p>
+        리밸런싱을 지나치게 자주 하면 거래 비용이 늘어나고,
+        세금 부담이 커질 수 있습니다.
+        또한 단기 변동성에 과도하게 반응하면서
+        오히려 투자 원칙을 흔들 수 있습니다.
+      </p>
+
+      <div class="note">
+        리밸런싱은 수익을 극대화하기 위한 전략이 아니라,
+        위험을 관리하고 장기 계획을 유지하기 위한 수단입니다.
+      </div>
+
+      <h2>4. 계산기를 활용한 현실적인 접근</h2>
+      <p>
+        현재 포트폴리오의 자산 비중이
+        목표에서 얼마나 벗어났는지를 먼저 확인한 뒤,
+        조정이 필요한지 판단하는 것이 현실적인 방법입니다.
+      </p>
+      <p>
+        리밸런싱 계산기를 활용하면
+        비중 변화와 조정 규모를 객관적으로 확인할 수 있어,
+        감정적인 판단을 줄이는 데 도움이 됩니다.
+      </p>
+
+      <h2>📺 리밸런싱 주기 이해를 돕는 영상</h2>
+      <p>
+        아래 영상은 리밸런싱 주기를 어떤 기준으로 설정하면 좋은지
+        실전 관점에서 설명합니다.
+        글과 함께 보면 이해에 도움이 됩니다.
+      </p>
+
+      <div style="position: relative; width: 100%; padding-bottom: 56.25%; margin-top: 10px;">
+        <iframe
+          src="https://www.youtube.com/embed/HSgLtn73mRo"
+          title="리밸런싱 주기 설명 영상"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          style="position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 12px;"
+        ></iframe>
+      </div>
+    </main>
+
+    <footer class="docFooter">
+      <a href="../index.html">메인 화면으로 이동</a>
+    </footer>
+  </div>
+</body>
+</html>

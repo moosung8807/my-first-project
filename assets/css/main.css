@@ -543,6 +543,10 @@ td.col-qty::after{
       color:var(--footer-sep);
       margin:0 6px;
     }
+    .guideLabel {
+      font-weight: 600;
+      color: var(--muted);
+    }
 
     @media (max-width: 640px){
       body{padding:20px 16px 88px;}
