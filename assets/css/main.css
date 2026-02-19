@@ -624,13 +624,19 @@ td.col-qty::after{
       #tbl tbody{display:block}
       #tbl tbody tr{
         display:grid;
-        grid-template-columns:repeat(3, minmax(0, 1fr)) auto;
+        grid-template-columns:minmax(0, 1fr) auto;
         grid-template-areas:
-          "name name name del"
-          "target price qty ."
-          "val w . ."
-          "decision trade . ."
-          "afterqty afterval afterw .";
+          "name del"
+          "target target"
+          "price price"
+          "qty qty"
+          "val val"
+          "w w"
+          "decision decision"
+          "trade trade"
+          "afterqty afterqty"
+          "afterval afterval"
+          "afterw afterw";
         gap:8px;
         border:1px solid var(--line);
         border-radius:14px;
@@ -660,30 +666,36 @@ td.col-qty::after{
       td.col-afterw{grid-area:afterw}
       td.col-del{
         grid-area:del;
-        align-self:start;
+        align-self:center;
         justify-self:end;
       }
 
       td.col-name input{
         width:100%;
         max-width:none;
-        height:38px;
+        min-height:44px;
       }
       td.col-target input,
       td.col-price input,
       td.col-qty input{
-        height:38px;
+        width:100%;
+        min-height:44px;
         padding:0 10px;
         font-size:13px;
       }
+      td.col-target,
+      td.col-price,
+      td.col-qty{
+        margin-bottom:8px;
+      }
       td.col-price input,
       td.col-qty input{
-        padding-right:24px;
+        padding-right:34px;
       }
       td.col-price::after,
       td.col-qty::after{
-        right:10px;
-        font-size:11px;
+        right:12px;
+        font-size:12px;
       }
 
       td.col-target::before,
@@ -713,9 +725,15 @@ td.col-qty::after{
       td.col-afterqty::before{content:"후 수량"}
       td.col-afterval::before{content:"후 보유액"}
       td.col-afterw::before{content:"후 비중"}
+      td.col-val{
+        border-top:1px solid var(--line);
+        padding-top:8px;
+      }
 
       td.col-val,
       td.col-w,
+      td.col-decision,
+      td.col-trade,
       td.col-afterqty,
       td.col-afterval,
       td.col-afterw{
