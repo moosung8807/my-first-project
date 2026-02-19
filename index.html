@@ -132,6 +132,12 @@
         </tfoot>
       </table>
     </div>
+
+    <div class="mobileStickySummary" id="mobileStickySummary" aria-live="polite">
+      <span class="miniItem"><span class="k" id="mobileSumTotalKey">현재 보유액</span><span class="v" id="mobileSumTotalLabel">₩ 0</span></span>
+      <span class="miniItem"><span class="k">기준%</span><span class="v" id="mobileProgressText">0.00%</span></span>
+      <span class="miniItem"><span class="k">현금</span><span class="v" id="mobileCashLabel">₩ 0</span></span>
+    </div>
 </div>
 
 <div class="toast" id="toast">
@@ -141,16 +147,16 @@
 
 <script src="assets/js/app.js"></script>
 <footer class="siteFooter">
-  <a href="pages/about.html">About</a>
-  <span class="sep">|</span>
-  <a href="pages/privacy.html">Privacy Policy</a>
-  <span class="sep">|</span>
-  <a href="pages/contact.html">Contact</a>
-  <span class="sep">|</span>
-  <span class="guideLabel">리밸런싱 가이드:</span>
-  <a href="pages/why-rebalancing.html">리밸런싱을 해야 하는 이유</a>
-  ·
-  <a href="pages/rebalancing-frequency.html">리밸런싱 주기</a>
+  <div class="footerTopLinks">
+    <a href="pages/about.html">About</a>
+    <a href="pages/privacy.html">Privacy Policy</a>
+    <a href="pages/contact.html">Contact</a>
+  </div>
+  <div class="footerGuideLinks">
+    <span class="guideLabel">리밸런싱 가이드</span>
+    <a href="pages/why-rebalancing.html">리밸런싱을 해야 하는 이유</a>
+    <a href="pages/rebalancing-frequency.html">리밸런싱 주기</a>
+  </div>
 </footer>
 </body>
 </html>

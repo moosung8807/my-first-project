@@ -19,6 +19,10 @@
   const progressWrap = document.querySelector("#progressWrap");
   const progressBar = document.querySelector("#progressBar");
   const progressText = document.querySelector("#progressText");
+  const mobileSumTotalKey = document.querySelector("#mobileSumTotalKey");
+  const mobileSumTotalLabel = document.querySelector("#mobileSumTotalLabel");
+  const mobileProgressText = document.querySelector("#mobileProgressText");
+  const mobileCashLabel = document.querySelector("#mobileCashLabel");
 
   // Toast
   const toast = document.querySelector("#toast");
@@ -63,6 +67,16 @@
   function fmt(n){ return isFinite(n) ? n.toLocaleString("ko-KR") : "0"; }
   function fmtKRW(n){ return "₩ " + fmt(Math.round(n)); }
   function fmtPct01(x){ return isFinite(x) ? (x * 100).toFixed(2) + "%" : "0.00%"; }
+  function setTotalSummary(keyText, valueText){
+    sumTotalKey.textContent = keyText;
+    sumTotalLabel.textContent = valueText;
+    if(mobileSumTotalKey) mobileSumTotalKey.textContent = keyText;
+    if(mobileSumTotalLabel) mobileSumTotalLabel.textContent = valueText;
+  }
+  function setCashSummary(valueText){
+    cashLabel.textContent = valueText;
+    if(mobileCashLabel) mobileCashLabel.textContent = valueText;
+  }
 
   function showToast(message){
     toastMsg.textContent = message;
@@ -106,8 +120,8 @@
 
       // 입력 모드: 결과/현금은 의미가 약하니 0으로 정리
       cashPill.classList.remove("negative");
-      cashLabel.textContent = fmtKRW(0);
-      sumTotalKey.textContent = "현재 보유액";
+      setCashSummary(fmtKRW(0));
+      setTotalSummary("현재 보유액", document.querySelector("#sumValue").textContent);
       resetSummaryCounts();
     }else{
       currentEls.forEach(el=>el.classList.add("hide"));
@@ -134,6 +148,7 @@
     const widthPct = Math.min(100, clamped);
     progressBar.style.width = widthPct + "%";
     progressText.textContent = clamped.toFixed(2) + "%";
+    if(mobileProgressText) mobileProgressText.textContent = clamped.toFixed(2) + "%";
     progressWrap.classList.toggle("over", clamped > 100.0001);
   }
 
@@ -213,7 +228,7 @@
       <td class="left col-name"><input class="name" placeholder="종목명"></td>
 
       <td class="col-target">
-        <input class="target" type="number" min="0" max="100" step="0.1" placeholder="예: 30%">
+        <input class="target" type="number" min="0" max="100" step="0.1" inputmode="numeric" placeholder="예: 30%">
       </td>
 
       <td class="col-price"><input class="price" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 1,234"></td>
@@ -276,7 +291,7 @@ function updateCurrentUI(){
   document.querySelector("#sumWeight").textContent = fmtPct01(rows.reduce((s,r)=>s+r.weight,0));
 
   // 상단 현재 보유액
-  sumTotalLabel.textContent = fmtKRW(total);
+  setTotalSummary("현재 보유액", fmtKRW(total));
 }
 
   function snapshotRows(){
@@ -444,16 +459,15 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     document.querySelector("#sumAfterWeight").textContent = fmtPct01(1); // afterW 분모를 afterHoldings로 쓰니 항상 100%
 
     // --- 5) Summary bar 업데이트 ---
-    sumTotalKey.textContent = "매매 후 보유액";
-    sumTotalLabel.textContent = fmtKRW(afterHoldings);
+    setTotalSummary("매매 후 보유액", fmtKRW(afterHoldings));
 
     // 현금 잔액 표시(+만 존재하도록 조정했지만, 혹시 모를 방어)
     if(cashResidual >= 0){
       cashPill.classList.remove("negative");
-      cashLabel.textContent = fmtKRW(cashResidual);
+      setCashSummary(fmtKRW(cashResidual));
     }else{
       cashPill.classList.add("negative");
-      cashLabel.textContent = "₩ -" + fmt(Math.round(-cashResidual));
+      setCashSummary("₩ -" + fmt(Math.round(-cashResidual)));
     }
 
     buyCountEl.textContent = String(buyCnt);
@@ -484,9 +498,8 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     tbody.innerHTML = "";
     for(let i=0;i<7;i++) addRow();
     setMode("current");
-    sumTotalKey.textContent = "현재 보유액";
-    sumTotalLabel.textContent = fmtKRW(0);
-    cashLabel.textContent = fmtKRW(0);
+    setTotalSummary("현재 보유액", fmtKRW(0));
+    setCashSummary(fmtKRW(0));
     cashPill.classList.remove("negative");
     updateTargetSumUI();
     updateCurrentUI();
@@ -504,9 +517,8 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
 
   for(let i=0;i<7;i++) addRow();
   setMode("current");
-  sumTotalKey.textContent = "현재 보유액";
-  sumTotalLabel.textContent = fmtKRW(0);
-  cashLabel.textContent = fmtKRW(0);
+  setTotalSummary("현재 보유액", fmtKRW(0));
+  setCashSummary(fmtKRW(0));
   updateTargetSumUI();
   updateCurrentUI();
 
