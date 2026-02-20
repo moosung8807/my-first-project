@@ -193,6 +193,9 @@
     .sidePanel li + li{
       margin-top:4px;
     }
+    .sidePanel li{
+      word-break:keep-all;
+    }
     .topBar{
       display:flex;
       align-items:center;
