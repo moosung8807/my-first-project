@@ -656,7 +656,7 @@ td.col-qty::after{
 
     @media (min-width: 1200px){
       body{
-        padding-left:24px;
+        padding-left:96px;
         padding-right:28px;
       }
       .layoutShell{
