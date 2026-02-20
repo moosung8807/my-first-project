@@ -655,11 +655,15 @@ td.col-qty::after{
     }
 
     @media (min-width: 1200px){
+      body{
+        padding-left:16px;
+        padding-right:28px;
+      }
       .layoutShell{
-        max-width:1420px;
+        max-width:1360px;
         display:grid;
-        grid-template-columns:280px minmax(0, 1fr);
-        gap:20px;
+        grid-template-columns:240px minmax(0, 1fr);
+        gap:16px;
         align-items:start;
       }
       .sidePanel{
