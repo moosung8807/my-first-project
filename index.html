@@ -13,7 +13,47 @@
 </head>
 
 <body>
-<div class="container">
+<div class="layoutShell">
+  <aside class="sidePanel" aria-label="리밸런싱 계산기 사용 안내">
+    <div class="sidePanelInner">
+      <h2>리밸런싱 계산기 사용 방법</h2>
+      <p>
+        목표 비중과 현재 보유 상태를 입력하면 종목별로 매수/매도/유지 판단을 빠르게 확인할 수 있습니다.
+      </p>
+
+      <section>
+        <h3>입력 항목 설명</h3>
+        <ul>
+          <li><strong>목표비중</strong>: 포트폴리오에서 원하는 최종 비율</li>
+          <li><strong>현재가</strong>: 종목 1주당 현재 가격</li>
+          <li><strong>수량</strong>: 현재 보유하고 있는 주식 수</li>
+          <li><strong>허용오차</strong>: 목표비중과 차이가 이 범위 이하면 유지 처리</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>결과 해석</h3>
+        <ul>
+          <li><strong>매수</strong>: 목표비중 대비 비중이 낮아 수량을 늘려야 하는 상태</li>
+          <li><strong>매도</strong>: 목표비중 대비 비중이 높아 수량을 줄여야 하는 상태</li>
+          <li><strong>유지</strong>: 허용오차 범위 내라서 조정이 필요 없는 상태</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>투자 유의사항</h3>
+        <p>
+          본 계산 결과는 참고용이며, 수수료·세금·체결오차 등 실제 거래 비용은 반영하지 않습니다.
+        </p>
+      </section>
+
+      <div class="adPlaceholder" aria-label="광고 영역(추후 삽입 예정)">
+        광고/배너 영역
+      </div>
+    </div>
+  </aside>
+
+  <main class="container">
   <div class="topBar">
     <h1>리밸런싱 계산기</h1>
     <button class="secondary themeToggle" id="themeToggle" type="button" aria-label="테마 전환">화이트 테마</button>
@@ -138,6 +178,7 @@
       <span class="miniItem"><span class="k">기준%</span><span class="v" id="mobileProgressText">0.00%</span></span>
       <span class="miniItem"><span class="k">현금</span><span class="v" id="mobileCashLabel">₩ 0</span></span>
     </div>
+  </main>
 </div>
 
 <div class="toast" id="toast">
