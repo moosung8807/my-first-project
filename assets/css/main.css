@@ -196,6 +196,9 @@
     .sidePanel li{
       word-break:keep-all;
     }
+    .sidePanel .keepWord{
+      white-space:nowrap;
+    }
     .topBar{
       display:flex;
       align-items:center;
