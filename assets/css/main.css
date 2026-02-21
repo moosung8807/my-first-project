@@ -161,43 +161,98 @@
       padding:18px 18px 22px;
       color:var(--muted);
     }
-    .sidePanel h2{
+    .guideContent h2{
       margin:0 0 12px;
       font-size:18px;
       color:var(--text);
       font-weight:700;
-      line-height:1.4;
+      line-height:1.5;
     }
-    .sidePanel h3{
+    .guideContent h3{
       margin:0 0 8px;
       font-size:14px;
       color:var(--text);
       font-weight:700;
+      line-height:1.5;
     }
-    .sidePanel p{
+    .guideContent p{
       margin:0 0 12px;
       font-size:13px;
-      line-height:1.6;
+      line-height:1.75;
+      word-break:keep-all;
     }
-    .sidePanel section{
+    .guideContent section{
       margin-bottom:14px;
       padding-top:10px;
       border-top:1px solid rgba(156,163,175,.16);
     }
-    .sidePanel ul{
+    .guideContent section:last-child{
+      margin-bottom:0;
+    }
+    .guideContent ul{
       margin:0;
       padding-left:18px;
       font-size:13px;
-      line-height:1.6;
+      line-height:1.75;
     }
-    .sidePanel li + li{
+    .guideContent li + li{
       margin-top:4px;
     }
-    .sidePanel li{
+    .guideContent li{
       word-break:keep-all;
     }
-    .sidePanel .keepWord{
-      white-space:nowrap;
+    .mobileGuide{
+      margin:0 0 14px;
+    }
+    .mobileGuide details{
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:linear-gradient(180deg, var(--card2), var(--card));
+      overflow:hidden;
+      transition:border-color .16s ease, box-shadow .16s ease;
+    }
+    .mobileGuide summary{
+      list-style:none;
+      cursor:pointer;
+      padding:12px 14px;
+      font-size:14px;
+      font-weight:700;
+      color:var(--text);
+      background:rgba(255,255,255,.02);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .mobileGuide summary::-webkit-details-marker{
+      display:none;
+    }
+    .mobileGuide summary::after{
+      content:"▾";
+      font-size:12px;
+      color:var(--muted);
+      transition:transform .16s ease, color .16s ease;
+      transform-origin:center;
+    }
+    .mobileGuide details[open] summary{
+      border-bottom:1px solid rgba(156,163,175,.2);
+    }
+    .mobileGuide details[open] summary::after{
+      transform:rotate(180deg);
+      color:var(--text);
+    }
+    .mobileGuide details[open]{
+      border-color:rgba(156,163,175,.35);
+    }
+    .mobileGuide summary:focus-visible{
+      outline:2px solid rgba(201,162,77,.45);
+      outline-offset:-2px;
+    }
+    .mobileGuideBody{
+      padding:14px;
+    }
+    .mobileGuide details{
+      box-shadow:0 6px 16px rgba(0,0,0,.1);
     }
     .topBar{
       display:flex;
@@ -224,6 +279,77 @@
       padding:16px;
       margin-bottom:16px;
       box-shadow:0 18px 36px var(--card-shadow);
+    }
+    .faqSection{
+      margin:6px 0 20px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,.015));
+      box-shadow:0 10px 24px rgba(0,0,0,.12);
+    }
+    .faqSection h2{
+      margin:0 0 12px;
+      font-size:19px;
+      line-height:1.45;
+      color:var(--text);
+    }
+    .faqItem{
+      border-top:1px solid rgba(156,163,175,.2);
+      padding:10px 0;
+    }
+    .faqItem:first-of-type{
+      border-top:0;
+      padding-top:0;
+    }
+    .faqItem:last-of-type{
+      padding-bottom:0;
+    }
+    .faqItem h3{
+      margin:0;
+    }
+    .faqQuestion{
+      width:100%;
+      height:auto;
+      min-height:0;
+      padding:8px 0;
+      text-align:left;
+      background:transparent;
+      border:0;
+      border-radius:0;
+      color:var(--text);
+      font-size:15px;
+      font-weight:700;
+      line-height:1.5;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      cursor:pointer;
+    }
+    .faqQuestion::after{
+      content:"+";
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.2;
+      flex:0 0 auto;
+      transition:transform .14s ease, color .14s ease;
+    }
+    .faqQuestion[aria-expanded="true"]::after{
+      content:"−";
+      color:var(--text);
+    }
+    .faqQuestion:focus-visible{
+      outline:2px solid rgba(201,162,77,.45);
+      outline-offset:2px;
+      border-radius:6px;
+    }
+    .faqAnswer{
+      margin:2px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.75;
+      word-break:keep-all;
     }
     .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
     label{
@@ -654,7 +780,7 @@ td.col-qty::after{
       color: var(--muted);
     }
 
-    @media (min-width: 1200px){
+    @media (min-width: 1024px){
       body{
         padding-left:96px;
         padding-right:28px;
@@ -662,8 +788,8 @@ td.col-qty::after{
       .layoutShell{
         max-width:1420px;
         display:grid;
-        grid-template-columns:280px minmax(0, 1fr);
-        gap:20px;
+        grid-template-columns:310px minmax(0, 1fr);
+        gap:22px;
         align-items:start;
         margin-left:0;
         margin-right:auto;
@@ -675,9 +801,65 @@ td.col-qty::after{
         position:sticky;
         top:28px;
       }
+      .mobileGuide{
+        display:none;
+      }
       .container{
         max-width:none;
         margin:0;
+      }
+      .sidePanelInner{
+        padding:16px 16px 20px;
+      }
+      .guideContent h2{
+        font-size:17px;
+      }
+      .guideContent h3{
+        font-size:13px;
+      }
+      .guideContent p,
+      .guideContent ul{
+        font-size:12.75px;
+        line-height:1.74;
+      }
+      .faqSection{
+        margin-top:8px;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1023px){
+      .layoutShell{
+        max-width:980px;
+      }
+      .container{
+        max-width:none;
+      }
+      .mobileGuide{
+        margin:0 0 16px;
+      }
+      .mobileGuide summary{
+        padding:13px 14px;
+        font-size:14px;
+      }
+      .mobileGuideBody{
+        padding:14px 14px 15px;
+      }
+      .mobileGuide details[open]{
+        box-shadow:0 8px 18px rgba(0,0,0,.12);
+      }
+      .guideContent h2{
+        font-size:16px;
+      }
+      .guideContent h3{
+        font-size:13.5px;
+      }
+      .guideContent p,
+      .guideContent ul{
+        font-size:13px;
+        line-height:1.75;
+      }
+      .guideContent li + li{
+        margin-top:5px;
       }
     }
 
@@ -685,6 +867,41 @@ td.col-qty::after{
       body{padding:20px 14px 24px}
       .card{padding:12px}
       .summaryBar{display:none}
+      .faqSection{
+        margin:8px 0 16px;
+        padding:14px;
+        border-radius:14px;
+      }
+      .faqSection h2{
+        font-size:17px;
+        margin-bottom:10px;
+      }
+      .faqQuestion{
+        font-size:14px;
+        line-height:1.45;
+        padding:8px 0;
+      }
+      .faqAnswer{
+        font-size:13px;
+        line-height:1.72;
+      }
+      .mobileGuide{
+        margin:0 0 12px;
+      }
+      .mobileGuide details[open]{
+        box-shadow:0 8px 16px rgba(0,0,0,.14);
+      }
+      .guideContent h2{
+        font-size:16px;
+      }
+      .guideContent h3{
+        font-size:13px;
+      }
+      .guideContent p,
+      .guideContent ul{
+        font-size:13px;
+        line-height:1.74;
+      }
 
       .tableWrap{
         overflow:visible;
@@ -882,10 +1099,66 @@ td.col-qty::after{
       .topBar{flex-wrap:wrap;justify-content:center}
       .themeToggle{width:100%}
       .introText{font-size:13px;text-align:left;}
+      .mobileGuide summary{
+        padding:11px 12px;
+        font-size:13.5px;
+      }
+      .mobileGuideBody{
+        padding:12px;
+      }
+      .guideContent h2{
+        font-size:15px;
+      }
+      .guideContent p,
+      .guideContent ul{
+        font-size:12.5px;
+        line-height:1.7;
+      }
+      .guideContent li + li{
+        margin-top:3px;
+      }
       .controlTolerance{min-width:100%;}
       .controlActions{width:100%;}
       .controlActions button{flex:1}
       .siteFooter{padding:12px 8px;font-size:12px;}
       .footerTopLinks,
       .footerGuideLinks{gap:12px;}
+    }
+
+    @media (max-width: 390px){
+      .faqSection{
+        padding:12px;
+      }
+      .faqSection h2{
+        font-size:16px;
+      }
+      .faqQuestion{
+        font-size:13px;
+      }
+      .faqAnswer{
+        font-size:12px;
+        line-height:1.68;
+      }
+      .mobileGuide summary{
+        padding:10px 11px;
+        font-size:13px;
+      }
+      .mobileGuideBody{
+        padding:11px;
+      }
+      .guideContent h2{
+        font-size:14px;
+        line-height:1.45;
+      }
+      .guideContent h3{
+        font-size:12.5px;
+      }
+      .guideContent p,
+      .guideContent ul{
+        font-size:12px;
+        line-height:1.68;
+      }
+      .guideContent li + li{
+        margin-top:2px;
+      }
     }

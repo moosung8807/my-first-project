@@ -15,38 +15,44 @@
 <body>
 <div class="layoutShell">
   <aside class="sidePanel" aria-label="리밸런싱 계산기 사용 안내">
-    <div class="sidePanelInner">
-      <h2>리밸런싱 계산기 사용 방법</h2>
+    <div class="sidePanelInner guideContent">
+      <h2>■ 리밸런싱 계산기 사용 방법</h2>
       <p>
-        목표 비중과 현재 보유 상태를 입력하면 종목별로 매수/매도/유지 판단을 빠르게 확인할 수 있습니다.
+        이 계산기는 포트폴리오의 현재 비중과 목표 비중을 비교해
+        어떤 자산을 매수·매도·유지해야 하는지 빠르게 확인할 수 있는 도구입니다.
       </p>
 
       <section>
-        <h3>입력 항목 설명</h3>
+        <h3>■ 입력 항목 설명</h3>
         <ul>
-          <li><strong>목표비중</strong>: 포트폴리오에서 원하는 최종 <span class="keepWord">비율</span></li>
-          <li><strong>현재가</strong>: 종목 1주당 현재 가격</li>
-          <li><strong>수량</strong>: 현재 보유하고 있는 주식 수</li>
-          <li><strong>허용오차</strong>: 목표비중과 차이가 이 범위 이하면 유지 처리</li>
+          <li>목표비중 (%): 포트폴리오에서 각 자산이 차지하길 원하는 비율입니다. 전체 비중의 합은 100%가 되어야 합니다.</li>
+          <li>현재가 (원): 해당 자산의 현재 1주당 가격을 입력합니다.</li>
+          <li>수량 (주): 현재 보유 중인 주식 수량을 입력합니다.</li>
+          <li>유지 허용오차 (%p): 목표 비중과의 차이가 이 범위 이내일 경우 매수·매도 없이 ‘유지’ 상태로 판단합니다.</li>
         </ul>
       </section>
 
       <section>
-        <h3>결과 해석</h3>
+        <h3>■ 계산 결과 해석</h3>
         <ul>
-          <li><strong>매수</strong>: 목표비중 대비 비중이 낮아 수량을 늘려야 하는 상태</li>
-          <li><strong>매도</strong>: 목표비중 대비 비중이 높아 수량을 줄여야 하는 상태</li>
-          <li><strong>유지</strong>: 허용오차 범위 내라서 조정이 필요 없는 <span class="keepWord">상태</span></li>
+          <li>매수: 목표 비중보다 낮아 자산을 늘려야 하는 상태</li>
+          <li>매도: 목표 비중보다 높아 자산을 줄여야 하는 상태</li>
+          <li>유지: 허용오차 범위 내로 조정이 필요 없는 상태</li>
         </ul>
-      </section>
-
-      <section>
-        <h3>투자 유의사항</h3>
         <p>
-          본 계산 결과는 참고용이며, 수수료·세금·체결오차 등 실제 거래 비용은 반영하지 않습니다.
+          계산 결과는 비중 기준 판단이며,
+          실제 거래 수량은 개인 투자 전략에 따라 달라질 수 있습니다.
         </p>
       </section>
 
+      <section>
+        <h3>■ 투자 유의사항</h3>
+        <p>
+          본 계산기는 투자 자문이나 수익 보장을 제공하지 않습니다.
+          세금, 수수료, 슬리피지 등 실제 거래 비용은 반영되지 않으며
+          모든 투자 판단의 책임은 사용자에게 있습니다.
+        </p>
+      </section>
     </div>
   </aside>
 
@@ -61,6 +67,51 @@
     자동으로 재조정 방향을 계산해주는 도구입니다.
     리밸런싱은 장기 투자 전략에서 위험 관리를 돕는 중요한 절차입니다.
   </p>
+
+  <section class="mobileGuide" aria-label="리밸런싱 계산기 사용 안내">
+    <details>
+      <summary>계산기 사용 방법 보기</summary>
+      <div class="mobileGuideBody guideContent">
+        <h2>■ 리밸런싱 계산기 사용 방법</h2>
+        <p>
+          이 계산기는 포트폴리오의 현재 비중과 목표 비중을 비교해
+          어떤 자산을 매수·매도·유지해야 하는지 빠르게 확인할 수 있는 도구입니다.
+        </p>
+
+        <section>
+          <h3>■ 입력 항목 설명</h3>
+          <ul>
+            <li>목표비중 (%): 포트폴리오에서 각 자산이 차지하길 원하는 비율입니다. 전체 비중의 합은 100%가 되어야 합니다.</li>
+            <li>현재가 (원): 해당 자산의 현재 1주당 가격을 입력합니다.</li>
+            <li>수량 (주): 현재 보유 중인 주식 수량을 입력합니다.</li>
+            <li>유지 허용오차 (%p): 목표 비중과의 차이가 이 범위 이내일 경우 매수·매도 없이 ‘유지’ 상태로 판단합니다.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>■ 계산 결과 해석</h3>
+          <ul>
+            <li>매수: 목표 비중보다 낮아 자산을 늘려야 하는 상태</li>
+            <li>매도: 목표 비중보다 높아 자산을 줄여야 하는 상태</li>
+            <li>유지: 허용오차 범위 내로 조정이 필요 없는 상태</li>
+          </ul>
+          <p>
+            계산 결과는 비중 기준 판단이며,
+            실제 거래 수량은 개인 투자 전략에 따라 달라질 수 있습니다.
+          </p>
+        </section>
+
+        <section>
+          <h3>■ 투자 유의사항</h3>
+          <p>
+            본 계산기는 투자 자문이나 수익 보장을 제공하지 않습니다.
+            세금, 수수료, 슬리피지 등 실제 거래 비용은 반영되지 않으며
+            모든 투자 판단의 책임은 사용자에게 있습니다.
+          </p>
+        </section>
+      </div>
+    </details>
+  </section>
 
   <div class="card">
     <div class="controlBar">
@@ -175,6 +226,77 @@
       <span class="miniItem"><span class="k">기준%</span><span class="v" id="mobileProgressText">0.00%</span></span>
       <span class="miniItem"><span class="k">현금</span><span class="v" id="mobileCashLabel">₩ 0</span></span>
     </div>
+  </div>
+
+    <section class="faqSection" aria-labelledby="faqTitle">
+      <h2 id="faqTitle">자주 묻는 질문 (FAQ)</h2>
+
+      <article class="faqItem">
+        <h3>
+          <button class="faqQuestion" type="button" aria-expanded="false" aria-controls="faqAnswer1" id="faqQuestion1">
+            Q1. 리밸런싱이란 무엇인가요?
+          </button>
+        </h3>
+        <p id="faqAnswer1" class="faqAnswer" role="region" aria-labelledby="faqQuestion1" hidden>
+          A. 리밸런싱은 자산 가격 변동으로 인해 변한 포트폴리오 비중을
+          처음 설정한 목표 비중에 맞게 다시 조정하는 투자 관리 방법입니다.
+          장기 투자에서 위험 관리와 수익 안정성에 중요한 역할을 합니다.
+        </p>
+      </article>
+
+      <article class="faqItem">
+        <h3>
+          <button class="faqQuestion" type="button" aria-expanded="false" aria-controls="faqAnswer2" id="faqQuestion2">
+            Q2. 리밸런싱은 얼마나 자주 해야 하나요?
+          </button>
+        </h3>
+        <p id="faqAnswer2" class="faqAnswer" role="region" aria-labelledby="faqQuestion2" hidden>
+          A. 일반적으로 분기, 반기, 연 1회 주기로 많이 사용됩니다.
+          다만 시장 변동성이 크거나 자산 비중이 크게 어긋난 경우
+          주기와 관계없이 추가 리밸런싱을 고려할 수 있습니다.
+        </p>
+      </article>
+
+      <article class="faqItem">
+        <h3>
+          <button class="faqQuestion" type="button" aria-expanded="false" aria-controls="faqAnswer3" id="faqQuestion3">
+            Q3. 유지 허용오차(%p)는 무엇인가요?
+          </button>
+        </h3>
+        <p id="faqAnswer3" class="faqAnswer" role="region" aria-labelledby="faqQuestion3" hidden>
+          A. 목표 비중과 현재 비중의 차이가
+          설정한 허용오차 범위 이내일 경우
+          매수나 매도 없이 ‘유지’로 판단하기 위한 기준입니다.
+          불필요한 잦은 거래를 줄이는 데 도움이 됩니다.
+        </p>
+      </article>
+
+      <article class="faqItem">
+        <h3>
+          <button class="faqQuestion" type="button" aria-expanded="false" aria-controls="faqAnswer4" id="faqQuestion4">
+            Q4. 계산 결과 그대로 거래해도 되나요?
+          </button>
+        </h3>
+        <p id="faqAnswer4" class="faqAnswer" role="region" aria-labelledby="faqQuestion4" hidden>
+          A. 아닙니다.
+          본 계산기는 비중 기준 참고용 도구이며,
+          세금, 수수료, 시장 유동성 등은 반영하지 않습니다.
+          실제 거래 여부와 수량은 개인의 투자 판단에 따라 결정해야 합니다.
+        </p>
+      </article>
+
+      <article class="faqItem">
+        <h3>
+          <button class="faqQuestion" type="button" aria-expanded="false" aria-controls="faqAnswer5" id="faqQuestion5">
+            Q5. 이 계산기는 어떤 투자자에게 적합한가요?
+          </button>
+        </h3>
+        <p id="faqAnswer5" class="faqAnswer" role="region" aria-labelledby="faqQuestion5" hidden>
+          A. 장기 투자자, ETF·주식 포트폴리오를 관리하는 투자자,
+          정기적으로 자산 비중을 점검하고 싶은 분들에게 적합합니다.
+        </p>
+      </article>
+    </section>
   </main>
 </div>
 
@@ -184,6 +306,21 @@
 </div>
 
 <script src="assets/js/app.js"></script>
+<script>
+  (function() {
+    const faqButtons = document.querySelectorAll(".faqQuestion");
+    faqButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const isOpen = button.getAttribute("aria-expanded") === "true";
+        const answerId = button.getAttribute("aria-controls");
+        const answer = answerId ? document.getElementById(answerId) : null;
+
+        button.setAttribute("aria-expanded", isOpen ? "false" : "true");
+        if (answer) answer.hidden = isOpen;
+      });
+    });
+  })();
+</script>
 <footer class="siteFooter">
   <div class="footerTopLinks">
     <a href="pages/about.html">About</a>
