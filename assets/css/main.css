@@ -1318,7 +1318,7 @@ td.col-qty::after{
       #tableCard.mode-result #tbl tbody td.col-name{
         align-self:center;
         font-weight:700;
-        padding-right:88px;
+        padding-right:0;
       }
       #tableCard.mode-result #tbl tbody td.col-name input{
         display:none;
@@ -1360,17 +1360,20 @@ td.col-qty::after{
       }
       #tableCard.mode-result #tbl tbody td.col-trade{
         align-self:center;
-        padding-right:0;
         margin-top:6px;
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        gap:8px;
+        display:grid;
+        grid-template-columns:minmax(0, 1fr) auto;
+        grid-template-areas:
+          "trade trade"
+          ". toggle";
+        row-gap:6px;
+        column-gap:8px;
       }
       #tableCard.mode-result #tbl tbody td.col-trade::before{
         display:none;
       }
       #tableCard.mode-result #tbl tbody .tradeCell{
+        grid-area:trade;
         justify-content:flex-start;
         min-width:0;
       }
@@ -1383,11 +1386,13 @@ td.col-qty::after{
         min-width:0;
       }
       #tableCard.mode-result #tbl tbody .detailToggleBtn{
+        grid-area:toggle;
         display:inline-flex!important;
         align-items:center;
         justify-content:center;
         position:static;
-        margin-left:auto;
+        justify-self:end;
+        margin-left:0;
         flex:none;
         white-space:nowrap;
         height:28px;
