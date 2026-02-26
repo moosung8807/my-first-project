@@ -819,7 +819,6 @@ td.col-qty::after{
       font-weight:900;
     }
 
-    .mode-result tbody td .name,
     .mode-result tbody td .target,
     .mode-result tbody td .price,
     .mode-result tbody td .qty{
@@ -1330,9 +1329,10 @@ td.col-qty::after{
         color:var(--text);
         font-size:14px;
         line-height:1.35;
-        white-space:nowrap;
-        overflow:hidden;
-        text-overflow:ellipsis;
+        white-space:normal;
+        overflow:visible;
+        text-overflow:clip;
+        word-break:keep-all;
       }
       #tableCard.mode-result #tbl tbody td.col-decision{
         align-self:start;
@@ -1386,9 +1386,11 @@ td.col-qty::after{
         display:inline-flex!important;
         align-items:center;
         justify-content:center;
-        position:static;
-        margin-left:auto;
-        flex:0 0 auto;
+        position:absolute;
+        right:10px;
+        top:10px;
+        margin-left:0;
+        flex:none;
         white-space:nowrap;
         height:28px;
         padding:0 10px;
