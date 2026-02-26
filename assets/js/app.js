@@ -3,11 +3,19 @@
   const calcBtn = document.querySelector("#calcBtn");
   const sumTargetEl = document.querySelector("#sumTarget");
   const themeToggle = document.querySelector("#themeToggle");
+  const heroCalcBtn = document.querySelector("#heroCalcBtn");
+  const heroDemoBtn = document.querySelector("#heroDemoBtn");
+  const inputSection = document.querySelector("#inputSection");
+  const resultSection = document.querySelector("#resultSection");
+  const errorSummary = document.querySelector("#errorSummary");
+  const staleBadge = document.querySelector("#staleBadge");
+  const editWarningFloat = document.querySelector("#editWarningFloat");
 
   // Summary UI
   const modeLabel = document.querySelector("#modeLabel");
   const sumTotalKey = document.querySelector("#sumTotalKey");
   const sumTotalLabel = document.querySelector("#sumTotalLabel");
+  const cashKey = document.querySelector("#cashKey");
   const cashLabel = document.querySelector("#cashLabel");
   const cashPill = document.querySelector("#cashPill");
 
@@ -28,9 +36,15 @@
   const toast = document.querySelector("#toast");
   const toastMsg = document.querySelector("#toastMsg");
   let toastTimer = null;
+  let editWarningFloatTimer = null;
 
   let mode = "current"; // "current" | "result"
   const THEME_KEY = "rb-theme";
+  const FIXED_TOLERANCE_PERCENT_POINT = 0.1;
+  const FIXED_TOLERANCE_RATIO = FIXED_TOLERANCE_PERCENT_POINT / 100;
+  const LARGE_AMOUNT_WRAP_THRESHOLD = 1000000000;
+  let hasComputed = false;
+  let isDirtyAfterCalc = false;
 
   function parseNum(v){
     const n = Number(String(v).replaceAll(",", "").trim());
@@ -77,12 +91,113 @@
     cashLabel.textContent = valueText;
     if(mobileCashLabel) mobileCashLabel.textContent = valueText;
   }
+  function resetSummaryKeyLabels(){
+    sumTotalKey.textContent = "현재 보유액";
+    if(cashKey) cashKey.textContent = "현금 잔액";
+  }
+  function applyResultSummaryKeyLabels(afterHoldings, cashResidual){
+    const shouldWrap = afterHoldings >= LARGE_AMOUNT_WRAP_THRESHOLD || cashResidual >= LARGE_AMOUNT_WRAP_THRESHOLD;
+    sumTotalKey.innerHTML = shouldWrap ? "매매 후<br>보유액" : "매매 후 보유액";
+    if(cashKey){
+      cashKey.innerHTML = shouldWrap ? "현금<br>잔액" : "현금 잔액";
+    }
+  }
 
   function showToast(message){
     toastMsg.textContent = message;
     toast.classList.add("show");
     clearTimeout(toastTimer);
     toastTimer = setTimeout(()=>toast.classList.remove("show"), 1700);
+  }
+
+  function scrollToEl(el){
+    if(!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function clearInvalidMarks(){
+    document.querySelectorAll(".invalidField").forEach(el=>el.classList.remove("invalidField"));
+  }
+
+  function hideErrorSummary(){
+    if(!errorSummary) return;
+    errorSummary.hidden = true;
+    errorSummary.textContent = "";
+  }
+
+  function showErrorSummary(message){
+    if(!errorSummary){
+      showToast(message);
+      return;
+    }
+    errorSummary.textContent = message;
+    errorSummary.hidden = false;
+  }
+
+  function setDirtyState(next){
+    isDirtyAfterCalc = Boolean(next);
+    if(!staleBadge) return;
+
+    if(!hasComputed){
+      staleBadge.hidden = true;
+      staleBadge.classList.remove("dirty", "clean");
+      staleBadge.textContent = "입력 변경됨 · 다시 계산 필요";
+      return;
+    }
+
+    staleBadge.hidden = false;
+    staleBadge.classList.toggle("dirty", isDirtyAfterCalc);
+    staleBadge.classList.toggle("clean", !isDirtyAfterCalc);
+    staleBadge.textContent = isDirtyAfterCalc
+      ? "입력 변경됨 · 다시 계산 필요"
+      : "최신 계산 결과가 반영됨";
+  }
+
+  function markDirtyIfNeeded(){
+    if(hasComputed && mode === "current"){
+      setDirtyState(true);
+    }
+  }
+
+  function showEditWarningNearInput(inputEl){
+    if(!editWarningFloat || !inputEl) return;
+    const rect = inputEl.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const bubbleWidth = Math.min(280, vw - 16);
+    let left = rect.left + rect.width / 2 - bubbleWidth / 2;
+    let top = rect.top - 44;
+
+    if(left < 8) left = 8;
+    if(left + bubbleWidth > vw - 8) left = vw - bubbleWidth - 8;
+    if(top < 8) top = rect.bottom + 8;
+
+    editWarningFloat.style.width = `${bubbleWidth}px`;
+    editWarningFloat.style.left = `${left}px`;
+    editWarningFloat.style.top = `${top}px`;
+    editWarningFloat.hidden = false;
+
+    clearTimeout(editWarningFloatTimer);
+    editWarningFloatTimer = setTimeout(()=>{
+      editWarningFloat.hidden = true;
+    }, 2200);
+  }
+
+  function switchToCurrentOnEdit(inputEl){
+    if(mode !== "result") return;
+    setMode("current");
+    showEditWarningNearInput(inputEl);
+  }
+
+  function warnOnResultFocus(inputEl){
+    if(mode !== "result") return;
+    showEditWarningNearInput(inputEl);
+  }
+
+  function focusInvalidField(el){
+    if(!el) return;
+    el.classList.add("invalidField");
+    scrollToEl(el);
+    el.focus({ preventScroll: true });
   }
 
   function setTheme(theme){
@@ -122,6 +237,7 @@
       cashPill.classList.remove("negative");
       setCashSummary(fmtKRW(0));
       setTotalSummary("현재 보유액", document.querySelector("#sumValue").textContent);
+      resetSummaryKeyLabels();
       resetSummaryCounts();
     }else{
       currentEls.forEach(el=>el.classList.add("hide"));
@@ -130,6 +246,7 @@
       tableCard.classList.add("mode-result");
       tableCard.classList.remove("mode-current");
       modeLabel.textContent = "결과";
+      setDirtyState(false);
     }
   }
 
@@ -207,6 +324,9 @@
       setMode("current");
       showToast("행이 변경되어 현재 보기로 돌아왔어요. 다시 계산하세요.");
     }
+    markDirtyIfNeeded();
+    hideErrorSummary();
+    clearInvalidMarks();
   }
 
   function setTradeCell(tr, tradeQty, decision){
@@ -225,14 +345,14 @@
   function addRow(){
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td class="left col-name"><input class="name" placeholder="종목명"></td>
+      <td class="left col-name"><input class="name" placeholder="종목명" aria-label="종목명"></td>
 
       <td class="col-target">
-        <input class="target" type="number" min="0" max="100" step="0.1" inputmode="numeric" placeholder="예: 30%">
+        <input class="target" type="number" min="0" max="100" step="0.1" inputmode="numeric" placeholder="예: 30%" aria-label="목표비중 퍼센트">
       </td>
 
-      <td class="col-price"><input class="price" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 1,234"></td>
-      <td class="col-qty"><input class="qty" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 123"></td>
+      <td class="col-price"><input class="price" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 1,234" aria-label="현재가 원"></td>
+      <td class="col-qty"><input class="qty" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 123" aria-label="수량 주"></td>
 
       <td class="g-current col-val val">₩ 0</td>
       <td class="g-current col-w w">0.00%</td>
@@ -255,20 +375,48 @@
     `;
     tbody.appendChild(tr);
 
+    // 새 행은 현재 모드와 동일한 컬럼 가시성 상태로 시작해야 레이아웃이 유지된다.
+    const currentCells = tr.querySelectorAll(".g-current");
+    const resultCells = tr.querySelectorAll(".g-result");
+    if(mode === "current"){
+      currentCells.forEach(el=>el.classList.remove("hide"));
+      resultCells.forEach(el=>el.classList.add("hide"));
+    }else{
+      currentCells.forEach(el=>el.classList.add("hide"));
+      resultCells.forEach(el=>el.classList.remove("hide"));
+    }
+
 attachTargetGuard(tr.querySelector(".target"));
 tr.querySelector(".delBtn").addEventListener("click", ()=>deleteRow(tr));
+tr.querySelector(".name").addEventListener("focus", ()=>warnOnResultFocus(tr.querySelector(".name")));
+tr.querySelector(".name").addEventListener("input", ()=>{
+  switchToCurrentOnEdit(tr.querySelector(".name"));
+  markDirtyIfNeeded();
+});
+tr.querySelector(".target").addEventListener("focus", ()=>warnOnResultFocus(tr.querySelector(".target")));
+tr.querySelector(".target").addEventListener("input", ()=>{
+  switchToCurrentOnEdit(tr.querySelector(".target"));
+  tr.querySelector(".target").classList.remove("invalidField");
+  if(mode === "current") updateCurrentUI();
+  markDirtyIfNeeded();
+});
 
 // ✅ 현재가/수량: 편집 중엔 숫자, blur 시 천 단위 콤마 포맷
 const priceEl = tr.querySelector(".price");
 const qtyEl   = tr.querySelector(".qty");
 [priceEl, qtyEl].forEach(el=>{
+  el.addEventListener("focus", ()=>warnOnResultFocus(el));
   el.addEventListener("input", ()=>{
+    switchToCurrentOnEdit(el);
+    el.classList.remove("invalidField");
     formatInputWithComma(el);
     if(mode === "current") updateCurrentUI();
+    markDirtyIfNeeded();
   });
   el.addEventListener("blur", ()=>{
     formatInputWithComma(el);
     if(mode === "current") updateCurrentUI();
+    markDirtyIfNeeded();
   });
 });
 
@@ -349,10 +497,89 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     return { trades, buyCost, sellProceeds, residual };
   }
 
+  function validateBeforeCalc(){
+    clearInvalidMarks();
+    hideErrorSummary();
+
+    const allRows = [...tbody.querySelectorAll("tr")];
+    const sum = sumTargets(null);
+    const hasAnyActive = allRows.some((tr)=>{
+      const target = clampMin0(parseNum(tr.querySelector(".target").value));
+      const price = clampMin0(parseNum(tr.querySelector(".price").value));
+      const qty = clampMin0(parseNum(tr.querySelector(".qty").value));
+      return target > 0 || (price > 0 && qty > 0);
+    });
+
+    if(!hasAnyActive){
+      showErrorSummary("입력 오류: 최소 1개 종목에 목표비중 또는 보유 수량/가격을 입력하세요.");
+      showToast("입력값이 비어 있어요.");
+      const first = tbody.querySelector("tr .target");
+      focusInvalidField(first);
+      return false;
+    }
+
+    if(Math.abs(sum - 100) > 0.01){
+      showErrorSummary(`입력 오류: 목표비중 합계가 100%가 아닙니다. 현재 ${sum.toFixed(2)}%입니다.`);
+      showToast("목표비중 합계를 100%로 맞춰주세요.");
+      const first = tbody.querySelector("tr .target");
+      focusInvalidField(first);
+      return false;
+    }
+
+    for(const tr of allRows){
+      const targetEl = tr.querySelector(".target");
+      const priceEl = tr.querySelector(".price");
+      const target = clampMin0(parseNum(targetEl.value));
+      const price = clampMin0(parseNum(priceEl.value));
+
+      if(target > 0 && price <= 0){
+        showErrorSummary("입력 오류: 목표비중을 입력한 종목은 현재가를 0보다 크게 입력해야 합니다.");
+        showToast("현재가를 확인해주세요.");
+        focusInvalidField(priceEl);
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  function fillDemoAndRun(){
+    const samples = [
+      { name: "KODEX 200", target: "35", price: "35,200", qty: "110" },
+      { name: "TIGER 미국S&P500", target: "35", price: "18,450", qty: "180" },
+      { name: "KOSEF 국고채10년", target: "20", price: "10,230", qty: "120" },
+      { name: "KODEX 골드선물(H)", target: "10", price: "14,120", qty: "60" }
+    ];
+
+    tbody.innerHTML = "";
+    samples.forEach(()=>addRow());
+
+    const rows = [...tbody.querySelectorAll("tr")];
+    samples.forEach((sample, idx)=>{
+      const tr = rows[idx];
+      tr.querySelector(".name").value = sample.name;
+      tr.querySelector(".target").value = sample.target;
+      tr.querySelector(".price").value = sample.price;
+      tr.querySelector(".qty").value = sample.qty;
+    });
+
+    updateTargetSumUI();
+    updateCurrentUI();
+    clearInvalidMarks();
+    hideErrorSummary();
+
+    if(validateBeforeCalc()){
+      calc();
+      hasComputed = true;
+      setMode("result");
+      setDirtyState(false);
+      scrollToEl(resultSection || tableCard);
+      showToast("예시 데이터로 계산을 완료했어요.");
+    }
+  }
+
   function calc(){
-    const epsEl = document.querySelector("#eps");
-    if(parseNum(epsEl.value) < 0) epsEl.value = 0;
-    const eps = clampMin0(parseNum(epsEl.value)) / 100;
+    const eps = FIXED_TOLERANCE_RATIO;
 
     const { rows, total } = snapshotRows();
 
@@ -460,6 +687,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
 
     // --- 5) Summary bar 업데이트 ---
     setTotalSummary("매매 후 보유액", fmtKRW(afterHoldings));
+    applyResultSummaryKeyLabels(afterHoldings, cashResidual);
 
     // 현금 잔액 표시(+만 존재하도록 조정했지만, 혹시 모를 방어)
     if(cashResidual >= 0){
@@ -478,29 +706,46 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     updateTargetSumUI();
   }
 
-  document.querySelector("#addRow").onclick = addRow;
+  document.querySelector("#addRow").onclick = ()=>{
+    addRow();
+    markDirtyIfNeeded();
+    hideErrorSummary();
+    clearInvalidMarks();
+  };
 
   calcBtn.onclick = ()=>{
     if(mode === "current"){
-      const sum = sumTargets(null);
-      if(sum > 100.0001){
-        showToast("기준% 합계가 100%를 초과했어요. 입력을 조정하세요.");
+      if(!validateBeforeCalc()){
         return;
       }
       calc();
+      hasComputed = true;
       setMode("result");
+      setDirtyState(false);
+      hideErrorSummary();
+      clearInvalidMarks();
+      if(window.matchMedia("(max-width: 768px)").matches){
+        scrollToEl(resultSection || tableCard);
+      }
     }else{
       setMode("current");
     }
   };
 
   document.querySelector("#reset").onclick = ()=>{
+    if(!window.confirm("전체 입력값을 초기화할까요?")){
+      return;
+    }
     tbody.innerHTML = "";
     for(let i=0;i<7;i++) addRow();
     setMode("current");
     setTotalSummary("현재 보유액", fmtKRW(0));
     setCashSummary(fmtKRW(0));
     cashPill.classList.remove("negative");
+    hasComputed = false;
+    setDirtyState(false);
+    hideErrorSummary();
+    clearInvalidMarks();
     updateTargetSumUI();
     updateCurrentUI();
   };
@@ -514,17 +759,21 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
       setTheme(currentTheme === "dark" ? "light" : "dark");
     });
   }
+  if(heroCalcBtn){
+    heroCalcBtn.addEventListener("click", ()=>{
+      scrollToEl(inputSection);
+      const firstInput = tbody.querySelector("tr .target");
+      if(firstInput) firstInput.focus({ preventScroll: true });
+    });
+  }
+  if(heroDemoBtn){
+    heroDemoBtn.addEventListener("click", fillDemoAndRun);
+  }
 
   for(let i=0;i<7;i++) addRow();
   setMode("current");
   setTotalSummary("현재 보유액", fmtKRW(0));
   setCashSummary(fmtKRW(0));
+  setDirtyState(false);
   updateTargetSumUI();
   updateCurrentUI();
-
-  // eps 음수 방지
-  const epsEl = document.querySelector("#eps");
-  epsEl.addEventListener("input", ()=>{
-    const v = parseNum(epsEl.value);
-    if(v < 0) epsEl.value = 0;
-  });

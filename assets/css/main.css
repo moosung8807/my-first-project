@@ -181,6 +181,9 @@
       line-height:1.75;
       word-break:keep-all;
     }
+    .guideMoreLinks{
+      margin-top:12px;
+    }
     .guideContent section{
       margin-bottom:14px;
       padding-top:10px;
@@ -272,15 +275,46 @@
     .mobileGuide details{
       box-shadow:0 6px 16px rgba(0,0,0,.1);
     }
-    .topBar{
+    .heroSection{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:18px;
+      margin:0 0 14px;
+      background:
+        radial-gradient(120% 160% at 0% 0%, rgba(201,162,77,.14), transparent 55%),
+        linear-gradient(180deg,var(--card2),var(--card));
+      box-shadow:0 14px 30px var(--card-shadow);
+    }
+    .heroTopRow{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
-      margin:0 0 14px;
+      gap:10px;
+      margin:0 0 8px;
     }
-    h1{
-      font-size:22px;font-weight:700;margin:0;letter-spacing:.3px;text-align:center;flex:1
+    .heroEyebrow{
+      margin:0;
+      font-size:12px;
+      letter-spacing:.08em;
+      font-weight:700;
+      color:var(--gold-soft);
+    }
+    .heroSection h1{
+      margin:0 0 8px;
+      font-size:30px;
+      line-height:1.3;
+      letter-spacing:.2px;
+    }
+    .heroDesc{
+      margin:0 0 14px;
+      color:var(--muted);
+      line-height:1.65;
+      font-size:14px;
+    }
+    .heroActions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
     }
     .introText{
       margin:0 0 14px;
@@ -297,6 +331,84 @@
       padding:16px;
       margin-bottom:16px;
       box-shadow:0 18px 36px var(--card-shadow);
+    }
+    .sectionHeading{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin:0 0 10px;
+    }
+    .sectionHeadingActions{
+      margin-left:auto;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .sectionHeading h2{
+      margin:0;
+      font-size:17px;
+      line-height:1.4;
+      color:var(--text);
+    }
+    .sectionHeading p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+      width:100%;
+    }
+    .statusBadge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border:1px solid var(--line);
+      background:rgba(156,163,175,.12);
+      color:var(--muted);
+      border-radius:999px;
+      padding:5px 10px;
+      font-size:12px;
+      font-weight:700;
+      flex:0 0 auto;
+      white-space:nowrap;
+    }
+    .statusBadge.dirty{
+      border-color:rgba(224,90,90,.5);
+      background:rgba(224,90,90,.12);
+      color:var(--sell);
+    }
+    .statusBadge.clean{
+      border-color:rgba(34,197,94,.42);
+      background:rgba(34,197,94,.14);
+      color:#22c55e;
+    }
+    .errorSummary{
+      margin:4px 0 10px;
+      border:1px solid rgba(224,90,90,.5);
+      background:rgba(224,90,90,.12);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:13px;
+      line-height:1.55;
+    }
+    .floatingWarning{
+      position:fixed;
+      top:0;
+      left:0;
+      max-width:280px;
+      border:1px solid rgba(224,90,90,.55);
+      background:rgba(18,19,23,.96);
+      color:#f8d7d7;
+      border-radius:10px;
+      padding:8px 10px;
+      font-size:12px;
+      font-weight:700;
+      line-height:1.45;
+      box-shadow:0 10px 24px rgba(0,0,0,.35);
+      z-index:10001;
+      pointer-events:none;
     }
     .faqSection{
       margin:6px 0 20px;
@@ -392,6 +504,10 @@
       border-color:var(--gold);
       box-shadow:0 0 0 1px rgba(201,162,77,.35);
     }
+    .invalidField{
+      border-color:var(--sell)!important;
+      box-shadow:0 0 0 1px rgba(224,90,90,.35)!important;
+    }
 
     button{
       height:38px;
@@ -405,6 +521,10 @@
       white-space:nowrap;
       transition:transform .1s ease, border-color .12s ease, filter .12s ease;
     }
+    button:focus-visible{
+      outline:2px solid rgba(201,162,77,.55);
+      outline-offset:2px;
+    }
     button:active{transform:translateY(1px)}
     button.primary{
       background:linear-gradient(135deg,var(--gold),var(--gold-soft));
@@ -412,9 +532,31 @@
       border:none;
       font-weight:700;
     }
-    .themeToggle{min-width:116px}
+    .themeToggle{
+      min-width:116px;
+      background:transparent;
+      border-color:rgba(156,163,175,.45);
+      color:var(--muted);
+      font-weight:600;
+    }
+    .themeToggle:hover{
+      color:var(--text);
+      border-color:var(--gold);
+      background:rgba(255,255,255,.02);
+    }
     button.secondary:hover{border-color:var(--gold)}
     .small{font-size:12px;color:var(--muted)}
+    .srOnly{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
     .controlBar{
       display:flex;
       align-items:center;
@@ -537,7 +679,7 @@
       font-size:13px;
       font-variant-numeric:tabular-nums;
       table-layout:fixed;
-      min-width:1040px;
+      min-width:0;
     }
     thead th{
       background:var(--thead-bg);
@@ -573,21 +715,36 @@
     th.left, td.left{text-align:left}
 
     /* Column widths */
-    th.col-name, td.col-name{width:220px}
-    th.col-target, td.col-target{width:108px}
-    th.col-price, td.col-price{width:132px}
-    th.col-qty, td.col-qty{width:118px}
+    th.col-name, td.col-name{width:136px}
+    th.col-target, td.col-target{width:88px}
+    th.col-price, td.col-price{width:126px}
+    th.col-qty, td.col-qty{width:108px}
 
-    th.col-val, td.col-val{width:110px}
-    th.col-w, td.col-w{width:92px}
+    th.col-val, td.col-val{width:120px}
+    th.col-w, td.col-w{width:74px}
 
-    th.col-decision, td.col-decision{width:70px;text-align:center}
-    th.col-trade, td.col-trade{width:110px}
-    th.col-afterqty, td.col-afterqty{width:95px}
-    th.col-afterval, td.col-afterval{width:120px}
-    th.col-afterw, td.col-afterw{width:85px}
+    th.col-decision, td.col-decision{width:62px;text-align:center}
+    th.col-trade, td.col-trade{width:84px}
+    th.col-afterqty, td.col-afterqty{width:82px}
+    th.col-afterval, td.col-afterval{
+      width:136px;
+      min-width:136px;
+    }
+    th.col-afterw, td.col-afterw{width:74px}
 
-    th.col-del, td.col-del{width:58px;text-align:center}
+    th.col-del, td.col-del{width:46px;text-align:center}
+
+    /* Numeric result columns should stay fully visible and right-aligned. */
+    tbody td.col-val,
+    tbody td.col-w,
+    tbody td.col-afterqty,
+    tbody td.col-afterval,
+    tbody td.col-afterw{
+      overflow:hidden;
+      text-overflow:clip;
+      white-space:nowrap;
+      text-align:right;
+    }
 
     td.col-name input{width:100%;max-width:200px}
     td.col-target input, td.col-price input, td.col-qty input{width:100%;text-align:right}
@@ -596,9 +753,20 @@
       font-size:12px;
     }
 
-/* ===== Unit suffix for inputs (현재가: 원, 수량: 주) ===== */
-td.col-price, td.col-qty{ position:relative; }
-td.col-price input, td.col-qty input{ padding-right:28px; } /* 단위 자리 확보 */
+/* ===== Unit suffix for inputs (목표비중: %, 현재가: 원, 수량: 주) ===== */
+td.col-target, td.col-price, td.col-qty{ position:relative; }
+td.col-target input, td.col-price input, td.col-qty input{ padding-right:28px; } /* 단위 자리 확보 */
+
+td.col-target::after{
+  content:"%";
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:12px;
+  color:var(--unit);
+  pointer-events:none;
+}
 
 td.col-price::after{
   content:"원";
@@ -649,7 +817,6 @@ td.col-qty::after{
     .mode-result tbody td .qty{
       opacity:.55;
       filter:saturate(.9);
-      pointer-events:none;
     }
     .mode-result tbody td .name:focus,
     .mode-result tbody td .target:focus,
@@ -885,6 +1052,22 @@ td.col-qty::after{
     @media (max-width: 768px){
       body{padding:20px 14px 24px}
       .card{padding:12px}
+      .heroSection{
+        padding:14px;
+        margin-bottom:12px;
+      }
+      .heroSection h1{
+        font-size:24px;
+      }
+      .heroTopRow{
+        align-items:flex-start;
+      }
+      .heroActions{
+        flex-direction:column;
+      }
+      .heroActions button{
+        width:100%;
+      }
       .summaryBar{display:none}
       .faqSection{
         margin:8px 0 16px;
@@ -931,7 +1114,18 @@ td.col-qty::after{
         min-width:0;
         border-spacing:0;
       }
-      #tbl thead, #tbl tfoot{display:none}
+      #tbl thead,
+      #tbl tfoot{
+        position:absolute;
+        width:1px;
+        height:1px;
+        padding:0;
+        margin:-1px;
+        overflow:hidden;
+        clip:rect(0,0,0,0);
+        white-space:nowrap;
+        border:0;
+      }
       #tbl tbody{display:block}
       #tbl tbody tr{
         display:grid;
@@ -999,10 +1193,12 @@ td.col-qty::after{
       td.col-qty{
         margin-bottom:8px;
       }
+      td.col-target input,
       td.col-price input,
       td.col-qty input{
         padding-right:34px;
       }
+      td.col-target::after,
       td.col-price::after,
       td.col-qty::after{
         right:12px;
@@ -1115,8 +1311,13 @@ td.col-qty::after{
 
     @media (max-width: 640px){
       body{padding:18px 12px 20px;}
-      .topBar{flex-wrap:wrap;justify-content:center}
-      .themeToggle{width:100%}
+      .themeToggle{
+        width:auto;
+        min-width:104px;
+        height:34px;
+        padding:0 10px;
+      }
+      .heroSection h1{font-size:21px}
       .introText{font-size:13px;text-align:left;}
       .mobileGuide summary{
         padding:11px 12px;
