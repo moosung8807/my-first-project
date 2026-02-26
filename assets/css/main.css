@@ -1129,19 +1129,11 @@ td.col-qty::after{
       #tbl tbody{display:block}
       #tbl tbody tr{
         display:grid;
-        grid-template-columns:minmax(0, 1fr) auto;
+        grid-template-columns:minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.35fr) auto;
         grid-template-areas:
-          "name del"
-          "target target"
-          "price price"
-          "qty qty"
-          "val val"
-          "w w"
-          "decision decision"
-          "trade trade"
-          "afterqty afterqty"
-          "afterval afterval"
-          "afterw afterw";
+          "name name name name name del"
+          "target price qty val w del"
+          "decision trade afterqty afterw afterval del";
         gap:8px;
         border:1px solid var(--line);
         border-radius:14px;
@@ -1191,7 +1183,7 @@ td.col-qty::after{
       td.col-target,
       td.col-price,
       td.col-qty{
-        margin-bottom:8px;
+        margin-bottom:0;
       }
       td.col-target input,
       td.col-price input,
@@ -1222,9 +1214,11 @@ td.col-qty::after{
         color:var(--muted);
         text-align:left;
       }
-      td.col-target::before{content:"목표비중"}
-      td.col-price::before{content:"현재가"}
-      td.col-qty::before{content:"수량"}
+      td.col-target::before,
+      td.col-price::before,
+      td.col-qty::before{
+        display:none;
+      }
       td.col-val::before{content:"보유액"}
       td.col-w::before{content:"비중"}
       td.col-decision::before{content:"판단"}
