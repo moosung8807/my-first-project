@@ -361,7 +361,7 @@
   function addRow(){
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td class="g-input left col-name"><input class="g-input name" placeholder="종목명" aria-label="종목명"></td>
+      <td class="left col-name"><input class="name" placeholder="종목명" aria-label="종목명"></td>
 
       <td class="g-input col-target">
         <input class="g-input target" type="number" min="0" max="100" step="0.1" inputmode="numeric" placeholder="예: 30%" aria-label="목표비중 퍼센트">

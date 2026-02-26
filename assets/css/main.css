@@ -1387,6 +1387,9 @@ td.col-qty::after{
         align-items:center;
         justify-content:center;
         position:static;
+        margin-left:auto;
+        flex:0 0 auto;
+        white-space:nowrap;
         height:28px;
         padding:0 10px;
         border-radius:10px;
