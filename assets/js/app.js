@@ -80,7 +80,7 @@
 
   function fmt(n){ return isFinite(n) ? n.toLocaleString("ko-KR") : "0"; }
   function fmtKRW(n){ return "₩ " + fmt(Math.round(n)); }
-  function fmtPct01(x){ return isFinite(x) ? (x * 100).toFixed(2) + "%" : "0.00%"; }
+  function fmtPct01(x){ return isFinite(x) ? (x * 100).toFixed(1) + "%" : "0.0%"; }
   function setTotalSummary(keyText, valueText){
     sumTotalKey.textContent = keyText;
     sumTotalLabel.textContent = valueText;
@@ -239,6 +239,7 @@
       setTotalSummary("현재 보유액", document.querySelector("#sumValue").textContent);
       resetSummaryKeyLabels();
       resetSummaryCounts();
+      tbody.querySelectorAll("tr").forEach(tr=>setRowDetailOpen(tr, false));
     }else{
       currentEls.forEach(el=>el.classList.add("hide"));
       resultEls.forEach(el=>el.classList.remove("hide"));
@@ -247,6 +248,18 @@
       tableCard.classList.remove("mode-current");
       modeLabel.textContent = "결과";
       setDirtyState(false);
+      tbody.querySelectorAll("tr").forEach(tr=>setRowDetailOpen(tr, false));
+    }
+  }
+
+  function setRowDetailOpen(tr, open){
+    if(!tr) return;
+    const nextOpen = Boolean(open);
+    tr.classList.toggle("mobile-details-open", nextOpen);
+    const btn = tr.querySelector(".detailToggleBtn");
+    if(btn){
+      btn.setAttribute("aria-expanded", nextOpen ? "true" : "false");
+      btn.textContent = nextOpen ? "접기" : "상세 보기";
     }
   }
 
@@ -363,6 +376,7 @@
           <span class="tradeIcon hold">·</span>
           <span class="tradeNum">0</span>
         </div>
+        <button class="g-result detailToggleBtn" type="button" aria-expanded="false">상세 보기</button>
       </td>
 
       <td class="g-result col-afterqty afterQty">0</td>
@@ -388,8 +402,13 @@
 
 attachTargetGuard(tr.querySelector(".target"));
 tr.querySelector(".delBtn").addEventListener("click", ()=>deleteRow(tr));
+tr.querySelector(".detailToggleBtn").addEventListener("click", ()=>{
+  const next = !tr.classList.contains("mobile-details-open");
+  setRowDetailOpen(tr, next);
+});
 tr.querySelector(".name").addEventListener("focus", ()=>warnOnResultFocus(tr.querySelector(".name")));
 tr.querySelector(".name").addEventListener("input", ()=>{
+  syncRowDisplayName(tr);
   switchToCurrentOnEdit(tr.querySelector(".name"));
   markDirtyIfNeeded();
 });
@@ -422,6 +441,8 @@ const qtyEl   = tr.querySelector(".qty");
 
 updateTargetSumUI();
 updateCurrentUI();
+setRowDetailOpen(tr, false);
+syncRowDisplayName(tr);
 
   }
 
@@ -442,8 +463,17 @@ function updateCurrentUI(){
   setTotalSummary("현재 보유액", fmtKRW(total));
 }
 
+  function syncRowDisplayName(tr){
+    const nameInput = tr.querySelector(".name");
+    const nameCell = tr.querySelector(".col-name");
+    if(!nameInput || !nameCell) return;
+    const raw = String(nameInput.value || "").trim();
+    nameCell.setAttribute("data-name", raw || "종목명 미입력");
+  }
+
   function snapshotRows(){
     const rows = [...tbody.querySelectorAll("tr")].map(tr=>{
+      syncRowDisplayName(tr);
       const targetInput = tr.querySelector(".target");
       const targetPctRaw = String(targetInput.value).trim() === "" ? 0 : clampMin0(parseNum(targetInput.value));
       const price = clampMin0(parseNum(tr.querySelector(".price").value));
