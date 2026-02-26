@@ -715,7 +715,7 @@
     th.left, td.left{text-align:left}
 
     /* Column widths */
-    th.col-name, td.col-name{width:136px}
+    th.col-name, td.col-name{width:180px}
     th.col-target, td.col-target{width:88px}
     th.col-price, td.col-price{width:126px}
     th.col-qty, td.col-qty{width:108px}
@@ -1329,10 +1329,9 @@ td.col-qty::after{
         color:var(--text);
         font-size:14px;
         line-height:1.35;
-        white-space:normal;
-        overflow:visible;
-        text-overflow:clip;
-        word-break:keep-all;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
       }
       #tableCard.mode-result #tbl tbody td.col-decision{
         align-self:start;
@@ -1362,6 +1361,7 @@ td.col-qty::after{
       #tableCard.mode-result #tbl tbody td.col-trade{
         align-self:center;
         padding-right:0;
+        margin-top:10px;
         display:flex;
         align-items:center;
         justify-content:space-between;
