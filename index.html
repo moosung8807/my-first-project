@@ -176,7 +176,7 @@
   </div>
 
   <div class="card" id="tableCard">
-    <div class="sectionHeading">
+    <div class="sectionHeading resultHeading">
       <h2 id="resultSection">2. 계산 결과</h2>
       <p>요약과 자산별 매수/매도 결과를 확인하세요.</p>
     </div>
@@ -226,16 +226,16 @@
         <caption id="tableAssist" class="srOnly">종목별 목표비중과 현재 보유 상태를 입력하고 계산 결과를 확인하는 표</caption>
         <thead>
           <tr class="group">
-            <th class="col-name" rowspan="2">종목명</th>
-            <th class="col-target" rowspan="2">목표비중</th>
-            <th class="col-price" rowspan="2">현재가 [원]</th>
-            <th class="col-qty" rowspan="2">수량 [주]</th>
+            <th class="g-input col-name" rowspan="2">종목명</th>
+            <th class="g-input col-target" rowspan="2">목표비중</th>
+            <th class="g-input col-price" rowspan="2">현재가 [원]</th>
+            <th class="g-input col-qty" rowspan="2">수량 [주]</th>
 
             <th class="g-current" colspan="2">현재</th>
             <th class="g-result" colspan="2">매도/매수</th>
             <th class="g-result" colspan="3">리밸런싱 후</th>
 
-            <th class="col-del" rowspan="2">삭제</th>
+            <th class="g-input col-del" rowspan="2">삭제</th>
           </tr>
           <tr class="sub">
             <th class="g-current col-val">보유액 [원]</th>
@@ -254,10 +254,10 @@
 
         <tfoot>
           <tr>
-            <th class="col-name">합계</th>
-            <th class="col-target" id="sumTarget">0.00%</th>
-            <th class="col-price"></th>
-            <th class="col-qty"></th>
+            <th class="g-input col-name">합계</th>
+            <th class="g-input col-target" id="sumTarget">0.00%</th>
+            <th class="g-input col-price"></th>
+            <th class="g-input col-qty"></th>
             <th class="g-current col-val" id="sumValue">₩ 0</th>
             <th class="g-current col-w" id="sumWeight">0.00%</th>
 
@@ -268,7 +268,7 @@
             <th class="g-result col-afterval" id="sumAfterValue">₩ 0</th>
             <th class="g-result col-afterw" id="sumAfterWeight">0.00%</th>
 
-            <th class="col-del"></th>
+            <th class="g-input col-del"></th>
           </tr>
         </tfoot>
       </table>

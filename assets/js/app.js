@@ -222,11 +222,13 @@
   function setMode(nextMode){
     mode = nextMode;
 
+    const inputEls = document.querySelectorAll(".g-input");
     const currentEls = document.querySelectorAll(".g-current");
     const resultEls  = document.querySelectorAll(".g-result");
 
     if(mode === "current"){
-      currentEls.forEach(el=>el.classList.remove("hide"));
+      inputEls.forEach(el=>el.classList.remove("hide"));
+      currentEls.forEach(el=>el.classList.add("hide"));
       resultEls.forEach(el=>el.classList.add("hide"));
       calcBtn.textContent = "계산";
       tableCard.classList.add("mode-current");
@@ -241,6 +243,7 @@
       resetSummaryCounts();
       tbody.querySelectorAll("tr").forEach(tr=>setRowDetailOpen(tr, false));
     }else{
+      inputEls.forEach(el=>el.classList.add("hide"));
       currentEls.forEach(el=>el.classList.add("hide"));
       resultEls.forEach(el=>el.classList.remove("hide"));
       calcBtn.textContent = "현재 보기";
@@ -277,14 +280,14 @@
     const clamped = Math.max(0, sumPct);
     const widthPct = Math.min(100, clamped);
     progressBar.style.width = widthPct + "%";
-    progressText.textContent = clamped.toFixed(2) + "%";
-    if(mobileProgressText) mobileProgressText.textContent = clamped.toFixed(2) + "%";
+    progressText.textContent = clamped.toFixed(1) + "%";
+    if(mobileProgressText) mobileProgressText.textContent = clamped.toFixed(1) + "%";
     progressWrap.classList.toggle("over", clamped > 100.0001);
   }
 
   function updateTargetSumUI(){
     const sum = sumTargets(null);
-    sumTargetEl.textContent = sum.toFixed(2) + "%";
+    sumTargetEl.textContent = sum.toFixed(1) + "%";
     sumTargetEl.style.color = (sum > 100.0001) ? "var(--sell)" : "var(--sum-ok)";
     updateProgress(sum);
   }
@@ -358,14 +361,14 @@
   function addRow(){
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td class="left col-name"><input class="name" placeholder="종목명" aria-label="종목명"></td>
+      <td class="g-input left col-name"><input class="g-input name" placeholder="종목명" aria-label="종목명"></td>
 
-      <td class="col-target">
-        <input class="target" type="number" min="0" max="100" step="0.1" inputmode="numeric" placeholder="예: 30%" aria-label="목표비중 퍼센트">
+      <td class="g-input col-target">
+        <input class="g-input target" type="number" min="0" max="100" step="0.1" inputmode="numeric" placeholder="예: 30%" aria-label="목표비중 퍼센트">
       </td>
 
-      <td class="col-price"><input class="price" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 1,234" aria-label="현재가 원"></td>
-      <td class="col-qty"><input class="qty" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 123" aria-label="수량 주"></td>
+      <td class="g-input col-price"><input class="g-input price" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 1,234" aria-label="현재가 원"></td>
+      <td class="g-input col-qty"><input class="g-input qty" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 123" aria-label="수량 주"></td>
 
       <td class="g-current col-val val">₩ 0</td>
       <td class="g-current col-w w">0.00%</td>
@@ -383,19 +386,22 @@
       <td class="g-result col-afterval afterVal">₩ 0</td>
       <td class="g-result col-afterw afterW">0.00%</td>
 
-      <td class="col-del">
-        <button class="delBtn" type="button" title="행 삭제">×</button>
+      <td class="g-input col-del">
+        <button class="g-input delBtn" type="button" title="행 삭제">×</button>
       </td>
     `;
     tbody.appendChild(tr);
 
     // 새 행은 현재 모드와 동일한 컬럼 가시성 상태로 시작해야 레이아웃이 유지된다.
+    const inputCells = tr.querySelectorAll(".g-input");
     const currentCells = tr.querySelectorAll(".g-current");
     const resultCells = tr.querySelectorAll(".g-result");
     if(mode === "current"){
-      currentCells.forEach(el=>el.classList.remove("hide"));
+      inputCells.forEach(el=>el.classList.remove("hide"));
+      currentCells.forEach(el=>el.classList.add("hide"));
       resultCells.forEach(el=>el.classList.add("hide"));
     }else{
+      inputCells.forEach(el=>el.classList.add("hide"));
       currentCells.forEach(el=>el.classList.add("hide"));
       resultCells.forEach(el=>el.classList.remove("hide"));
     }

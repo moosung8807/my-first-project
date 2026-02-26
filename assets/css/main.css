@@ -806,6 +806,14 @@ td.col-qty::after{
     .hide{display:none!important}
 
     /* ===== Mode UX ===== */
+    .mode-current .resultHeading,
+    .mode-current #summaryBar,
+    .mode-current #mobileStickySummary{
+      display:none!important;
+    }
+    .mode-result .resultHeading{
+      display:flex;
+    }
     .mode-current .hintMode{
       color:var(--mode-hint);
       font-weight:900;
@@ -815,8 +823,7 @@ td.col-qty::after{
     .mode-result tbody td .target,
     .mode-result tbody td .price,
     .mode-result tbody td .qty{
-      opacity:.55;
-      filter:saturate(.9);
+      display:none;
     }
     .mode-result tbody td .name:focus,
     .mode-result tbody td .target:focus,
@@ -1130,17 +1137,24 @@ td.col-qty::after{
       #tbl tbody tr{
         display:grid;
         position:relative;
-        grid-template-columns:repeat(3, minmax(0, 1fr)) auto;
+        grid-template-columns:repeat(2, minmax(0, 1fr)) auto;
         grid-template-areas:
-          "name name name del"
-          "target price qty del"
-          "val w w del";
-        gap:8px;
+          "name name del"
+          "target target del"
+          "price qty del";
+        gap:10px;
         border:1px solid var(--line);
         border-radius:14px;
         padding:10px;
         margin-bottom:10px;
         background:linear-gradient(180deg, var(--card2), var(--card));
+      }
+      #tableCard.mode-current #tbl tbody tr{
+        grid-template-columns:repeat(2, minmax(0, 1fr)) auto;
+        grid-template-areas:
+          "name name del"
+          "target target del"
+          "price qty del";
       }
       #tbl tbody td{
         border-bottom:0;
@@ -1178,6 +1192,7 @@ td.col-qty::after{
       td.col-qty input{
         width:100%;
         min-height:44px;
+        min-width:124px;
         padding:0 10px;
         font-size:13px;
       }
@@ -1282,12 +1297,15 @@ td.col-qty::after{
 
       /* Result mode: show only calculation summary on each asset card */
       #tableCard.mode-result #tbl tbody tr{
-        grid-template-columns:minmax(0, 1.25fr) auto minmax(0, 1fr);
+        grid-template-columns:minmax(0, 1fr) auto;
         grid-template-areas:
-          "name decision trade"
-          "afterqty afterw afterval";
-        gap:10px 8px;
-        padding:10px 10px 46px;
+          "name decision"
+          "trade trade"
+          "afterqty afterqty"
+          "afterw afterw"
+          "afterval afterval";
+        gap:8px;
+        padding:10px 10px 12px;
       }
       #tableCard.mode-result #tbl tbody td.col-target,
       #tableCard.mode-result #tbl tbody td.col-price,
@@ -1300,7 +1318,7 @@ td.col-qty::after{
       #tableCard.mode-result #tbl tbody td.col-name{
         align-self:center;
         font-weight:700;
-        padding-right:4px;
+        padding-right:88px;
       }
       #tableCard.mode-result #tbl tbody td.col-name input{
         display:none;
@@ -1342,12 +1360,13 @@ td.col-qty::after{
       }
       #tableCard.mode-result #tbl tbody td.col-trade{
         align-self:center;
+        padding-right:88px;
       }
       #tableCard.mode-result #tbl tbody td.col-trade::before{
         display:none;
       }
       #tableCard.mode-result #tbl tbody .tradeCell{
-        justify-content:flex-end;
+        justify-content:flex-start;
       }
       #tableCard.mode-result #tbl tbody .tradeIcon{
         display:none;
@@ -1362,10 +1381,10 @@ td.col-qty::after{
         align-items:center;
         justify-content:center;
         position:absolute;
-        left:10px;
         right:10px;
-        bottom:10px;
-        height:30px;
+        top:10px;
+        height:28px;
+        padding:0 10px;
         border-radius:10px;
         border:1px solid var(--line);
         background:var(--surface);
@@ -1385,11 +1404,31 @@ td.col-qty::after{
       #tableCard.mode-result #tbl tbody td.col-afterqty::before,
       #tableCard.mode-result #tbl tbody td.col-afterw::before,
       #tableCard.mode-result #tbl tbody td.col-afterval::before{
-        margin-bottom:2px;
+        margin:0;
+        min-width:68px;
+      }
+      #tableCard.mode-result #tbl tbody td.col-afterqty,
+      #tableCard.mode-result #tbl tbody td.col-afterw,
+      #tableCard.mode-result #tbl tbody td.col-afterval{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        line-height:1.45;
+        padding:6px 8px;
+        border:1px solid rgba(156,163,175,.25);
+        border-radius:10px;
+        background:rgba(255,255,255,.015);
       }
       #tableCard.mode-result #tbl tbody td.col-afterval{
         text-align:right;
-        padding-right:2px;
+        padding-right:8px;
+      }
+      #tableCard.mode-result #tbl tbody{
+        padding-bottom:80px;
+      }
+      #tableCard.mode-result #mobileStickySummary{
+        display:flex;
       }
 
       .mobileStickySummary{
