@@ -891,6 +891,7 @@ td.col-qty::after{
     .tradeIcon.sell{color:var(--sell); border-color:rgba(224,90,90,.35); background:rgba(224,90,90,.08)}
     .tradeIcon.hold{color:var(--trade-hold-color); border-color:var(--trade-hold-border); background:var(--trade-hold-bg)}
     .tradeNum{min-width:44px; text-align:right; font-weight:800;} /* ✅ 숫자 폭 고정 */
+    .detailToggleBtn{display:none!important;}
 
     /* ===== Toast ===== */
     .toast{
@@ -1382,7 +1383,7 @@ td.col-qty::after{
         min-width:0;
       }
       #tableCard.mode-result #tbl tbody .detailToggleBtn{
-        display:inline-flex;
+        display:inline-flex!important;
         align-items:center;
         justify-content:center;
         position:static;
