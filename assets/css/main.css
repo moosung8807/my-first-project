@@ -1129,17 +1129,17 @@ td.col-qty::after{
       #tbl tbody{display:block}
       #tbl tbody tr{
         display:grid;
-        grid-template-columns:repeat(3, minmax(0, 1fr)) auto;
+        position:relative;
+        grid-template-columns:repeat(4, minmax(0, 1fr));
         grid-template-areas:
-          "name name name del"
-          "target price qty del"
-          "val w decision del"
-          "trade afterqty afterw del"
-          "afterval afterval afterval del";
+          "name name name name"
+          "target price qty val"
+          "w decision decision decision"
+          "trade afterqty afterw afterval";
         gap:8px;
         border:1px solid var(--line);
         border-radius:14px;
-        padding:10px;
+        padding:10px 46px 10px 10px;
         margin-bottom:10px;
         background:linear-gradient(180deg, var(--card2), var(--card));
       }
@@ -1164,9 +1164,10 @@ td.col-qty::after{
       td.col-afterval{grid-area:afterval}
       td.col-afterw{grid-area:afterw}
       td.col-del{
-        grid-area:del;
-        align-self:center;
-        justify-self:end;
+        position:absolute;
+        top:10px;
+        right:10px;
+        z-index:1;
       }
 
       td.col-name input{
@@ -1259,6 +1260,11 @@ td.col-qty::after{
       td.col-trade,
       td.col-afterqty,
       td.col-afterw{
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+      }
+      td.col-afterval{
         white-space:nowrap;
         overflow:hidden;
         text-overflow:ellipsis;
