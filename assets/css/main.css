@@ -1416,25 +1416,36 @@ td.col-qty::after{
       #tableCard.mode-result #tbl tbody td.col-afterval::before{
         margin:0;
         min-width:0;
-        position:absolute;
-        left:8px;
-        top:50%;
-        transform:translateY(-50%);
+        position:static;
+        transform:none;
         color:var(--muted);
+        font-weight:700;
       }
       #tableCard.mode-result #tbl tbody td.col-afterqty,
       #tableCard.mode-result #tbl tbody td.col-afterw,
       #tableCard.mode-result #tbl tbody td.col-afterval{
-        display:block;
-        position:relative;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
         line-height:1.5;
-        padding:6px 8px 6px 82px;
-        border:1px solid rgba(156,163,175,.25);
-        border-radius:10px;
-        background:rgba(255,255,255,.015);
+        padding:3px 0;
+        border:0;
+        border-radius:0;
+        background:transparent;
         min-width:0;
         text-align:right;
         font-variant-numeric:tabular-nums;
+      }
+      #tableCard.mode-result #tbl tbody td.col-afterqty{
+        margin-top:2px;
+        padding-top:7px;
+        border-top:1px solid rgba(156,163,175,.25);
+      }
+      #tableCard.mode-result #tbl tbody td.col-afterqty::before,
+      #tableCard.mode-result #tbl tbody td.col-afterw::before,
+      #tableCard.mode-result #tbl tbody td.col-afterval::before{
+        flex:0 0 auto;
       }
       #tableCard.mode-result #tbl tbody td.col-afterval{
         text-align:right;
