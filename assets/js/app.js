@@ -373,13 +373,15 @@
       <td class="g-current col-val val">₩ 0</td>
       <td class="g-current col-w w">0.00%</td>
 
-      <td class="g-result col-decision decision hold">유지</td>
+      <td class="g-result col-decision decision hold">
+        <span class="decisionLabel">유지</span>
+        <button class="g-result detailToggleBtn" type="button" aria-expanded="false">상세 보기</button>
+      </td>
       <td class="g-result col-trade tradeQtyCell">
         <div class="tradeCell">
           <span class="tradeIcon hold">·</span>
           <span class="tradeNum">0</span>
         </div>
-        <button class="g-result detailToggleBtn" type="button" aria-expanded="false">상세 보기</button>
       </td>
 
       <td class="g-result col-afterqty afterQty">0</td>
@@ -678,7 +680,8 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
 // ✅ [추가] 비활성 행은 완전히 제외
   if(t.inactive){
     const d = t.tr.querySelector(".decision");
-    d.textContent = "-";
+    const lbl = d.querySelector(".decisionLabel");
+    if(lbl) lbl.textContent = "-";
     d.className = "g-result col-decision decision hold";
 
     const cell = t.tr.querySelector(".tradeQtyCell");
@@ -705,7 +708,8 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
       const afterW = (denomAfter > 0) ? (afterVal / denomAfter) : 0;
 
       const d = t.tr.querySelector(".decision");
-      d.textContent = decision;
+      const lbl = d.querySelector(".decisionLabel");
+      if(lbl) lbl.textContent = decision;
       d.className = "g-result col-decision decision " + (decision === "매도" ? "sell" : decision === "매수" ? "buy" : "hold");
 
       setTradeCell(t.tr, t.tradeQty, decision);
