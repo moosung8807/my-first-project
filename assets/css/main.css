@@ -1129,11 +1129,13 @@ td.col-qty::after{
       #tbl tbody{display:block}
       #tbl tbody tr{
         display:grid;
-        grid-template-columns:minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.35fr) auto;
+        grid-template-columns:repeat(3, minmax(0, 1fr)) auto;
         grid-template-areas:
-          "name name name name name del"
-          "target price qty val w del"
-          "decision trade afterqty afterw afterval del";
+          "name name name del"
+          "target price qty del"
+          "val w decision del"
+          "trade afterqty afterw del"
+          "afterval afterval afterval del";
         gap:8px;
         border:1px solid var(--line);
         border-radius:14px;
@@ -1219,13 +1221,13 @@ td.col-qty::after{
       td.col-qty::before{
         display:none;
       }
-      td.col-val::before{content:"보유액"}
+      td.col-val::before{content:"보유"}
       td.col-w::before{content:"비중"}
       td.col-decision::before{content:"판단"}
-      td.col-trade::before{content:"매도/매수"}
-      td.col-afterqty::before{content:"후 수량"}
-      td.col-afterval::before{content:"후 보유액"}
-      td.col-afterw::before{content:"후 비중"}
+      td.col-trade::before{content:"매매"}
+      td.col-afterqty::before{content:"후수량"}
+      td.col-afterval::before{content:"후보유액"}
+      td.col-afterw::before{content:"후비중"}
       td.col-val{
         border-top:1px solid var(--line);
         padding-top:8px;
@@ -1242,6 +1244,24 @@ td.col-qty::after{
       }
       .tradeCell{
         justify-content:flex-start;
+        gap:6px;
+      }
+      .tradeNum{
+        min-width:0;
+        font-size:12px;
+      }
+      td.col-afterval{
+        min-width:0;
+      }
+      td.col-val,
+      td.col-w,
+      td.col-decision,
+      td.col-trade,
+      td.col-afterqty,
+      td.col-afterw{
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
       }
       .delBtn{
         width:32px;
