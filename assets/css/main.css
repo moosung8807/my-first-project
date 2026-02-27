@@ -585,9 +585,39 @@
       display:flex;
       gap:8px;
       flex-shrink:0;
+      align-items:center;
     }
     .controlActions button{
       flex-shrink:0;
+    }
+    .autoQuoteToggle{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      height:38px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:0 10px;
+      background:var(--surface);
+      color:var(--muted);
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+      white-space:nowrap;
+      user-select:none;
+    }
+    .autoQuoteToggle:hover{
+      border-color:var(--gold);
+      color:var(--text);
+    }
+    .autoQuoteToggle input{
+      width:16px;
+      height:16px;
+      margin:0;
+      accent-color:var(--gold);
+      padding:0;
+      border-radius:4px;
+      border:1px solid var(--line);
     }
 
     /* ===== Summary bar ===== */
@@ -711,6 +741,9 @@
       text-overflow:ellipsis;
       transition:opacity .12s ease, filter .12s ease;
     }
+    tbody td.col-name{
+      overflow:visible;
+    }
     tbody tr:hover{background:var(--row-hover)}
     th.left, td.left{text-align:left}
 
@@ -747,6 +780,58 @@
     }
 
     td.col-name input{width:100%;max-width:200px}
+    .nameFieldWrap{
+      position:relative;
+      width:100%;
+    }
+    .nameSuggest{
+      position:absolute;
+      left:0;
+      right:0;
+      top:calc(100% + 6px);
+      z-index:40;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:linear-gradient(180deg, var(--card2), var(--card));
+      box-shadow:0 14px 24px rgba(0,0,0,.25);
+      padding:4px;
+      max-height:220px;
+      overflow:auto;
+    }
+    .nameSuggestItem{
+      width:100%;
+      min-height:36px;
+      border:0;
+      border-radius:8px;
+      background:transparent;
+      color:var(--text);
+      padding:7px 8px;
+      text-align:left;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      cursor:pointer;
+    }
+    .nameSuggestItem:hover,
+    .nameSuggestItem:focus-visible{
+      background:rgba(201,162,77,.12);
+      outline:none;
+    }
+    .nameSuggestName{
+      font-weight:700;
+      font-size:13px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .nameSuggestSymbol{
+      color:var(--muted);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.02em;
+      flex:0 0 auto;
+    }
     td.col-target input, td.col-price input, td.col-qty input{width:100%;text-align:right}
     td.col-target input, td.col-price input, td.col-qty input{min-width:0;box-sizing:border-box}
     td.col-target input::placeholder, td.col-price input::placeholder, td.col-qty input::placeholder{
@@ -1546,6 +1631,10 @@ td.col-qty::after{
       .controlTolerance{min-width:100%;}
       .controlActions{width:100%;}
       .controlActions button{flex:1}
+      .autoQuoteToggle{
+        width:100%;
+        justify-content:center;
+      }
       .siteFooter{padding:12px 8px;font-size:12px;}
       .footerTopLinks,
       .footerGuideLinks{gap:12px;}

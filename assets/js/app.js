@@ -10,6 +10,7 @@
   const errorSummary = document.querySelector("#errorSummary");
   const staleBadge = document.querySelector("#staleBadge");
   const editWarningFloat = document.querySelector("#editWarningFloat");
+  const autoQuoteToggle = document.querySelector("#autoQuoteToggle");
 
   // Summary UI
   const modeLabel = document.querySelector("#modeLabel");
@@ -40,6 +41,7 @@
 
   let mode = "current"; // "current" | "result"
   const THEME_KEY = "rb-theme";
+  const AUTO_QUOTE_KEY = "rb-auto-quote-enabled";
   const FIXED_TOLERANCE_PERCENT_POINT = 0.1;
   const FIXED_TOLERANCE_RATIO = FIXED_TOLERANCE_PERCENT_POINT / 100;
   const LARGE_AMOUNT_WRAP_THRESHOLD = 1000000000;
@@ -47,7 +49,8 @@
   const PRICE_FETCH_DEBOUNCE_MS = 550;
   let hasComputed = false;
   let isDirtyAfterCalc = false;
-  const rowQuoteStates = new WeakMap();
+  let autoQuoteEnabled = true;
+  const rowQuoteStates = new Map();
   const SYMBOL_ALIAS_MAP = Object.freeze({
     "005930": "005930.KS",
     "000660": "000660.KS",
@@ -75,6 +78,25 @@
     "에코프로비엠": "247540.KQ",
     "엘앤에프": "066970.KQ"
   });
+  const STOCK_SUGGESTIONS = Object.freeze([
+    { name: "삼성전자", symbol: "005930.KS", aliases: ["005930", "삼성"] },
+    { name: "SK하이닉스", symbol: "000660.KS", aliases: ["000660", "하이닉스"] },
+    { name: "NAVER", symbol: "035420.KS", aliases: ["035420", "네이버"] },
+    { name: "카카오", symbol: "035720.KS", aliases: ["035720"] },
+    { name: "KODEX 200", symbol: "069500.KS", aliases: ["069500", "kodex200"] },
+    { name: "TIGER 200", symbol: "102110.KS", aliases: ["102110", "tiger200"] },
+    { name: "KOSEF 국고채10년", symbol: "148070.KS", aliases: ["148070", "국고채10년"] },
+    { name: "KODEX 골드선물(H)", symbol: "132030.KS", aliases: ["132030", "kodex골드선물h"] },
+    { name: "TIGER 미국S&P500", symbol: "360750.KS", aliases: ["360750", "tiger미국sp500", "미국s&p500"] },
+    { name: "KODEX 코스닥150레버리지", symbol: "233740.KS", aliases: ["233740"] },
+    { name: "TIGER 코스닥150", symbol: "229200.KS", aliases: ["229200"] },
+    { name: "에코프로비엠", symbol: "247540.KQ", aliases: ["247540"] },
+    { name: "엘앤에프", symbol: "066970.KQ", aliases: ["066970"] },
+    { name: "Apple", symbol: "AAPL", aliases: ["애플"] },
+    { name: "Microsoft", symbol: "MSFT", aliases: ["마이크로소프트"] },
+    { name: "NVIDIA", symbol: "NVDA", aliases: ["엔비디아"] },
+    { name: "Tesla", symbol: "TSLA", aliases: ["테슬라"] }
+  ]);
 
   function parseNum(v){
     const n = Number(String(v).replaceAll(",", "").trim());
@@ -130,6 +152,13 @@
     if(SYMBOL_ALIAS_MAP[aliasKey]){
       return SYMBOL_ALIAS_MAP[aliasKey];
     }
+    const fromSuggestion = STOCK_SUGGESTIONS.find((item)=>{
+      if(normalizeAliasKey(item.name) === aliasKey) return true;
+      return item.aliases.some((alias)=>normalizeAliasKey(alias) === aliasKey);
+    });
+    if(fromSuggestion){
+      return fromSuggestion.symbol;
+    }
 
     if(/^\d{6}$/.test(input)){
       return `${input}.KS`;
@@ -140,6 +169,77 @@
     }
 
     return "";
+  }
+  function getSuggestionCandidates(rawQuery){
+    const query = normalizeAliasKey(rawQuery);
+    if(!query) return [];
+
+    const results = STOCK_SUGGESTIONS.map((item)=>{
+      const keys = [
+        normalizeAliasKey(item.name),
+        normalizeAliasKey(item.symbol),
+        ...item.aliases.map(normalizeAliasKey)
+      ];
+      const starts = keys.some((key)=>key.startsWith(query));
+      const contains = keys.some((key)=>key.includes(query));
+      if(!starts && !contains) return null;
+      return { ...item, starts };
+    }).filter(Boolean);
+
+    results.sort((a, b)=>{
+      if(a.starts !== b.starts) return a.starts ? -1 : 1;
+      return a.name.localeCompare(b.name, "ko");
+    });
+    return results.slice(0, 8);
+  }
+  function getNameSuggestBox(tr){
+    return tr ? tr.querySelector(".nameSuggest") : null;
+  }
+  function hideNameSuggestions(tr){
+    const suggestBox = getNameSuggestBox(tr);
+    if(!suggestBox) return;
+    suggestBox.hidden = true;
+    suggestBox.innerHTML = "";
+    suggestBox.removeAttribute("aria-label");
+  }
+  function showNameSuggestions(tr, query){
+    const suggestBox = getNameSuggestBox(tr);
+    if(!suggestBox) return;
+
+    const candidates = getSuggestionCandidates(query);
+    if(!candidates.length){
+      hideNameSuggestions(tr);
+      return;
+    }
+
+    suggestBox.innerHTML = "";
+    suggestBox.setAttribute("aria-label", "종목 자동완성 목록");
+    candidates.forEach((item)=>{
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "nameSuggestItem";
+      button.innerHTML = `
+        <span class="nameSuggestName">${item.name}</span>
+        <span class="nameSuggestSymbol">${item.symbol}</span>
+      `;
+      button.addEventListener("mousedown", (event)=>event.preventDefault());
+      button.addEventListener("click", ()=>{
+        const nameEl = tr.querySelector(".name");
+        if(!nameEl) return;
+        nameEl.value = item.name;
+        syncRowDisplayName(tr);
+        hideNameSuggestions(tr);
+        if(autoQuoteEnabled){
+          scheduleAutoPriceFetch(tr, { immediate: true, symbolOverride: item.symbol });
+        }
+        nameEl.focus({ preventScroll: true });
+      });
+      suggestBox.appendChild(button);
+    });
+    suggestBox.hidden = false;
+  }
+  function hideAllNameSuggestions(){
+    tbody.querySelectorAll("tr").forEach((tr)=>hideNameSuggestions(tr));
   }
   function getRowQuoteState(tr){
     let state = rowQuoteStates.get(tr);
@@ -159,6 +259,23 @@
     if(state.controller){
       state.controller.abort();
       state.controller = null;
+    }
+    rowQuoteStates.delete(tr);
+  }
+  function clearAllRowQuoteStates(){
+    [...rowQuoteStates.keys()].forEach((tr)=>clearRowQuoteState(tr));
+  }
+  function setAutoQuoteEnabled(nextEnabled, { notify = false } = {}){
+    autoQuoteEnabled = Boolean(nextEnabled);
+    if(autoQuoteToggle){
+      autoQuoteToggle.checked = autoQuoteEnabled;
+    }
+    localStorage.setItem(AUTO_QUOTE_KEY, autoQuoteEnabled ? "1" : "0");
+    if(!autoQuoteEnabled){
+      clearAllRowQuoteStates();
+    }
+    if(notify){
+      showToast(autoQuoteEnabled ? "현재가 자동조회가 켜졌어요." : "현재가 자동조회가 꺼졌어요.");
     }
   }
   function applyFetchedPriceToRow(tr, price){
@@ -185,10 +302,11 @@
     }
     return { symbol: payload?.symbol || symbol, price };
   }
-  function scheduleAutoPriceFetch(tr, { immediate = false } = {}){
+  function scheduleAutoPriceFetch(tr, { immediate = false, symbolOverride = "" } = {}){
+    if(!autoQuoteEnabled) return;
     const nameEl = tr.querySelector(".name");
     if(!nameEl) return;
-    const symbol = resolveYahooSymbol(nameEl.value);
+    const symbol = symbolOverride || resolveYahooSymbol(nameEl.value);
     if(!symbol){
       if(immediate && String(nameEl.value || "").trim()){
         showToast("심볼을 인식하지 못했어요. 예: 005930, 삼성전자, AAPL");
@@ -371,6 +489,7 @@
 
   function setMode(nextMode){
     mode = nextMode;
+    hideAllNameSuggestions();
 
     const inputEls = document.querySelectorAll(".g-input");
     const currentEls = document.querySelectorAll(".g-current");
@@ -482,6 +601,7 @@
       showToast("최소 1개 행은 남겨야 해요.");
       return;
     }
+    hideNameSuggestions(tr);
     clearRowQuoteState(tr);
     tr.remove();
     updateTargetSumUI();
@@ -512,7 +632,12 @@
   function addRow(){
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td class="left col-name"><input class="name" placeholder="종목명" aria-label="종목명"></td>
+      <td class="left col-name">
+        <div class="nameFieldWrap">
+          <input class="name" placeholder="종목명" aria-label="종목명" autocomplete="off">
+          <div class="nameSuggest" hidden></div>
+        </div>
+      </td>
 
       <td class="g-input col-target">
         <input class="g-input target" type="number" min="0" max="100" step="0.1" inputmode="numeric" placeholder="예: 30%" aria-label="목표비중 퍼센트">
@@ -567,15 +692,30 @@ tr.querySelector(".detailToggleBtn").addEventListener("click", ()=>{
 });
 tr.querySelector(".name").addEventListener("focus", ()=>warnOnResultFocus(tr.querySelector(".name")));
 tr.querySelector(".name").addEventListener("input", ()=>{
+  const nameEl = tr.querySelector(".name");
+  showNameSuggestions(tr, nameEl.value);
   syncRowDisplayName(tr);
-  switchToCurrentOnEdit(tr.querySelector(".name"));
-  scheduleAutoPriceFetch(tr);
+  switchToCurrentOnEdit(nameEl);
+  if(autoQuoteEnabled) scheduleAutoPriceFetch(tr);
   markDirtyIfNeeded();
 });
-tr.querySelector(".name").addEventListener("blur", ()=>scheduleAutoPriceFetch(tr, { immediate: true }));
+tr.querySelector(".name").addEventListener("focus", ()=>{
+  const nameEl = tr.querySelector(".name");
+  if(nameEl && String(nameEl.value || "").trim()){
+    showNameSuggestions(tr, nameEl.value);
+  }
+});
+tr.querySelector(".name").addEventListener("blur", ()=>{
+  setTimeout(()=>hideNameSuggestions(tr), 120);
+  if(autoQuoteEnabled) scheduleAutoPriceFetch(tr, { immediate: true });
+});
 tr.querySelector(".name").addEventListener("keydown", (event)=>{
   if(event.key === "Enter"){
-    scheduleAutoPriceFetch(tr, { immediate: true });
+    hideNameSuggestions(tr);
+    if(autoQuoteEnabled) scheduleAutoPriceFetch(tr, { immediate: true });
+  }
+  if(event.key === "Escape"){
+    hideNameSuggestions(tr);
   }
 });
 tr.querySelector(".target").addEventListener("focus", ()=>warnOnResultFocus(tr.querySelector(".target")));
@@ -747,6 +887,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
       { name: "KODEX 골드선물(H)", target: "10", price: "14,120", qty: "60" }
     ];
 
+    clearAllRowQuoteStates();
     tbody.innerHTML = "";
     samples.forEach(()=>addRow());
 
@@ -934,6 +1075,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     if(!window.confirm("전체 입력값을 초기화할까요?")){
       return;
     }
+    clearAllRowQuoteStates();
     tbody.innerHTML = "";
     for(let i=0;i<7;i++) addRow();
     setMode("current");
@@ -951,6 +1093,19 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
   // init
   const savedTheme = localStorage.getItem(THEME_KEY);
   setTheme(savedTheme || "dark");
+  const savedAutoQuote = localStorage.getItem(AUTO_QUOTE_KEY);
+  setAutoQuoteEnabled(savedAutoQuote !== "0");
+  if(autoQuoteToggle){
+    autoQuoteToggle.addEventListener("change", ()=>{
+      setAutoQuoteEnabled(autoQuoteToggle.checked, { notify: true });
+    });
+  }
+  document.addEventListener("click", (event)=>{
+    if(event.target && event.target.closest && event.target.closest(".nameFieldWrap")){
+      return;
+    }
+    hideAllNameSuggestions();
+  });
   if(themeToggle){
     themeToggle.addEventListener("click", ()=>{
       const currentTheme = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
