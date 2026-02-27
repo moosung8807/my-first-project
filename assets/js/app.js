@@ -43,8 +43,38 @@
   const FIXED_TOLERANCE_PERCENT_POINT = 0.1;
   const FIXED_TOLERANCE_RATIO = FIXED_TOLERANCE_PERCENT_POINT / 100;
   const LARGE_AMOUNT_WRAP_THRESHOLD = 1000000000;
+  const YAHOO_PROXY_ENDPOINT = "/api/quote";
+  const PRICE_FETCH_DEBOUNCE_MS = 550;
   let hasComputed = false;
   let isDirtyAfterCalc = false;
+  const rowQuoteStates = new WeakMap();
+  const SYMBOL_ALIAS_MAP = Object.freeze({
+    "005930": "005930.KS",
+    "000660": "000660.KS",
+    "035420": "035420.KS",
+    "035720": "035720.KS",
+    "069500": "069500.KS",
+    "102110": "102110.KS",
+    "132030": "132030.KS",
+    "148070": "148070.KS",
+    "229200": "229200.KS",
+    "360750": "360750.KS",
+    "247540": "247540.KQ",
+    "066970": "066970.KQ",
+    "kodex200": "069500.KS",
+    "tiger200": "102110.KS",
+    "kodex골드선물h": "132030.KS",
+    "kodex골드선물(h)": "132030.KS",
+    "kosef국고채10년": "148070.KS",
+    "tiger미국s&p500": "360750.KS",
+    "tiger미국sp500": "360750.KS",
+    "삼성전자": "005930.KS",
+    "sk하이닉스": "000660.KS",
+    "naver": "035420.KS",
+    "카카오": "035720.KS",
+    "에코프로비엠": "247540.KQ",
+    "엘앤에프": "066970.KQ"
+  });
 
   function parseNum(v){
     const n = Number(String(v).replaceAll(",", "").trim());
@@ -77,6 +107,118 @@
     el.setSelectionRange(pos, pos);
   }
   function clampMin0(n){ return n < 0 ? 0 : n; }
+  function normalizeAliasKey(value){
+    return String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/[^0-9a-zA-Z가-힣&().+-]/g, "");
+  }
+  function normalizeSymbol(value){
+    return String(value || "").trim().toUpperCase();
+  }
+  function resolveYahooSymbol(rawInput){
+    const input = String(rawInput || "").trim();
+    if(!input) return "";
+
+    const symbolLike = normalizeSymbol(input);
+    if(/^[A-Z0-9.^=\-]{1,20}$/.test(symbolLike) && symbolLike.includes(".")){
+      return symbolLike;
+    }
+
+    const aliasKey = normalizeAliasKey(input);
+    if(SYMBOL_ALIAS_MAP[aliasKey]){
+      return SYMBOL_ALIAS_MAP[aliasKey];
+    }
+
+    if(/^\d{6}$/.test(input)){
+      return `${input}.KS`;
+    }
+
+    if(/^[A-Za-z][A-Za-z0-9.^=\-]{0,9}$/.test(input)){
+      return symbolLike;
+    }
+
+    return "";
+  }
+  function getRowQuoteState(tr){
+    let state = rowQuoteStates.get(tr);
+    if(!state){
+      state = { timer: null, controller: null, seq: 0 };
+      rowQuoteStates.set(tr, state);
+    }
+    return state;
+  }
+  function clearRowQuoteState(tr){
+    const state = rowQuoteStates.get(tr);
+    if(!state) return;
+    if(state.timer){
+      clearTimeout(state.timer);
+      state.timer = null;
+    }
+    if(state.controller){
+      state.controller.abort();
+      state.controller = null;
+    }
+  }
+  function applyFetchedPriceToRow(tr, price){
+    const priceEl = tr.querySelector(".price");
+    if(!priceEl) return;
+    const rounded = Math.round(Number(price));
+    if(!isFinite(rounded) || rounded <= 0) return;
+    priceEl.value = withComma(String(rounded));
+    priceEl.classList.remove("invalidField");
+    if(mode === "current") updateCurrentUI();
+    markDirtyIfNeeded();
+  }
+  async function fetchQuoteFromProxy(symbol, signal){
+    const response = await fetch(`${YAHOO_PROXY_ENDPOINT}?symbol=${encodeURIComponent(symbol)}`, { signal });
+    if(!response.ok){
+      const payload = await response.json().catch(()=>({}));
+      const message = payload && payload.error ? payload.error : "현재가 조회에 실패했습니다.";
+      throw new Error(message);
+    }
+    const payload = await response.json();
+    const price = Number(payload?.price);
+    if(!isFinite(price) || price <= 0){
+      throw new Error("조회된 현재가가 유효하지 않습니다.");
+    }
+    return { symbol: payload?.symbol || symbol, price };
+  }
+  function scheduleAutoPriceFetch(tr, { immediate = false } = {}){
+    const nameEl = tr.querySelector(".name");
+    if(!nameEl) return;
+    const symbol = resolveYahooSymbol(nameEl.value);
+    if(!symbol) return;
+
+    const state = getRowQuoteState(tr);
+    if(state.timer){
+      clearTimeout(state.timer);
+      state.timer = null;
+    }
+
+    const runFetch = async ()=>{
+      if(state.controller) state.controller.abort();
+      state.controller = new AbortController();
+      const currentSeq = ++state.seq;
+
+      try{
+        const result = await fetchQuoteFromProxy(symbol, state.controller.signal);
+        if(currentSeq !== state.seq) return;
+        tr.dataset.resolvedSymbol = result.symbol;
+        applyFetchedPriceToRow(tr, result.price);
+      }catch(err){
+        if(err && (err.name === "AbortError")) return;
+        tr.dataset.resolvedSymbol = "";
+      }
+    };
+
+    if(immediate){
+      runFetch();
+      return;
+    }
+    state.timer = setTimeout(runFetch, PRICE_FETCH_DEBOUNCE_MS);
+  }
 
   function fmt(n){ return isFinite(n) ? n.toLocaleString("ko-KR") : "0"; }
   function fmtKRW(n){ return "₩ " + fmt(Math.round(n)); }
@@ -332,6 +474,7 @@
       showToast("최소 1개 행은 남겨야 해요.");
       return;
     }
+    clearRowQuoteState(tr);
     tr.remove();
     updateTargetSumUI();
     updateCurrentUI();
@@ -418,7 +561,14 @@ tr.querySelector(".name").addEventListener("focus", ()=>warnOnResultFocus(tr.que
 tr.querySelector(".name").addEventListener("input", ()=>{
   syncRowDisplayName(tr);
   switchToCurrentOnEdit(tr.querySelector(".name"));
+  scheduleAutoPriceFetch(tr);
   markDirtyIfNeeded();
+});
+tr.querySelector(".name").addEventListener("blur", ()=>scheduleAutoPriceFetch(tr, { immediate: true }));
+tr.querySelector(".name").addEventListener("keydown", (event)=>{
+  if(event.key === "Enter"){
+    scheduleAutoPriceFetch(tr, { immediate: true });
+  }
 });
 tr.querySelector(".target").addEventListener("focus", ()=>warnOnResultFocus(tr.querySelector(".target")));
 tr.querySelector(".target").addEventListener("input", ()=>{
