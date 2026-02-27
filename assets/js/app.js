@@ -189,7 +189,12 @@
     const nameEl = tr.querySelector(".name");
     if(!nameEl) return;
     const symbol = resolveYahooSymbol(nameEl.value);
-    if(!symbol) return;
+    if(!symbol){
+      if(immediate && String(nameEl.value || "").trim()){
+        showToast("심볼을 인식하지 못했어요. 예: 005930, 삼성전자, AAPL");
+      }
+      return;
+    }
 
     const state = getRowQuoteState(tr);
     if(state.timer){
@@ -210,6 +215,9 @@
       }catch(err){
         if(err && (err.name === "AbortError")) return;
         tr.dataset.resolvedSymbol = "";
+        if(immediate){
+          showToast(`현재가 조회 실패: ${symbol}`);
+        }
       }
     };
 
