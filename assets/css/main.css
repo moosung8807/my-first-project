@@ -749,15 +749,22 @@
       white-space:nowrap;
     }
     thead tr.group th{
-      font-size:12px;font-weight:800;color:var(--thead-group);
+      font-size:15px;font-weight:800;color:var(--thead-group);
       border-bottom:1px solid rgba(36,38,45,.75);
     }
     thead tr.sub th{
-      font-size:12px;font-weight:700;color:var(--thead-sub);
+      font-size:15px;font-weight:700;color:var(--thead-sub);
     }
     @media (min-width: 769px){
       thead tr.group th.g-result + th.g-result{
         padding-left:14px;
+      }
+      tbody td.col-name{
+        text-align:left;
+      }
+      tbody td.col-name .nameFieldWrap{
+        width:calc(100% - 18px);
+        margin-left:18px;
       }
       thead tr.sub th.col-trade,
       tbody td.col-trade,
@@ -792,7 +799,7 @@
     th.left, td.left{text-align:left}
 
     /* Column widths */
-    th.col-name, td.col-name{width:180px}
+    th.col-name, td.col-name{width:232px}
     th.col-target, td.col-target{width:88px}
     th.col-price, td.col-price{width:126px}
     th.col-qty, td.col-qty{width:108px}
@@ -833,7 +840,12 @@
       padding-right:var(--align-afterw-result-desktop);
     }
 
-    td.col-name input{width:100%;max-width:200px}
+    td.col-name input{
+      width:100%;
+      max-width:none;
+      padding-left:14px;
+      box-sizing:border-box;
+    }
     .nameFieldWrap{
       position:relative;
       width:100%;
@@ -934,6 +946,7 @@ td.col-qty::after{
     .hold{color:var(--hold);font-weight:800}
 
     tfoot th{
+      font-size:15px;
       padding:12px 6px;
       font-weight:800;
       border-top:2px solid var(--gold);
@@ -943,10 +956,7 @@ td.col-qty::after{
       white-space:nowrap;
     }
     tfoot th.col-name{
-      text-align:left;
-    }
-    #tableCard tfoot th.col-name{
-      padding-left:100px;
+      text-align:center;
     }
     #sumTarget{
       position:relative;
@@ -1237,6 +1247,16 @@ td.col-qty::after{
 
     @media (max-width: 768px){
       body{padding:20px 14px 24px}
+      body,
+      h1, h2, h3,
+      p, li, label,
+      .faqQuestion, .faqAnswer,
+      .guideContent p, .guideContent li,
+      #tbl tbody td{
+        word-break:keep-all;
+        overflow-wrap:normal;
+        line-break:strict;
+      }
       .card{padding:12px}
       .heroSection{
         padding:14px;
