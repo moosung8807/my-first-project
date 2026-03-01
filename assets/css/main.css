@@ -23,6 +23,11 @@
       --card2:#14151b;
       --surface:#0e0f14;
       --card-shadow:rgba(0,0,0,.45);
+      --hero-bg1:#14151b;
+      --hero-bg2:#101116;
+      --hero-glow:rgba(201,162,77,.08);
+      --hero-shadow:rgba(0,0,0,.32);
+      --hero-eyebrow:rgba(230,201,122,.78);
 
       --summary-border:rgba(36,38,45,.9);
       --summary-bg1:rgba(15,16,22,.9);
@@ -106,6 +111,11 @@
       --card2:#f8fafc;
       --surface:#ffffff;
       --card-shadow:rgba(15,23,42,.08);
+      --hero-bg1:#fbfaf8;
+      --hero-bg2:#f6f4f0;
+      --hero-glow:rgba(176,148,115,.08);
+      --hero-shadow:rgba(34,42,54,.10);
+      --hero-eyebrow:#8d7960;
 
       --summary-border:#d7ddeb;
       --summary-bg1:#ffffff;
@@ -303,9 +313,9 @@
       padding:18px;
       margin:0 0 14px;
       background:
-        radial-gradient(120% 160% at 0% 0%, rgba(201,162,77,.14), transparent 55%),
-        linear-gradient(180deg,var(--card2),var(--card));
-      box-shadow:0 14px 30px var(--card-shadow);
+        radial-gradient(120% 160% at 0% 0%, var(--hero-glow), transparent 60%),
+        linear-gradient(180deg,var(--hero-bg1),var(--hero-bg2));
+      box-shadow:0 10px 20px var(--hero-shadow);
     }
     .heroTopRow{
       display:flex;
@@ -319,7 +329,7 @@
       font-size:12px;
       letter-spacing:.08em;
       font-weight:700;
-      color:var(--gold-soft);
+      color:var(--hero-eyebrow);
     }
     .heroSection h1{
       margin:0 0 8px;
