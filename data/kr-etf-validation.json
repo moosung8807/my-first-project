@@ -1,0 +1,329 @@
+{
+  "meta": {
+    "generatedAt": "2026-03-01T14:45:01.246Z",
+    "source": "data/kr-etf-source.seed.json",
+    "thresholds": {
+      "pass": 0.72,
+      "check": 0.4
+    },
+    "runtime": {
+      "delayMs": 700,
+      "batchSize": 5,
+      "batchPauseMs": 1200,
+      "cache": "data/kr-etf-validation.cache.json"
+    },
+    "counts": {
+      "PASS": 0,
+      "CHECK": 0,
+      "RETRY": 43,
+      "FAIL": 0,
+      "total": 43
+    }
+  },
+  "PASS": [],
+  "CHECK": [],
+  "RETRY": [
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 200",
+      "code": "069500",
+      "tickerCandidate": "069500.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 레버리지",
+      "code": "122630",
+      "tickerCandidate": "122630.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 인버스",
+      "code": "114800",
+      "tickerCandidate": "114800.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 코스닥150레버리지",
+      "code": "233740",
+      "tickerCandidate": "233740.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 코스닥150",
+      "code": "229200",
+      "tickerCandidate": "229200.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 2차전지산업",
+      "code": "305720",
+      "tickerCandidate": "305720.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 미국S&P500TR",
+      "code": "379800",
+      "tickerCandidate": "379800.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 미국나스닥100TR",
+      "code": "379810",
+      "tickerCandidate": "379810.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 미국S&P500선물(H)",
+      "code": "229480",
+      "tickerCandidate": "229480.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 단기채권PLUS",
+      "code": "214980",
+      "tickerCandidate": "214980.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX CD금리액티브(합성)",
+      "code": "459580",
+      "tickerCandidate": "459580.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 미국나스닥100선물(H)",
+      "code": "304940",
+      "tickerCandidate": "304940.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 골드선물(H)",
+      "code": "132030",
+      "tickerCandidate": "132030.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 반도체",
+      "code": "091160",
+      "tickerCandidate": "091160.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 자동차",
+      "code": "091180",
+      "tickerCandidate": "091180.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 은행",
+      "code": "091170",
+      "tickerCandidate": "091170.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 미국배당다우존스",
+      "code": "453850",
+      "tickerCandidate": "453850.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "TIGER 200",
+      "code": "102110",
+      "tickerCandidate": "102110.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "TIGER 미국S&P500",
+      "code": "360750",
+      "tickerCandidate": "360750.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "TIGER 미국나스닥100",
+      "code": "133690",
+      "tickerCandidate": "133690.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "TIGER 미국테크TOP10 INDXX",
+      "code": "381170",
+      "tickerCandidate": "381170.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "TIGER 2차전지테마",
+      "code": "305540",
+      "tickerCandidate": "305540.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "TIGER 차이나전기차SOLACTIVE",
+      "code": "371460",
+      "tickerCandidate": "371460.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "TIGER CD금리투자KIS(합성)",
+      "code": "357870",
+      "tickerCandidate": "357870.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "TIGER 코스닥150",
+      "code": "232080",
+      "tickerCandidate": "232080.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "TIGER 코스닥150레버리지",
+      "code": "233160",
+      "tickerCandidate": "233160.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "TIGER TOP10",
+      "code": "292150",
+      "tickerCandidate": "292150.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KOSEF 200",
+      "code": "069660",
+      "tickerCandidate": "069660.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KOSEF 국고채10년",
+      "code": "148070",
+      "tickerCandidate": "148070.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "RISE 200",
+      "code": "148020",
+      "tickerCandidate": "148020.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "RISE 단기통안채",
+      "code": "196230",
+      "tickerCandidate": "196230.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "ACE 미국S&P500",
+      "code": "360200",
+      "tickerCandidate": "360200.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "ACE 미국나스닥100",
+      "code": "367380",
+      "tickerCandidate": "367380.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "ACE 2차전지액티브",
+      "code": "385550",
+      "tickerCandidate": "385550.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "ARIRANG 고배당주",
+      "code": "161510",
+      "tickerCandidate": "161510.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "ARIRANG 200",
+      "code": "152100",
+      "tickerCandidate": "152100.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "SOL 미국배당다우존스",
+      "code": "446720",
+      "tickerCandidate": "446720.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "SOL 2차전지소부장Fn",
+      "code": "469070",
+      "tickerCandidate": "469070.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "PLUS K방산",
+      "code": "449450",
+      "tickerCandidate": "449450.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "PLUS 고배당주",
+      "code": "161510",
+      "tickerCandidate": "161510.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "TIMEFOLIO Kstock액티브",
+      "code": "385710",
+      "tickerCandidate": "385710.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "HANARO 200",
+      "code": "304760",
+      "tickerCandidate": "304760.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KINDEX 200",
+      "code": "105190",
+      "tickerCandidate": "105190.KS",
+      "reason": "RETRY_RATE_LIMIT"
+    }
+  ],
+  "FAIL": []
+}

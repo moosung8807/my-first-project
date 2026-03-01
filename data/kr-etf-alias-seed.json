@@ -1,0 +1,590 @@
+[
+  {
+    "canonical": "KODEX 레버리지",
+    "code": "122630",
+    "tickerCandidate": "122630.KS",
+    "turnover": {
+      "1d": 710000000000,
+      "5d": 665000000000,
+      "20d": 590000000000
+    },
+    "manager": "KODEX",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200",
+    "code": "069500",
+    "tickerCandidate": "069500.KS",
+    "turnover": {
+      "1d": 325000000000,
+      "5d": 301000000000,
+      "20d": 287000000000
+    },
+    "manager": "KODEX",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 인버스",
+    "code": "114800",
+    "tickerCandidate": "114800.KS",
+    "turnover": {
+      "1d": 318000000000,
+      "5d": 292000000000,
+      "20d": 275000000000
+    },
+    "manager": "KODEX",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코스닥150레버리지",
+    "code": "233740",
+    "tickerCandidate": "233740.KS",
+    "turnover": {
+      "1d": 188000000000,
+      "5d": 170000000000,
+      "20d": 159000000000
+    },
+    "manager": "KODEX",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200",
+    "code": "102110",
+    "tickerCandidate": "102110.KS",
+    "turnover": {
+      "1d": 172000000000,
+      "5d": 159000000000,
+      "20d": 148000000000
+    },
+    "manager": "TIGER",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국나스닥100",
+    "code": "133690",
+    "tickerCandidate": "133690.KS",
+    "turnover": {
+      "1d": 167000000000,
+      "5d": 151000000000,
+      "20d": 134000000000
+    },
+    "manager": "TIGER",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국S&P500",
+    "code": "360750",
+    "tickerCandidate": "360750.KS",
+    "turnover": {
+      "1d": 148000000000,
+      "5d": 137000000000,
+      "20d": 122000000000
+    },
+    "manager": "TIGER",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 2차전지산업",
+    "code": "305720",
+    "tickerCandidate": "305720.KS",
+    "turnover": {
+      "1d": 132000000000,
+      "5d": 121000000000,
+      "20d": 103000000000
+    },
+    "manager": "KODEX",
+    "category": "테마",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국배당다우존스",
+    "code": "453850",
+    "tickerCandidate": "453850.KS",
+    "turnover": {
+      "1d": 129000000000,
+      "5d": 117000000000,
+      "20d": 99000000000
+    },
+    "manager": "KODEX",
+    "category": "배당",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 2차전지테마",
+    "code": "305540",
+    "tickerCandidate": "305540.KS",
+    "turnover": {
+      "1d": 121000000000,
+      "5d": 113000000000,
+      "20d": 96000000000
+    },
+    "manager": "TIGER",
+    "category": "테마",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국테크TOP10 INDXX",
+    "code": "381170",
+    "tickerCandidate": "381170.KS",
+    "turnover": {
+      "1d": 109000000000,
+      "5d": 98000000000,
+      "20d": 86000000000
+    },
+    "manager": "TIGER",
+    "category": "테마",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500TR",
+    "code": "379800",
+    "tickerCandidate": "379800.KS",
+    "turnover": {
+      "1d": 92000000000,
+      "5d": 85000000000,
+      "20d": 74000000000
+    },
+    "manager": "KODEX",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국나스닥100TR",
+    "code": "379810",
+    "tickerCandidate": "379810.KS",
+    "turnover": {
+      "1d": 91000000000,
+      "5d": 86000000000,
+      "20d": 76000000000
+    },
+    "manager": "KODEX",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코스닥150",
+    "code": "229200",
+    "tickerCandidate": "229200.KS",
+    "turnover": {
+      "1d": 86000000000,
+      "5d": 78000000000,
+      "20d": 70000000000
+    },
+    "manager": "KODEX",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX CD금리액티브(합성)",
+    "code": "459580",
+    "tickerCandidate": "459580.KS",
+    "turnover": {
+      "1d": 84000000000,
+      "5d": 81000000000,
+      "20d": 79000000000
+    },
+    "manager": "KODEX",
+    "category": "단기자금",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER CD금리투자KIS(합성)",
+    "code": "357870",
+    "tickerCandidate": "357870.KS",
+    "turnover": {
+      "1d": 81000000000,
+      "5d": 76000000000,
+      "20d": 71000000000
+    },
+    "manager": "TIGER",
+    "category": "단기자금",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 골드선물(H)",
+    "code": "132030",
+    "tickerCandidate": "132030.KS",
+    "turnover": {
+      "1d": 77000000000,
+      "5d": 72000000000,
+      "20d": 66000000000
+    },
+    "manager": "KODEX",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 단기채권PLUS",
+    "code": "214980",
+    "tickerCandidate": "214980.KS",
+    "turnover": {
+      "1d": 68000000000,
+      "5d": 64000000000,
+      "20d": 61000000000
+    },
+    "manager": "KODEX",
+    "category": "단기자금",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 반도체",
+    "code": "091160",
+    "tickerCandidate": "091160.KS",
+    "turnover": {
+      "1d": 64000000000,
+      "5d": 59000000000,
+      "20d": 53000000000
+    },
+    "manager": "KODEX",
+    "category": "테마",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코스닥150레버리지",
+    "code": "233160",
+    "tickerCandidate": "233160.KS",
+    "turnover": {
+      "1d": 63000000000,
+      "5d": 57000000000,
+      "20d": 50000000000
+    },
+    "manager": "TIGER",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KOSEF 국고채10년",
+    "code": "148070",
+    "tickerCandidate": "148070.KS",
+    "turnover": {
+      "1d": 62000000000,
+      "5d": 58000000000,
+      "20d": 55000000000
+    },
+    "manager": "KOSEF",
+    "category": "채권",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500선물(H)",
+    "code": "229480",
+    "tickerCandidate": "229480.KS",
+    "turnover": {
+      "1d": 58000000000,
+      "5d": 52000000000,
+      "20d": 46000000000
+    },
+    "manager": "KODEX",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국S&P500",
+    "code": "360200",
+    "tickerCandidate": "360200.KS",
+    "turnover": {
+      "1d": 57000000000,
+      "5d": 53000000000,
+      "20d": 46000000000
+    },
+    "manager": "ACE",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KOSEF 200",
+    "code": "069660",
+    "tickerCandidate": "069660.KS",
+    "turnover": {
+      "1d": 51000000000,
+      "5d": 48000000000,
+      "20d": 43000000000
+    },
+    "manager": "KOSEF",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국나스닥100",
+    "code": "367380",
+    "tickerCandidate": "367380.KS",
+    "turnover": {
+      "1d": 49000000000,
+      "5d": 45000000000,
+      "20d": 39000000000
+    },
+    "manager": "ACE",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코스닥150",
+    "code": "232080",
+    "tickerCandidate": "232080.KS",
+    "turnover": {
+      "1d": 44000000000,
+      "5d": 41000000000,
+      "20d": 35000000000
+    },
+    "manager": "TIGER",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국나스닥100선물(H)",
+    "code": "304940",
+    "tickerCandidate": "304940.KS",
+    "turnover": {
+      "1d": 43000000000,
+      "5d": 39000000000,
+      "20d": 35000000000
+    },
+    "manager": "KODEX",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국배당다우존스",
+    "code": "446720",
+    "tickerCandidate": "446720.KS",
+    "turnover": {
+      "1d": 41000000000,
+      "5d": 38000000000,
+      "20d": 33000000000
+    },
+    "manager": "SOL",
+    "category": "배당",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 200",
+    "code": "148020",
+    "tickerCandidate": "148020.KS",
+    "turnover": {
+      "1d": 39000000000,
+      "5d": 36000000000,
+      "20d": 31000000000
+    },
+    "manager": "RISE",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS K방산",
+    "code": "449450",
+    "tickerCandidate": "449450.KS",
+    "turnover": {
+      "1d": 38000000000,
+      "5d": 36000000000,
+      "20d": 32000000000
+    },
+    "manager": "PLUS",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER TOP10",
+    "code": "292150",
+    "tickerCandidate": "292150.KS",
+    "turnover": {
+      "1d": 36000000000,
+      "5d": 33000000000,
+      "20d": 29000000000
+    },
+    "manager": "TIGER",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 2차전지액티브",
+    "code": "385550",
+    "tickerCandidate": "385550.KS",
+    "turnover": {
+      "1d": 34000000000,
+      "5d": 31000000000,
+      "20d": 28000000000
+    },
+    "manager": "ACE",
+    "category": "테마",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KINDEX 200",
+    "code": "105190",
+    "tickerCandidate": "105190.KS",
+    "turnover": {
+      "1d": 34000000000,
+      "5d": 31000000000,
+      "20d": 29000000000
+    },
+    "manager": "KINDEX",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나전기차SOLACTIVE",
+    "code": "371460",
+    "tickerCandidate": "371460.KS",
+    "turnover": {
+      "1d": 32000000000,
+      "5d": 30000000000,
+      "20d": 27000000000
+    },
+    "manager": "TIGER",
+    "category": "테마",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 자동차",
+    "code": "091180",
+    "tickerCandidate": "091180.KS",
+    "turnover": {
+      "1d": 28000000000,
+      "5d": 25000000000,
+      "20d": 22000000000
+    },
+    "manager": "KODEX",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 단기통안채",
+    "code": "196230",
+    "tickerCandidate": "196230.KS",
+    "turnover": {
+      "1d": 27000000000,
+      "5d": 25000000000,
+      "20d": 23000000000
+    },
+    "manager": "RISE",
+    "category": "단기자금",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "ARIRANG 200",
+    "code": "152100",
+    "tickerCandidate": "152100.KS",
+    "turnover": {
+      "1d": 26000000000,
+      "5d": 24000000000,
+      "20d": 22000000000
+    },
+    "manager": "ARIRANG",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 은행",
+    "code": "091170",
+    "tickerCandidate": "091170.KS",
+    "turnover": {
+      "1d": 24000000000,
+      "5d": 22000000000,
+      "20d": 19000000000
+    },
+    "manager": "KODEX",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 2차전지소부장Fn",
+    "code": "469070",
+    "tickerCandidate": "469070.KS",
+    "turnover": {
+      "1d": 23000000000,
+      "5d": 21000000000,
+      "20d": 18000000000
+    },
+    "manager": "SOL",
+    "category": "테마",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 고배당주",
+    "code": "161510",
+    "tickerCandidate": "161510.KS",
+    "turnover": {
+      "1d": 21000000000,
+      "5d": 19000000000,
+      "20d": 17000000000
+    },
+    "manager": "ARIRANG",
+    "category": "배당",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 200",
+    "code": "293180",
+    "tickerCandidate": "293180.KS",
+    "turnover": {
+      "1d": 17000000000,
+      "5d": 15000000000,
+      "20d": 13000000000
+    },
+    "manager": "HANARO",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  },
+  {
+    "canonical": "TIMEFOLIO Kstock액티브",
+    "code": "385710",
+    "tickerCandidate": "385710.KS",
+    "turnover": {
+      "1d": 12000000000,
+      "5d": 11000000000,
+      "20d": 10000000000
+    },
+    "manager": "TIMEFOLIO",
+    "category": "지수",
+    "aumRankHint": "거래대금 상위(1d/5d/20d 중 최대치 기준)",
+    "aliases": []
+  }
+]

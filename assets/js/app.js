@@ -53,7 +53,7 @@
   const rowQuoteStates = new Map();
   const KR_ETF_ALIAS_MAP = Object.freeze([
     {
-      ticker: "453850.KS",
+      ticker: "489250.KS",
       canonical: "KODEX 미국배당다우존스",
       aliases: ["미국배당다우존스", "미국배당다우", "미배당다우", "코미당", "미국배당", "453850"]
     },
@@ -160,7 +160,7 @@
         .map((value)=>normalizeKrEtfAlias(value))
         .filter(Boolean)
         .sort((a, b)=>b.length - a.length);
-      return { ticker: entry.ticker, keys };
+      return { ticker: entry.ticker, canonical: entry.canonical, keys };
     })
   );
   const SYMBOL_ALIAS_MAP = Object.freeze({
@@ -262,17 +262,18 @@
   function normalizeSymbol(value){
     return String(value || "").trim().toUpperCase();
   }
-  function findTickerByKrEtfAlias(rawInput){
+  function findKrEtfByAlias(rawInput){
     const normalizedInput = normalizeKrEtfAlias(rawInput);
-    if(!normalizedInput) return "";
+    if(!normalizedInput) return null;
 
     for(const etf of KR_ETF_ALIAS_INDEX){
       if(etf.keys.some((alias)=>alias === normalizedInput)){
-        return etf.ticker;
+        return { ticker: etf.ticker, canonical: etf.canonical };
       }
     }
 
     let bestTicker = "";
+    let bestCanonical = "";
     let bestScore = 0;
     for(const etf of KR_ETF_ALIAS_INDEX){
       for(const alias of etf.keys){
@@ -282,10 +283,12 @@
         if(alias.length > bestScore){
           bestScore = alias.length;
           bestTicker = etf.ticker;
+          bestCanonical = etf.canonical;
         }
       }
     }
-    return bestTicker;
+    if(!bestTicker) return null;
+    return { ticker: bestTicker, canonical: bestCanonical };
   }
   function resolveYahooSymbol(rawInput){
     const input = String(rawInput || "").trim();
@@ -296,9 +299,9 @@
       return symbolLike;
     }
 
-    const etfTicker = findTickerByKrEtfAlias(input);
-    if(etfTicker){
-      return etfTicker;
+    const etfMatch = findKrEtfByAlias(input);
+    if(etfMatch){
+      return etfMatch.ticker;
     }
 
     const aliasKey = normalizeAliasKey(input);
@@ -499,6 +502,14 @@
     if(mode === "current") updateCurrentUI();
     markDirtyIfNeeded();
   }
+  function clearFetchedPriceFromRow(tr){
+    const priceEl = tr.querySelector(".price");
+    if(!priceEl) return;
+    priceEl.value = "";
+    priceEl.classList.remove("invalidField");
+    if(mode === "current") updateCurrentUI();
+    markDirtyIfNeeded();
+  }
   async function fetchQuoteFromProxy(symbol, signal){
     const response = await fetch(`${YAHOO_PROXY_ENDPOINT}?symbol=${encodeURIComponent(symbol)}`, { signal });
     if(!response.ok){
@@ -517,11 +528,9 @@
     if(!autoQuoteEnabled) return;
     const nameEl = tr.querySelector(".name");
     if(!nameEl) return;
-    const symbol = symbolOverride || resolveYahooSymbol(nameEl.value);
+    const aliasMatch = symbolOverride ? null : findKrEtfByAlias(nameEl.value);
+    const symbol = symbolOverride || (aliasMatch ? aliasMatch.ticker : resolveYahooSymbol(nameEl.value));
     if(!symbol){
-      if(immediate && String(nameEl.value || "").trim()){
-        showToast("종목명/심볼을 확인해주세요. 예: 005930, 삼성전자, AAPL");
-      }
       return;
     }
 
@@ -540,13 +549,16 @@
         const result = await fetchQuoteFromProxy(symbol, state.controller.signal);
         if(currentSeq !== state.seq) return;
         tr.dataset.resolvedSymbol = result.symbol;
+        if(aliasMatch && String(result.symbol || "").toUpperCase() !== String(aliasMatch.ticker).toUpperCase()){
+          console.warn("Invalid Yahoo symbol in aliasMap:", aliasMatch.ticker, aliasMatch.canonical);
+        }
         applyFetchedPriceToRow(tr, result.price);
       }catch(err){
         if(err && (err.name === "AbortError")) return;
         tr.dataset.resolvedSymbol = "";
-        if(immediate){
-          const reason = (err && err.message) ? err.message : `심볼 ${symbol} 조회 실패`;
-          showToast(`현재가 조회 실패: ${reason}`);
+        clearFetchedPriceFromRow(tr);
+        if(aliasMatch){
+          console.warn("Invalid Yahoo symbol in aliasMap:", aliasMatch.ticker, aliasMatch.canonical);
         }
       }
     };

@@ -11,18 +11,18 @@ export async function onRequestGet(context) {
   }
 
   try {
-    const quote = await fetchYahooQuote(symbol);
-    const regularMarketPrice = Number(quote?.regularMarketPrice);
-    if (!quote || !isFinite(regularMarketPrice) || regularMarketPrice <= 0) {
+    const validation = await validateYahooSymbol(symbol);
+    if (!validation.ok || !validation.quote) {
       return jsonResponse({ error: "현재가를 찾을 수 없습니다." }, 404);
     }
+    const regularMarketPrice = Number(validation.quote.regularMarketPrice);
 
     return jsonResponse(
       {
-        symbol: String(quote.symbol || symbol).toUpperCase(),
+        symbol: String(validation.resolvedSymbol || validation.quote.symbol || symbol).toUpperCase(),
         price: regularMarketPrice,
-        currency: quote.currency || null,
-        exchangeName: quote.fullExchangeName || quote.exchange || null
+        currency: validation.quote.currency || null,
+        exchangeName: validation.quote.fullExchangeName || validation.quote.exchange || null
       },
       200
     );
@@ -34,9 +34,43 @@ export async function onRequestGet(context) {
   }
 }
 
+async function validateYahooSymbol(inputSymbol) {
+  const candidates = buildSymbolCandidates(inputSymbol);
+  for (const candidate of candidates) {
+    const quote = await fetchYahooQuote(candidate);
+    const price = Number(quote?.regularMarketPrice);
+    if (!quote || !isFinite(price) || price <= 0) {
+      continue;
+    }
+    return {
+      ok: true,
+      price,
+      resolvedSymbol: String(quote.symbol || candidate).toUpperCase(),
+      quote
+    };
+  }
+  return { ok: false };
+}
+
+function buildSymbolCandidates(rawSymbol) {
+  const symbol = String(rawSymbol || "").trim().toUpperCase();
+  if (!symbol) return [];
+
+  if (/^\d{6}$/.test(symbol)) {
+    return [`${symbol}.KS`, `${symbol}.KQ`];
+  }
+  if (/^\d{6}\.(KS|KQ)$/.test(symbol)) {
+    const base = symbol.slice(0, 6);
+    const other = symbol.endsWith(".KS") ? `${base}.KQ` : `${base}.KS`;
+    return [symbol, other];
+  }
+  return [symbol];
+}
+
 async function fetchYahooQuote(symbol) {
   const direct = await fetchQuoteEndpoint(symbol);
   if (direct.ok) return direct.quote;
+  if (direct.status === 404) return null;
 
   if (![401, 403, 429].includes(direct.status)) {
     throw { upstreamStatus: direct.status };
@@ -49,6 +83,7 @@ async function fetchYahooQuote(symbol) {
 
   const withCrumb = await fetchQuoteEndpoint(symbol, session);
   if (withCrumb.ok) return withCrumb.quote;
+  if (withCrumb.status === 404) return null;
 
   throw { upstreamStatus: withCrumb.status || direct.status };
 }
