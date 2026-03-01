@@ -615,7 +615,7 @@
 
   function updateTargetSumUI(){
     const sum = sumTargets(null);
-    sumTargetEl.textContent = sum.toFixed(1) + "%";
+    sumTargetEl.textContent = sum.toFixed(1) + " %";
     sumTargetEl.style.color = (sum > 100.0001) ? "var(--sell)" : "var(--sum-ok)";
     updateProgress(sum);
   }

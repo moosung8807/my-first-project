@@ -653,6 +653,13 @@
     }
     .pill .k{color:var(--pill-k);font-weight:600}
     .pill .v{color:var(--pill-v);font-weight:800}
+    #sumTotalKey,
+    #cashKey,
+    #mobileSumTotalKey{
+      word-break:keep-all;
+      overflow-wrap:normal;
+      line-break:strict;
+    }
     .pill.buy .v{color:var(--buy)}
     .pill.sell .v{color:var(--sell)}
     .pill.hold .v{color:var(--pill-hold)}
@@ -726,6 +733,21 @@
     thead tr.sub th{
       font-size:12px;font-weight:700;color:var(--thead-sub);
     }
+    @media (min-width: 769px){
+      thead tr.group th.g-result + th.g-result{
+        padding-left:14px;
+      }
+      thead tr.sub th.col-trade,
+      tbody td.col-trade,
+      tfoot th.col-trade{
+        padding-right:14px;
+      }
+      thead tr.sub th.col-afterqty,
+      tbody td.col-afterqty,
+      tfoot th.col-afterqty{
+        padding-left:14px;
+      }
+    }
     thead th.col-del{
       color:var(--thead-del);
       font-weight:700;
@@ -757,8 +779,8 @@
     th.col-w, td.col-w{width:74px}
 
     th.col-decision, td.col-decision{width:62px;text-align:center}
-    th.col-trade, td.col-trade{width:84px}
-    th.col-afterqty, td.col-afterqty{width:82px}
+    th.col-trade, td.col-trade{width:108px}
+    th.col-afterqty, td.col-afterqty{width:108px;text-align:center}
     th.col-afterval, td.col-afterval{
       width:136px;
       min-width:136px;
@@ -770,13 +792,23 @@
     /* Numeric result columns should stay fully visible and right-aligned. */
     tbody td.col-val,
     tbody td.col-w,
-    tbody td.col-afterqty,
     tbody td.col-afterval,
     tbody td.col-afterw{
       overflow:hidden;
       text-overflow:clip;
       white-space:nowrap;
       text-align:right;
+    }
+    tbody td.col-afterqty{
+      overflow:hidden;
+      text-overflow:clip;
+      white-space:nowrap;
+      text-align:right;
+      padding-right:53px;
+    }
+    #tableCard.mode-result tbody td.col-afterw,
+    #tableCard.mode-result tfoot th.col-afterw{
+      padding-right:35px;
     }
 
     td.col-name input{width:100%;max-width:200px}
@@ -888,6 +920,23 @@ td.col-qty::after{
       text-align:center;
       white-space:nowrap;
     }
+    tfoot th.col-name{
+      text-align:left;
+    }
+    #tableCard tfoot th.col-name{
+      padding-left:100px;
+    }
+    #tableCard.mode-current tfoot th.col-target{
+      padding-right:13px;
+    }
+    tfoot th.col-target,
+    tfoot th.col-val,
+    tfoot th.col-w,
+    tfoot th.col-afterqty,
+    tfoot th.col-afterval,
+    tfoot th.col-afterw{
+      text-align:right;
+    }
 
     .hide{display:none!important}
 
@@ -958,6 +1007,11 @@ td.col-qty::after{
       gap:8px;
       font-variant-numeric:tabular-nums;
       width:100%;
+    }
+    @media (min-width: 769px){
+      td.col-trade .tradeCell{
+        padding-left:35px;
+      }
     }
     .tradeIcon{
       width:18px;height:18px;
@@ -1325,7 +1379,7 @@ td.col-qty::after{
       td.col-w::before{content:"비중"}
       td.col-decision::before{content:"판단"}
       td.col-trade::before{content:"매매"}
-      td.col-afterqty::before{content:"후수량"}
+      td.col-afterqty::before{content:"최종수량[주]"}
       td.col-afterval::before{content:"후보유액"}
       td.col-afterw::before{content:"후비중"}
       td.col-val{

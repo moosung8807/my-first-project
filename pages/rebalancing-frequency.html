@@ -76,192 +76,7 @@
       ]
     }
   </script>
-
-  <style>
-    :root {
-      --bg: #f8fafc;
-      --panel: #ffffff;
-      --text: #111827;
-      --muted: #4b5563;
-      --line: #d7dbe4;
-      --accent: #1f6feb;
-      --accent-soft: #eaf2ff;
-    }
-
-    html[data-theme="dark"] {
-      --bg: #0b0b0f;
-      --panel: #11131a;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --line: #24262d;
-      --accent: #c9a24d;
-      --accent-soft: #1a1920;
-    }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 24px 18px 84px;
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
-      line-height: 1.72;
-    }
-    .shell {
-      max-width: 920px;
-      margin: 0 auto;
-    }
-    .docNav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-    .backLink {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 700;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 8px 12px;
-      background: var(--panel);
-    }
-    .backLink:hover { text-decoration: underline; }
-    .docMeta {
-      color: var(--muted);
-      font-size: 13px;
-      white-space: nowrap;
-    }
-    main {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 20px 18px;
-    }
-    h1 {
-      margin: 0 0 12px;
-      font-size: 33px;
-      line-height: 1.25;
-      letter-spacing: -0.01em;
-    }
-    h2 {
-      margin: 26px 0 8px;
-      font-size: 24px;
-      line-height: 1.32;
-      border-bottom: 2px solid var(--line);
-      padding-bottom: 6px;
-    }
-    h3 {
-      margin: 18px 0 8px;
-      font-size: 20px;
-      line-height: 1.4;
-    }
-    p, ul { margin: 0 0 14px; }
-    ul { padding-left: 20px; }
-    li { margin-bottom: 6px; }
-    .faqAnswer {
-      padding-left: 10px;
-      text-indent: 0.7em;
-    }
-    .faqQuestion {
-      padding-left: 10px;
-    }
-    .highlight {
-      background: var(--accent-soft);
-      border-left: 4px solid var(--accent);
-      border-radius: 8px;
-      padding: 12px 14px;
-      margin-bottom: 16px;
-    }
-    .note {
-      color: var(--muted);
-      border-left: 3px solid var(--line);
-      background: color-mix(in srgb, var(--panel) 84%, var(--text) 4%);
-      border-radius: 8px;
-      padding: 11px 12px;
-      margin: 16px 0;
-    }
-    .guideHub {
-      margin: 18px 0 12px;
-      padding: 14px 14px 10px;
-      border: 1px solid var(--line);
-      border-left: 4px solid var(--accent);
-      border-radius: 12px;
-      background: color-mix(in srgb, var(--accent-soft) 58%, var(--panel) 42%);
-    }
-    .guideHubTitle {
-      display: inline-block;
-      margin: 0 0 10px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--accent);
-      background: color-mix(in srgb, var(--accent) 16%, var(--panel) 84%);
-    }
-    .guideHubList {
-      margin: 0;
-      padding-left: 0;
-      list-style: none;
-    }
-    .guideHubItem {
-      margin: 0 0 8px;
-      font-size: 16px;
-    }
-    .guideHubTag {
-      display: inline-block;
-      min-width: 72px;
-      color: var(--muted);
-      font-weight: 700;
-    }
-    .guideHub a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 700;
-    }
-    .guideHub a:hover { text-decoration: underline; }
-    .guideCurrent {
-      color: var(--text);
-      font-weight: 700;
-    }
-    .docFooter {
-      margin-top: 16px;
-      color: var(--muted);
-      font-size: 14px;
-      text-align: right;
-    }
-    .docFooter a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 700;
-    }
-    .docFooter a:hover { text-decoration: underline; }
-    .inlineLink {
-      color: var(--accent);
-      font-weight: 700;
-      text-decoration: none;
-      border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
-    }
-    .inlineLink:hover {
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-
-    @media (max-width: 768px) {
-      body { padding: 18px 14px 78px; }
-      .docNav {
-        flex-wrap: wrap;
-        align-items: flex-start;
-      }
-      .docMeta { white-space: normal; }
-      h1 { font-size: 29px; }
-      h2 { font-size: 21px; }
-      h3 { font-size: 19px; }
-      p, li { font-size: 17px; }
-      main { padding: 16px 14px; }
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/css/docs.css" />
 </head>
 <body>
   <div class="shell">
@@ -372,14 +187,12 @@
         글과 함께 보면 이해에 도움이 됩니다.
       </p>
 
-      <div style="position: relative; width: 100%; padding-bottom: 56.25%; margin-top: 10px;">
+      <div class="videoEmbed">
         <iframe
           src="https://www.youtube.com/embed/HSgLtn73mRo"
           title="리밸런싱 주기 설명 영상"
-          frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
-          style="position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 12px;"
         ></iframe>
       </div>
       </article>
