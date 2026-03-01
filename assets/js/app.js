@@ -51,6 +51,118 @@
   let isDirtyAfterCalc = false;
   let autoQuoteEnabled = true;
   const rowQuoteStates = new Map();
+  const KR_ETF_ALIAS_MAP = Object.freeze([
+    {
+      ticker: "453850.KS",
+      canonical: "KODEX 미국배당다우존스",
+      aliases: ["미국배당다우존스", "미국배당다우", "미배당다우", "코미당", "미국배당", "453850"]
+    },
+    {
+      ticker: "069500.KS",
+      canonical: "KODEX 200",
+      aliases: ["코덱스200", "국내200", "코스피200", "069500"]
+    },
+    {
+      ticker: "102110.KS",
+      canonical: "TIGER 200",
+      aliases: ["타이거200", "호랑이200", "102110"]
+    },
+    {
+      ticker: "133690.KS",
+      canonical: "TIGER 미국나스닥100",
+      aliases: ["미국나스닥100", "나스닥100", "미국나스닥", "133690"]
+    },
+    {
+      ticker: "360750.KS",
+      canonical: "TIGER 미국S&P500",
+      aliases: ["미국s&p500", "미국sp500", "미국에스앤피500", "s&p500", "sp500", "360750"]
+    },
+    {
+      ticker: "379800.KS",
+      canonical: "KODEX 미국S&P500TR",
+      aliases: ["미국s&p500tr", "미국sp500tr", "sp500tr", "379800"]
+    },
+    {
+      ticker: "214980.KS",
+      canonical: "KODEX 단기채권PLUS",
+      aliases: ["단기채권", "파킹etf", "파킹", "214980"]
+    },
+    {
+      ticker: "148070.KS",
+      canonical: "KOSEF 국고채10년",
+      aliases: ["국고채10년", "국채10년", "148070"]
+    },
+    {
+      ticker: "273130.KS",
+      canonical: "KODEX 종합채권(AA-이상)액티브",
+      aliases: ["종합채권", "채권액티브", "273130"]
+    },
+    {
+      ticker: "132030.KS",
+      canonical: "KODEX 골드선물(H)",
+      aliases: ["골드선물", "금etf", "금선물", "132030"]
+    },
+    {
+      ticker: "114800.KS",
+      canonical: "KODEX 인버스",
+      aliases: ["인버스", "114800"]
+    },
+    {
+      ticker: "122630.KS",
+      canonical: "KODEX 레버리지",
+      aliases: ["레버리지", "122630"]
+    },
+    {
+      ticker: "233740.KS",
+      canonical: "KODEX 코스닥150레버리지",
+      aliases: ["코스닥150레버리지", "코스닥레버리지", "233740"]
+    },
+    {
+      ticker: "229200.KS",
+      canonical: "KODEX 코스닥150",
+      aliases: ["코스닥150", "229200"]
+    },
+    {
+      ticker: "305720.KS",
+      canonical: "KODEX 2차전지산업",
+      aliases: ["2차전지", "이차전지", "2차전지산업", "305720"]
+    },
+    {
+      ticker: "305540.KS",
+      canonical: "TIGER 2차전지테마",
+      aliases: ["2차전지테마", "이차전지테마", "305540"]
+    },
+    {
+      ticker: "381170.KS",
+      canonical: "TIGER 미국테크TOP10 INDXX",
+      aliases: ["미국테크top10", "미국테크10", "381170"]
+    },
+    {
+      ticker: "379810.KS",
+      canonical: "KODEX 미국나스닥100TR",
+      aliases: ["미국나스닥100tr", "나스닥100tr", "379810"]
+    },
+    {
+      ticker: "229480.KS",
+      canonical: "KODEX 미국S&P500선물(H)",
+      aliases: ["미국s&p500선물", "미국sp500선물", "229480"]
+    },
+    {
+      ticker: "091180.KS",
+      canonical: "KODEX 자동차",
+      aliases: ["자동차", "091180"]
+    }
+  ]);
+  const KR_ETF_ALIAS_INDEX = Object.freeze(
+    KR_ETF_ALIAS_MAP.map((entry)=>{
+      const keySet = new Set([entry.canonical, entry.ticker, ...(entry.aliases || [])]);
+      const keys = [...keySet]
+        .map((value)=>normalizeKrEtfAlias(value))
+        .filter(Boolean)
+        .sort((a, b)=>b.length - a.length);
+      return { ticker: entry.ticker, keys };
+    })
+  );
   const SYMBOL_ALIAS_MAP = Object.freeze({
     "005930": "005930.KS",
     "000660": "000660.KS",
@@ -136,8 +248,44 @@
       .replace(/\s+/g, "")
       .replace(/[^0-9a-zA-Z가-힣&().+-]/g, "");
   }
+  function normalizeKrEtfAlias(value){
+    return String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(
+        /etf|kodex|tiger|rise|kbstar|arirang|ace|plus|sol|timefolio|코덱스|타이거|라이즈|케이스타|아리랑|에이스|플러스|쏠/g,
+        ""
+      )
+      .replace(/[^0-9a-zA-Z가-힣]/g, "");
+  }
   function normalizeSymbol(value){
     return String(value || "").trim().toUpperCase();
+  }
+  function findTickerByKrEtfAlias(rawInput){
+    const normalizedInput = normalizeKrEtfAlias(rawInput);
+    if(!normalizedInput) return "";
+
+    for(const etf of KR_ETF_ALIAS_INDEX){
+      if(etf.keys.some((alias)=>alias === normalizedInput)){
+        return etf.ticker;
+      }
+    }
+
+    let bestTicker = "";
+    let bestScore = 0;
+    for(const etf of KR_ETF_ALIAS_INDEX){
+      for(const alias of etf.keys){
+        if(alias.length < 3 || normalizedInput.length < 3) continue;
+        const matched = normalizedInput.includes(alias) || alias.includes(normalizedInput);
+        if(!matched) continue;
+        if(alias.length > bestScore){
+          bestScore = alias.length;
+          bestTicker = etf.ticker;
+        }
+      }
+    }
+    return bestTicker;
   }
   function resolveYahooSymbol(rawInput){
     const input = String(rawInput || "").trim();
@@ -146,6 +294,11 @@
     const symbolLike = normalizeSymbol(input);
     if(/^[A-Z0-9.^=\-]{1,20}$/.test(symbolLike) && symbolLike.includes(".")){
       return symbolLike;
+    }
+
+    const etfTicker = findTickerByKrEtfAlias(input);
+    if(etfTicker){
+      return etfTicker;
     }
 
     const aliasKey = normalizeAliasKey(input);
@@ -168,7 +321,7 @@
       return symbolLike;
     }
 
-    return "";
+    return symbolLike.replace(/\s+/g, "");
   }
   function getSuggestionCandidates(rawQuery){
     const query = normalizeAliasKey(rawQuery);
@@ -684,7 +837,7 @@
     tr.innerHTML = `
       <td class="left col-name">
         <div class="nameFieldWrap">
-          <input class="name" placeholder="종목명" aria-label="종목명" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false">
+          <input class="name" placeholder="종목명 또는 티커" aria-label="종목명" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false">
           <div class="nameSuggest" hidden role="listbox"></div>
         </div>
       </td>
