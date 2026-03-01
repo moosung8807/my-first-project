@@ -615,7 +615,7 @@
 
   function updateTargetSumUI(){
     const sum = sumTargets(null);
-    sumTargetEl.textContent = sum.toFixed(1) + " %";
+    sumTargetEl.textContent = sum.toFixed(1);
     sumTargetEl.style.color = (sum > 100.0001) ? "var(--sell)" : "var(--sum-ok)";
     updateProgress(sum);
   }
@@ -1056,6 +1056,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     neutral.trades.forEach(t=>{
 // ✅ [추가] 비활성 행은 완전히 제외
   if(t.inactive){
+    t.tr.classList.add("inactiveRow");
     const d = t.tr.querySelector(".decision");
     const lbl = d.querySelector(".decisionLabel");
     if(lbl) lbl.textContent = "-";
@@ -1066,10 +1067,11 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     cell.querySelector(".tradeNum").textContent = "-";
 
     t.tr.querySelector(".afterQty").textContent = "-";
-    t.tr.querySelector(".afterVal").textContent = "-";
-    t.tr.querySelector(".afterW").textContent = "-";
-    return; // ⭐ 여기서 끝 → 카운트도 안 되고 계산도 안 됨
+      t.tr.querySelector(".afterVal").textContent = "-";
+      t.tr.querySelector(".afterW").textContent = "-";
+      return; // ⭐ 여기서 끝 → 카운트도 안 되고 계산도 안 됨
   }
+      t.tr.classList.remove("inactiveRow");
 
       let decision = t.decision;
       if(t.tradeQty === 0){
