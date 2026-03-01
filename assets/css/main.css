@@ -814,6 +814,7 @@
       cursor:pointer;
     }
     .nameSuggestItem:hover,
+    .nameSuggestItem.isActive,
     .nameSuggestItem:focus-visible{
       background:rgba(201,162,77,.12);
       outline:none;

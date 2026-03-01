@@ -195,15 +195,73 @@
   function getNameSuggestBox(tr){
     return tr ? tr.querySelector(".nameSuggest") : null;
   }
+  function getNameInput(tr){
+    return tr ? tr.querySelector(".name") : null;
+  }
+  function getNameSuggestionItems(tr){
+    const suggestBox = getNameSuggestBox(tr);
+    if(!suggestBox) return [];
+    return [...suggestBox.querySelectorAll(".nameSuggestItem")];
+  }
+  function getSuggestionActiveIndex(tr){
+    const suggestBox = getNameSuggestBox(tr);
+    if(!suggestBox) return -1;
+    const n = Number(suggestBox.dataset.activeIndex);
+    return Number.isInteger(n) ? n : -1;
+  }
+  function setSuggestionActiveIndex(tr, nextIndex){
+    const suggestBox = getNameSuggestBox(tr);
+    const nameEl = getNameInput(tr);
+    if(!suggestBox || !nameEl) return;
+
+    const items = getNameSuggestionItems(tr);
+    const last = items.length - 1;
+    const index = (nextIndex < 0 || nextIndex > last) ? -1 : nextIndex;
+    suggestBox.dataset.activeIndex = String(index);
+
+    items.forEach((item, itemIndex)=>{
+      const active = itemIndex === index;
+      item.setAttribute("aria-selected", active ? "true" : "false");
+      item.classList.toggle("isActive", active);
+      if(active){
+        nameEl.setAttribute("aria-activedescendant", item.id);
+        item.scrollIntoView({ block: "nearest" });
+      }
+    });
+
+    if(index === -1){
+      nameEl.removeAttribute("aria-activedescendant");
+    }
+  }
+  function applySuggestionSelection(tr, item){
+    const nameEl = getNameInput(tr);
+    if(!nameEl || !item) return;
+    const name = item.dataset.name || "";
+    const symbol = item.dataset.symbol || "";
+    nameEl.value = name;
+    syncRowDisplayName(tr);
+    hideNameSuggestions(tr);
+    if(autoQuoteEnabled){
+      scheduleAutoPriceFetch(tr, { immediate: true, symbolOverride: symbol });
+    }
+    nameEl.focus({ preventScroll: true });
+  }
   function hideNameSuggestions(tr){
     const suggestBox = getNameSuggestBox(tr);
+    const nameEl = getNameInput(tr);
     if(!suggestBox) return;
     suggestBox.hidden = true;
     suggestBox.innerHTML = "";
     suggestBox.removeAttribute("aria-label");
+    suggestBox.removeAttribute("data-active-index");
+    if(nameEl){
+      nameEl.setAttribute("aria-expanded", "false");
+      nameEl.removeAttribute("aria-activedescendant");
+    }
   }
   function showNameSuggestions(tr, query){
     const suggestBox = getNameSuggestBox(tr);
+    const nameEl = getNameInput(tr);
     if(!suggestBox) return;
 
     const candidates = getSuggestionCandidates(query);
@@ -214,29 +272,29 @@
 
     suggestBox.innerHTML = "";
     suggestBox.setAttribute("aria-label", "종목 자동완성 목록");
-    candidates.forEach((item)=>{
+    candidates.forEach((item, idx)=>{
       const button = document.createElement("button");
       button.type = "button";
       button.className = "nameSuggestItem";
+      button.id = `${suggestBox.id}-item-${idx}`;
+      button.setAttribute("role", "option");
+      button.setAttribute("aria-selected", "false");
+      button.dataset.name = item.name;
+      button.dataset.symbol = item.symbol;
       button.innerHTML = `
         <span class="nameSuggestName">${item.name}</span>
         <span class="nameSuggestSymbol">${item.symbol}</span>
       `;
       button.addEventListener("mousedown", (event)=>event.preventDefault());
-      button.addEventListener("click", ()=>{
-        const nameEl = tr.querySelector(".name");
-        if(!nameEl) return;
-        nameEl.value = item.name;
-        syncRowDisplayName(tr);
-        hideNameSuggestions(tr);
-        if(autoQuoteEnabled){
-          scheduleAutoPriceFetch(tr, { immediate: true, symbolOverride: item.symbol });
-        }
-        nameEl.focus({ preventScroll: true });
-      });
+      button.addEventListener("click", ()=>applySuggestionSelection(tr, button));
       suggestBox.appendChild(button);
     });
     suggestBox.hidden = false;
+    setSuggestionActiveIndex(tr, -1);
+    if(nameEl){
+      nameEl.setAttribute("aria-expanded", "true");
+      nameEl.setAttribute("aria-controls", suggestBox.id);
+    }
   }
   function hideAllNameSuggestions(){
     tbody.querySelectorAll("tr").forEach((tr)=>hideNameSuggestions(tr));
@@ -309,7 +367,7 @@
     const symbol = symbolOverride || resolveYahooSymbol(nameEl.value);
     if(!symbol){
       if(immediate && String(nameEl.value || "").trim()){
-        showToast("심볼을 인식하지 못했어요. 예: 005930, 삼성전자, AAPL");
+        showToast("종목명/심볼을 확인해주세요. 예: 005930, 삼성전자, AAPL");
       }
       return;
     }
@@ -334,7 +392,8 @@
         if(err && (err.name === "AbortError")) return;
         tr.dataset.resolvedSymbol = "";
         if(immediate){
-          showToast(`현재가 조회 실패: ${symbol}`);
+          const reason = (err && err.message) ? err.message : `심볼 ${symbol} 조회 실패`;
+          showToast(`현재가 조회 실패: ${reason}`);
         }
       }
     };
@@ -564,16 +623,9 @@
   function attachTargetGuard(targetInput){
     targetInput.addEventListener("input", ()=>{
       let v = clampMin0(parseNum(targetInput.value));
-
-      const others = sumTargets(targetInput);
-      const allowedMax = Math.max(0, 100 - others);
-
-      if(v > allowedMax + 1e-9){
-        v = allowedMax;
-        targetInput.value = (Math.round(v * 100) / 100).toString();
-        showToast(`기준% 합계는 100%를 넘을 수 없어요. (이 행 최대 ${allowedMax.toFixed(2)}%)`);
-      }else{
-        if(parseNum(targetInput.value) < 0) targetInput.value = "0";
+      if(parseNum(targetInput.value) < 0) targetInput.value = "0";
+      if(v > 100){
+        targetInput.value = "100";
       }
       updateTargetSumUI();
     });
@@ -584,9 +636,7 @@
         return;
       }
       let v = clampMin0(parseNum(targetInput.value));
-      const others = sumTargets(targetInput);
-      const allowedMax = Math.max(0, 100 - others);
-      if(v > allowedMax) v = allowedMax;
+      if(v > 100) v = 100;
       targetInput.value = (Math.round(v * 100) / 100).toString();
       updateTargetSumUI();
     });
@@ -634,8 +684,8 @@
     tr.innerHTML = `
       <td class="left col-name">
         <div class="nameFieldWrap">
-          <input class="name" placeholder="종목명" aria-label="종목명" autocomplete="off">
-          <div class="nameSuggest" hidden></div>
+          <input class="name" placeholder="종목명" aria-label="종목명" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false">
+          <div class="nameSuggest" hidden role="listbox"></div>
         </div>
       </td>
 
@@ -669,6 +719,11 @@
       </td>
     `;
     tbody.appendChild(tr);
+    const suggestBox = tr.querySelector(".nameSuggest");
+    if(suggestBox){
+      const uid = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      suggestBox.id = `nameSuggest-${uid}`;
+    }
 
     // 새 행은 현재 모드와 동일한 컬럼 가시성 상태로 시작해야 레이아웃이 유지된다.
     const inputCells = tr.querySelectorAll(".g-input");
@@ -710,7 +765,30 @@ tr.querySelector(".name").addEventListener("blur", ()=>{
   if(autoQuoteEnabled) scheduleAutoPriceFetch(tr, { immediate: true });
 });
 tr.querySelector(".name").addEventListener("keydown", (event)=>{
+  const items = getNameSuggestionItems(tr);
+  const isOpen = items.length > 0;
+  if(event.key === "ArrowDown" && isOpen){
+    event.preventDefault();
+    const next = Math.min(getSuggestionActiveIndex(tr) + 1, items.length - 1);
+    setSuggestionActiveIndex(tr, next);
+    return;
+  }
+  if(event.key === "ArrowUp" && isOpen){
+    event.preventDefault();
+    const next = getSuggestionActiveIndex(tr) <= 0 ? items.length - 1 : getSuggestionActiveIndex(tr) - 1;
+    setSuggestionActiveIndex(tr, next);
+    return;
+  }
   if(event.key === "Enter"){
+    if(isOpen){
+      event.preventDefault();
+      const activeIndex = getSuggestionActiveIndex(tr);
+      const picked = activeIndex >= 0 ? items[activeIndex] : items[0];
+      if(picked){
+        applySuggestionSelection(tr, picked);
+        return;
+      }
+    }
     hideNameSuggestions(tr);
     if(autoQuoteEnabled) scheduleAutoPriceFetch(tr, { immediate: true });
   }
