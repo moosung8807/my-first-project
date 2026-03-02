@@ -1,1 +1,32 @@
-{}
+{
+  "069500.KS": {
+    "kind": "RATE_LIMIT",
+    "retryCount": 5,
+    "lastTriedAt": "2026-03-02T15:59:42.794Z",
+    "lastReason": "RETRY_RATE_LIMIT"
+  },
+  "122630.KS": {
+    "kind": "RATE_LIMIT",
+    "retryCount": 2,
+    "lastTriedAt": "2026-03-02T15:59:44.211Z",
+    "lastReason": "RETRY_RATE_LIMIT_GLOBAL"
+  },
+  "114800.KS": {
+    "kind": "RATE_LIMIT",
+    "retryCount": 2,
+    "lastTriedAt": "2026-03-02T15:59:46.368Z",
+    "lastReason": "RETRY_RATE_LIMIT_GLOBAL"
+  },
+  "233740.KS": {
+    "kind": "RATE_LIMIT",
+    "retryCount": 2,
+    "lastTriedAt": "2026-03-02T15:59:48.553Z",
+    "lastReason": "RETRY_RATE_LIMIT_GLOBAL"
+  },
+  "229200.KS": {
+    "kind": "RATE_LIMIT",
+    "retryCount": 2,
+    "lastTriedAt": "2026-03-02T15:59:50.110Z",
+    "lastReason": "RETRY_RATE_LIMIT_GLOBAL"
+  }
+}

@@ -1,63 +1,42 @@
 {
   "meta": {
-    "generatedAt": "2026-03-01T14:45:01.246Z",
+    "generatedAt": "2026-03-02T15:59:50.112Z",
     "source": "data/kr-etf-source.seed.json",
     "thresholds": {
       "pass": 0.72,
       "check": 0.4
     },
     "runtime": {
-      "delayMs": 700,
+      "delayMs": 1200,
       "batchSize": 5,
-      "batchPauseMs": 1200,
-      "cache": "data/kr-etf-validation.cache.json"
+      "batchPauseMs": 6000,
+      "cache": "data/kr-etf-validation.cache.json",
+      "retryOnly": true,
+      "limit": 5,
+      "timeoutMs": 8000,
+      "max429Retries": 8,
+      "minRlPauseMs": 20000,
+      "maxRlPauseMs": 180000,
+      "maxRetryPerCode": 12,
+      "globalRateLimit": {
+        "last429At": "2026-03-02T15:59:42.793Z",
+        "cooldownUntil": "2026-03-02T16:00:18.565Z"
+      },
+      "processedThisRun": 5
     },
     "counts": {
       "PASS": 0,
       "CHECK": 0,
-      "RETRY": 43,
+      "RETRY": 42,
+      "DEFERRED_RATE_LIMIT": 0,
       "FAIL": 0,
-      "total": 43
+      "sourceTotal": 43,
+      "mergedTotal": 42
     }
   },
   "PASS": [],
   "CHECK": [],
   "RETRY": [
-    {
-      "status": "RETRY",
-      "canonical": "KODEX 200",
-      "code": "069500",
-      "tickerCandidate": "069500.KS",
-      "reason": "RETRY_RATE_LIMIT"
-    },
-    {
-      "status": "RETRY",
-      "canonical": "KODEX 레버리지",
-      "code": "122630",
-      "tickerCandidate": "122630.KS",
-      "reason": "RETRY_RATE_LIMIT"
-    },
-    {
-      "status": "RETRY",
-      "canonical": "KODEX 인버스",
-      "code": "114800",
-      "tickerCandidate": "114800.KS",
-      "reason": "RETRY_RATE_LIMIT"
-    },
-    {
-      "status": "RETRY",
-      "canonical": "KODEX 코스닥150레버리지",
-      "code": "233740",
-      "tickerCandidate": "233740.KS",
-      "reason": "RETRY_RATE_LIMIT"
-    },
-    {
-      "status": "RETRY",
-      "canonical": "KODEX 코스닥150",
-      "code": "229200",
-      "tickerCandidate": "229200.KS",
-      "reason": "RETRY_RATE_LIMIT"
-    },
     {
       "status": "RETRY",
       "canonical": "KODEX 2차전지산업",
@@ -298,13 +277,6 @@
     },
     {
       "status": "RETRY",
-      "canonical": "PLUS 고배당주",
-      "code": "161510",
-      "tickerCandidate": "161510.KS",
-      "reason": "RETRY_RATE_LIMIT"
-    },
-    {
-      "status": "RETRY",
       "canonical": "TIMEFOLIO Kstock액티브",
       "code": "385710",
       "tickerCandidate": "385710.KS",
@@ -323,7 +295,48 @@
       "code": "105190",
       "tickerCandidate": "105190.KS",
       "reason": "RETRY_RATE_LIMIT"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 레버리지",
+      "code": "122630",
+      "tickerCandidate": "122630.KS",
+      "retryCount": 1,
+      "reason": "RETRY_RATE_LIMIT_GLOBAL"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 인버스",
+      "code": "114800",
+      "tickerCandidate": "114800.KS",
+      "retryCount": 1,
+      "reason": "RETRY_RATE_LIMIT_GLOBAL"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 코스닥150레버리지",
+      "code": "233740",
+      "tickerCandidate": "233740.KS",
+      "retryCount": 1,
+      "reason": "RETRY_RATE_LIMIT_GLOBAL"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 코스닥150",
+      "code": "229200",
+      "tickerCandidate": "229200.KS",
+      "retryCount": 1,
+      "reason": "RETRY_RATE_LIMIT_GLOBAL"
+    },
+    {
+      "status": "RETRY",
+      "canonical": "KODEX 200",
+      "code": "069500",
+      "tickerCandidate": "069500.KS",
+      "retryCount": 2,
+      "reason": "RETRY_RATE_LIMIT"
     }
   ],
+  "DEFERRED_RATE_LIMIT": [],
   "FAIL": []
 }
