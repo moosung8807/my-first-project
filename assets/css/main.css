@@ -651,6 +651,27 @@
       border-radius:4px;
       border:1px solid var(--line);
     }
+    .autoQuoteLabel{
+      display:inline-flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:2px;
+      line-height:1.1;
+    }
+    .autoQuoteBeta{
+      display:inline-flex;
+      align-items:center;
+      height:12.6px;
+      padding:0 4.2px;
+      border-radius:999px;
+      border:1px solid var(--toast-badge-line);
+      background:var(--toast-badge-bg);
+      color:var(--gold);
+      font-size:7.875px;
+      font-weight:800;
+      letter-spacing:.042em;
+      text-transform:uppercase;
+    }
 
     /* ===== Summary bar ===== */
     .summaryBar{
