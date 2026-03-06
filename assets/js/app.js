@@ -1,16 +1,25 @@
   const tbody = document.querySelector("#tbl tbody");
   const tableCard = document.querySelector("#tableCard");
   const calcBtn = document.querySelector("#calcBtn");
+  const resetBtn = document.querySelector("#reset");
   const sumTargetEl = document.querySelector("#sumTarget");
   const themeToggle = document.querySelector("#themeToggle");
   const heroCalcBtn = document.querySelector("#heroCalcBtn");
   const heroDemoBtn = document.querySelector("#heroDemoBtn");
+  const heroDemoBtnMobile = document.querySelector("#heroDemoBtnMobile");
   const inputSection = document.querySelector("#inputSection");
   const resultSection = document.querySelector("#resultSection");
   const errorSummary = document.querySelector("#errorSummary");
   const staleBadge = document.querySelector("#staleBadge");
   const editWarningFloat = document.querySelector("#editWarningFloat");
   const autoQuoteToggle = document.querySelector("#autoQuoteToggle");
+  const mobileTargetSumLabel = document.querySelector("#mobileTargetSumLabel");
+  const mobileTargetWarning = document.querySelector("#mobileTargetWarning");
+  const mobileResultList = document.querySelector("#mobileResultList");
+  const mobileDetailToggle = document.querySelector("#mobileDetailToggle");
+  const mobileTotalAssetLabel = document.querySelector("#mobileTotalAssetLabel");
+  const mobileCalcBtn = document.querySelector("#mobileCalcBtn");
+  const mobileResetBtn = document.querySelector("#mobileResetBtn");
 
   // Summary UI
   const modeLabel = document.querySelector("#modeLabel");
@@ -479,6 +488,52 @@
   function clearAllRowQuoteStates(){
     [...rowQuoteStates.keys()].forEach((tr)=>clearRowQuoteState(tr));
   }
+  function getInitialRowCount(){
+    return window.matchMedia("(max-width: 768px)").matches ? 3 : 7;
+  }
+  function syncRowPriceInputMode(tr){
+    if(!tr) return;
+    const rowAutoToggle = tr.querySelector(".rowAutoQuoteToggle");
+    const manualToggle = tr.querySelector(".rowManualPriceToggle");
+    const statusEl = tr.querySelector(".rowPriceStatus");
+    if(rowAutoToggle){
+      rowAutoToggle.checked = autoQuoteEnabled;
+    }
+    if(!manualToggle){
+      return;
+    }
+    const wasDisabled = manualToggle.disabled;
+    const forceManual = !autoQuoteEnabled;
+    manualToggle.disabled = forceManual;
+    if(forceManual){
+      manualToggle.checked = true;
+    }else if(wasDisabled){
+      manualToggle.checked = false;
+    }
+    const manualOn = forceManual || manualToggle.checked;
+    tr.classList.toggle("manual-price-on", manualOn);
+
+    if(statusEl){
+      statusEl.textContent = manualOn
+        ? (autoQuoteEnabled ? "현재가 수동입력 ON · 보유금액 자동 계산" : "자동조회 OFF · 현재가 수동입력 필요")
+        : "현재가 자동조회 ON · 보유금액 자동 계산";
+    }
+  }
+  function syncAllRowsPriceMode(){
+    tbody.querySelectorAll("tr").forEach((tr)=>syncRowPriceInputMode(tr));
+  }
+  function setCalcButtonDisabled(disabled){
+    const nextDisabled = Boolean(disabled);
+    if(calcBtn) calcBtn.disabled = nextDisabled;
+    if(mobileCalcBtn) mobileCalcBtn.disabled = nextDisabled;
+  }
+  function updateCalcActionState(sumPct){
+    const overLimit = sumPct > 100.0001;
+    setCalcButtonDisabled(overLimit);
+    if(mobileTargetWarning){
+      mobileTargetWarning.hidden = !overLimit;
+    }
+  }
   function setAutoQuoteEnabled(nextEnabled, { notify = false } = {}){
     autoQuoteEnabled = Boolean(nextEnabled);
     if(autoQuoteToggle){
@@ -490,6 +545,12 @@
     }
     if(notify){
       showToast(autoQuoteEnabled ? "현재가 자동조회가 켜졌어요." : "현재가 자동조회가 꺼졌어요.");
+    }
+    syncAllRowsPriceMode();
+    if(autoQuoteEnabled){
+      tbody.querySelectorAll("tr").forEach((tr)=>{
+        scheduleAutoPriceFetch(tr, { immediate: true });
+      });
     }
   }
   function applyFetchedPriceToRow(tr, price){
@@ -526,6 +587,7 @@
   }
   function scheduleAutoPriceFetch(tr, { immediate = false, symbolOverride = "" } = {}){
     if(!autoQuoteEnabled) return;
+    if(tr && tr.classList.contains("manual-price-on")) return;
     const nameEl = tr.querySelector(".name");
     if(!nameEl) return;
     const aliasMatch = symbolOverride ? null : findKrEtfByAlias(nameEl.value);
@@ -724,9 +786,20 @@
       currentEls.forEach(el=>el.classList.add("hide"));
       resultEls.forEach(el=>el.classList.add("hide"));
       calcBtn.textContent = "계산";
+      if(mobileCalcBtn) mobileCalcBtn.textContent = "계산하기";
       tableCard.classList.add("mode-current");
       tableCard.classList.remove("mode-result");
       modeLabel.textContent = "입력";
+      if(mobileResultList){
+        mobileResultList.hidden = true;
+        mobileResultList.innerHTML = "";
+      }
+      if(mobileDetailToggle){
+        mobileDetailToggle.hidden = true;
+        mobileDetailToggle.textContent = "상세 보기";
+        mobileDetailToggle.setAttribute("aria-expanded", "false");
+      }
+      tableCard.classList.remove("mobile-details-open-global");
 
       // 입력 모드: 결과/현금은 의미가 약하니 0으로 정리
       cashPill.classList.remove("negative");
@@ -740,11 +813,21 @@
       currentEls.forEach(el=>el.classList.add("hide"));
       resultEls.forEach(el=>el.classList.remove("hide"));
       calcBtn.textContent = "현재 보기";
+      if(mobileCalcBtn) mobileCalcBtn.textContent = "입력 보기";
       tableCard.classList.add("mode-result");
       tableCard.classList.remove("mode-current");
       modeLabel.textContent = "결과";
       setDirtyState(false);
       tbody.querySelectorAll("tr").forEach(tr=>setRowDetailOpen(tr, false));
+      if(mobileResultList){
+        mobileResultList.hidden = false;
+      }
+      if(mobileDetailToggle){
+        mobileDetailToggle.hidden = false;
+        mobileDetailToggle.textContent = "상세 보기";
+        mobileDetailToggle.setAttribute("aria-expanded", "false");
+      }
+      tableCard.classList.remove("mobile-details-open-global");
     }
   }
 
@@ -782,7 +865,11 @@
     const sum = sumTargets(null);
     sumTargetEl.textContent = sum.toFixed(1);
     sumTargetEl.style.color = (sum > 100.0001) ? "var(--sell)" : "var(--sum-ok)";
+    if(mobileTargetSumLabel){
+      mobileTargetSumLabel.textContent = `${sum.toFixed(1)}%`;
+    }
     updateProgress(sum);
+    updateCalcActionState(sum);
   }
 
   function attachTargetGuard(targetInput){
@@ -851,6 +938,19 @@
         <div class="nameFieldWrap">
           <input class="name" placeholder="종목명 또는 티커" aria-label="종목명" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false">
           <div class="nameSuggest" hidden role="listbox"></div>
+          <div class="rowMetaPanel">
+            <div class="rowMetaStatus">
+              <label class="rowAutoQuoteControl">
+                <span>현재가 자동</span>
+                <input class="rowAutoQuoteToggle" type="checkbox" checked aria-label="현재가 자동조회">
+              </label>
+              <span class="rowPriceStatus">현재가 자동조회 ON · 보유금액 자동 계산</span>
+            </div>
+            <label class="rowManualPriceControl">
+              <input class="rowManualPriceToggle" type="checkbox" aria-label="현재가 수동입력">
+              <span>현재가 수동입력</span>
+            </label>
+          </div>
         </div>
       </td>
 
@@ -972,6 +1072,8 @@ tr.querySelector(".target").addEventListener("input", ()=>{
 // ✅ 현재가/수량: 편집 중엔 숫자, blur 시 천 단위 콤마 포맷
 const priceEl = tr.querySelector(".price");
 const qtyEl   = tr.querySelector(".qty");
+const rowAutoToggleEl = tr.querySelector(".rowAutoQuoteToggle");
+const rowManualPriceToggleEl = tr.querySelector(".rowManualPriceToggle");
 [priceEl, qtyEl].forEach(el=>{
   el.addEventListener("focus", ()=>warnOnResultFocus(el));
   el.addEventListener("input", ()=>{
@@ -988,14 +1090,31 @@ const qtyEl   = tr.querySelector(".qty");
   });
 });
 
+if(rowAutoToggleEl){
+  rowAutoToggleEl.addEventListener("change", ()=>{
+    setAutoQuoteEnabled(rowAutoToggleEl.checked, { notify: true });
+  });
+}
+if(rowManualPriceToggleEl){
+  rowManualPriceToggleEl.addEventListener("change", ()=>{
+    syncRowPriceInputMode(tr);
+    if(autoQuoteEnabled && !rowManualPriceToggleEl.checked){
+      scheduleAutoPriceFetch(tr, { immediate: true });
+    }
+    if(mode === "current") updateCurrentUI();
+    markDirtyIfNeeded();
+  });
+}
+
 updateTargetSumUI();
 updateCurrentUI();
 setRowDetailOpen(tr, false);
 syncRowDisplayName(tr);
+syncRowPriceInputMode(tr);
 
   }
 
-function updateCurrentUI(){
+  function updateCurrentUI(){
   const { rows, total } = snapshotRows();
 
   // 행별 현재 보유액/비중
@@ -1010,6 +1129,9 @@ function updateCurrentUI(){
 
   // 상단 현재 보유액
   setTotalSummary("현재 보유액", fmtKRW(total));
+  if(mobileTotalAssetLabel){
+    mobileTotalAssetLabel.textContent = fmtKRW(total);
+  }
 }
 
   function syncRowDisplayName(tr){
@@ -1018,6 +1140,34 @@ function updateCurrentUI(){
     if(!nameInput || !nameCell) return;
     const raw = String(nameInput.value || "").trim();
     nameCell.setAttribute("data-name", raw || "종목명 미입력");
+    nameCell.setAttribute("data-mobile-header", raw || "종목명 미입력");
+    nameCell.setAttribute("data-mobile-decision", "유지");
+  }
+  function setMobileDetailHeader(tr, { nameText = "", decision = "유지", tradeText = "" } = {}){
+    if(!tr) return;
+    const nameCell = tr.querySelector(".col-name");
+    if(!nameCell) return;
+    let rich = nameCell.querySelector(".mobileHeaderRich");
+    if(!rich){
+      rich = document.createElement("div");
+      rich.className = "mobileHeaderRich";
+      rich.innerHTML = `
+        <span class="mobileHeaderName"></span>
+        <span class="mobileHeaderSep"> : </span>
+        <span class="mobileHeaderTrade"></span>
+        <span class="mobileHeaderDecision"></span>
+      `;
+      nameCell.appendChild(rich);
+    }
+    const nameEl = rich.querySelector(".mobileHeaderName");
+    const decisionEl = rich.querySelector(".mobileHeaderDecision");
+    const tradeEl = rich.querySelector(".mobileHeaderTrade");
+    if(nameEl) nameEl.textContent = nameText || "이름 미입력";
+    if(decisionEl){
+      decisionEl.textContent = `[${decision}]`;
+      decisionEl.className = `mobileHeaderDecision ${decision === "매수" ? "buy" : decision === "매도" ? "sell" : "hold"}`;
+    }
+    if(tradeEl) tradeEl.textContent = tradeText || "";
   }
 
   function snapshotRows(){
@@ -1158,6 +1308,55 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     }
   }
 
+  function renderMobileResultList(trades, cashResidual){
+    if(!mobileResultList) return;
+    mobileResultList.innerHTML = "";
+
+    const activeTrades = trades.filter((t)=>!t.inactive);
+    if(!activeTrades.length){
+      const empty = document.createElement("li");
+      empty.className = "mobileResultItem empty";
+      empty.textContent = "표시할 계산 결과가 없습니다.";
+      mobileResultList.appendChild(empty);
+      return;
+    }
+
+    activeTrades.forEach((t)=>{
+      const item = document.createElement("li");
+      item.className = "mobileResultItem";
+      const name = String(t.tr?.querySelector(".name")?.value || "").trim() || "이름 미입력";
+      const decision = t.tradeQty > 0 ? "매수" : t.tradeQty < 0 ? "매도" : "유지";
+      const qtyText = t.tradeQty === 0
+        ? "0주"
+        : `${t.tradeQty > 0 ? "+" : "-"}${fmt(Math.abs(t.tradeQty))}주`;
+      const nameEl = document.createElement("span");
+      nameEl.className = "name";
+      nameEl.textContent = name;
+      const decisionEl = document.createElement("span");
+      decisionEl.className = `decision ${decision === "매수" ? "buy" : decision === "매도" ? "sell" : "hold"}`;
+      decisionEl.textContent = decision;
+      const qtyEl = document.createElement("span");
+      qtyEl.className = "qty";
+      qtyEl.textContent = qtyText;
+      item.append(nameEl, decisionEl, qtyEl);
+      mobileResultList.appendChild(item);
+    });
+
+    const cashItem = document.createElement("li");
+    cashItem.className = "mobileResultItem cash";
+    const cashName = document.createElement("span");
+    cashName.className = "name";
+    cashName.textContent = "현금";
+    const cashDecision = document.createElement("span");
+    cashDecision.className = `decision ${cashResidual >= 0 ? "buy" : "sell"}`;
+    cashDecision.textContent = cashResidual >= 0 ? "잔액" : "부족";
+    const cashQty = document.createElement("span");
+    cashQty.className = "qty";
+    cashQty.textContent = `${cashResidual < 0 ? "-" : ""}${fmt(Math.round(Math.abs(cashResidual)))}원`;
+    cashItem.append(cashName, cashDecision, cashQty);
+    mobileResultList.appendChild(cashItem);
+  }
+
   function calc(){
     const eps = FIXED_TOLERANCE_RATIO;
 
@@ -1234,6 +1433,12 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     t.tr.querySelector(".afterQty").textContent = "-";
       t.tr.querySelector(".afterVal").textContent = "-";
       t.tr.querySelector(".afterW").textContent = "-";
+      const inactiveNameCell = t.tr.querySelector(".col-name");
+      if(inactiveNameCell){
+        inactiveNameCell.setAttribute("data-mobile-header", "-");
+        inactiveNameCell.setAttribute("data-mobile-decision", "유지");
+      }
+      setMobileDetailHeader(t.tr, { nameText: "결과 없음", decision: "유지", tradeText: "-" });
       return; // ⭐ 여기서 끝 → 카운트도 안 되고 계산도 안 됨
   }
       t.tr.classList.remove("inactiveRow");
@@ -1257,6 +1462,16 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
       d.className = "g-result col-decision decision " + (decision === "매도" ? "sell" : decision === "매수" ? "buy" : "hold");
 
       setTradeCell(t.tr, t.tradeQty, decision);
+      const tradeLabel = t.tradeQty === 0
+        ? "0주"
+        : `${fmt(Math.abs(t.tradeQty))}주`;
+      const nameCell = t.tr.querySelector(".col-name");
+      const rawName = String(t.tr.querySelector(".name")?.value || "").trim() || "이름 미입력";
+      if(nameCell){
+        nameCell.setAttribute("data-mobile-header", `${rawName}   [${decision}] ${tradeLabel}`);
+        nameCell.setAttribute("data-mobile-decision", decision);
+      }
+      setMobileDetailHeader(t.tr, { nameText: rawName, decision, tradeText: tradeLabel });
 
       t.tr.querySelector(".afterQty").textContent = fmt(afterQty) + "주";
       t.tr.querySelector(".afterVal").textContent = fmtKRW(afterVal);
@@ -1285,6 +1500,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     buyCountEl.textContent = String(buyCnt);
     sellCountEl.textContent = String(sellCnt);
     holdCountEl.textContent = String(holdCnt);
+    renderMobileResultList(neutral.trades, cashResidual);
 
     // 기준% 합계
     updateTargetSumUI();
@@ -1297,7 +1513,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     clearInvalidMarks();
   };
 
-  calcBtn.onclick = ()=>{
+  function runCalcAction(){
     if(mode === "current"){
       if(!validateBeforeCalc()){
         return;
@@ -1314,18 +1530,20 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     }else{
       setMode("current");
     }
-  };
-
-  document.querySelector("#reset").onclick = ()=>{
+  }
+  function resetAllRows(){
     if(!window.confirm("전체 입력값을 초기화할까요?")){
       return;
     }
     clearAllRowQuoteStates();
     tbody.innerHTML = "";
-    for(let i=0;i<7;i++) addRow();
+    for(let i=0;i<getInitialRowCount();i++) addRow();
     setMode("current");
     setTotalSummary("현재 보유액", fmtKRW(0));
     setCashSummary(fmtKRW(0));
+    if(mobileTotalAssetLabel){
+      mobileTotalAssetLabel.textContent = fmtKRW(0);
+    }
     cashPill.classList.remove("negative");
     hasComputed = false;
     setDirtyState(false);
@@ -1333,13 +1551,35 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     clearInvalidMarks();
     updateTargetSumUI();
     updateCurrentUI();
-  };
+  }
+  calcBtn.onclick = runCalcAction;
+  if(mobileCalcBtn){
+    mobileCalcBtn.addEventListener("click", runCalcAction);
+  }
+  if(mobileDetailToggle){
+    mobileDetailToggle.addEventListener("click", ()=>{
+      const nextOpen = !tableCard.classList.contains("mobile-details-open-global");
+      tableCard.classList.toggle("mobile-details-open-global", nextOpen);
+      mobileDetailToggle.textContent = nextOpen ? "상세 닫기" : "상세 보기";
+      mobileDetailToggle.setAttribute("aria-expanded", nextOpen ? "true" : "false");
+    });
+  }
+  if(resetBtn){
+    resetBtn.onclick = resetAllRows;
+  }
+  if(mobileResetBtn){
+    mobileResetBtn.addEventListener("click", (event)=>{
+      event.preventDefault();
+      resetAllRows();
+      const details = mobileResetBtn.closest("details");
+      if(details) details.open = false;
+    });
+  }
 
   // init
   const savedTheme = localStorage.getItem(THEME_KEY);
   setTheme(savedTheme || "dark");
-  const savedAutoQuote = localStorage.getItem(AUTO_QUOTE_KEY);
-  setAutoQuoteEnabled(savedAutoQuote !== "0");
+  setAutoQuoteEnabled(false);
   if(autoQuoteToggle){
     autoQuoteToggle.addEventListener("change", ()=>{
       setAutoQuoteEnabled(autoQuoteToggle.checked, { notify: true });
@@ -1360,15 +1600,18 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
   if(heroCalcBtn){
     heroCalcBtn.addEventListener("click", ()=>{
       scrollToEl(inputSection);
-      const firstInput = tbody.querySelector("tr .target");
+      const firstInput = tbody.querySelector("tr .name");
       if(firstInput) firstInput.focus({ preventScroll: true });
     });
   }
   if(heroDemoBtn){
     heroDemoBtn.addEventListener("click", fillDemoAndRun);
   }
+  if(heroDemoBtnMobile){
+    heroDemoBtnMobile.addEventListener("click", fillDemoAndRun);
+  }
 
-  for(let i=0;i<7;i++) addRow();
+  for(let i=0;i<getInitialRowCount();i++) addRow();
   setMode("current");
   setTotalSummary("현재 보유액", fmtKRW(0));
   setCashSummary(fmtKRW(0));

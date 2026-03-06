@@ -1,8 +1,8 @@
 {
   "069500.KS": {
     "kind": "RATE_LIMIT",
-    "retryCount": 5,
-    "lastTriedAt": "2026-03-02T15:59:42.794Z",
+    "retryCount": 6,
+    "lastTriedAt": "2026-03-05T15:24:27.987Z",
     "lastReason": "RETRY_RATE_LIMIT"
   },
   "122630.KS": {
