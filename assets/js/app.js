@@ -656,6 +656,18 @@
     localStorage.setItem("rb-portfolio-name", nextName);
     return nextName;
   }
+  function waitForImagesLoaded(root){
+    const images = [...(root?.querySelectorAll?.("img") || [])];
+    if(images.length === 0) return Promise.resolve();
+    return Promise.all(images.map((img)=>{
+      if(img.complete && img.naturalWidth > 0) return Promise.resolve();
+      return new Promise((resolve)=>{
+        const done = ()=>resolve();
+        img.addEventListener("load", done, { once: true });
+        img.addEventListener("error", done, { once: true });
+      });
+    })).then(()=>undefined);
+  }
   function formatReportDate(date){
     const yyyy = String(date.getFullYear());
     const mm = String(date.getMonth() + 1).padStart(2, "0");
@@ -681,7 +693,7 @@
     ) return "주식";
     return "기타";
   }
-  function buildPieChartSvg(items){
+  function buildPieChartSvg(items, targetGapRows = []){
     const palette = ["#1f77b4", "#ef4444", "#22c55e", "#f59e0b", "#1f3a8a", "#6b7280"];
     const parts = items
       .map((item)=>({ ...item, value: Math.max(0, Number(item.value) || 0) }))
@@ -732,10 +744,25 @@
       return `<li><span class="dot" style="background:${color}"></span><span class="name">${escapeHtml(part.name)}</span><span class="pct">${escapeHtml(part.value.toFixed(1))}%</span></li>`;
     }).join("");
 
+    const targetGapItems = targetGapRows.length > 0
+      ? targetGapRows.map((row)=>{
+        const dirClass = row.gap >= 0 ? "up" : "down";
+        const sign = row.gap > 0 ? "+" : "";
+        return `<li><span class="name">${escapeHtml(row.name)}</span><span class="gap ${dirClass}">${sign}${escapeHtml(row.gap.toFixed(1))}%p</span></li>`;
+      }).join("")
+      : `<li><span class="name">-</span><span class="gap">0.0%p</span></li>`;
+
     return `
       <div class="pie-wrap">
-        <img class="pie" src="${chartSrc}" alt="리밸런싱 후 비중 차트">
-        <ul class="pie-legend">${legends}</ul>
+        <img class="pie" src="${chartSrc}" alt="리밸런싱 후 비중 차트" width="130" height="130">
+        <div class="pie-legend-box">
+          <p class="pie-legend-title">리밸런싱 후 비중</p>
+          <ul class="pie-legend">${legends}</ul>
+        </div>
+        <div class="target-gap-box">
+          <p class="target-gap-title">리밸런싱 후 목표 대비 차이</p>
+          <ul class="target-gap-list">${targetGapItems}</ul>
+        </div>
       </div>
     `;
   }
@@ -863,7 +890,7 @@
         <td class="left">${escapeHtml(row.name)}</td>
         <td class="num">${escapeHtml(row.currentWeightText)}</td>
         <td class="num">${escapeHtml(row.targetText)}</td>
-        <td class="num">${escapeHtml(Math.abs(row.diffValue).toFixed(1))}%p</td>
+        <td class="num diff ${row.diffValue >= 0 ? "pos" : "neg"}">${row.diffValue >= 0 ? "▲ " : "▼ "}${escapeHtml(Math.abs(row.diffValue).toFixed(1))}%p</td>
       </tr>
     `).join("");
     const tradeRowsByAmount = [...rows]
@@ -891,7 +918,23 @@
     `).join("");
     const cashRatio = totalAssetValue > 0 ? (cashResidual / totalAssetValue) * 100 : 0;
     const cashEfficiencyLabel = cashRatio > 1 ? "비효율(잔여현금 과다)" : cashRatio > 0.5 ? "보통" : "양호";
-    const riskSummaryText = `현재안 기준 최대 편차 ${currentMaxDrift.toFixed(1)}%p, 상위 3종목 집중도 ${top3Concentration.toFixed(1)}%입니다. 잔여금 효율은 ${cashEfficiencyLabel} 상태입니다.`;
+    const concentrationTone = top3Concentration >= 60 ? "높은 편" : top3Concentration >= 45 ? "보통 수준" : "안정적인 편";
+    const cashTone = cashEfficiencyLabel === "양호" ? "양호한 수준" : "추가 점검이 필요한 수준";
+    const riskSummaryText = `현재 포트폴리오는 상위 3종목 집중도가 ${concentrationTone}이며, 잔여금 효율은 ${cashTone}입니다.`;
+    const clampScore = (value)=>Math.max(35, Math.min(100, Math.round(value)));
+    const diversificationScore = clampScore(92 - Math.max(0, top3Concentration - 55) * 0.9 - Math.max(0, (maxWeightRow?.afterWeightValue || 0) - 30) * 1.1);
+    const driftStabilityScore = clampScore(94 - currentAvgDrift * 4.2 - currentMaxDrift * 1.8);
+    const tradeEfficiencyScore = clampScore(93 - turnoverPct * 0.45 - cashRatio * 5.5 - Math.max(0, top3TradeConcentration - 70) * 0.25);
+    const portfolioTotalScore = clampScore((diversificationScore + driftStabilityScore + tradeEfficiencyScore) / 3);
+    const scoreStatusLabel = (score)=>{
+      if(score >= 85) return "양호";
+      if(score >= 70) return "보통";
+      return "개선 필요";
+    };
+    const diversificationLabel = scoreStatusLabel(diversificationScore);
+    const driftLabel = scoreStatusLabel(driftStabilityScore);
+    const tradeLabel = scoreStatusLabel(tradeEfficiencyScore);
+    const totalLabel = scoreStatusLabel(portfolioTotalScore);
 
     const bucketTotals = rows.reduce((acc, row)=>{
       const key = classifyAssetBucket(row.name);
@@ -926,17 +969,17 @@
     `).join("");
     const sellPlanItemsHtml = sellPlans.length > 0
       ? `<ul class="trade-list">${sellPlans.map((row)=>
-        `<li>${escapeHtml(row.name)} ${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주 매도 (예상 ${escapeHtml(fmtKRW(row.expectedTradeAmount))})</li>`
+        `<li><span class="asset">${escapeHtml(row.name)}</span> <span class="qty">${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주 매도</span> <span class="amt">(예상 ${escapeHtml(fmtKRW(row.expectedTradeAmount))})</span></li>`
       ).join("")}</ul>`
       : `<p class="muted">매도 대상 종목이 없습니다.</p>`;
     const buyPlanItemsHtml = buyPlans.length > 0
       ? `<ul class="trade-list">${buyPlans.map((row)=>
-        `<li>${escapeHtml(row.name)} ${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주 매수 (예상 ${escapeHtml(fmtKRW(row.expectedTradeAmount))})</li>`
+        `<li><span class="asset">${escapeHtml(row.name)}</span> <span class="qty">${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주 매수</span> <span class="amt">(예상 ${escapeHtml(fmtKRW(row.expectedTradeAmount))})</span></li>`
       ).join("")}</ul>`
       : `<p class="muted">매수 대상 종목이 없습니다.</p>`;
     const buyPlansByHighPrice = [...buyPlans].sort((a, b)=>b.currentPriceValue - a.currentPriceValue);
     const executionSteps = [...sellPlans, ...buyPlansByHighPrice].map((row, idx)=>
-      `<li><span class="step-num">${idx + 1}.</span><span class="step-text">${escapeHtml(row.name)} ${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주 ${escapeHtml(row.decision)}</span></li>`
+      `<li><span class="step-num">${idx + 1}</span><span class="step-text">${escapeHtml(row.name)} ${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주 ${escapeHtml(row.decision)}</span></li>`
     ).join("");
     const executionOrderHtml = executionSteps
       ? `<ul class="exec-order">${executionSteps}</ul>`
@@ -945,10 +988,36 @@
       <ul class="result-summary">
         <li>리밸런싱 결과: 매도 ${sellCount}건, 매수 ${buyCount}건으로 총 ${adjustedCount}개 종목을 조정했습니다.</li>
         <li>리밸런싱 후 목표 비중 평균 오차는 ${afterAvgDiff.toFixed(1)}%p입니다.</li>
-        <li>가장 큰 조정 필요 종목: ${escapeHtml(topDiff?.name || "-")} (${topDiff ? `${topDiff.diffValue >= 0 ? "+" : ""}${topDiff.diffValue.toFixed(1)}%p` : "-"})</li>
+        <li>가장 큰 조정 필요 종목은 ${escapeHtml(topDiff?.name || "-")}이었습니다.</li>
       </ul>
     `;
-    const pieChartHtml = buildPieChartSvg(rows.map((row)=>({ name: row.name, value: row.afterWeightValue })));
+    const largestSell = [...sellPlans].sort((a, b)=>b.expectedTradeAmount - a.expectedTradeAmount)[0];
+    const largestBuy = [...buyPlans].sort((a, b)=>b.expectedTradeAmount - a.expectedTradeAmount)[0];
+    const strategyHeadline = largestSell && largestBuy
+      ? `이번 리밸런싱은 ${escapeHtml(largestSell.name)} 비중을 줄이고 ${escapeHtml(largestBuy.name)} 비중을 확대하는 방향으로 진행되었습니다.`
+      : largestSell
+        ? `이번 리밸런싱은 ${escapeHtml(largestSell.name)} 비중을 줄여 목표 비중 정렬을 개선하는 방향으로 진행되었습니다.`
+        : largestBuy
+          ? `이번 리밸런싱은 ${escapeHtml(largestBuy.name)} 비중을 확대해 목표 비중 정렬을 개선하는 방향으로 진행되었습니다.`
+          : "이번 리밸런싱은 현재 포트폴리오 비중을 유지하며 목표 대비 편차를 점검하는 방향으로 진행되었습니다.";
+    const nextReviewText = currentMaxDrift >= 5
+      ? "권장 점검 시점: 1개월 후 또는 비중 편차 5%p 이상 발생 시"
+      : "권장 점검 시점: 3개월 후 또는 비중 편차 5%p 이상 발생 시";
+    const strategySummaryHtml = `
+      <div class="strategy-note">
+        <p class="strategy-title">리밸런싱 전략 요약</p>
+        <p class="strategy-line">${strategyHeadline}</p>
+        <p class="strategy-line">${nextReviewText}</p>
+      </div>
+    `;
+    const targetGapRows = [...rows]
+      .map((row)=>({ name: row.name, gap: row.afterWeightValue - row.targetValue }))
+      .sort((a, b)=>Math.abs(b.gap) - Math.abs(a.gap))
+      .slice(0, 5);
+    const pieChartHtml = buildPieChartSvg(
+      rows.map((row)=>({ name: row.name, value: row.afterWeightValue })),
+      targetGapRows
+    );
 
     const reportHtml = `<!doctype html>
 <html lang="ko">
@@ -998,9 +1067,9 @@
       background: #f9fafb;
       border-radius: 10px;
       padding: 7px 9px;
-      font-size: 11px;
+      font-size: 10px;
       color: #4b5563;
-      line-height: 1.45;
+      line-height: 1.52;
       min-width: 148px;
       text-align: right;
     }
@@ -1018,8 +1087,8 @@
       font-weight: 700;
       letter-spacing: .02em;
     }
-    .meta { font-size: 13px; color: #444; }
-    .meta div { margin-bottom: 2px; }
+    .meta { font-size: 13px; color: #444; line-height: 1.55; }
+    .meta div { margin-bottom: 3px; }
     .summary {
       width: 100%;
       border-collapse: collapse;
@@ -1027,27 +1096,29 @@
     }
     .summary td {
       width: 25%;
-      border: 1px solid #ddd;
+      border: 1px solid #e5e7eb;
       padding: 12px 10px;
       vertical-align: top;
       background: #f8fafc;
-      border-top: 4px solid #d1d5db;
+      border-top: 3px solid #d1d5db;
     }
-    .summary td.sell { border-top-color: var(--sell); }
-    .summary td.buy { border-top-color: var(--buy); }
-    .summary td.primary { border-top-color: var(--primary); }
-    .summary td.neutral { border-top-color: var(--neutral); }
+    .summary td.sell { border-top-color: #ef9a9a; }
+    .summary td.buy { border-top-color: #93c5fd; }
+    .summary td.primary { border-top-color: #93a8dc; }
+    .summary td.neutral { border-top-color: #b6c2d1; }
     .summary-label { font-size: 12px; color: #666; margin-bottom: 6px; }
     .summary-value { font-size: 22px; font-weight: 800; color: var(--primary); line-height: 1.15; }
     .summary-value.sell { color: var(--sell); }
     .summary-value.buy { color: var(--buy); }
+    .summary-value.cash { color: var(--neutral); }
+    .summary-value.count { color: var(--primary); }
     .section { margin-bottom: 18px; }
     .section-title {
       font-size: 16px;
       font-weight: 700;
-      margin: 0 0 8px;
+      margin: 0 0 9px;
       padding-bottom: 5px;
-      border-bottom: 1px solid #222;
+      border-bottom: 1px solid #1f2937;
       color: #111827;
     }
     .section + .section { padding-top: 4px; }
@@ -1065,7 +1136,7 @@
     }
     th, td {
       border: 1px solid #ddd;
-      padding: 6px 5px;
+      padding: 7px 6px;
       text-align: center;
       word-break: keep-all;
       overflow-wrap: anywhere;
@@ -1080,11 +1151,18 @@
       overflow-wrap: normal;
       line-break: auto;
     }
-    .current-table thead th { text-align: center; }
+    .current-table thead th {
+      text-align: center;
+      background: #f1f5f9;
+    }
+    .after-table thead th {
+      text-align: center;
+      background: #f1f5f9;
+    }
     .current-table tbody td.left { text-align: left; }
     td.num { text-align: right; font-variant-numeric: tabular-nums; }
     th.num { text-align: center; }
-    td.diff.pos { color: var(--buy); font-weight: 700; }
+    td.diff.pos { color: #16a34a; font-weight: 800; }
     td.diff.neg { color: var(--sell); font-weight: 700; }
     td.diff { white-space: nowrap; font-size: 11px; }
     tbody tr { break-inside: avoid; page-break-inside: avoid; }
@@ -1109,7 +1187,10 @@
     .trade-title.sell { color: var(--sell); }
     .trade-title.buy { color: var(--buy); }
     .trade-list { margin: 0; padding-left: 16px; }
-    .trade-list li { margin-bottom: 6px; }
+    .trade-list li { margin-bottom: 7px; line-height: 1.5; }
+    .trade-list .asset{ font-weight: 700; color: #0f172a; }
+    .trade-list .qty{ color: #334155; }
+    .trade-list .amt{ color: #475569; }
     .exec-heading {
       margin: 10px 0 6px;
       font-size: 13px;
@@ -1125,17 +1206,24 @@
       margin-bottom: 4px;
       line-height: 1.45;
       display: grid;
-      grid-template-columns: 24px 1fr;
+      grid-template-columns: 26px minmax(0, 1fr);
       align-items: start;
-      column-gap: 4px;
+      column-gap: 8px;
     }
     .exec-order .step-num{
       font-variant-numeric: tabular-nums;
       font-weight: 700;
-      color: #334155;
-      text-align: right;
-      display: inline-block;
-      width: 24px;
+      color: #0f172a;
+      text-align: center;
+      display: inline-flex;
+      width: 22px;
+      height: 22px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: #e2e8f0;
+      white-space: nowrap;
+      font-size: 11.5px;
     }
     .exec-order .step-text{
       display: inline-block;
@@ -1146,8 +1234,9 @@
       padding-left: 18px;
       color: #2f3b4b;
       font-size: 12.5px;
+      line-height: 1.55;
     }
-    .result-summary li { margin-bottom: 4px; }
+    .result-summary li { margin-bottom: 6px; }
     .risk-grid{
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1159,11 +1248,12 @@
     .risk-card{
       border: 1px solid #d1d5db;
       background: #f9fafb;
-      padding: 8px 9px;
+      padding: 10px 10px;
       border-radius: 10px;
       font-size: 12.5px;
       line-height: 1.5;
       height: 100%;
+      min-height: 220px;
       break-inside: avoid;
       page-break-inside: avoid;
       overflow: visible;
@@ -1178,16 +1268,16 @@
     }
     .kpi-grid{
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
       margin-bottom: 8px;
     }
     .kpi-card{
       border: 1px solid #d7deea;
-      background: #ffffff;
+      background: #f8fbff;
       border-radius: 8px;
-      padding: 5px 6px;
-      min-height: 46px;
+      padding: 6px 7px;
+      min-height: 48px;
     }
     .kpi-label{
       margin: 0 0 4px;
@@ -1241,7 +1331,7 @@
       padding: 10px;
       display: flex;
       gap: 12px;
-      align-items: center;
+      align-items: stretch;
     }
     .pie {
       width: 130px;
@@ -1249,6 +1339,21 @@
       flex: 0 0 auto;
       display: block;
       object-fit: contain;
+    }
+    .pie-legend-box{
+      width: 34%;
+      min-width: 170px;
+      border: 1px solid #d1d5db;
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 8px;
+      align-self: stretch;
+    }
+    .pie-legend-title{
+      margin: 0 0 7px;
+      font-size: 11.5px;
+      color: #334155;
+      font-weight: 700;
     }
     .pie-legend {
       margin: 0;
@@ -1274,6 +1379,108 @@
     }
     .pie-legend .name { color: #1f2937; }
     .pie-legend .pct { font-variant-numeric: tabular-nums; font-weight: 700; color: #111; }
+    .target-gap-box{
+      width: 34%;
+      min-width: 160px;
+      border: 1px solid #d1d5db;
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 8px;
+      align-self: stretch;
+    }
+    .target-gap-title{
+      margin: 0 0 7px;
+      font-size: 11.5px;
+      color: #334155;
+      font-weight: 700;
+    }
+    .target-gap-list{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 5px;
+      font-size: 11.5px;
+    }
+    .target-gap-list li{
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+    .target-gap-list .name{
+      color: #1f2937;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .target-gap-list .gap{
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      color: #334155;
+      white-space: nowrap;
+    }
+    .target-gap-list .gap.up{ color: #16a34a; }
+    .target-gap-list .gap.down{ color: #dc2626; }
+    .score-grid{
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .score-grid td{
+      border: 1px solid #d8dee8;
+      background: #ffffff;
+      text-align: left;
+      padding: 7px 8px;
+    }
+    .score-grid td.score{
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .score-grid td.status{
+      text-align: center;
+      width: 68px;
+      font-weight: 700;
+      color: #334155;
+      background: #f8fafc;
+    }
+    .score-grid tr.total td{
+      background: #eef2ff;
+      border-color: #c7d2fe;
+      font-weight: 800;
+    }
+    .score-section{
+      page-break-before: always;
+      break-before: page;
+    }
+    .score-section .risk-card{
+      min-height: 0;
+    }
+    .strategy-note{
+      margin-top: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 9px 10px;
+      font-size: 12px;
+      color: #334155;
+      line-height: 1.5;
+    }
+    .strategy-title{
+      margin: 0 0 5px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .strategy-line{
+      margin: 0 0 4px;
+    }
+    .strategy-line:last-child{
+      margin-bottom: 0;
+    }
     .chart-empty {
       border: 1px dashed #cbd5e1;
       padding: 12px;
@@ -1310,7 +1517,8 @@
   <main class="report">
     <section class="header">
       <div class="header-main">
-        <h1 class="title">포트폴리오 리밸런싱 리포트</h1>
+        <h1 class="title">Portfolio Rebalancing Report</h1>
+        <p class="brand-sub">포트폴리오 리밸런싱 분석</p>
         <p class="brand-sub">rebalancing.kr</p>
         <div class="meta">
           <div><strong>포트폴리오 이름:</strong> ${escapeHtml(portfolioName)}</div>
@@ -1335,13 +1543,13 @@
           <div class="summary-label">총 매수 금액</div>
           <div class="summary-value buy">${escapeHtml(fmtKRW(totalBuyAmount))}</div>
         </td>
-        <td class="primary">
-          <div class="summary-label">잔여 현금</div>
-          <div class="summary-value">${escapeHtml(fmtKRW(cashResidual))}</div>
-        </td>
         <td class="neutral">
+          <div class="summary-label">잔여 현금</div>
+          <div class="summary-value cash">${escapeHtml(fmtKRW(cashResidual))}</div>
+        </td>
+        <td class="primary">
           <div class="summary-label">조정 종목 수</div>
-          <div class="summary-value">${escapeHtml(String(adjustedCount))}개</div>
+          <div class="summary-value count">${escapeHtml(String(adjustedCount))}개</div>
         </td>
       </tr>
     </table>
@@ -1388,10 +1596,10 @@
                 <th class="left">자산명</th>
                 <th class="num">현재</th>
                 <th class="num">목표</th>
-                <th class="num">차이 크기</th>
+                <th class="num">차이</th>
               </tr>
             </thead>
-            <tbody>${driftRowsHtml || `<tr><td class="left">-</td><td class="num">0.0%</td><td class="num">0.0%</td><td class="num">0.0%p</td></tr>`}</tbody>
+            <tbody>${driftRowsHtml || `<tr><td class="left">-</td><td class="num">0.0%</td><td class="num">0.0%</td><td class="num diff pos">▲ 0.0%p</td></tr>`}</tbody>
           </table>
         </div>
         <div class="risk-card">
@@ -1422,6 +1630,37 @@
           </table>
         </div>
       </div>
+    </section>
+
+    <section class="section score-section">
+      <h2 class="section-title">포트폴리오 평가 점수</h2>
+      <div class="risk-card">
+          <div class="subsection-title">포트폴리오 평가 점수</div>
+          <table class="score-grid">
+            <tbody>
+              <tr>
+                <td>분산 점수</td>
+                <td class="score">${diversificationScore} / 100</td>
+                <td class="status">${diversificationLabel}</td>
+              </tr>
+              <tr>
+                <td>드리프트 안정성</td>
+                <td class="score">${driftStabilityScore} / 100</td>
+                <td class="status">${driftLabel}</td>
+              </tr>
+              <tr>
+                <td>거래 효율성</td>
+                <td class="score">${tradeEfficiencyScore} / 100</td>
+                <td class="status">${tradeLabel}</td>
+              </tr>
+              <tr class="total">
+                <td>총점</td>
+                <td class="score">${portfolioTotalScore} / 100</td>
+                <td class="status">${totalLabel}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
     </section>
 
     <section class="section">
@@ -1471,7 +1710,7 @@
 
     <section class="section">
       <h2 class="section-title">리밸런싱 후 포트폴리오</h2>
-      <table>
+      <table class="after-table">
         <thead>
           <tr>
             <th class="left">자산명</th>
@@ -1484,6 +1723,7 @@
       </table>
       ${resultSummaryHtml}
       ${pieChartHtml}
+      ${strategySummaryHtml}
     </section>
   </main>
 </body>
@@ -1533,31 +1773,35 @@
     const filename = `${safeName}_rebalancing_report.pdf`;
 
     exportPdfBtn && (exportPdfBtn.disabled = true);
-    window.html2pdf()
-      .set({
-        margin: [10, 10, 14, 10],
-        filename,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-        pagebreak: { mode: ["css", "legacy"] }
+    waitForImagesLoaded(host)
+      .then(()=>{
+        return window.html2pdf()
+          .set({
+            margin: [10, 10, 14, 10],
+            filename,
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+            pagebreak: { mode: ["css", "legacy"] }
+          })
+          .from(host)
+          .toPdf()
+          .get("pdf")
+          .then((pdf)=>{
+            const totalPages = pdf.internal.getNumberOfPages();
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            for(let i=1; i<=totalPages; i++){
+              pdf.setPage(i);
+              pdf.setFontSize(9);
+              pdf.setTextColor(70, 70, 70);
+              pdf.text("Generated by rebalancing.kr", 8, pageHeight - 6);
+              pdf.setTextColor(95, 95, 95);
+              pdf.text(`Page ${i} of ${totalPages}`, pageWidth - 8, pageHeight - 6, { align: "right" });
+            }
+          })
+          .save();
       })
-      .from(host)
-      .toPdf()
-      .get("pdf")
-      .then((pdf)=>{
-        const totalPages = pdf.internal.getNumberOfPages();
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        for(let i=1; i<=totalPages; i++){
-          pdf.setPage(i);
-          pdf.setFontSize(9);
-          pdf.setTextColor(90, 90, 90);
-          pdf.text("rebalancing.kr | Portfolio Rebalancing Tool", 8, pageHeight - 6);
-          pdf.text(`Page ${i} of ${totalPages}`, pageWidth - 8, pageHeight - 6, { align: "right" });
-        }
-      })
-      .save()
       .catch(()=>{
         showToast("PDF 생성 중 오류가 발생했습니다.");
       })
