@@ -1,75 +1,63 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#F8F8F6"/>
-      <stop offset="1" stop-color="#F2F3F5"/>
+      <stop stop-color="#F2F5FA"/>
+      <stop offset="1" stop-color="#E8EDF4"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="340" y2="380" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1E293B"/>
+      <stop offset="1" stop-color="#0F172A"/>
     </linearGradient>
   </defs>
 
   <rect width="1200" height="630" fill="url(#bg)"/>
-  <rect x="68" y="64" width="1064" height="502" fill="#FDFDFD" stroke="#D6DAE0" stroke-width="2"/>
+  <rect x="58" y="54" width="1084" height="522" rx="18" fill="#FCFEFF" stroke="#D0D8E4" stroke-width="2"/>
 
-  <rect x="100" y="98" width="180" height="30" fill="#111827"/>
-  <text x="294" y="121" fill="#6B7280" font-size="22" font-weight="600" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
+  <rect x="96" y="96" width="345" height="40" rx="20" fill="#0F172A"/>
+  <text x="269" y="122" text-anchor="middle" fill="#E2E8F0" font-size="16" font-weight="700" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
     REBALANCING CALCULATOR
   </text>
 
-  <text x="100" y="246" fill="#0F172A" font-size="84" font-weight="700" letter-spacing="-1.4" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
+  <text x="96" y="226" fill="#0F172A" font-size="76" font-weight="800" letter-spacing="-1.5" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
     포트폴리오
   </text>
-  <text x="100" y="334" fill="#0F172A" font-size="84" font-weight="700" letter-spacing="-1.4" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
+  <text x="96" y="306" fill="#0F172A" font-size="76" font-weight="800" letter-spacing="-1.5" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
     리밸런싱 계산기
   </text>
 
-  <text x="102" y="410" fill="#475569" font-size="30" font-weight="600" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
-    계산은 단순하게, 결과는 즉시
+  <text x="96" y="362" fill="#1E293B" font-size="34" font-weight="700" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
+    감이 아니라, 규칙으로 매매하세요
   </text>
 
-  <line x1="100" y1="454" x2="760" y2="454" stroke="#CBD2DB" stroke-width="2"/>
-  <text x="100" y="500" fill="#64748B" font-size="22" font-weight="500" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
-    Risk Control
-  </text>
-  <text x="294" y="500" fill="#64748B" font-size="22" font-weight="500" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
-    Weight Discipline
-  </text>
-  <text x="540" y="500" fill="#64748B" font-size="22" font-weight="500" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
-    Rule-based Execution
-  </text>
+  <rect x="96" y="394" width="640" height="2" fill="#CDD6E2"/>
 
-  <g transform="translate(824 174)">
-    <rect width="258" height="322" fill="#FFFFFF" stroke="#D3D9E2" stroke-width="2"/>
-    <text x="30" y="46" fill="#64748B" font-size="13" font-weight="600" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
-      INPUT
-    </text>
-    <rect x="30" y="56" width="198" height="52" rx="6" fill="#F8FAFC" stroke="#D3D9E2" stroke-width="2"/>
-    <text x="46" y="77" fill="#64748B" font-size="12" font-weight="600" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
-      목표 비중
-    </text>
-    <text x="214" y="89" text-anchor="end" fill="#0F172A" font-size="22" font-weight="700" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
-      25%
-    </text>
+  <rect x="96" y="426" width="194" height="102" rx="12" fill="#FFFFFF" stroke="#D4DCE7" stroke-width="2"/>
+  <text x="193" y="487" text-anchor="middle" fill="#0F172A" font-size="32" font-weight="800" letter-spacing="-0.6" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">리스크 통제</text>
 
-    <rect x="30" y="122" width="198" height="52" rx="6" fill="#F8FAFC" stroke="#D3D9E2" stroke-width="2"/>
-    <text x="46" y="143" fill="#64748B" font-size="12" font-weight="600" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
-      현재가
-    </text>
-    <text x="214" y="155" text-anchor="end" fill="#0F172A" font-size="22" font-weight="700" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
-      72,000
-    </text>
+  <rect x="310" y="426" width="194" height="102" rx="12" fill="#FFFFFF" stroke="#D4DCE7" stroke-width="2"/>
+  <text x="407" y="487" text-anchor="middle" fill="#0F172A" font-size="32" font-weight="800" letter-spacing="-0.6" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">실행 속도</text>
 
-    <text x="129" y="214" text-anchor="middle" fill="#64748B" font-size="28" font-weight="700" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
-      =
-    </text>
+  <rect x="524" y="426" width="212" height="102" rx="12" fill="#FFFFFF" stroke="#D4DCE7" stroke-width="2"/>
+  <text x="630" y="487" text-anchor="middle" fill="#0F172A" font-size="32" font-weight="800" letter-spacing="-0.6" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">규칙 기반</text>
+  <text x="96" y="556" fill="#64748B" font-size="21" font-weight="700" letter-spacing="0.4" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">www.rebalancing.kr</text>
 
-    <text x="30" y="244" fill="#64748B" font-size="13" font-weight="600" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
-      OUTPUT
-    </text>
-    <rect x="30" y="254" width="198" height="52" rx="6" fill="#2E3A4D"/>
-    <text x="46" y="275" fill="#C9D3E3" font-size="12" font-weight="600" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
-      주문 수량
-    </text>
-    <text x="214" y="287" text-anchor="end" fill="#FFFFFF" font-size="22" font-weight="700" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">
-      매수 12주
-    </text>
+  <g transform="translate(770 126)">
+    <rect width="346" height="402" rx="14" fill="url(#panel)"/>
+    <rect x="24" y="24" width="298" height="60" rx="10" fill="#0B1220" stroke="#334155"/>
+    <text x="42" y="51" fill="#94A3B8" font-size="13" font-weight="600" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">TARGET WEIGHT</text>
+    <text x="304" y="61" text-anchor="end" fill="#F8FAFC" font-size="30" font-weight="800" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">25%</text>
+
+    <rect x="24" y="98" width="298" height="60" rx="10" fill="#0B1220" stroke="#334155"/>
+    <text x="42" y="125" fill="#94A3B8" font-size="13" font-weight="600" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">CURRENT PRICE</text>
+    <text x="304" y="135" text-anchor="end" fill="#F8FAFC" font-size="30" font-weight="800" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">72,000</text>
+
+    <rect x="24" y="172" width="298" height="60" rx="10" fill="#0B1220" stroke="#334155"/>
+    <text x="42" y="199" fill="#94A3B8" font-size="13" font-weight="600" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">CURRENT WEIGHT</text>
+    <text x="304" y="209" text-anchor="end" fill="#F8FAFC" font-size="30" font-weight="800" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">19%</text>
+
+    <rect x="24" y="258" width="298" height="120" rx="12" fill="#E2E8F0"/>
+    <text x="42" y="292" fill="#334155" font-size="14" font-weight="700" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">RECOMMENDED ORDER</text>
+    <text x="42" y="336" fill="#0F172A" font-size="44" font-weight="900" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">매수 12주</text>
+    <text x="42" y="362" fill="#334155" font-size="16" font-weight="600" font-family="'Paperlogy', 'Noto Sans KR', sans-serif">오차 -6%p → 목표 구간 복귀</text>
   </g>
 </svg>

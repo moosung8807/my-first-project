@@ -95,7 +95,7 @@
   <main class="container">
   <section class="heroSection" aria-labelledby="heroTitle">
     <div class="heroTopRow">
-      <p class="heroEyebrow">ETF · 주식 포트폴리오 관리</p>
+      <p class="heroEyebrow">ETF · 주식 포트폴리오 관리 · rebalancing.kr</p>
       <button class="secondary themeToggle" id="themeToggle" type="button" aria-label="테마 전환">화이트 테마</button>
     </div>
     <h1 id="heroTitle">포트폴리오 리밸런싱 계산기</h1>
@@ -195,6 +195,9 @@
   <div class="card" id="tableCard">
     <div class="sectionHeading resultHeading">
       <h2 id="resultSection">2. 계산 결과</h2>
+      <div class="sectionHeadingActions">
+        <button class="secondary" id="exportPdfBtn" type="button" disabled>PDF 보고서</button>
+      </div>
       <p>요약과 자산별 매수/매도 결과를 확인하세요.</p>
     </div>
     <div id="errorSummary" class="errorSummary" role="alert" aria-live="assertive" hidden></div>
@@ -387,6 +390,7 @@
   입력값이 수정되면 다시 계산해야 합니다.
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="assets/js/app.js"></script>
 <script>
   (function() {
