@@ -88,10 +88,27 @@
 </head>
 
 <body>
+<button
+  class="guide-tab-button"
+  id="guidePanelToggle"
+  type="button"
+  aria-expanded="false"
+  aria-controls="guidePanel"
+  aria-label="리밸런싱 계산기 사용방법 열기"
+>
+  <span class="guide-tab-arrow" id="guidePanelArrow" aria-hidden="true">▶</span>
+  <span class="guide-tab-label">사용방법</span>
+</button>
+<div class="guide-panel-overlay" id="guidePanelOverlay" hidden></div>
+<aside class="guide-panel" id="guidePanel" aria-label="리밸런싱 계산기 사용 안내">
+  <div class="guide-panel-header">
+    <strong>리밸런싱 계산기 사용방법</strong>
+    <button class="guide-panel-close" id="guidePanelClose" type="button" aria-label="사용방법 닫기">✕</button>
+  </div>
+  <div class="sidePanelInner guideContent" id="desktopGuideContent"></div>
+</aside>
+
 <div class="layoutShell">
-  <aside class="sidePanel" aria-label="리밸런싱 계산기 사용 안내">
-    <div class="sidePanelInner guideContent" id="desktopGuideContent"></div>
-  </aside>
 
   <main class="container">
   <section class="heroSection" aria-labelledby="heroTitle">
@@ -115,13 +132,6 @@
     계산 결과는 비중 기준 참고값이며 세금·수수료·유동성은 포함되지 않습니다.
     실제 거래 전 주문 가능 수량과 비용을 함께 확인하세요.
   </p>
-
-  <section class="mobileGuide" aria-label="리밸런싱 계산기 사용 안내">
-    <details>
-      <summary>계산기 사용 방법 보기</summary>
-      <div class="mobileGuideBody guideContent" id="mobileGuideContent"></div>
-    </details>
-  </section>
 
   <template id="guideTemplate">
     <h2>■ 리밸런싱 계산기 사용 방법</h2>
@@ -396,16 +406,43 @@
 <script>
   (function() {
     const guideTemplate = document.querySelector("#guideTemplate");
-    const guideTargets = [
-      document.querySelector("#desktopGuideContent"),
-      document.querySelector("#mobileGuideContent")
-    ];
-    if (guideTemplate) {
-      guideTargets.forEach((target) => {
-        if (!target) return;
-        target.replaceChildren(guideTemplate.content.cloneNode(true));
+    const guideTarget = document.querySelector("#desktopGuideContent");
+    if (guideTemplate && guideTarget) {
+      guideTarget.replaceChildren(guideTemplate.content.cloneNode(true));
+    }
+
+    const guidePanel = document.querySelector("#guidePanel");
+    const guidePanelToggle = document.querySelector("#guidePanelToggle");
+    const guidePanelClose = document.querySelector("#guidePanelClose");
+    const guidePanelOverlay = document.querySelector("#guidePanelOverlay");
+    const guidePanelArrow = document.querySelector("#guidePanelArrow");
+
+    function setGuidePanelOpen(nextOpen) {
+      const open = Boolean(nextOpen);
+      if (!guidePanel || !guidePanelToggle || !guidePanelOverlay || !guidePanelArrow) return;
+      guidePanel.classList.toggle("open", open);
+      guidePanelOverlay.hidden = !open;
+      guidePanelToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      guidePanelToggle.setAttribute("aria-label", open ? "리밸런싱 계산기 사용방법 닫기" : "리밸런싱 계산기 사용방법 열기");
+      guidePanelArrow.textContent = open ? "◀" : "▶";
+      document.body.classList.toggle("guide-panel-open", open);
+    }
+
+    if (guidePanelToggle) {
+      guidePanelToggle.addEventListener("click", () => {
+        const isOpen = guidePanel?.classList.contains("open");
+        setGuidePanelOpen(!isOpen);
       });
     }
+    if (guidePanelClose) {
+      guidePanelClose.addEventListener("click", () => setGuidePanelOpen(false));
+    }
+    if (guidePanelOverlay) {
+      guidePanelOverlay.addEventListener("click", () => setGuidePanelOpen(false));
+    }
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setGuidePanelOpen(false);
+    });
 
     const faqButtons = document.querySelectorAll(".faqQuestion");
     faqButtons.forEach((button) => {

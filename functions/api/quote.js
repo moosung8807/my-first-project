@@ -51,7 +51,6 @@ async function validateYahooSymbol(inputSymbol) {
   }
   return { ok: false };
 }
-
 function buildSymbolCandidates(rawSymbol) {
   const symbol = String(rawSymbol || "").trim().toUpperCase();
   if (!symbol) return [];

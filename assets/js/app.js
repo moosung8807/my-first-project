@@ -693,54 +693,68 @@
     ) return "주식";
     return "기타";
   }
-  function buildPieChartSvg(items, targetGapRows = []){
+  function buildPieChartSvg(currentItems, targetItems, afterItems, targetGapRows = [], residualRows = []){
     const palette = ["#1f77b4", "#ef4444", "#22c55e", "#f59e0b", "#1f3a8a", "#6b7280"];
-    const parts = items
+    const getSeriesColor = (index)=>{
+      if(index < palette.length) return palette[index];
+      const hue = Math.round((index * 137.508) % 360);
+      return `hsl(${hue} 62% 48%)`;
+    };
+    const normalizeParts = (items)=>items
       .map((item)=>({ ...item, value: Math.max(0, Number(item.value) || 0) }))
       .filter((item)=>item.value > 0);
-    const total = parts.reduce((sum, item)=>sum + item.value, 0);
-    if(total <= 0){
+    const currentParts = normalizeParts(currentItems);
+    const targetParts = normalizeParts(targetItems);
+    const afterParts = normalizeParts(afterItems);
+    if(afterParts.length === 0){
       return `<div class="chart-empty">표시할 비중 데이터가 없습니다.</div>`;
     }
-
-    const canvas = document.createElement("canvas");
-    canvas.width = 360;
-    canvas.height = 360;
-    const ctx = canvas.getContext("2d");
-    if(!ctx){
-      return `<div class="chart-empty">차트를 생성할 수 없습니다.</div>`;
-    }
-
-    const cx = canvas.width / 2;
-    const cy = canvas.height / 2;
-    const radius = 140;
-    const innerRadius = 72;
-    let acc = -Math.PI / 2;
-    parts.forEach((part, idx)=>{
-      const ratio = part.value / total;
-      const next = acc + ratio * Math.PI * 2;
+    const drawDonut = (parts, label)=>{
+      const total = parts.reduce((sum, item)=>sum + item.value, 0);
+      if(total <= 0){
+        return "";
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = 320;
+      canvas.height = 320;
+      const ctx = canvas.getContext("2d");
+      if(!ctx){
+        return "";
+      }
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      const radius = 118;
+      const innerRadius = 64;
+      let acc = -Math.PI / 2;
+      parts.forEach((part, idx)=>{
+        const ratio = part.value / total;
+        const next = acc + ratio * Math.PI * 2;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, radius, acc, next);
+        ctx.closePath();
+        ctx.fillStyle = getSeriesColor(idx);
+        ctx.fill();
+        acc = next;
+      });
       ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.arc(cx, cy, radius, acc, next);
-      ctx.closePath();
-      ctx.fillStyle = palette[idx % palette.length];
+      ctx.arc(cx, cy, innerRadius, 0, Math.PI * 2);
+      ctx.fillStyle = "#ffffff";
       ctx.fill();
-      acc = next;
-    });
-    ctx.beginPath();
-    ctx.arc(cx, cy, innerRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#ffffff";
-    ctx.fill();
-    ctx.fillStyle = "#64748b";
-    ctx.font = "700 18px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText("TOTAL", cx, cy - 9);
-    ctx.fillStyle = "#0f172a";
-    ctx.font = "800 36px Arial";
-    ctx.fillText("100%", cx, cy + 29);
-    const chartSrc = canvas.toDataURL("image/png");
-    const legends = parts.map((part, idx)=>{
-      const color = palette[idx % palette.length];
+      ctx.fillStyle = "#64748b";
+      ctx.font = "700 16px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(label, cx, cy - 8);
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "800 28px Arial";
+      ctx.fillText("100%", cx, cy + 24);
+      return canvas.toDataURL("image/png");
+    };
+    const currentChartSrc = drawDonut(currentParts, "현재");
+    const targetChartSrc = drawDonut(targetParts, "목표");
+    const afterChartSrc = drawDonut(afterParts, "이후");
+    const legends = afterParts.map((part, idx)=>{
+      const color = getSeriesColor(idx);
       return `<li><span class="dot" style="background:${color}"></span><span class="name">${escapeHtml(part.name)}</span><span class="pct">${escapeHtml(part.value.toFixed(1))}%</span></li>`;
     }).join("");
 
@@ -748,13 +762,25 @@
       ? targetGapRows.map((row)=>{
         const dirClass = row.gap >= 0 ? "up" : "down";
         const sign = row.gap > 0 ? "+" : "";
-        return `<li><span class="name">${escapeHtml(row.name)}</span><span class="gap ${dirClass}">${sign}${escapeHtml(row.gap.toFixed(1))}%p</span></li>`;
+        return `<li><span class="dot"></span><span class="name">${escapeHtml(row.name)}</span><span class="gap ${dirClass}">${sign}${escapeHtml(row.gap.toFixed(1))}%p</span></li>`;
       }).join("")
-      : `<li><span class="name">-</span><span class="gap">0.0%p</span></li>`;
+      : `<li><span class="dot"></span><span class="name">-</span><span class="gap">0.0%p</span></li>`;
+
+    const residualBars = residualRows.length > 0
+      ? residualRows.map((row)=>{
+        const dirClass = row.residual >= 0 ? "up" : "down";
+        const sign = row.residual > 0 ? "+" : "";
+        return `<li><span class="dot"></span><span class="name">${escapeHtml(row.name)}</span><span class="val ${dirClass}">${sign}${row.residual.toFixed(1)}%p</span></li>`;
+      }).join("")
+      : `<li><span class="dot"></span><span class="name">-</span><span class="val">0.0%p</span></li>`;
 
     return `
+      <div class="pie-compare-wrap">
+        ${currentChartSrc ? `<div class="pie-card"><p class="pie-card-title">현재 비중</p><img class="pie" src="${currentChartSrc}" alt="현재 비중 차트" width="120" height="120"></div>` : ""}
+        ${targetChartSrc ? `<div class="pie-card"><p class="pie-card-title">목표 비중</p><img class="pie" src="${targetChartSrc}" alt="목표 비중 차트" width="120" height="120"></div>` : ""}
+        ${afterChartSrc ? `<div class="pie-card"><p class="pie-card-title">리밸런싱 후 비중</p><img class="pie" src="${afterChartSrc}" alt="리밸런싱 후 비중 차트" width="120" height="120"></div>` : ""}
+      </div>
       <div class="pie-wrap">
-        <img class="pie" src="${chartSrc}" alt="리밸런싱 후 비중 차트" width="130" height="130">
         <div class="pie-legend-box">
           <p class="pie-legend-title">리밸런싱 후 비중</p>
           <ul class="pie-legend">${legends}</ul>
@@ -762,6 +788,10 @@
         <div class="target-gap-box">
           <p class="target-gap-title">리밸런싱 후 목표 대비 차이</p>
           <ul class="target-gap-list">${targetGapItems}</ul>
+        </div>
+        <div class="residual-box">
+          <p class="target-gap-title">잔여 오차(목표-리밸런싱 후)</p>
+          <ul class="residual-list">${residualBars}</ul>
         </div>
       </div>
     `;
@@ -885,14 +915,19 @@
       ? rows.reduce((sum, row)=>sum + Math.abs(row.diffValue), 0) / rows.length
       : 0;
     const currentMaxDrift = topDiff ? Math.abs(topDiff.diffValue) : 0;
-    const driftRowsHtml = sortedByAbsDiff.map((row)=>`
+    const driftRowsHtml = sortedByAbsDiff.map((row)=>{
+      const isBuy = row.diffValue >= 0;
+      const dirClass = isBuy ? "pos" : "neg";
+      const dirText = isBuy ? "매수" : "매도";
+      return `
       <tr>
         <td class="left">${escapeHtml(row.name)}</td>
         <td class="num">${escapeHtml(row.currentWeightText)}</td>
         <td class="num">${escapeHtml(row.targetText)}</td>
-        <td class="num diff ${row.diffValue >= 0 ? "pos" : "neg"}">${row.diffValue >= 0 ? "▲ " : "▼ "}${escapeHtml(Math.abs(row.diffValue).toFixed(1))}%p</td>
+        <td class="num diff ${dirClass}"><span class="dir-tag ${dirClass}">${dirText}</span>${isBuy ? "▲ " : "▼ "}${escapeHtml(Math.abs(row.diffValue).toFixed(1))}%p</td>
       </tr>
-    `).join("");
+    `;
+    }).join("");
     const tradeRowsByAmount = [...rows]
       .filter((row)=>row.tradeQtyValue !== 0)
       .sort((a, b)=>b.expectedTradeAmount - a.expectedTradeAmount);
@@ -900,6 +935,7 @@
     const top3TradeAmount = tradeRowsByAmount.slice(0, 3).reduce((sum, row)=>sum + row.expectedTradeAmount, 0);
     const top3TradeConcentration = totalTradeAmount > 0 ? (top3TradeAmount / totalTradeAmount) * 100 : 0;
     const largestTradeRow = tradeRowsByAmount[0];
+    const largestTradeDisplay = String(largestTradeRow?.name || "-").trim() || "-";
     const liquidityRows = tradeRowsByAmount
       .map((row)=>{
         const currentValueValue = parseNumberFromText(row.currentValueText);
@@ -917,10 +953,17 @@
       </tr>
     `).join("");
     const cashRatio = totalAssetValue > 0 ? (cashResidual / totalAssetValue) * 100 : 0;
+    const tradeBurdenPct = totalAssetValue > 0 ? (totalTradeAmount / totalAssetValue) * 100 : 0;
     const cashEfficiencyLabel = cashRatio > 1 ? "비효율(잔여현금 과다)" : cashRatio > 0.5 ? "보통" : "양호";
+    const cashRatioText = `${cashRatio.toFixed(2)}%`;
     const concentrationTone = top3Concentration >= 60 ? "높은 편" : top3Concentration >= 45 ? "보통 수준" : "안정적인 편";
     const cashTone = cashEfficiencyLabel === "양호" ? "양호한 수준" : "추가 점검이 필요한 수준";
     const riskSummaryText = `현재 포트폴리오는 상위 3종목 집중도가 ${concentrationTone}이며, 잔여금 효율은 ${cashTone}입니다.`;
+    const concentrationHint = top3Concentration >= 70 ? "다소 높은 수준 · 분산 개선 필요" : top3Concentration >= 55 ? "보통 수준 · 편중 모니터링 필요" : "양호한 수준 · 분산 상태 안정적";
+    const maxWeightHint = (maxWeightRow?.afterWeightValue || 0) >= 35 ? "단일 종목 비중이 높아 변동성 주의" : "단일 종목 비중이 과도하지 않음";
+    const tradeBurdenHint = tradeBurdenPct >= 20 ? "거래 부담 높음" : tradeBurdenPct >= 10 ? "거래 부담 보통" : "거래 부담 낮음";
+    const driftImprovement = Math.max(0, currentAvgDrift - afterAvgDiff);
+    const driftImprovePct = currentAvgDrift > 0 ? (driftImprovement / currentAvgDrift) * 100 : 0;
     const clampScore = (value)=>Math.max(35, Math.min(100, Math.round(value)));
     const diversificationScore = clampScore(92 - Math.max(0, top3Concentration - 55) * 0.9 - Math.max(0, (maxWeightRow?.afterWeightValue || 0) - 30) * 1.1);
     const driftStabilityScore = clampScore(94 - currentAvgDrift * 4.2 - currentMaxDrift * 1.8);
@@ -935,6 +978,15 @@
     const driftLabel = scoreStatusLabel(driftStabilityScore);
     const tradeLabel = scoreStatusLabel(tradeEfficiencyScore);
     const totalLabel = scoreStatusLabel(portfolioTotalScore);
+    const diversificationReason = `상위 3종목 비중 ${top3Concentration.toFixed(1)}%, 최대 단일 비중 ${(maxWeightRow?.afterWeightValue || 0).toFixed(1)}% 반영`;
+    const driftReason = `목표 대비 평균 오차 ${currentAvgDrift.toFixed(1)}%p → ${afterAvgDiff.toFixed(1)}%p 개선`;
+    const tradeReason = `총 거래금액 비중 ${tradeBurdenPct.toFixed(1)}%, 잔여현금 비중 ${cashRatio.toFixed(2)}% 반영`;
+
+    const currentBucketTotals = rows.reduce((acc, row)=>{
+      const key = classifyAssetBucket(row.name);
+      acc[key] = (acc[key] || 0) + parseNumberFromText(row.currentValueText);
+      return acc;
+    }, {});
 
     const bucketTotals = rows.reduce((acc, row)=>{
       const key = classifyAssetBucket(row.name);
@@ -947,8 +999,35 @@
         const pct = totalAfterValue > 0 ? (value / totalAfterValue) * 100 : 0;
         return `<tr><td class="left">${escapeHtml(bucket)}</td><td class="num">${escapeHtml(fmtKRW(value))}</td><td class="num">${escapeHtml(pct.toFixed(1))}%</td></tr>`;
       }).join("");
+    const bucketPalette = ["#2563eb", "#14b8a6", "#f59e0b", "#ef4444", "#8b5cf6", "#64748b"];
+    const bucketSegments = Object.entries(bucketTotals)
+      .sort((a, b)=>b[1] - a[1])
+      .map(([bucket, value], index)=>{
+        const pct = totalAfterValue > 0 ? (value / totalAfterValue) * 100 : 0;
+        const width = Math.min(100, Math.max(0, pct));
+        const color = bucketPalette[index % bucketPalette.length];
+        return { bucket, pct, width, color };
+      });
+    const bucketBarHtml = `
+      <div class="bucket-stack-track">
+        ${bucketSegments.map((segment)=>`<span class="bucket-stack-segment" style="width:${segment.width.toFixed(1)}%;background:${segment.color};" title="${escapeHtml(segment.bucket)} ${segment.pct.toFixed(1)}%"></span>`).join("")}
+      </div>
+      <ul class="bucket-stack-legend">
+        ${bucketSegments.map((segment)=>`<li><span class="dot" style="background:${segment.color};"></span><span class="name">${escapeHtml(segment.bucket)}</span><span class="pct">${segment.pct.toFixed(1)}%</span></li>`).join("")}
+      </ul>
+    `;
+    const currentStockPct = totalAssetValue > 0 ? ((currentBucketTotals["주식"] || 0) / totalAssetValue) * 100 : 0;
+    const currentBondPct = totalAssetValue > 0 ? ((currentBucketTotals["채권"] || 0) / totalAssetValue) * 100 : 0;
+    const afterStockPct = totalAfterValue > 0 ? ((bucketTotals["주식"] || 0) / totalAfterValue) * 100 : 0;
+    const afterBondPct = totalAfterValue > 0 ? ((bucketTotals["채권"] || 0) / totalAfterValue) * 100 : 0;
+    const stockShift = afterStockPct - currentStockPct;
+    const bondShift = afterBondPct - currentBondPct;
 
-    const currentTableRowsHtml = rows.map((row)=>`
+    const currentTableRowsHtml = rows.map((row)=>{
+      const isBuy = row.diffValue >= 0;
+      const dirClass = isBuy ? "pos" : "neg";
+      const dirText = isBuy ? "매수" : "매도";
+      return `
       <tr>
         <td class="left">${escapeHtml(row.name)}</td>
         <td class="num">${escapeHtml(row.currentQtyText)}</td>
@@ -956,9 +1035,10 @@
         <td class="num">${escapeHtml(row.currentValueText)}</td>
         <td class="num">${escapeHtml(row.currentWeightText)}</td>
         <td class="num">${escapeHtml(row.targetText)}</td>
-        <td class="num diff ${row.diffValue >= 0 ? "pos" : "neg"}">${row.diffValue >= 0 ? "▲ " : "▼ "}${escapeHtml(Math.abs(row.diffValue).toFixed(1))}%p</td>
+        <td class="num diff ${dirClass}"><span class="dir-tag ${dirClass}">${dirText}</span>${isBuy ? "▲ " : "▼ "}${escapeHtml(Math.abs(row.diffValue).toFixed(1))}%p</td>
       </tr>
-    `).join("");
+    `;
+    }).join("");
     const afterTableRowsHtml = rows.map((row)=>`
       <tr>
         <td class="left">${escapeHtml(row.name)}</td>
@@ -978,11 +1058,13 @@
       ).join("")}</ul>`
       : `<p class="muted">매수 대상 종목이 없습니다.</p>`;
     const buyPlansByHighPrice = [...buyPlans].sort((a, b)=>b.currentPriceValue - a.currentPriceValue);
-    const executionSteps = [...sellPlans, ...buyPlansByHighPrice].map((row, idx)=>
+    const executionStepRows = [...sellPlans, ...buyPlansByHighPrice];
+    const executionSteps = executionStepRows.map((row, idx)=>
       `<li><span class="step-num">${idx + 1}</span><span class="step-text">${escapeHtml(row.name)} ${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주 ${escapeHtml(row.decision)}</span></li>`
     ).join("");
+    const executionOrderClass = executionStepRows.length >= 8 ? "exec-order compact" : "exec-order";
     const executionOrderHtml = executionSteps
-      ? `<ul class="exec-order">${executionSteps}</ul>`
+      ? `<ul class="${executionOrderClass}">${executionSteps}</ul>`
       : `<p class="muted">실행이 필요한 주문이 없습니다.</p>`;
     const resultSummaryHtml = `
       <ul class="result-summary">
@@ -991,14 +1073,35 @@
         <li>가장 큰 조정 필요 종목은 ${escapeHtml(topDiff?.name || "-")}이었습니다.</li>
       </ul>
     `;
+    const quickTradeItems = (plans, verb)=>plans.slice(0, 4).map((row)=>
+      `<li><span class="asset">${escapeHtml(row.name)}</span><span class="qty">${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주 ${verb}</span><span class="amt">${escapeHtml(fmtKRW(row.expectedTradeAmount))}</span></li>`
+    ).join("");
+    const actionSummaryHtml = `
+      <section class="action-hero">
+        <div class="action-top">
+          <div class="action-kpi"><strong>매도 ${sellCount}건</strong> / <strong>매수 ${buyCount}건</strong></div>
+          <div class="action-meta">거래 발생 종목 ${adjustedCount}개 · 예상 잔여 현금 ${escapeHtml(fmtKRW(cashResidual))}</div>
+        </div>
+        <div class="action-grid">
+          <div class="action-box sell">
+            <p class="action-title">예상 매도 목록</p>
+            ${quickTradeItems(sellPlans, "매도") ? `<ul class="action-list">${quickTradeItems(sellPlans, "매도")}</ul>` : `<p class="muted">매도 대상 없음</p>`}
+          </div>
+          <div class="action-box buy">
+            <p class="action-title">예상 매수 목록</p>
+            ${quickTradeItems(buyPlans, "매수") ? `<ul class="action-list">${quickTradeItems(buyPlans, "매수")}</ul>` : `<p class="muted">매수 대상 없음</p>`}
+          </div>
+        </div>
+      </section>
+    `;
     const largestSell = [...sellPlans].sort((a, b)=>b.expectedTradeAmount - a.expectedTradeAmount)[0];
     const largestBuy = [...buyPlans].sort((a, b)=>b.expectedTradeAmount - a.expectedTradeAmount)[0];
     const strategyHeadline = largestSell && largestBuy
-      ? `이번 리밸런싱은 ${escapeHtml(largestSell.name)} 비중을 줄이고 ${escapeHtml(largestBuy.name)} 비중을 확대하는 방향으로 진행되었습니다.`
+      ? `주식 ETF 비중이 목표 대비 높아 ${escapeHtml(largestSell.name)}를 일부 매도하고 ${escapeHtml(largestBuy.name)}를 매수해 목표 비중으로 복귀하도록 설계했습니다.`
       : largestSell
-        ? `이번 리밸런싱은 ${escapeHtml(largestSell.name)} 비중을 줄여 목표 비중 정렬을 개선하는 방향으로 진행되었습니다.`
+        ? `목표 대비 초과 비중을 보인 ${escapeHtml(largestSell.name)}를 줄여 전체 비중 편차를 축소하도록 설계했습니다.`
         : largestBuy
-          ? `이번 리밸런싱은 ${escapeHtml(largestBuy.name)} 비중을 확대해 목표 비중 정렬을 개선하는 방향으로 진행되었습니다.`
+          ? `목표 대비 부족 비중이 큰 ${escapeHtml(largestBuy.name)}를 매수해 자산배분을 목표에 맞추도록 설계했습니다.`
           : "이번 리밸런싱은 현재 포트폴리오 비중을 유지하며 목표 대비 편차를 점검하는 방향으로 진행되었습니다.";
     const nextReviewText = currentMaxDrift >= 5
       ? "권장 점검 시점: 1개월 후 또는 비중 편차 5%p 이상 발생 시"
@@ -1007,6 +1110,7 @@
       <div class="strategy-note">
         <p class="strategy-title">리밸런싱 전략 요약</p>
         <p class="strategy-line">${strategyHeadline}</p>
+        <p class="strategy-line">주식 비중 ${currentStockPct.toFixed(1)}% → ${afterStockPct.toFixed(1)}% (${stockShift >= 0 ? "+" : ""}${stockShift.toFixed(1)}%p), 채권 비중 ${currentBondPct.toFixed(1)}% → ${afterBondPct.toFixed(1)}% (${bondShift >= 0 ? "+" : ""}${bondShift.toFixed(1)}%p)</p>
         <p class="strategy-line">${nextReviewText}</p>
       </div>
     `;
@@ -1014,10 +1118,44 @@
       .map((row)=>({ name: row.name, gap: row.afterWeightValue - row.targetValue }))
       .sort((a, b)=>Math.abs(b.gap) - Math.abs(a.gap))
       .slice(0, 5);
+    const residualRows = [...rows]
+      .map((row)=>({ name: row.name, residual: row.targetValue - row.afterWeightValue }))
+      .sort((a, b)=>Math.abs(b.residual) - Math.abs(a.residual))
+      .slice(0, 6);
     const pieChartHtml = buildPieChartSvg(
+      rows.map((row)=>({ name: row.name, value: row.currentWeightValue })),
+      rows.map((row)=>({ name: row.name, value: row.targetValue })),
       rows.map((row)=>({ name: row.name, value: row.afterWeightValue })),
-      targetGapRows
+      targetGapRows,
+      residualRows
     );
+    const effectSummaryHtml = `
+      <div class="effect-card">
+        <p class="effect-title">리밸런싱 효과</p>
+        <div class="effect-grid">
+          <div class="effect-box">
+            <p class="k">목표 대비 평균 오차 (Before)</p>
+            <p class="v before">${currentAvgDrift.toFixed(1)}%p</p>
+          </div>
+          <div class="effect-box">
+            <p class="k">목표 대비 평균 오차 (After)</p>
+            <p class="v after">${afterAvgDiff.toFixed(1)}%p</p>
+          </div>
+          <div class="effect-box">
+            <p class="k">개선 폭</p>
+            <p class="v gain">${driftImprovement.toFixed(1)}%p (${driftImprovePct.toFixed(0)}%)</p>
+          </div>
+        </div>
+        <p class="effect-note">목표 자산배분 복귀 수준: ${afterAvgDiff <= 0.5 ? "매우 양호" : afterAvgDiff <= 1.5 ? "양호" : "추가 조정 권장"}</p>
+      </div>
+    `;
+    const isVeryLargePortfolio = rows.length >= 14;
+    const reportClassNames = [
+      "report",
+      "report-container",
+      "report-dense",
+      isVeryLargePortfolio ? "report-xdense" : ""
+    ].filter(Boolean).join(" ");
 
     const reportHtml = `<!doctype html>
 <html lang="ko">
@@ -1026,7 +1164,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>리밸런싱 계산 결과 보고서</title>
   <style>
-    @page { size: A4 portrait; margin: 25mm 20mm 38mm 20mm; }
+    @page { size: A4 portrait; margin: 8mm 20mm 28mm 20mm; }
     :root { color-scheme: light; }
     body {
       margin: 0;
@@ -1044,8 +1182,24 @@
       --sell: #dc2626;
       --neutral: #6b7280;
       --table-head: #f3f4f6;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --text-soft: #475569;
     }
-    .report { width: 100%; padding: 0; }
+    .report,
+    .report-container {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      overflow: visible;
+    }
+    .report > :first-child {
+      margin-top: 0 !important;
+      page-break-before: auto !important;
+      break-before: auto !important;
+    }
     .header {
       border-left: 6px solid var(--primary);
       border-bottom: 2px solid #111;
@@ -1061,43 +1215,117 @@
       flex: 1 1 auto;
       min-width: 0;
     }
-    .header-meta{
-      flex: 0 0 auto;
-      border: 1px solid #d1d5db;
-      background: #f9fafb;
-      border-radius: 10px;
-      padding: 7px 9px;
-      font-size: 10px;
-      color: #4b5563;
-      line-height: 1.52;
-      min-width: 148px;
-      text-align: right;
-    }
     .title {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 700;
-      margin: 0 0 6px;
+      margin: 0 0 2px;
       line-height: 1.3;
       color: var(--primary);
     }
+    .title-sub{
+      margin: 0 0 8px;
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 600;
+    }
     .brand-sub {
-      margin: 0 0 6px;
-      font-size: 13px;
+      margin: 0 0 4px;
+      font-size: 12px;
       color: var(--neutral);
-      font-weight: 700;
+      font-weight: 600;
       letter-spacing: .02em;
+    }
+    .action-hero{
+      border: 1px solid #cdd6ea;
+      background: #f8fbff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .action-top{
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #dbe4f3;
+      padding-bottom: 7px;
+    }
+    .action-kpi{
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .action-meta{
+      font-size: 11px;
+      color: #475569;
+      text-align: right;
+    }
+    .action-grid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .action-box{
+      border: 1px solid #d7deea;
+      background: #fff;
+      border-radius: 10px;
+      padding: 8px;
+    }
+    .action-box.sell{
+      border-color: #f3caca;
+      background: #fff7f7;
+    }
+    .action-box.buy{
+      border-color: #c7dafb;
+      background: #f4f9ff;
+    }
+    .action-title{
+      margin: 0 0 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .action-list{
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 4px;
+      font-size: 11.5px;
+    }
+    .action-list li{
+      display: grid;
+      grid-template-columns: minmax(0,1fr) auto auto;
+      gap: 6px;
+      align-items: center;
+    }
+    .action-list .asset{
+      font-weight: 700;
+      color: #0f172a;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .action-list .qty{ color: #334155; }
+    .action-list .amt{
+      color: #475569;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
     }
     .meta { font-size: 13px; color: #444; line-height: 1.55; }
     .meta div { margin-bottom: 3px; }
     .summary {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     .summary td {
       width: 25%;
       border: 1px solid #e5e7eb;
-      padding: 12px 10px;
+      padding: 13px 11px;
       vertical-align: top;
       background: #f8fafc;
       border-top: 3px solid #d1d5db;
@@ -1112,37 +1340,56 @@
     .summary-value.buy { color: var(--buy); }
     .summary-value.cash { color: var(--neutral); }
     .summary-value.count { color: var(--primary); }
-    .section { margin-bottom: 18px; }
+    .section,
+    .report-section {
+      margin-bottom: 24px;
+      overflow: visible;
+      padding-left: 0;
+      padding-right: 0;
+      box-sizing: border-box;
+      page-break-inside: auto;
+      break-inside: auto;
+    }
+    .page-break{
+      page-break-before: auto;
+      break-before: auto;
+    }
     .section-title {
       font-size: 16px;
       font-weight: 700;
-      margin: 0 0 9px;
-      padding-bottom: 5px;
+      margin: 0 0 10px;
+      margin-left: 0;
+      padding-left: 16px;
+      padding-bottom: 6px;
       border-bottom: 1px solid #1f2937;
-      color: #111827;
+      color: var(--text-main);
+      page-break-after: avoid;
+      break-after: avoid-page;
     }
     .section + .section { padding-top: 4px; }
     .subsection-title{
-      margin: 0 0 6px;
-      font-size: 13px;
-      color: #374151;
+      margin: 0 0 10px;
+      font-size: 14px;
+      color: var(--text-main);
       font-weight: 700;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: fixed;
+      table-layout: auto;
       font-size: 12px;
     }
     th, td {
-      border: 1px solid #ddd;
-      padding: 7px 6px;
+      padding: 10px 12px;
       text-align: center;
       word-break: keep-all;
       overflow-wrap: anywhere;
       vertical-align: middle;
+      border-bottom: 1px solid #e5e7eb;
     }
-    th { background: var(--table-head); font-weight: 700; }
+    th { background: #f8fafc; font-weight: 600; color: var(--text-muted); }
+    td { color: var(--text-soft); }
+    tbody tr:nth-child(even){ background: #fafafa; }
     td.left { text-align: left; }
     th.left { text-align: center; }
     .risk-card table td.left{
@@ -1154,30 +1401,85 @@
     .current-table thead th {
       text-align: center;
       background: #f1f5f9;
+      white-space: normal;
+      overflow-wrap: anywhere;
     }
     .after-table thead th {
       text-align: center;
       background: #f1f5f9;
     }
     .current-table tbody td.left { text-align: left; }
+    .current-table td.diff{
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: keep-all;
+      line-height: 1.3;
+      font-size: 10.5px;
+      text-align: center;
+    }
+    .current-table td.diff .dir-tag{
+      margin-right: 2px;
+    }
     td.num { text-align: right; font-variant-numeric: tabular-nums; }
-    th.num { text-align: center; }
+    th.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .current-table td.num,
+    .after-table td.num,
+    .drift-table td.num,
+    .score-grid td.score {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
     td.diff.pos { color: #16a34a; font-weight: 800; }
     td.diff.neg { color: var(--sell); font-weight: 700; }
     td.diff { white-space: nowrap; font-size: 11px; }
+    .drift-table th:last-child,
+    .drift-table td:last-child{
+      width: 36%;
+      min-width: 120px;
+    }
+    .drift-table td.diff{
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: keep-all;
+      line-height: 1.2;
+      text-align: right;
+      font-size: 10.5px;
+    }
+    .dir-tag{
+      display: inline-block;
+      margin-right: 4px;
+      padding: 1px 5px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      font-size: 10px;
+      font-weight: 700;
+      color: #334155;
+      vertical-align: baseline;
+    }
+    .dir-tag.pos{
+      border-color: #bfdbfe;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+    .dir-tag.neg{
+      border-color: #fecaca;
+      background: #fff1f2;
+      color: #b91c1c;
+    }
     tbody tr { break-inside: avoid; page-break-inside: avoid; }
     thead { display: table-header-group; }
     .trade-box-wrap {
       width: 100%;
       border-collapse: separate;
       border-spacing: 8px 0;
-      margin-left: -8px;
-      margin-right: -8px;
+      margin-left: 0;
+      margin-right: 0;
     }
     .trade-box-wrap td {
       width: 50%;
       border: 1px solid #ddd;
-      padding: 10px;
+      padding: 12px;
       vertical-align: top;
       text-align: left;
     }
@@ -1186,13 +1488,19 @@
     .trade-title { font-size: 15px; font-weight: 700; margin: 0 0 8px; }
     .trade-title.sell { color: var(--sell); }
     .trade-title.buy { color: var(--buy); }
-    .trade-list { margin: 0; padding-left: 16px; }
-    .trade-list li { margin-bottom: 7px; line-height: 1.5; }
+    .trade-list {
+      margin: 0;
+      padding-left: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .trade-list li { margin-bottom: 0; line-height: 1.5; }
     .trade-list .asset{ font-weight: 700; color: #0f172a; }
     .trade-list .qty{ color: #334155; }
     .trade-list .amt{ color: #475569; }
     .exec-heading {
-      margin: 10px 0 6px;
+      margin: 19px 0 16px;
       font-size: 13px;
       font-weight: 700;
     }
@@ -1203,12 +1511,21 @@
       list-style: none;
     }
     .exec-order li {
-      margin-bottom: 4px;
+      margin-bottom: 14px;
       line-height: 1.45;
       display: grid;
       grid-template-columns: 26px minmax(0, 1fr);
       align-items: start;
       column-gap: 8px;
+    }
+    .exec-order.compact{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 12px;
+      align-items: start;
+    }
+    .exec-order.compact li{
+      margin-bottom: 0;
     }
     .exec-order .step-num{
       font-variant-numeric: tabular-nums;
@@ -1229,84 +1546,184 @@
       display: inline-block;
       min-width: 0;
     }
-    .result-summary {
+    .effect-card{
+      border: 1px solid #d2dbea;
+      border-radius: 10px;
+      background: #f8fbff;
+      padding: 11px;
+      margin-top: 10px;
+      break-inside: avoid-page;
+      page-break-inside: avoid;
+    }
+    .effect-title{
+      margin: 0 0 10px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #1f2937;
+    }
+    .effect-grid{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .effect-box{
+      border: 1px solid #d8e2f0;
+      border-radius: 8px;
+      padding: 8px;
+      background: #fff;
+    }
+    .effect-box .k{
+      margin: 0 0 4px;
+      font-size: 10.5px;
+      color: #64748b;
+      font-weight: 700;
+    }
+    .effect-box .v{
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      font-variant-numeric: tabular-nums;
+    }
+    .effect-box .v.before{ color: #b91c1c; }
+    .effect-box .v.after{ color: #0369a1; }
+    .effect-box .v.gain{ color: #1d4ed8; }
+    .effect-note{
       margin: 10px 0 0;
+      font-size: 11.5px;
+      color: #334155;
+      font-weight: 600;
+      break-before: avoid-page;
+      page-break-before: avoid;
+    }
+    .after-visuals{
+      break-inside: avoid-page;
+      page-break-inside: avoid;
+    }
+    .result-summary {
+      margin: 8px 0 0;
       padding-left: 18px;
       color: #2f3b4b;
       font-size: 12.5px;
       line-height: 1.55;
     }
     .result-summary li { margin-bottom: 6px; }
+    .dashboard-grid,
     .risk-grid{
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      align-items: stretch;
+      gap: 24px;
+      align-items: start;
       grid-auto-rows: auto;
       width: 100%;
     }
+    .dashboard-grid .dashboard-card{
+      min-height: 0;
+      padding: 16px;
+      gap: 6px;
+    }
+    .dashboard-grid .kpi-grid{
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .dashboard-grid .kpi-card{
+      padding: 8px;
+    }
+    .dashboard-card,
     .risk-card{
-      border: 1px solid #d1d5db;
-      background: #f9fafb;
-      padding: 10px 10px;
-      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
       font-size: 12.5px;
       line-height: 1.5;
-      height: 100%;
-      min-height: 220px;
-      break-inside: avoid;
-      page-break-inside: avoid;
+      height: auto;
+      min-height: 0;
+      break-inside: auto;
+      page-break-inside: auto;
       overflow: visible;
       box-sizing: border-box;
       width: 100%;
       display: flex;
       flex-direction: column;
+      justify-content: flex-start;
+      gap: 10px;
     }
     .risk-card strong{
-      color: #111827;
+      color: var(--text-main);
       font-weight: 800;
     }
     .kpi-grid{
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin-bottom: 8px;
+      gap: 4px;
+      margin-bottom: 2px;
     }
     .kpi-card{
-      border: 1px solid #d7deea;
-      background: #f8fbff;
-      border-radius: 8px;
-      padding: 6px 7px;
-      min-height: 48px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 8px;
+      min-height: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 2px;
     }
+    .metric-label,
     .kpi-label{
-      margin: 0 0 4px;
-      font-size: 10px;
-      color: #64748b;
-      font-weight: 700;
-      line-height: 1.3;
+      margin: 0 0 2px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+    .metric-value,
     .kpi-value{
       margin: 0;
-      font-size: 15px;
-      line-height: 1.2;
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: -0.02em;
-    }
-    .kpi-value.small{
-      font-size: 12.5px;
+      font-size: 13px;
+      line-height: 1.15;
+      font-weight: 700;
+      color: var(--text-main);
       letter-spacing: 0;
+    }
+    .kpi-sub{
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.1;
+      min-height: 0;
+    }
+    .kpi-sub.empty{
+      visibility: hidden;
+    }
+    .info-box{
+      background: #f9fafb;
+      font-size: 13px;
+      color: var(--text-soft);
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+    }
+    .info-box div + div{
+      margin-top: 4px;
     }
     .risk-summary{
       margin: 0;
-      padding: 7px 8px;
-      border: 1px solid #d7deea;
-      background: #ffffff;
-      border-radius: 8px;
-      color: #334155;
-      font-size: 11.5px;
+      border: none;
+      line-height: 1.5;
+    }
+    .metric-hint{
+      margin: 5px 0 0;
+      font-size: 13px;
+    }
+    .card-brief{
+      margin: 0 0 8px;
       line-height: 1.45;
+      color: var(--text-soft);
     }
     .risk-note{
       margin-top: 6px;
@@ -1325,35 +1742,131 @@
       background: #ffffff;
       margin-left: 4px;
     }
+    .bucket-bar-box{
+      margin: 2px 0 8px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+    }
+    .bucket-stack-track{
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+      display: flex;
+    }
+    .bucket-stack-segment{
+      display: block;
+      height: 100%;
+      min-width: 2px;
+    }
+    .bucket-stack-legend{
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px 10px;
+      font-size: 11.5px;
+    }
+    .bucket-stack-legend li{
+      display: grid;
+      grid-template-columns: 10px 1fr auto;
+      gap: 6px;
+      align-items: center;
+      min-width: 0;
+    }
+    .bucket-stack-legend .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+    .bucket-stack-legend .name{
+      color: #334155;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .bucket-stack-legend .pct{
+      color: #334155;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+      white-space: nowrap;
+    }
+    .score-grid{
+      table-layout: auto;
+    }
+    .score-grid td{
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: keep-all;
+    }
+    .pie-compare-wrap{
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .pie-card{
+      border: 1px solid #d6dce7;
+      border-radius: 10px;
+      background: #f8fafc;
+      padding: 8px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .pie-card-title{
+      margin: 0 0 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #334155;
+    }
     .pie-wrap {
       margin-top: 10px;
       border: 1px solid #ddd;
       padding: 10px;
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 12px;
       align-items: stretch;
+      break-inside: auto;
+      page-break-inside: auto;
     }
     .pie {
       width: 130px;
       height: 130px;
       flex: 0 0 auto;
       display: block;
+      margin: 0 auto;
       object-fit: contain;
     }
     .pie-legend-box{
-      width: 34%;
-      min-width: 170px;
       border: 1px solid #d1d5db;
       background: #f8fafc;
       border-radius: 8px;
       padding: 8px;
       align-self: stretch;
+      width: auto;
+      min-width: 0;
+      height: auto;
+      display: flex;
+      flex-direction: column;
     }
-    .pie-legend-title{
-      margin: 0 0 7px;
-      font-size: 11.5px;
+    .pie-legend-title,
+    .target-gap-title{
+      margin: 0 0 8px;
+      font-size: 12px;
       color: #334155;
       font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: 0;
     }
     .pie-legend {
       margin: 0;
@@ -1361,8 +1874,9 @@
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      font-size: 12px;
+      gap: 6px;
+      font-size: 11.5px;
+      line-height: 1.3;
       width: 100%;
     }
     .pie-legend li {
@@ -1370,6 +1884,7 @@
       grid-template-columns: 10px 1fr auto;
       align-items: center;
       gap: 6px;
+      min-height: 18px;
     }
     .pie-legend .dot {
       width: 10px;
@@ -1378,51 +1893,85 @@
       display: inline-block;
     }
     .pie-legend .name { color: #1f2937; }
-    .pie-legend .pct { font-variant-numeric: tabular-nums; font-weight: 700; color: #111; }
+    .pie-legend .pct { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--text-main); text-align: right; }
     .target-gap-box{
-      width: 34%;
-      min-width: 160px;
       border: 1px solid #d1d5db;
       background: #f8fafc;
       border-radius: 8px;
       padding: 8px;
       align-self: stretch;
+      width: auto;
+      min-width: 0;
+      height: auto;
+      display: flex;
+      flex-direction: column;
     }
-    .target-gap-title{
-      margin: 0 0 7px;
-      font-size: 11.5px;
-      color: #334155;
-      font-weight: 700;
-    }
-    .target-gap-list{
+    .target-gap-list,
+    .residual-list{
       list-style: none;
       margin: 0;
       padding: 0;
-      display: grid;
-      gap: 5px;
-      font-size: 11.5px;
-    }
-    .target-gap-list li{
       display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      align-items: center;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 11.5px;
+      line-height: 1.3;
+      width: 100%;
     }
-    .target-gap-list .name{
-      color: #1f2937;
+    .target-gap-list li,
+    .residual-list li{
+      display: grid;
+      grid-template-columns: 10px 1fr auto;
+      align-items: center;
+      gap: 6px;
+      min-height: 18px;
+    }
+    .target-gap-list .dot,
+    .residual-list .dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #94a3b8;
+      display: inline-block;
+    }
+    .target-gap-list .name,
+    .residual-list .name{
+      color: var(--text-soft);
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .target-gap-list .gap{
+    .target-gap-list .gap,
+    .residual-list .val{
       font-variant-numeric: tabular-nums;
       font-weight: 700;
-      color: #334155;
+      color: var(--text-main);
       white-space: nowrap;
+      text-align: right;
     }
     .target-gap-list .gap.up{ color: #16a34a; }
     .target-gap-list .gap.down{ color: #dc2626; }
+    .residual-box{
+      border: 1px solid #d1d5db;
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 8px;
+      align-self: stretch;
+      width: auto;
+      min-width: 0;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .pie-legend-box .pie-legend,
+    .target-gap-box .target-gap-list,
+    .residual-box .residual-list{
+      flex: 1 1 auto;
+      align-content: start;
+    }
+    .residual-list .val.up{ color: #1d4ed8; }
+    .residual-list .val.down{ color: #b91c1c; }
     .score-grid{
       width: 100%;
       border-collapse: collapse;
@@ -1447,20 +1996,41 @@
       color: #334155;
       background: #f8fafc;
     }
+    .score-grid td.desc{
+      text-align: left;
+      color: #475569;
+      font-size: 11px;
+      width: auto;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: keep-all;
+    }
     .score-grid tr.total td{
       background: #eef2ff;
       border-color: #c7d2fe;
       font-weight: 800;
     }
-    .score-section{
-      page-break-before: always;
-      break-before: page;
+    .score-grid tr.total td,
+    .score-grid tr.total td.score,
+    .score-grid tr.total td.status,
+    .score-grid tr.total td.desc{
+      text-align: left;
+      font-size: 12px;
+      color: #1f2937;
+      font-weight: 800;
+    }
+    .score-grid tr.total td.score{ text-align: right; }
+    .score-grid tr.total td.status{ text-align: center; }
+    .score-basis{
+      margin: 8px 0 0;
+      font-size: 11px;
+      color: #475569;
     }
     .score-section .risk-card{
       min-height: 0;
     }
     .strategy-note{
-      margin-top: 10px;
+      margin-top: 8px;
       border: 1px solid #d1d5db;
       border-radius: 8px;
       background: #f8fafc;
@@ -1481,16 +2051,86 @@
     .strategy-line:last-child{
       margin-bottom: 0;
     }
+    .report-disclaimer{
+      margin-top: 10px;
+      border-top: 1px dashed #cbd5e1;
+      padding-top: 8px;
+      color: #475569;
+      font-size: 11.5px;
+      line-height: 1.65;
+      letter-spacing: 0;
+    }
     .chart-empty {
       border: 1px dashed #cbd5e1;
       padding: 12px;
       color: #64748b;
       font-size: 12px;
     }
+    .report-dense .report-section{
+      margin-bottom: 20px;
+    }
+    .report-dense .dashboard-card,
+    .report-dense .risk-card{
+      padding: 14px;
+      gap: 8px;
+    }
+    .report-dense .risk-grid{
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .report-dense .kpi-card{
+      padding: 7px;
+      min-height: 36px;
+    }
+    .report-dense th,
+    .report-dense td{
+      padding: 8px 9px;
+      font-size: 11.5px;
+    }
+    .report-dense .trade-list{
+      gap: 4px;
+    }
+    .report-dense .pie-wrap{
+      gap: 8px;
+    }
+    .report-dense .pie{
+      width: 120px;
+      height: 120px;
+    }
+    .report-xdense .risk-grid{
+      gap: 14px;
+    }
+    .report-xdense .dashboard-card,
+    .report-xdense .risk-card{
+      padding: 12px;
+      gap: 6px;
+    }
+    .report-xdense .subsection-title{
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+    .report-xdense th,
+    .report-xdense td{
+      padding: 7px 8px;
+      font-size: 11px;
+    }
+    .report-xdense .kpi-grid{
+      gap: 3px;
+    }
+    .report-xdense .kpi-card{
+      padding: 6px;
+      min-height: 34px;
+    }
     .muted { margin: 0; color: #666; }
     @media print {
       html, body { width: 210mm; }
       .report { padding-bottom: 0; }
+      .report-section{
+        padding-left: 16px;
+        padding-right: 16px;
+        overflow: visible;
+        box-sizing: border-box;
+      }
       .risk-grid{
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -1514,184 +2154,44 @@
   </style>
 </head>
 <body>
-  <main class="report">
+  <main class="${reportClassNames}">
     <section class="header">
       <div class="header-main">
-        <h1 class="title">Portfolio Rebalancing Report</h1>
-        <p class="brand-sub">포트폴리오 리밸런싱 분석</p>
-        <p class="brand-sub">rebalancing.kr</p>
+        <h1 class="title">포트폴리오 리밸런싱 보고서</h1>
+        <p class="title-sub">Portfolio Rebalancing Report</p>
         <div class="meta">
           <div><strong>포트폴리오 이름:</strong> ${escapeHtml(portfolioName)}</div>
           <div><strong>생성일:</strong> ${escapeHtml(nowText)}</div>
           <div><strong>총 포트폴리오 금액:</strong> ${escapeHtml(sumValueText)}</div>
         </div>
       </div>
-      <div class="header-meta">
-        <div><strong>Report ID</strong> ${escapeHtml(reportId)}</div>
-        <div><strong>Version</strong> v1.3</div>
-        <div><strong>Timezone</strong> KST/UTC</div>
-      </div>
     </section>
+
+    ${actionSummaryHtml}
 
     <table class="summary" aria-label="요약">
       <tr>
         <td class="sell">
-          <div class="summary-label">총 매도 금액</div>
+          <div class="summary-label">예상 매도 금액</div>
           <div class="summary-value sell">${escapeHtml(fmtKRW(totalSellAmount))}</div>
         </td>
         <td class="buy">
-          <div class="summary-label">총 매수 금액</div>
+          <div class="summary-label">예상 매수 금액</div>
           <div class="summary-value buy">${escapeHtml(fmtKRW(totalBuyAmount))}</div>
         </td>
         <td class="neutral">
-          <div class="summary-label">잔여 현금</div>
+          <div class="summary-label">예상 잔여 현금</div>
           <div class="summary-value cash">${escapeHtml(fmtKRW(cashResidual))}</div>
         </td>
         <td class="primary">
-          <div class="summary-label">조정 종목 수</div>
+          <div class="summary-label">거래 발생 종목</div>
           <div class="summary-value count">${escapeHtml(String(adjustedCount))}개</div>
         </td>
       </tr>
     </table>
 
-    <section class="section">
-      <h2 class="section-title">리스크 지표</h2>
-      <div class="risk-grid">
-        <div class="risk-card">
-          <div class="subsection-title">핵심 지표</div>
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <p class="kpi-label">최대 단일 비중</p>
-              <p class="kpi-value">${maxWeightRow ? `${maxWeightRow.afterWeightValue.toFixed(1)}%` : "-"}</p>
-            </div>
-            <div class="kpi-card">
-              <p class="kpi-label">상위 3종목 집중도</p>
-              <p class="kpi-value">${top3Concentration.toFixed(1)}%</p>
-            </div>
-            <div class="kpi-card">
-              <p class="kpi-label">매매 회전율</p>
-              <p class="kpi-value">${turnoverPct.toFixed(1)}%</p>
-            </div>
-            <div class="kpi-card">
-              <p class="kpi-label">거래 집중도</p>
-              <p class="kpi-value">${top3TradeConcentration.toFixed(1)}%</p>
-            </div>
-            <div class="kpi-card">
-              <p class="kpi-label">잔여금 효율</p>
-              <p class="kpi-value small">${cashRatio.toFixed(2)}% · ${escapeHtml(cashEfficiencyLabel)}</p>
-            </div>
-            <div class="kpi-card">
-              <p class="kpi-label">최대 거래 종목</p>
-              <p class="kpi-value small">${escapeHtml(largestTradeRow?.name || "-")}</p>
-            </div>
-          </div>
-          <p class="risk-summary">${escapeHtml(riskSummaryText)}</p>
-        </div>
-        <div class="risk-card">
-          <div class="subsection-title">비중 차이 지표 (현재 비중 vs 목표 비중)</div>
-          <div><strong>평균 차이</strong> ${currentAvgDrift.toFixed(1)}%p · <strong>가장 큰 차이</strong> ${currentMaxDrift.toFixed(1)}%p</div>
-          <table>
-            <thead>
-              <tr>
-                <th class="left">자산명</th>
-                <th class="num">현재</th>
-                <th class="num">목표</th>
-                <th class="num">차이</th>
-              </tr>
-            </thead>
-            <tbody>${driftRowsHtml || `<tr><td class="left">-</td><td class="num">0.0%</td><td class="num">0.0%</td><td class="num diff pos">▲ 0.0%p</td></tr>`}</tbody>
-          </table>
-        </div>
-        <div class="risk-card">
-          <div class="subsection-title">거래 부담 지표 (내 보유 대비 주문 크기)</div>
-          <div><strong>최고 비율</strong> ${maxLiquidityRow ? `${maxLiquidityRow.liquidityRatio.toFixed(1)}%` : "0.0%"} · <strong>주의 종목</strong> ${highLiquidityCount}개 (25% 이상)</div>
-          <table>
-            <thead>
-              <tr>
-                <th class="left">자산명</th>
-                <th class="num">거래금액</th>
-                <th class="num">비율</th>
-              </tr>
-            </thead>
-            <tbody>${liquidityRowsHtml || `<tr><td class="left">-</td><td class="num">₩ 0</td><td class="num">0.0%</td></tr>`}</tbody>
-          </table>
-        </div>
-        <div class="risk-card">
-          <div class="subsection-title">자산군 비중(리밸런싱 후)</div>
-          <table>
-            <thead>
-              <tr>
-                <th class="left">자산군</th>
-                <th class="num">보유액</th>
-                <th class="num">비중</th>
-              </tr>
-            </thead>
-            <tbody>${bucketRowsHtml || `<tr><td class="left">-</td><td class="num">₩ 0</td><td class="num">0.0%</td></tr>`}</tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <section class="section score-section">
-      <h2 class="section-title">포트폴리오 평가 점수</h2>
-      <div class="risk-card">
-          <div class="subsection-title">포트폴리오 평가 점수</div>
-          <table class="score-grid">
-            <tbody>
-              <tr>
-                <td>분산 점수</td>
-                <td class="score">${diversificationScore} / 100</td>
-                <td class="status">${diversificationLabel}</td>
-              </tr>
-              <tr>
-                <td>드리프트 안정성</td>
-                <td class="score">${driftStabilityScore} / 100</td>
-                <td class="status">${driftLabel}</td>
-              </tr>
-              <tr>
-                <td>거래 효율성</td>
-                <td class="score">${tradeEfficiencyScore} / 100</td>
-                <td class="status">${tradeLabel}</td>
-              </tr>
-              <tr class="total">
-                <td>총점</td>
-                <td class="score">${portfolioTotalScore} / 100</td>
-                <td class="status">${totalLabel}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-    </section>
-
-    <section class="section">
-      <h2 class="section-title">현재 포트폴리오</h2>
-      <table class="current-table">
-        <colgroup>
-          <col style="width:27%">
-          <col style="width:11%">
-          <col style="width:14%">
-          <col style="width:16%">
-          <col style="width:11%">
-          <col style="width:11%">
-          <col style="width:10%">
-        </colgroup>
-        <thead>
-          <tr>
-            <th class="left">자산명</th>
-            <th class="num">현재 수량</th>
-            <th class="num">현재가</th>
-            <th class="num">현재 보유액</th>
-            <th class="num">현재 비중</th>
-            <th class="num">목표 비중</th>
-            <th class="num">차이</th>
-          </tr>
-        </thead>
-        <tbody>${currentTableRowsHtml}</tbody>
-      </table>
-    </section>
-
-    <section class="section">
-      <h2 class="section-title">리밸런싱 실행 계획</h2>
+    <section class="section report-section">
+      <h2 class="section-title">실행 요약</h2>
       <table class="trade-box-wrap" aria-label="리밸런싱 실행 계획">
         <tr>
           <td class="sell-box">
@@ -1706,9 +2206,165 @@
       </table>
       <div class="exec-heading">실행 순서 (기준: 매도 우선, 매수는 현재가 높은 순)</div>
       ${executionOrderHtml}
+      ${effectSummaryHtml}
     </section>
 
-    <section class="section">
+    <section class="section report-section page-break">
+      <h2 class="section-title">포트폴리오 분석</h2>
+      <div class="dashboard-grid risk-grid">
+        <div class="dashboard-card risk-card">
+          <div class="subsection-title">핵심 지표</div>
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <p class="metric-label kpi-label">최대 단일 비중</p>
+              <p class="metric-value kpi-value">${maxWeightRow ? `${maxWeightRow.afterWeightValue.toFixed(1)}%` : "-"}</p>
+              <p class="kpi-sub empty">.</p>
+            </div>
+            <div class="kpi-card">
+              <p class="metric-label kpi-label">상위 3종목 집중도</p>
+              <p class="metric-value kpi-value">${top3Concentration.toFixed(1)}%</p>
+              <p class="kpi-sub empty">.</p>
+            </div>
+            <div class="kpi-card">
+              <p class="metric-label kpi-label">매매 회전율</p>
+              <p class="metric-value kpi-value">${turnoverPct.toFixed(1)}%</p>
+              <p class="kpi-sub empty">.</p>
+            </div>
+            <div class="kpi-card">
+              <p class="metric-label kpi-label">거래 집중도</p>
+              <p class="metric-value kpi-value">${top3TradeConcentration.toFixed(1)}%</p>
+              <p class="kpi-sub empty">.</p>
+            </div>
+            <div class="kpi-card">
+              <p class="metric-label kpi-label">잔여금 효율</p>
+              <p class="metric-value kpi-value">${cashRatioText}</p>
+              <p class="kpi-sub">${escapeHtml(cashEfficiencyLabel)}</p>
+            </div>
+            <div class="kpi-card">
+              <p class="metric-label kpi-label">최대 거래 종목</p>
+              <p class="metric-value kpi-value">${escapeHtml(largestTradeDisplay)}</p>
+              <p class="kpi-sub empty">.</p>
+            </div>
+          </div>
+          <p class="risk-summary info-box">${escapeHtml(riskSummaryText)}</p>
+          <p class="metric-hint info-box">최대 단일 비중 ${(maxWeightRow?.afterWeightValue || 0).toFixed(1)}% → ${escapeHtml(maxWeightHint)}</p>
+        </div>
+        <div class="dashboard-card risk-card">
+          <div class="subsection-title">비중 차이 지표 (현재 비중 vs 목표 비중)</div>
+          <div class="card-brief"><strong>평균 차이</strong> ${currentAvgDrift.toFixed(1)}%p · <strong>가장 큰 차이</strong> ${currentMaxDrift.toFixed(1)}%p</div>
+          <table class="drift-table">
+            <thead>
+              <tr>
+                <th class="left">자산명</th>
+                <th class="num">현재</th>
+                <th class="num">목표</th>
+                <th class="num">조정(목표-현재)</th>
+              </tr>
+            </thead>
+            <tbody>${driftRowsHtml || `<tr><td class="left">-</td><td class="num">0.0%</td><td class="num">0.0%</td><td class="num diff pos"><span class="dir-tag pos">매수</span>▲ 0.0%p</td></tr>`}</tbody>
+          </table>
+        </div>
+        <div class="dashboard-card risk-card">
+          <div class="subsection-title">거래 부담 지표 (내 보유 대비 주문 크기)</div>
+          <div class="info-box card-brief">
+            <div><strong>총 거래금액</strong> ${escapeHtml(fmtKRW(totalTradeAmount))}</div>
+            <div><strong>포트폴리오 대비</strong> ${tradeBurdenPct.toFixed(1)}% (${tradeBurdenHint})</div>
+          </div>
+          <div class="card-brief"><strong>최고 비율</strong> ${maxLiquidityRow ? `${maxLiquidityRow.liquidityRatio.toFixed(1)}%` : "0.0%"} · <strong>주의 종목</strong> ${highLiquidityCount}개 (25% 이상)</div>
+          <table>
+            <thead>
+              <tr>
+                <th class="left">자산명</th>
+                <th class="num">거래금액</th>
+                <th class="num">비율</th>
+              </tr>
+            </thead>
+            <tbody>${liquidityRowsHtml || `<tr><td class="left">-</td><td class="num">₩ 0</td><td class="num">0.0%</td></tr>`}</tbody>
+          </table>
+        </div>
+        <div class="dashboard-card risk-card">
+          <div class="subsection-title">자산군 비중(리밸런싱 후)</div>
+          <div class="bucket-bar-box">
+            ${bucketBarHtml || ""}
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th class="left">자산군</th>
+                <th class="num">보유액</th>
+                <th class="num">비중</th>
+              </tr>
+            </thead>
+            <tbody>${bucketRowsHtml || `<tr><td class="left">-</td><td class="num">₩ 0</td><td class="num">0.0%</td></tr>`}</tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section report-section score-section page-break">
+      <h2 class="section-title">포트폴리오 평가 점수</h2>
+      <div class="risk-card">
+          <div class="subsection-title">포트폴리오 평가 점수</div>
+          <table class="score-grid">
+            <tbody>
+              <tr>
+                <td>자산 분산 상태</td>
+                <td class="score">${diversificationScore} / 100</td>
+                <td class="status">${diversificationLabel}</td>
+                <td class="desc">${escapeHtml(diversificationReason)}</td>
+              </tr>
+              <tr>
+                <td>목표 비중 유지력</td>
+                <td class="score">${driftStabilityScore} / 100</td>
+                <td class="status">${driftLabel}</td>
+                <td class="desc">${escapeHtml(driftReason)}</td>
+              </tr>
+              <tr>
+                <td>거래 부담 효율</td>
+                <td class="score">${tradeEfficiencyScore} / 100</td>
+                <td class="status">${tradeLabel}</td>
+                <td class="desc">${escapeHtml(tradeReason)}</td>
+              </tr>
+              <tr class="total">
+                <td>총점</td>
+                <td class="score">${portfolioTotalScore} / 100</td>
+                <td class="status">${totalLabel}</td>
+                <td class="desc">종합 평가</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="score-basis">기준: 80+ 양호 / 60-79 보통 / 0-59 개선 필요</p>
+        </div>
+    </section>
+
+    <section class="section report-section page-break">
+      <h2 class="section-title">현재 포트폴리오</h2>
+      <table class="current-table">
+        <colgroup>
+          <col style="width:25%">
+          <col style="width:10%">
+          <col style="width:13%">
+          <col style="width:15%">
+          <col style="width:10%">
+          <col style="width:10%">
+          <col style="width:17%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="left">자산명</th>
+            <th class="num">현재 수량</th>
+            <th class="num">현재가</th>
+            <th class="num">현재 보유액</th>
+            <th class="num">현재 비중</th>
+            <th class="num">목표 비중</th>
+            <th class="num">조정(목표-현재)</th>
+          </tr>
+        </thead>
+        <tbody>${currentTableRowsHtml}</tbody>
+      </table>
+    </section>
+
+    <section class="section report-section page-break">
       <h2 class="section-title">리밸런싱 후 포트폴리오</h2>
       <table class="after-table">
         <thead>
@@ -1722,8 +2378,17 @@
         <tbody>${afterTableRowsHtml}</tbody>
       </table>
       ${resultSummaryHtml}
+    </section>
+
+    <section class="section report-section page-break after-visuals">
+      <h2 class="section-title">리밸런싱 시각 요약</h2>
       ${pieChartHtml}
       ${strategySummaryHtml}
+      <div class="report-disclaimer">
+        <div>본 보고서는 거래 수수료·세금·슬리피지 미반영(브로커/상품별 상이).</div>
+        <div>주문 수량은 정수 단위 반올림으로 목표 대비 소폭 오차가 남을 수 있음.</div>
+        <div>%p는 퍼센트포인트 단위.</div>
+      </div>
     </section>
   </main>
 </body>
@@ -1749,6 +2414,36 @@
       [data-pdf-capture-host] .report { width: 100% !important; }
       [data-pdf-capture-host] .trade-box-wrap { margin-left: 0 !important; margin-right: 0 !important; }
       [data-pdf-capture-host] table { max-width: 100% !important; }
+      [data-pdf-capture-host] .report-section { margin-bottom: 18px !important; }
+      [data-pdf-capture-host] .risk-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+      [data-pdf-capture-host] .action-grid { grid-template-columns: 1fr !important; }
+      [data-pdf-capture-host] .pie-wrap { grid-template-columns: 1fr !important; gap: 8px !important; }
+      [data-pdf-capture-host] .pie-compare-wrap { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 8px !important; }
+      [data-pdf-capture-host] .pie-card,
+      [data-pdf-capture-host] .pie-legend-box,
+      [data-pdf-capture-host] .target-gap-box,
+      [data-pdf-capture-host] .residual-box { min-width: 0 !important; }
+      [data-pdf-capture-host] .pie-legend li,
+      [data-pdf-capture-host] .target-gap-list li,
+      [data-pdf-capture-host] .residual-list li { grid-template-columns: 10px minmax(0, 1fr) auto !important; }
+      [data-pdf-capture-host] .pie-legend .name,
+      [data-pdf-capture-host] .target-gap-list .name,
+      [data-pdf-capture-host] .residual-list .name {
+        min-width: 0 !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+      }
+      [data-pdf-capture-host] th,
+      [data-pdf-capture-host] td { padding: 8px 9px !important; font-size: 11.5px !important; }
+      [data-pdf-capture-host] tbody tr { break-inside: avoid !important; page-break-inside: avoid !important; }
+      [data-pdf-capture-host] .risk-card,
+      [data-pdf-capture-host] .effect-card,
+      [data-pdf-capture-host] .effect-note,
+      [data-pdf-capture-host] .strategy-note,
+      [data-pdf-capture-host] .after-visuals,
+      [data-pdf-capture-host] .pie-wrap,
+      [data-pdf-capture-host] .score-grid { break-inside: avoid !important; page-break-inside: avoid !important; }
     `;
     styleEl.textContent = `${styleText}\n${captureFixCss}`;
     document.head.appendChild(styleEl);
@@ -1756,8 +2451,8 @@
     const host = document.createElement("div");
     host.setAttribute("data-pdf-capture-host", "true");
     host.style.position = "static";
-    host.style.width = "680px"; // conservative A4 content width to prevent right clipping
-    host.style.maxWidth = "680px";
+    host.style.width = "718px"; // A4(210mm) with 10mm left/right margin in html2pdf
+    host.style.maxWidth = "718px";
     host.style.margin = "0 auto";
     host.style.background = "#fff";
     host.style.pointerEvents = "auto";
@@ -1777,12 +2472,15 @@
       .then(()=>{
         return window.html2pdf()
           .set({
-            margin: [10, 10, 14, 10],
+            margin: [10, 10, 18, 10],
             filename,
             image: { type: "jpeg", quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
             jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-            pagebreak: { mode: ["css", "legacy"] }
+            pagebreak: {
+              mode: ["avoid-all", "css", "legacy"],
+              avoid: ["tr", ".risk-card", ".effect-card", ".strategy-note", ".pie-wrap", ".score-grid", ".section-title"]
+            }
           })
           .from(host)
           .toPdf()
@@ -1797,6 +2495,9 @@
               pdf.setTextColor(70, 70, 70);
               pdf.text("Generated by rebalancing.kr", 8, pageHeight - 6);
               pdf.setTextColor(95, 95, 95);
+              pdf.setFontSize(8);
+              pdf.text(`Report ID ${reportId} | v1.3 | KST/UTC`, pageWidth / 2, pageHeight - 6, { align: "center" });
+              pdf.setFontSize(9);
               pdf.text(`Page ${i} of ${totalPages}`, pageWidth - 8, pageHeight - 6, { align: "right" });
             }
           })
@@ -2162,6 +2863,10 @@
       </td>
     `;
     tbody.appendChild(tr);
+    const nameEl = tr.querySelector(".name");
+    const targetEl = tr.querySelector(".target");
+    const priceEl = tr.querySelector(".price");
+    const qtyEl = tr.querySelector(".qty");
     const suggestBox = tr.querySelector(".nameSuggest");
     if(suggestBox){
       const uid = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -2182,32 +2887,40 @@
       resultCells.forEach(el=>el.classList.remove("hide"));
     }
 
-attachTargetGuard(tr.querySelector(".target"));
+const focusNextFieldInRow = (currentEl)=>{
+  const fieldOrder = [nameEl, qtyEl, priceEl, targetEl];
+  const currentIndex = fieldOrder.indexOf(currentEl);
+  if(currentIndex < 0) return;
+  const nextEl = fieldOrder[currentIndex + 1];
+  if(!nextEl) return;
+  nextEl.focus({ preventScroll: true });
+};
+
+attachTargetGuard(targetEl);
 tr.querySelector(".delBtn").addEventListener("click", ()=>deleteRow(tr));
 tr.querySelector(".detailToggleBtn").addEventListener("click", ()=>{
   const next = !tr.classList.contains("mobile-details-open");
   setRowDetailOpen(tr, next);
 });
-tr.querySelector(".name").addEventListener("focus", ()=>warnOnResultFocus(tr.querySelector(".name")));
-tr.querySelector(".name").addEventListener("input", ()=>{
-  const nameEl = tr.querySelector(".name");
+nameEl.addEventListener("focus", ()=>warnOnResultFocus(nameEl));
+nameEl.addEventListener("input", ()=>{
   showNameSuggestions(tr, nameEl.value);
   syncRowDisplayName(tr);
   switchToCurrentOnEdit(nameEl);
   if(autoQuoteEnabled) scheduleAutoPriceFetch(tr);
   markDirtyIfNeeded();
 });
-tr.querySelector(".name").addEventListener("focus", ()=>{
-  const nameEl = tr.querySelector(".name");
+nameEl.addEventListener("focus", ()=>{
   if(nameEl && String(nameEl.value || "").trim()){
     showNameSuggestions(tr, nameEl.value);
   }
 });
-tr.querySelector(".name").addEventListener("blur", ()=>{
+nameEl.addEventListener("blur", ()=>{
   setTimeout(()=>hideNameSuggestions(tr), 120);
   if(autoQuoteEnabled) scheduleAutoPriceFetch(tr, { immediate: true });
 });
-tr.querySelector(".name").addEventListener("keydown", (event)=>{
+nameEl.addEventListener("keydown", (event)=>{
+  if(event.isComposing) return;
   const items = getNameSuggestionItems(tr);
   const isOpen = items.length > 0;
   if(event.key === "ArrowDown" && isOpen){
@@ -2234,26 +2947,29 @@ tr.querySelector(".name").addEventListener("keydown", (event)=>{
     }
     hideNameSuggestions(tr);
     if(autoQuoteEnabled) scheduleAutoPriceFetch(tr, { immediate: true });
+    event.preventDefault();
+    focusNextFieldInRow(nameEl);
   }
   if(event.key === "Escape"){
     hideNameSuggestions(tr);
   }
 });
-tr.querySelector(".target").addEventListener("focus", ()=>warnOnResultFocus(tr.querySelector(".target")));
-tr.querySelector(".target").addEventListener("input", ()=>{
-  switchToCurrentOnEdit(tr.querySelector(".target"));
-  tr.querySelector(".target").classList.remove("invalidField");
+targetEl.addEventListener("focus", ()=>warnOnResultFocus(targetEl));
+targetEl.addEventListener("input", ()=>{
+  switchToCurrentOnEdit(targetEl);
+  targetEl.classList.remove("invalidField");
   if(mode === "current") updateCurrentUI();
   markDirtyIfNeeded();
 });
-
-// ✅ 현재가/수량: 편집 중엔 숫자, blur 시 천 단위 콤마 포맷
-const priceEl = tr.querySelector(".price");
-const qtyEl   = tr.querySelector(".qty");
 const rowAutoToggleEl = tr.querySelector(".rowAutoQuoteToggle");
 const rowManualPriceToggleEl = tr.querySelector(".rowManualPriceToggle");
 [priceEl, qtyEl].forEach(el=>{
   el.addEventListener("focus", ()=>warnOnResultFocus(el));
+  el.addEventListener("keydown", (event)=>{
+    if(event.key !== "Enter" || event.isComposing) return;
+    event.preventDefault();
+    focusNextFieldInRow(el);
+  });
   el.addEventListener("input", ()=>{
     switchToCurrentOnEdit(el);
     el.classList.remove("invalidField");
@@ -2266,6 +2982,11 @@ const rowManualPriceToggleEl = tr.querySelector(".rowManualPriceToggle");
     if(mode === "current") updateCurrentUI();
     markDirtyIfNeeded();
   });
+});
+targetEl.addEventListener("keydown", (event)=>{
+  if(event.key !== "Enter" || event.isComposing) return;
+  event.preventDefault();
+  focusNextFieldInRow(targetEl);
 });
 
 if(rowAutoToggleEl){
@@ -2755,7 +3476,8 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
 
   // init
   const savedTheme = localStorage.getItem(THEME_KEY);
-  setTheme(savedTheme || "light");
+  const defaultTheme = window.matchMedia("(max-width: 768px)").matches ? "dark" : "light";
+  setTheme(savedTheme || defaultTheme);
   setAutoQuoteEnabled(false);
   if(autoQuoteToggle){
     autoQuoteToggle.addEventListener("change", ()=>{
