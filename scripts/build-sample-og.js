@@ -137,22 +137,22 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
     <path d="M140 110C320 180 500 300 730 390" stroke="#8CCAF0" stroke-width="1" stroke-linecap="round"/>
   </g>
 
-  <g opacity="0.72">
-    <rect x="82" y="78" width="178" height="34" rx="17" fill="#F7FBFF" fill-opacity="0.88" stroke="#9FCBE8"/>
-    ${textPath({ text: "복잡한 계산은 빼고", x: 171, y: 100, size: 12, fill: "#155C92", font: font700, anchor: "middle" })}
+  <g opacity="0.72" transform="translate(78 74) scale(1.045)">
+    <rect x="4" y="4" width="178" height="34" rx="17" fill="#F7FBFF" fill-opacity="0.88" stroke="#9FCBE8"/>
+    ${textPath({ text: "복잡한 계산은 빼고", x: 93, y: 26, size: 12, fill: "#155C92", font: font700, anchor: "middle" })}
 
-    ${textPath({ text: "비중 정리는", x: 84, y: 214, size: 80, fill: "#0A2E4E", font: font800, letterSpacing: -0.04 })}
-    ${textPath({ text: "딸깍 한 번", x: 84, y: 298, size: 80, fill: "#0A2E4E", font: font800, letterSpacing: -0.04 })}
-    ${textPath({ text: "simple · fast · no spreadsheet", x: 84, y: 346, size: 26, fill: "#3F6587", font: font700, letterSpacing: -0.01 })}
+    ${textPath({ text: "비중 정리는", x: 6, y: 140, size: 80, fill: "#0A2E4E", font: font800, letterSpacing: -0.04 })}
+    ${textPath({ text: "딸깍 한 번", x: 6, y: 224, size: 80, fill: "#0A2E4E", font: font800, letterSpacing: -0.04 })}
+    ${textPath({ text: "simple · fast · no spreadsheet", x: 6, y: 272, size: 26, fill: "#3F6587", font: font700, letterSpacing: -0.01 })}
 
-    <rect x="84" y="378" width="560" height="2" fill="#7BAED3"/>
+    <rect x="6" y="304" width="560" height="2" fill="#7BAED3"/>
 
-    ${textPath({ text: "목표 비중만 넣으면 필요한 수량이 바로 보입니다", x: 84, y: 438, size: 23, fill: "#365B7B", font: font700, letterSpacing: -0.02 })}
-    ${textPath({ text: "엑셀 없이 매수·매도만 빠르게 확인하세요", x: 84, y: 478, size: 23, fill: "#365B7B", font: font700, letterSpacing: -0.02 })}
-    ${textPath({ text: "www.rebalancing.kr", x: 84, y: 530, size: 18, fill: "#4C7599", font: font700, letterSpacing: 0.01 })}
+    ${textPath({ text: "목표 비중만 넣으면 필요한 수량이 바로 보입니다", x: 6, y: 364, size: 23, fill: "#365B7B", font: font700, letterSpacing: -0.02 })}
+    ${textPath({ text: "엑셀 없이 매수·매도만 빠르게 확인하세요", x: 6, y: 404, size: 23, fill: "#365B7B", font: font700, letterSpacing: -0.02 })}
+    ${textPath({ text: "www.rebalancing.kr", x: 6, y: 456, size: 18, fill: "#4C7599", font: font700, letterSpacing: 0.01 })}
   </g>
 
-  <g transform="translate(700 80)">
+  <g transform="translate(695 75) scale(1.045)">
     <rect width="412" height="468" rx="20" fill="url(#card)" stroke="#AAB8C1" stroke-width="1.8"/>
     <rect x="0.5" y="0.5" width="411" height="467" rx="19.5" stroke="#F5FBFD" stroke-opacity="0.56"/>
     <rect x="10" y="10" width="392" height="448" rx="24" fill="none" stroke="#FFFFFF" stroke-opacity="0.6"/>
@@ -162,101 +162,101 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
     <circle cx="386" cy="442" r="4" fill="url(#metal)" stroke="#B6C4CC"/>
     <rect x="22" y="22" width="368" height="424" rx="16" fill="#ECF1F4" fill-opacity="0.42" stroke="#C6D2D9" stroke-opacity="0.72"/>
     ${textPath({ text: "RB-12", x: 52, y: 48, size: 11, fill: "#5D7380", font: font700, letterSpacing: 0.08 })}
-    ${textPath({ text: "REBALANCER", x: 368, y: 48, size: 11, fill: "#5D7380", font: font700, anchor: "end", letterSpacing: 0.08 })}
+    ${textPath({ text: "비중계산기", x: 368, y: 48, size: 11, fill: "#5A707D", font: font700, anchor: "end", letterSpacing: 0.02 })}
 
-    <rect x="24" y="30" width="362" height="96" rx="12" fill="url(#panel)" stroke="#8B998B" stroke-width="1.8"/>
-    <rect x="36" y="42" width="338" height="72" rx="8" fill="#D8E1D4" stroke="#A4AEA2" stroke-width="1.1"/>
+    <rect x="24" y="30" width="362" height="100" rx="12" fill="url(#panel)" stroke="#8B998B" stroke-width="1.8"/>
+    <rect x="36" y="42" width="338" height="76" rx="8" fill="#D8E1D4" stroke="#A4AEA2" stroke-width="1.1"/>
     <circle cx="60" cy="74" r="4.5" fill="#92A289"/>
     <circle cx="76" cy="74" r="4.5" fill="#A5B49A"/>
     <circle cx="92" cy="74" r="4.5" fill="#BBC8B2"/>
-    ${textPath({ text: "TARGET", x: 48, y: 62, size: 14, fill: "#42524B", font: font700, letterSpacing: 0.08 })}
-    ${textPath({ text: "25%", x: 357, y: 95, size: 45, fill: "#273731", font: font800, anchor: "end", letterSpacing: -0.05 })}
+    ${textPath({ text: "목표", x: 54, y: 62, size: 12, fill: "#52655F", font: font700, letterSpacing: 0.04 })}
+    ${textPath({ text: "25%", x: 357, y: 97, size: 45, fill: "#283A34", font: font800, anchor: "end", letterSpacing: -0.04 })}
 
-    <rect x="24" y="148" width="362" height="126" rx="12" fill="#EEF3F6" stroke="#C2CFD6" stroke-width="1.2"/>
-    <rect x="36" y="160" width="162" height="46" rx="9" fill="#F8FBFC" stroke="#C8D5DC" stroke-width="1.1"/>
-    <rect x="212" y="160" width="162" height="46" rx="9" fill="#F8FBFC" stroke="#C8D5DC" stroke-width="1.1"/>
-    <rect x="36" y="216" width="338" height="46" rx="9" fill="#DCE6EB" stroke="#B3C5CF" stroke-width="1"/>
-    ${textPath({ text: "PRICE", x: 48, y: 178, size: 12, fill: "#4A5C56", font: font700, letterSpacing: 0.08 })}
-    ${textPath({ text: "72,000", x: 184, y: 192, size: 26, fill: "#2C3C36", font: font800, anchor: "end", letterSpacing: -0.04 })}
-    ${textPath({ text: "OWNED", x: 224, y: 178, size: 12, fill: "#4A5C56", font: font700, letterSpacing: 0.08 })}
-    ${textPath({ text: "128", x: 360, y: 192, size: 26, fill: "#2C3C36", font: font800, anchor: "end", letterSpacing: -0.04 })}
-    ${textPath({ text: "YOU NEED", x: 48, y: 234, size: 13, fill: "#415A6B", font: font700, letterSpacing: 0.08 })}
-    ${textPath({ text: "+12 SHARES", x: 360, y: 248, size: 27, fill: "#1E3344", font: font800, anchor: "end", letterSpacing: -0.03 })}
+    <rect x="24" y="135" width="362" height="130" rx="12" fill="#EEF3F6" stroke="#C2CFD6" stroke-width="1.2"/>
+    <rect x="36" y="147" width="162" height="48" rx="9" fill="#F8FBFC" stroke="#C8D5DC" stroke-width="1.1"/>
+    <rect x="212" y="147" width="162" height="48" rx="9" fill="#F8FBFC" stroke="#C8D5DC" stroke-width="1.1"/>
+    <rect x="36" y="205" width="338" height="48" rx="9" fill="#DCE6EB" stroke="#B3C5CF" stroke-width="1"/>
+    ${textPath({ text: "가격", x: 48, y: 166, size: 12, fill: "#52655F", font: font700, letterSpacing: 0.04 })}
+    ${textPath({ text: "72,000", x: 184, y: 181, size: 26, fill: "#283A34", font: font800, anchor: "end", letterSpacing: -0.04 })}
+    ${textPath({ text: "보유", x: 224, y: 166, size: 12, fill: "#52655F", font: font700, letterSpacing: 0.04 })}
+    ${textPath({ text: "128", x: 360, y: 181, size: 26, fill: "#283A34", font: font800, anchor: "end", letterSpacing: -0.04 })}
+    ${textPath({ text: "필요 수량", x: 48, y: 224, size: 12, fill: "#52655F", font: font700, letterSpacing: 0.04 })}
+    ${textPath({ text: "+12주", x: 360, y: 239, size: 27, fill: "#283A34", font: font800, anchor: "end", letterSpacing: -0.04 })}
 
-    <rect x="24" y="286" width="362" height="156" rx="16" fill="#EDF3F6" stroke="#C2CFD6" stroke-width="1.2"/>
-    <rect x="36" y="300" width="338" height="2" rx="1" fill="#D5E1E7"/>
-    <circle cx="58" cy="318" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
-    <circle cx="114" cy="318" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
-    <circle cx="170" cy="318" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
-    <circle cx="226" cy="318" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
-    <circle cx="282" cy="318" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
-    <circle cx="338" cy="318" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
-    <circle cx="58" cy="353" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
-    <circle cx="114" cy="353" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
-    <circle cx="170" cy="353" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
-    <circle cx="226" cy="353" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
-    <circle cx="282" cy="353" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
-    <circle cx="338" cy="353" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
-    <circle cx="58" cy="388" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
-    <circle cx="114" cy="388" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
-    <circle cx="170" cy="388" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
-    <circle cx="226" cy="388" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
-    <circle cx="282" cy="388" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
-    <circle cx="338" cy="388" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
-    <circle cx="58" cy="421" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
-    <circle cx="114" cy="421" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
-    <circle cx="170" cy="421" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
-    <circle cx="226" cy="421" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
-    <circle cx="282" cy="421" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
-    <rect x="320" y="404" width="36" height="34" rx="13" fill="url(#cta)" stroke="#96B82F" stroke-width="1.2"/>
-    <rect x="44" y="306" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
-    <rect x="100" y="306" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
-    <rect x="156" y="306" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
-    <rect x="212" y="306" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
-    <rect x="268" y="306" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
-    <rect x="324" y="306" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
-    <rect x="44" y="341" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
-    <rect x="100" y="341" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
-    <rect x="156" y="341" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
-    <rect x="212" y="341" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
-    <rect x="268" y="341" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
-    <rect x="324" y="341" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
-    <rect x="44" y="376" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
-    <rect x="100" y="376" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
-    <rect x="156" y="376" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
-    <rect x="212" y="376" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
-    <rect x="268" y="376" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
-    <rect x="324" y="376" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
-    <rect x="44" y="409" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
-    <rect x="100" y="409" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
-    <rect x="156" y="409" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
-    <rect x="212" y="409" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
-    <rect x="268" y="409" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
-    <rect x="326" y="410" width="24" height="20" rx="9" fill="#CBE37B" opacity="0.28"/>
-    ${textPath({ text: "7", x: 58, y: 323, size: 13, fill: "#5B6C61", font: font700, anchor: "middle" })}
-    ${textPath({ text: "8", x: 114, y: 323, size: 13, fill: "#5B6C61", font: font700, anchor: "middle" })}
-    ${textPath({ text: "9", x: 170, y: 323, size: 13, fill: "#5B6C61", font: font700, anchor: "middle" })}
-    ${textPath({ text: "%", x: 226, y: 322, size: 11.5, fill: "#5F7167", font: font700, anchor: "middle" })}
-    ${textPath({ text: "×", x: 282, y: 323, size: 13, fill: "#5F7167", font: font700, anchor: "middle" })}
-    ${textPath({ text: "÷", x: 338, y: 323, size: 13, fill: "#5F7167", font: font700, anchor: "middle" })}
-    ${textPath({ text: "4", x: 58, y: 358, size: 13, fill: "#5B6C61", font: font700, anchor: "middle" })}
-    ${textPath({ text: "5", x: 114, y: 358, size: 13, fill: "#5B6C61", font: font700, anchor: "middle" })}
-    ${textPath({ text: "6", x: 170, y: 358, size: 13, fill: "#5B6C61", font: font700, anchor: "middle" })}
-    ${textPath({ text: "(", x: 226, y: 358, size: 13, fill: "#5F7167", font: font700, anchor: "middle" })}
-    ${textPath({ text: ")", x: 282, y: 358, size: 13, fill: "#5F7167", font: font700, anchor: "middle" })}
-    ${textPath({ text: "-", x: 338, y: 357, size: 15, fill: "#5F7167", font: font700, anchor: "middle" })}
-    ${textPath({ text: "1", x: 58, y: 393, size: 13, fill: "#5B6C61", font: font700, anchor: "middle" })}
-    ${textPath({ text: "2", x: 114, y: 393, size: 13, fill: "#5B6C61", font: font700, anchor: "middle" })}
-    ${textPath({ text: "3", x: 170, y: 393, size: 13, fill: "#5B6C61", font: font700, anchor: "middle" })}
-    ${textPath({ text: "+", x: 226, y: 393, size: 13, fill: "#5F7167", font: font700, anchor: "middle" })}
-    ${textPath({ text: "±", x: 282, y: 393, size: 11.5, fill: "#5F7167", font: font700, anchor: "middle" })}
-    ${textPath({ text: "M", x: 338, y: 393, size: 11.5, fill: "#5F7167", font: font700, anchor: "middle" })}
-    ${textPath({ text: "AC", x: 58, y: 426, size: 8.5, fill: "#5F7167", font: font700, anchor: "middle", letterSpacing: 0.04 })}
-    ${textPath({ text: "0", x: 114, y: 426, size: 13, fill: "#5B6C61", font: font700, anchor: "middle" })}
-    ${textPath({ text: ".", x: 170, y: 426, size: 15, fill: "#5B6C61", font: font700, anchor: "middle" })}
-    ${textPath({ text: "=", x: 226, y: 425, size: 13, fill: "#5F7167", font: font700, anchor: "middle" })}
-    ${textPath({ text: "CE", x: 282, y: 425, size: 8.5, fill: "#5F7167", font: font700, anchor: "middle", letterSpacing: 0.03 })}
-    ${textPath({ text: "=", x: 338, y: 426, size: 16, fill: "#F7FFF0", font: font800, anchor: "middle" })}
+    <rect x="24" y="270" width="362" height="170" rx="16" fill="#EDF3F6" stroke="#C2CFD6" stroke-width="1.2"/>
+    <rect x="36" y="286" width="338" height="2" rx="1" fill="#D5E1E7"/>
+    <circle cx="58" cy="306" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
+    <circle cx="114" cy="306" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
+    <circle cx="170" cy="306" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
+    <circle cx="226" cy="306" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
+    <circle cx="282" cy="306" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
+    <circle cx="338" cy="306" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
+    <circle cx="58" cy="344" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
+    <circle cx="114" cy="344" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
+    <circle cx="170" cy="344" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
+    <circle cx="226" cy="344" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
+    <circle cx="282" cy="344" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
+    <circle cx="338" cy="344" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
+    <circle cx="58" cy="382" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
+    <circle cx="114" cy="382" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
+    <circle cx="170" cy="382" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
+    <circle cx="226" cy="382" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
+    <circle cx="282" cy="382" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
+    <circle cx="338" cy="382" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
+    <circle cx="58" cy="418" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
+    <circle cx="114" cy="418" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
+    <circle cx="170" cy="418" r="17" fill="#FCFEFF" stroke="#CFDBE1" stroke-width="1.15"/>
+    <circle cx="226" cy="418" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
+    <circle cx="282" cy="418" r="17" fill="#EEF4EE" stroke="#C5D2C8" stroke-width="1.15"/>
+    <rect x="320" y="401" width="36" height="34" rx="13" fill="url(#cta)" stroke="#96B82F" stroke-width="1.2"/>
+    <rect x="44" y="294" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
+    <rect x="100" y="294" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
+    <rect x="156" y="294" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
+    <rect x="212" y="294" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
+    <rect x="268" y="294" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
+    <rect x="324" y="294" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
+    <rect x="44" y="332" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
+    <rect x="100" y="332" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
+    <rect x="156" y="332" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
+    <rect x="212" y="332" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
+    <rect x="268" y="332" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
+    <rect x="324" y="332" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
+    <rect x="44" y="370" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
+    <rect x="100" y="370" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
+    <rect x="156" y="370" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
+    <rect x="212" y="370" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
+    <rect x="268" y="370" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
+    <rect x="324" y="370" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
+    <rect x="44" y="406" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
+    <rect x="100" y="406" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
+    <rect x="156" y="406" width="28" height="21" rx="9" fill="#EFF4F7" opacity="0.52"/>
+    <rect x="212" y="406" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
+    <rect x="268" y="406" width="28" height="21" rx="9" fill="#E5EDE5" opacity="0.7"/>
+    <rect x="326" y="407" width="24" height="20" rx="9" fill="#CBE37B" opacity="0.28"/>
+    ${textPath({ text: "7", x: 58, y: 311, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "8", x: 114, y: 311, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "9", x: 170, y: 311, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "%", x: 226, y: 310, size: 12, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "×", x: 282, y: 311, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "÷", x: 338, y: 311, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "4", x: 58, y: 349, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "5", x: 114, y: 349, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "6", x: 170, y: 349, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "(", x: 226, y: 349, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: ")", x: 282, y: 349, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "-", x: 338, y: 348, size: 15, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "1", x: 58, y: 387, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "2", x: 114, y: 387, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "3", x: 170, y: 387, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "+", x: 226, y: 387, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "±", x: 282, y: 387, size: 12, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "M", x: 338, y: 387, size: 12, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "AC", x: 58, y: 423, size: 8.5, fill: "#5D6F65", font: font700, anchor: "middle", letterSpacing: 0.03 })}
+    ${textPath({ text: "0", x: 114, y: 423, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: ".", x: 170, y: 423, size: 15, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "=", x: 226, y: 422, size: 13, fill: "#5D6F65", font: font700, anchor: "middle" })}
+    ${textPath({ text: "CE", x: 282, y: 422, size: 8.5, fill: "#5D6F65", font: font700, anchor: "middle", letterSpacing: 0.03 })}
+    ${textPath({ text: "=", x: 338, y: 423, size: 16, fill: "#F7FFF0", font: font800, anchor: "middle" })}
   </g>
 
   <rect width="1200" height="630" filter="url(#grain)" opacity="0.14"/>
