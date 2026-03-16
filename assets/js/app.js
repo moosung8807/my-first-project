@@ -516,7 +516,7 @@
 
     if(statusEl){
       statusEl.textContent = manualOn
-        ? (autoQuoteEnabled ? "현재가 수동입력 ON · 보유금액 자동 계산" : "자동조회 OFF · 현재가 수동입력 필요")
+        ? (autoQuoteEnabled ? "현재가 수동입력 ON · 보유금액 자동 계산" : "현재가를 직접 입력하세요 · 보유금액 자동 계산")
         : "현재가 자동조회 ON · 보유금액 자동 계산";
     }
   }
@@ -2819,11 +2819,7 @@
           <div class="nameSuggest" hidden role="listbox"></div>
           <div class="rowMetaPanel">
             <div class="rowMetaStatus">
-              <label class="rowAutoQuoteControl">
-                <span>현재가 자동</span>
-                <input class="rowAutoQuoteToggle" type="checkbox" checked aria-label="현재가 자동조회">
-              </label>
-              <span class="rowPriceStatus">현재가 자동조회 ON · 보유금액 자동 계산</span>
+              <span class="rowPriceStatus">현재가를 직접 입력하세요 · 보유금액 자동 계산</span>
             </div>
             <label class="rowManualPriceControl">
               <input class="rowManualPriceToggle" type="checkbox" aria-label="현재가 수동입력">
