@@ -23,63 +23,38 @@
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "WebApplication",
-          "name": "포트폴리오 리밸런싱 계산기",
-          "url": "https://rebalancing.kr/",
-          "applicationCategory": "FinanceApplication",
-          "operatingSystem": "Web",
-          "inLanguage": "ko",
-          "description": "현재 비중과 목표 비중을 입력하면 자산별 매수/매도 수량을 계산해주는 포트폴리오 리밸런싱 계산기입니다."
-        },
-        {
-          "@type": "FAQPage",
-          "mainEntity": [
-            {
-              "@type": "Question",
-              "name": "리밸런싱이란 무엇인가요?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "리밸런싱은 자산 가격 변동으로 인해 변한 포트폴리오 비중을 처음 설정한 목표 비중에 맞게 다시 조정하는 투자 관리 방법입니다."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "리밸런싱은 얼마나 자주 해야 하나요?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "일반적으로 분기, 반기, 연 1회 주기로 많이 사용되며 시장 변동성이 크거나 자산 비중이 크게 어긋난 경우 추가 리밸런싱을 고려할 수 있습니다."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "목표 비중 합이 100%가 아니면 어떻게 되나요?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "계산 전 목표 비중 합계를 100%로 맞춰야 정확하게 동작합니다."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "계산 결과 그대로 거래해도 되나요?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "본 계산기는 비중 기준 참고용 도구이며 세금, 수수료, 시장 유동성 등은 반영하지 않으므로 실제 거래는 개인의 투자 판단에 따라 결정해야 합니다."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "이 계산기는 어떤 투자자에게 적합한가요?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "장기 투자자, ETF·주식 포트폴리오를 관리하는 투자자, 정기적으로 자산 비중을 점검하고 싶은 사용자에게 적합합니다."
-              }
-            }
-          ]
-        }
-      ]
+      "@type": "WebApplication",
+      "name": "포트폴리오 리밸런싱 계산기",
+      "url": "https://rebalancing.kr/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "inLanguage": "ko",
+      "description": "현재 비중과 목표 비중을 입력하면 자산별 매수/매도 수량을 계산해주는 포트폴리오 리밸런싱 계산기입니다."
     }
+  </script>
+  <script id="faqData" type="application/json">
+    [
+      {
+        "question": "리밸런싱이란 무엇인가요?",
+        "answer": "리밸런싱은 자산 가격 변동으로 인해 변한 포트폴리오 비중을 처음 설정한 목표 비중에 맞게 다시 조정하는 투자 관리 방법입니다. 장기 투자에서 위험 관리와 수익 안정성에 중요한 역할을 합니다."
+      },
+      {
+        "question": "리밸런싱은 얼마나 자주 해야 하나요?",
+        "answer": "일반적으로 분기, 반기, 연 1회 주기로 많이 사용됩니다. 다만 시장 변동성이 크거나 자산 비중이 크게 어긋난 경우 주기와 관계없이 추가 리밸런싱을 고려할 수 있습니다."
+      },
+      {
+        "question": "목표 비중 합이 100%가 아니면 어떻게 되나요?",
+        "answer": "계산 전 목표 비중 합계를 먼저 확인해야 합니다. 이 계산기는 목표 비중 합계를 100%로 맞췄을 때 가장 정확하게 동작합니다."
+      },
+      {
+        "question": "계산 결과 그대로 거래해도 되나요?",
+        "answer": "아닙니다. 본 계산기는 비중 기준 참고용 도구이며, 세금, 수수료, 시장 유동성 등은 반영하지 않습니다. 실제 거래 여부와 수량은 개인의 투자 판단에 따라 결정해야 합니다."
+      },
+      {
+        "question": "이 계산기는 어떤 투자자에게 적합한가요?",
+        "answer": "장기 투자자, ETF·주식 포트폴리오를 관리하는 투자자, 정기적으로 자산 비중을 점검하고 싶은 분들에게 적합합니다."
+      }
+    ]
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9973322388801174"
      crossorigin="anonymous"></script>
@@ -319,69 +294,7 @@
     <section class="faqSection" aria-labelledby="faqTitle">
       <h2 id="faqTitle">자주 묻는 질문 (FAQ)</h2>
 
-      <article class="faqItem">
-        <h3>
-          <button class="faqQuestion" type="button" aria-expanded="false" aria-controls="faqAnswer1" id="faqQuestion1">
-            Q1. 리밸런싱이란 무엇인가요?
-          </button>
-        </h3>
-        <p id="faqAnswer1" class="faqAnswer" role="region" aria-labelledby="faqQuestion1" hidden>
-          A. 리밸런싱은 자산 가격 변동으로 인해 변한 포트폴리오 비중을
-          처음 설정한 목표 비중에 맞게 다시 조정하는 투자 관리 방법입니다.
-          장기 투자에서 위험 관리와 수익 안정성에 중요한 역할을 합니다.
-        </p>
-      </article>
-
-      <article class="faqItem">
-        <h3>
-          <button class="faqQuestion" type="button" aria-expanded="false" aria-controls="faqAnswer2" id="faqQuestion2">
-            Q2. 리밸런싱은 얼마나 자주 해야 하나요?
-          </button>
-        </h3>
-        <p id="faqAnswer2" class="faqAnswer" role="region" aria-labelledby="faqQuestion2" hidden>
-          A. 일반적으로 분기, 반기, 연 1회 주기로 많이 사용됩니다.
-          다만 시장 변동성이 크거나 자산 비중이 크게 어긋난 경우
-          주기와 관계없이 추가 리밸런싱을 고려할 수 있습니다.
-        </p>
-      </article>
-
-      <article class="faqItem">
-        <h3>
-          <button class="faqQuestion" type="button" aria-expanded="false" aria-controls="faqAnswer3" id="faqQuestion3">
-            Q3. 목표 비중 합이 100%가 아니면 어떻게 되나요?
-          </button>
-        </h3>
-        <p id="faqAnswer3" class="faqAnswer" role="region" aria-labelledby="faqQuestion3" hidden>
-          A. 계산 전 목표 비중 합계를 먼저 확인해야 합니다.
-          이 계산기는 목표 비중 합계를 100%로 맞췄을 때 가장 정확하게 동작합니다.
-        </p>
-      </article>
-
-      <article class="faqItem">
-        <h3>
-          <button class="faqQuestion" type="button" aria-expanded="false" aria-controls="faqAnswer4" id="faqQuestion4">
-            Q4. 계산 결과 그대로 거래해도 되나요?
-          </button>
-        </h3>
-        <p id="faqAnswer4" class="faqAnswer" role="region" aria-labelledby="faqQuestion4" hidden>
-          A. 아닙니다.
-          본 계산기는 비중 기준 참고용 도구이며,
-          세금, 수수료, 시장 유동성 등은 반영하지 않습니다.
-          실제 거래 여부와 수량은 개인의 투자 판단에 따라 결정해야 합니다.
-        </p>
-      </article>
-
-      <article class="faqItem">
-        <h3>
-          <button class="faqQuestion" type="button" aria-expanded="false" aria-controls="faqAnswer5" id="faqQuestion5">
-            Q5. 이 계산기는 어떤 투자자에게 적합한가요?
-          </button>
-        </h3>
-        <p id="faqAnswer5" class="faqAnswer" role="region" aria-labelledby="faqQuestion5" hidden>
-          A. 장기 투자자, ETF·주식 포트폴리오를 관리하는 투자자,
-          정기적으로 자산 비중을 점검하고 싶은 분들에게 적합합니다.
-        </p>
-      </article>
+      <div id="faqList"></div>
     </section>
   </main>
 </div>
@@ -395,61 +308,21 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="assets/js/core-format.js"></script>
+<script src="assets/js/core-symbols.js"></script>
+<script src="assets/js/core-utils.js"></script>
+<script src="assets/js/dom-helpers.js"></script>
+<script src="assets/js/summary-helpers.js"></script>
+<script src="assets/js/feedback-helpers.js"></script>
+<script src="assets/js/ui-state-helpers.js"></script>
+<script src="assets/js/theme-helpers.js"></script>
+<script src="assets/js/target-helpers.js"></script>
+<script src="assets/js/mode-helpers.js"></script>
+<script src="assets/js/row-helpers.js"></script>
+<script src="assets/js/mobile-helpers.js"></script>
 <script src="assets/js/app.js"></script>
-<script>
-  (function() {
-    const guideTemplate = document.querySelector("#guideTemplate");
-    const guideTarget = document.querySelector("#desktopGuideContent");
-    if (guideTemplate && guideTarget) {
-      guideTarget.replaceChildren(guideTemplate.content.cloneNode(true));
-    }
-
-    const guidePanel = document.querySelector("#guidePanel");
-    const guidePanelToggle = document.querySelector("#guidePanelToggle");
-    const guidePanelClose = document.querySelector("#guidePanelClose");
-    const guidePanelOverlay = document.querySelector("#guidePanelOverlay");
-    const guidePanelArrow = document.querySelector("#guidePanelArrow");
-
-    function setGuidePanelOpen(nextOpen) {
-      const open = Boolean(nextOpen);
-      if (!guidePanel || !guidePanelToggle || !guidePanelOverlay || !guidePanelArrow) return;
-      guidePanel.classList.toggle("open", open);
-      guidePanelOverlay.hidden = !open;
-      guidePanelToggle.setAttribute("aria-expanded", open ? "true" : "false");
-      guidePanelToggle.setAttribute("aria-label", open ? "리밸런싱 계산기 사용방법 닫기" : "리밸런싱 계산기 사용방법 열기");
-      guidePanelArrow.textContent = open ? "◀" : "▶";
-      document.body.classList.toggle("guide-panel-open", open);
-    }
-
-    if (guidePanelToggle) {
-      guidePanelToggle.addEventListener("click", () => {
-        const isOpen = guidePanel?.classList.contains("open");
-        setGuidePanelOpen(!isOpen);
-      });
-    }
-    if (guidePanelClose) {
-      guidePanelClose.addEventListener("click", () => setGuidePanelOpen(false));
-    }
-    if (guidePanelOverlay) {
-      guidePanelOverlay.addEventListener("click", () => setGuidePanelOpen(false));
-    }
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") setGuidePanelOpen(false);
-    });
-
-    const faqButtons = document.querySelectorAll(".faqQuestion");
-    faqButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const isOpen = button.getAttribute("aria-expanded") === "true";
-        const answerId = button.getAttribute("aria-controls");
-        const answer = answerId ? document.getElementById(answerId) : null;
-
-        button.setAttribute("aria-expanded", isOpen ? "false" : "true");
-        if (answer) answer.hidden = isOpen;
-      });
-    });
-  })();
-</script>
+<script src="assets/js/faq-renderer.js"></script>
+<script src="assets/js/main-page.js"></script>
 <footer class="siteFooter">
   <div class="footerGuideLinks">
     <span class="guideLabel">리밸런싱 가이드</span>

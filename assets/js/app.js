@@ -48,6 +48,163 @@
   const toastMsg = document.querySelector("#toastMsg");
   let toastTimer = null;
   let editWarningFloatTimer = null;
+  const {
+    clampMin0,
+    escapeHtml,
+    fmt,
+    fmtKRW,
+    fmtPct01,
+    formatInputWithComma,
+    parseNum,
+    parseNumberFromText,
+    withComma
+  } = window.RebalancingFormat;
+  const {
+    KR_ETF_ALIAS_MAP,
+    STOCK_SUGGESTIONS,
+    SYMBOL_ALIAS_MAP,
+    findKrEtfByAlias,
+    getSuggestionCandidates,
+    normalizeAliasKey,
+    normalizeKrEtfAlias,
+    normalizeSymbol,
+    resolveYahooSymbol
+  } = window.RebalancingSymbols;
+  const {
+    getNameInput,
+    getNameSuggestBox,
+    getNameSuggestionItems,
+    getSuggestionActiveIndex,
+    setSuggestionActiveIndex
+  } = window.RebalancingDomHelpers;
+  const {
+    classifyAssetBucket,
+    formatReportDate,
+    requestPortfolioName,
+    waitForImagesLoaded
+  } = window.RebalancingUtils;
+  const {
+    applyResultSummaryKeyLabels: applyResultSummaryKeyLabelsHelper,
+    resetSummaryCounts: resetSummaryCountsHelper,
+    resetSummaryKeyLabels: resetSummaryKeyLabelsHelper,
+    setCashSummary: setCashSummaryHelper,
+    setTotalSummary: setTotalSummaryHelper
+  } = window.RebalancingSummaryHelpers;
+  const {
+    clearInvalidMarks: clearInvalidMarksHelper,
+    focusInvalidField: focusInvalidFieldHelper,
+    hideErrorSummary: hideErrorSummaryHelper,
+    scrollToEl: scrollToElHelper,
+    showErrorSummary: showErrorSummaryHelper,
+    showToast: showToastHelper
+  } = window.RebalancingFeedbackHelpers;
+  const {
+    markDirtyIfNeeded: markDirtyIfNeededHelper,
+    setDirtyState: setDirtyStateHelper,
+    showEditWarningNearInput: showEditWarningNearInputHelper,
+    switchToCurrentOnEdit: switchToCurrentOnEditHelper,
+    warnOnResultFocus: warnOnResultFocusHelper
+  } = window.RebalancingUiStateHelpers;
+  const {
+    setTheme: setThemeHelper
+  } = window.RebalancingThemeHelpers;
+  const {
+    attachTargetGuard: attachTargetGuardHelper,
+    rowCount: rowCountHelper,
+    sumTargets: sumTargetsHelper,
+    updateProgress: updateProgressHelper,
+    updateTargetSumUI: updateTargetSumUIHelper
+  } = window.RebalancingTargetHelpers;
+  const {
+    setMode: setModeHelper,
+    setRowDetailOpen: setRowDetailOpenHelper
+  } = window.RebalancingModeHelpers;
+  const {
+    deleteRow: deleteRowHelper,
+    setTradeCell: setTradeCellHelper,
+    syncRowDisplayName: syncRowDisplayNameHelper,
+    updateCurrentUI: updateCurrentUIHelper
+  } = window.RebalancingRowHelpers;
+  const {
+    renderMobileResultList: renderMobileResultListHelper,
+    setMobileDetailHeader: setMobileDetailHeaderHelper
+  } = window.RebalancingMobileHelpers;
+  const summaryRefs = {
+    buyCountEl,
+    cashKey,
+    cashLabel,
+    holdCountEl,
+    mobileCashLabel,
+    mobileSumTotalKey,
+    mobileSumTotalLabel,
+    sellCountEl,
+    sumTotalKey,
+    sumTotalLabel
+  };
+  const targetRefs = {
+    mobileProgressText,
+    mobileTargetSumLabel,
+    progressBar,
+    progressText,
+    progressWrap,
+    sumTargetEl,
+    tbody
+  };
+  const modeRefs = {
+    calcBtn,
+    cashPill,
+    mobileCalcBtn,
+    mobileDetailToggle,
+    mobileResultList,
+    modeLabel,
+    tableCard,
+    tbody
+  };
+  const rowRefs = {
+    mobileTotalAssetLabel,
+    sumValue: document.querySelector("#sumValue"),
+    sumWeight: document.querySelector("#sumWeight")
+  };
+  const mobileRefs = {
+    mobileResultList
+  };
+  const feedbackRefs = {
+    errorSummary,
+    toast,
+    toastMsg
+  };
+  const uiStateRefs = {
+    editWarningFloat,
+    staleBadge
+  };
+  const feedbackState = {
+    get toastTimer() {
+      return toastTimer;
+    },
+    set toastTimer(value) {
+      toastTimer = value;
+    }
+  };
+  const uiState = {
+    get editWarningFloatTimer() {
+      return editWarningFloatTimer;
+    },
+    set editWarningFloatTimer(value) {
+      editWarningFloatTimer = value;
+    },
+    get hasComputed() {
+      return hasComputed;
+    },
+    get isDirtyAfterCalc() {
+      return isDirtyAfterCalc;
+    },
+    set isDirtyAfterCalc(value) {
+      isDirtyAfterCalc = value;
+    },
+    get mode() {
+      return mode;
+    }
+  };
 
   let mode = "current"; // "current" | "result"
   const THEME_KEY = "rb-theme";
@@ -61,344 +218,6 @@
   let isDirtyAfterCalc = false;
   let autoQuoteEnabled = true;
   const rowQuoteStates = new Map();
-  const KR_ETF_ALIAS_MAP = Object.freeze([
-    {
-      ticker: "489250.KS",
-      canonical: "KODEX 미국배당다우존스",
-      aliases: ["미국배당다우존스", "미국배당다우", "미배당다우", "코미당", "미국배당", "453850"]
-    },
-    {
-      ticker: "069500.KS",
-      canonical: "KODEX 200",
-      aliases: ["코덱스200", "국내200", "코스피200", "069500"]
-    },
-    {
-      ticker: "102110.KS",
-      canonical: "TIGER 200",
-      aliases: ["타이거200", "호랑이200", "102110"]
-    },
-    {
-      ticker: "133690.KS",
-      canonical: "TIGER 미국나스닥100",
-      aliases: ["미국나스닥100", "나스닥100", "미국나스닥", "133690"]
-    },
-    {
-      ticker: "360750.KS",
-      canonical: "TIGER 미국S&P500",
-      aliases: ["미국s&p500", "미국sp500", "미국에스앤피500", "s&p500", "sp500", "360750"]
-    },
-    {
-      ticker: "379800.KS",
-      canonical: "KODEX 미국S&P500TR",
-      aliases: ["미국s&p500tr", "미국sp500tr", "sp500tr", "379800"]
-    },
-    {
-      ticker: "214980.KS",
-      canonical: "KODEX 단기채권PLUS",
-      aliases: ["단기채권", "파킹etf", "파킹", "214980"]
-    },
-    {
-      ticker: "148070.KS",
-      canonical: "KOSEF 국고채10년",
-      aliases: ["국고채10년", "국채10년", "148070"]
-    },
-    {
-      ticker: "273130.KS",
-      canonical: "KODEX 종합채권(AA-이상)액티브",
-      aliases: ["종합채권", "채권액티브", "273130"]
-    },
-    {
-      ticker: "132030.KS",
-      canonical: "KODEX 골드선물(H)",
-      aliases: ["골드선물", "금etf", "금선물", "132030"]
-    },
-    {
-      ticker: "114800.KS",
-      canonical: "KODEX 인버스",
-      aliases: ["인버스", "114800"]
-    },
-    {
-      ticker: "122630.KS",
-      canonical: "KODEX 레버리지",
-      aliases: ["레버리지", "122630"]
-    },
-    {
-      ticker: "233740.KS",
-      canonical: "KODEX 코스닥150레버리지",
-      aliases: ["코스닥150레버리지", "코스닥레버리지", "233740"]
-    },
-    {
-      ticker: "229200.KS",
-      canonical: "KODEX 코스닥150",
-      aliases: ["코스닥150", "229200"]
-    },
-    {
-      ticker: "305720.KS",
-      canonical: "KODEX 2차전지산업",
-      aliases: ["2차전지", "이차전지", "2차전지산업", "305720"]
-    },
-    {
-      ticker: "305540.KS",
-      canonical: "TIGER 2차전지테마",
-      aliases: ["2차전지테마", "이차전지테마", "305540"]
-    },
-    {
-      ticker: "381170.KS",
-      canonical: "TIGER 미국테크TOP10 INDXX",
-      aliases: ["미국테크top10", "미국테크10", "381170"]
-    },
-    {
-      ticker: "379810.KS",
-      canonical: "KODEX 미국나스닥100TR",
-      aliases: ["미국나스닥100tr", "나스닥100tr", "379810"]
-    },
-    {
-      ticker: "229480.KS",
-      canonical: "KODEX 미국S&P500선물(H)",
-      aliases: ["미국s&p500선물", "미국sp500선물", "229480"]
-    },
-    {
-      ticker: "091180.KS",
-      canonical: "KODEX 자동차",
-      aliases: ["자동차", "091180"]
-    }
-  ]);
-  const KR_ETF_ALIAS_INDEX = Object.freeze(
-    KR_ETF_ALIAS_MAP.map((entry)=>{
-      const keySet = new Set([entry.canonical, entry.ticker, ...(entry.aliases || [])]);
-      const keys = [...keySet]
-        .map((value)=>normalizeKrEtfAlias(value))
-        .filter(Boolean)
-        .sort((a, b)=>b.length - a.length);
-      return { ticker: entry.ticker, canonical: entry.canonical, keys };
-    })
-  );
-  const SYMBOL_ALIAS_MAP = Object.freeze({
-    "005930": "005930.KS",
-    "000660": "000660.KS",
-    "035420": "035420.KS",
-    "035720": "035720.KS",
-    "069500": "069500.KS",
-    "102110": "102110.KS",
-    "132030": "132030.KS",
-    "148070": "148070.KS",
-    "229200": "229200.KS",
-    "360750": "360750.KS",
-    "247540": "247540.KQ",
-    "066970": "066970.KQ",
-    "kodex200": "069500.KS",
-    "tiger200": "102110.KS",
-    "kodex골드선물h": "132030.KS",
-    "kodex골드선물(h)": "132030.KS",
-    "kosef국고채10년": "148070.KS",
-    "tiger미국s&p500": "360750.KS",
-    "tiger미국sp500": "360750.KS",
-    "삼성전자": "005930.KS",
-    "sk하이닉스": "000660.KS",
-    "naver": "035420.KS",
-    "카카오": "035720.KS",
-    "에코프로비엠": "247540.KQ",
-    "엘앤에프": "066970.KQ"
-  });
-  const STOCK_SUGGESTIONS = Object.freeze([
-    { name: "삼성전자", symbol: "005930.KS", aliases: ["005930", "삼성"] },
-    { name: "SK하이닉스", symbol: "000660.KS", aliases: ["000660", "하이닉스"] },
-    { name: "NAVER", symbol: "035420.KS", aliases: ["035420", "네이버"] },
-    { name: "카카오", symbol: "035720.KS", aliases: ["035720"] },
-    { name: "KODEX 200", symbol: "069500.KS", aliases: ["069500", "kodex200"] },
-    { name: "TIGER 200", symbol: "102110.KS", aliases: ["102110", "tiger200"] },
-    { name: "KOSEF 국고채10년", symbol: "148070.KS", aliases: ["148070", "국고채10년"] },
-    { name: "KODEX 골드선물(H)", symbol: "132030.KS", aliases: ["132030", "kodex골드선물h"] },
-    { name: "TIGER 미국S&P500", symbol: "360750.KS", aliases: ["360750", "tiger미국sp500", "미국s&p500"] },
-    { name: "KODEX 코스닥150레버리지", symbol: "233740.KS", aliases: ["233740"] },
-    { name: "TIGER 코스닥150", symbol: "229200.KS", aliases: ["229200"] },
-    { name: "에코프로비엠", symbol: "247540.KQ", aliases: ["247540"] },
-    { name: "엘앤에프", symbol: "066970.KQ", aliases: ["066970"] },
-    { name: "Apple", symbol: "AAPL", aliases: ["애플"] },
-    { name: "Microsoft", symbol: "MSFT", aliases: ["마이크로소프트"] },
-    { name: "NVIDIA", symbol: "NVDA", aliases: ["엔비디아"] },
-    { name: "Tesla", symbol: "TSLA", aliases: ["테슬라"] }
-  ]);
-
-  function parseNum(v){
-    const n = Number(String(v).replaceAll(",", "").trim());
-    return isFinite(n) ? n : 0;
-  }
-  function toDigits(str){
-    return String(str || "").replace(/[^\d]/g, "");
-  }
-  function withComma(numStr){
-    if(!numStr) return "";
-    return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-  function formatInputWithComma(el){
-    const before = el.value;
-    const start = el.selectionStart ?? before.length;
-    const digitsBeforeCursor = toDigits(before.slice(0, start)).length;
-
-    const digits = toDigits(before);
-    const formatted = withComma(digits);
-    el.value = formatted;
-
-    if(document.activeElement !== el) return;
-    let pos = 0;
-    let digitCount = 0;
-    while(pos < formatted.length){
-      if(/\d/.test(formatted[pos])) digitCount++;
-      pos++;
-      if(digitCount >= digitsBeforeCursor) break;
-    }
-    el.setSelectionRange(pos, pos);
-  }
-  function clampMin0(n){ return n < 0 ? 0 : n; }
-  function normalizeAliasKey(value){
-    return String(value || "")
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, "")
-      .replace(/[^0-9a-zA-Z가-힣&().+-]/g, "");
-  }
-  function normalizeKrEtfAlias(value){
-    return String(value || "")
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, "")
-      .replace(
-        /etf|kodex|tiger|rise|kbstar|arirang|ace|plus|sol|timefolio|코덱스|타이거|라이즈|케이스타|아리랑|에이스|플러스|쏠/g,
-        ""
-      )
-      .replace(/[^0-9a-zA-Z가-힣]/g, "");
-  }
-  function normalizeSymbol(value){
-    return String(value || "").trim().toUpperCase();
-  }
-  function findKrEtfByAlias(rawInput){
-    const normalizedInput = normalizeKrEtfAlias(rawInput);
-    if(!normalizedInput) return null;
-
-    for(const etf of KR_ETF_ALIAS_INDEX){
-      if(etf.keys.some((alias)=>alias === normalizedInput)){
-        return { ticker: etf.ticker, canonical: etf.canonical };
-      }
-    }
-
-    let bestTicker = "";
-    let bestCanonical = "";
-    let bestScore = 0;
-    for(const etf of KR_ETF_ALIAS_INDEX){
-      for(const alias of etf.keys){
-        if(alias.length < 3 || normalizedInput.length < 3) continue;
-        const matched = normalizedInput.includes(alias) || alias.includes(normalizedInput);
-        if(!matched) continue;
-        if(alias.length > bestScore){
-          bestScore = alias.length;
-          bestTicker = etf.ticker;
-          bestCanonical = etf.canonical;
-        }
-      }
-    }
-    if(!bestTicker) return null;
-    return { ticker: bestTicker, canonical: bestCanonical };
-  }
-  function resolveYahooSymbol(rawInput){
-    const input = String(rawInput || "").trim();
-    if(!input) return "";
-
-    const symbolLike = normalizeSymbol(input);
-    if(/^[A-Z0-9.^=\-]{1,20}$/.test(symbolLike) && symbolLike.includes(".")){
-      return symbolLike;
-    }
-
-    const etfMatch = findKrEtfByAlias(input);
-    if(etfMatch){
-      return etfMatch.ticker;
-    }
-
-    const aliasKey = normalizeAliasKey(input);
-    if(SYMBOL_ALIAS_MAP[aliasKey]){
-      return SYMBOL_ALIAS_MAP[aliasKey];
-    }
-    const fromSuggestion = STOCK_SUGGESTIONS.find((item)=>{
-      if(normalizeAliasKey(item.name) === aliasKey) return true;
-      return item.aliases.some((alias)=>normalizeAliasKey(alias) === aliasKey);
-    });
-    if(fromSuggestion){
-      return fromSuggestion.symbol;
-    }
-
-    if(/^\d{6}$/.test(input)){
-      return `${input}.KS`;
-    }
-
-    if(/^[A-Za-z][A-Za-z0-9.^=\-]{0,9}$/.test(input)){
-      return symbolLike;
-    }
-
-    return symbolLike.replace(/\s+/g, "");
-  }
-  function getSuggestionCandidates(rawQuery){
-    const query = normalizeAliasKey(rawQuery);
-    if(!query) return [];
-
-    const results = STOCK_SUGGESTIONS.map((item)=>{
-      const keys = [
-        normalizeAliasKey(item.name),
-        normalizeAliasKey(item.symbol),
-        ...item.aliases.map(normalizeAliasKey)
-      ];
-      const starts = keys.some((key)=>key.startsWith(query));
-      const contains = keys.some((key)=>key.includes(query));
-      if(!starts && !contains) return null;
-      return { ...item, starts };
-    }).filter(Boolean);
-
-    results.sort((a, b)=>{
-      if(a.starts !== b.starts) return a.starts ? -1 : 1;
-      return a.name.localeCompare(b.name, "ko");
-    });
-    return results.slice(0, 8);
-  }
-  function getNameSuggestBox(tr){
-    return tr ? tr.querySelector(".nameSuggest") : null;
-  }
-  function getNameInput(tr){
-    return tr ? tr.querySelector(".name") : null;
-  }
-  function getNameSuggestionItems(tr){
-    const suggestBox = getNameSuggestBox(tr);
-    if(!suggestBox) return [];
-    return [...suggestBox.querySelectorAll(".nameSuggestItem")];
-  }
-  function getSuggestionActiveIndex(tr){
-    const suggestBox = getNameSuggestBox(tr);
-    if(!suggestBox) return -1;
-    const n = Number(suggestBox.dataset.activeIndex);
-    return Number.isInteger(n) ? n : -1;
-  }
-  function setSuggestionActiveIndex(tr, nextIndex){
-    const suggestBox = getNameSuggestBox(tr);
-    const nameEl = getNameInput(tr);
-    if(!suggestBox || !nameEl) return;
-
-    const items = getNameSuggestionItems(tr);
-    const last = items.length - 1;
-    const index = (nextIndex < 0 || nextIndex > last) ? -1 : nextIndex;
-    suggestBox.dataset.activeIndex = String(index);
-
-    items.forEach((item, itemIndex)=>{
-      const active = itemIndex === index;
-      item.setAttribute("aria-selected", active ? "true" : "false");
-      item.classList.toggle("isActive", active);
-      if(active){
-        nameEl.setAttribute("aria-activedescendant", item.id);
-        item.scrollIntoView({ block: "nearest" });
-      }
-    });
-
-    if(index === -1){
-      nameEl.removeAttribute("aria-activedescendant");
-    }
-  }
   function applySuggestionSelection(tr, item){
     const nameEl = getNameInput(tr);
     if(!nameEl || !item) return;
@@ -633,68 +452,8 @@
     state.timer = setTimeout(runFetch, PRICE_FETCH_DEBOUNCE_MS);
   }
 
-  function fmt(n){ return isFinite(n) ? n.toLocaleString("ko-KR") : "0"; }
-  function fmtKRW(n){ return "₩ " + fmt(Math.round(n)); }
-  function fmtPct01(x){ return isFinite(x) ? (x * 100).toFixed(1) + "%" : "0.0%"; }
-  function escapeHtml(value){
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
-  }
-  function parseNumberFromText(text){
-    const num = Number(String(text ?? "").replace(/[^0-9.-]/g, ""));
-    return Number.isFinite(num) ? num : 0;
-  }
-  function requestPortfolioName(){
-    const saved = String(localStorage.getItem("rb-portfolio-name") || "My Portfolio").trim() || "My Portfolio";
-    const input = window.prompt("포트폴리오 이름을 입력하세요.", saved);
-    if(input === null) return null;
-    const nextName = String(input).trim() || "My Portfolio";
-    localStorage.setItem("rb-portfolio-name", nextName);
-    return nextName;
-  }
-  function waitForImagesLoaded(root){
-    const images = [...(root?.querySelectorAll?.("img") || [])];
-    if(images.length === 0) return Promise.resolve();
-    return Promise.all(images.map((img)=>{
-      if(img.complete && img.naturalWidth > 0) return Promise.resolve();
-      return new Promise((resolve)=>{
-        const done = ()=>resolve();
-        img.addEventListener("load", done, { once: true });
-        img.addEventListener("error", done, { once: true });
-      });
-    })).then(()=>undefined);
-  }
-  function formatReportDate(date){
-    const yyyy = String(date.getFullYear());
-    const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const dd = String(date.getDate()).padStart(2, "0");
-    const hh = String(date.getHours()).padStart(2, "0");
-    const min = String(date.getMinutes()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
-  }
-  function classifyAssetBucket(name){
-    const n = String(name || "").toLowerCase();
-    if(n.includes("채") || n.includes("bond") || n.includes("국고")) return "채권";
-    if(n.includes("골드") || n.includes("금") || n.includes("gold")) return "금/원자재";
-    if(n.includes("cash") || n.includes("현금")) return "현금";
-    if(
-      n.includes("주식") ||
-      n.includes("stock") ||
-      n.includes("equity") ||
-      n.includes("나스닥") ||
-      n.includes("nasdaq") ||
-      n.includes("s&p") ||
-      n.includes("sp500") ||
-      n.includes("코스피")
-    ) return "주식";
-    return "기타";
-  }
-  function buildPieChartSvg(currentItems, targetItems, afterItems, targetGapRows = [], residualRows = []){
-    const palette = ["#1f77b4", "#ef4444", "#22c55e", "#f59e0b", "#1f3a8a", "#6b7280"];
+  function buildPieChartSvg(currentItems, targetItems, afterItems){
+    const palette = ["#4e79a7", "#a0cbe8", "#f28e2b", "#ffbe7d", "#b07aa1", "#9c755f", "#bab0ac"];
     const getSeriesColor = (index)=>{
       if(index < palette.length) return palette[index];
       const hue = Math.round((index * 137.508) % 360);
@@ -703,95 +462,99 @@
     const normalizeParts = (items)=>items
       .map((item)=>({ ...item, value: Math.max(0, Number(item.value) || 0) }))
       .filter((item)=>item.value > 0);
-    const currentParts = normalizeParts(currentItems);
-    const targetParts = normalizeParts(targetItems);
-    const afterParts = normalizeParts(afterItems);
+    const compressParts = (items, limit = 6)=>{
+      const sorted = [...normalizeParts(items)].sort((a, b)=>b.value - a.value);
+      if(sorted.length <= limit){
+        return sorted;
+      }
+      const keepCount = Math.max(1, limit - 1);
+      const kept = sorted.slice(0, keepCount);
+      const othersValue = sorted.slice(keepCount).reduce((sum, item)=>sum + item.value, 0);
+      if(othersValue > 0){
+        kept.push({ name: "Others", value: othersValue });
+      }
+      return kept;
+    };
+    const currentParts = compressParts(currentItems, 6);
+    const targetParts = compressParts(targetItems, 6);
+    const afterParts = compressParts(afterItems, 6);
     if(afterParts.length === 0){
       return `<div class="chart-empty">표시할 비중 데이터가 없습니다.</div>`;
     }
-    const drawDonut = (parts, label)=>{
-      const total = parts.reduce((sum, item)=>sum + item.value, 0);
-      if(total <= 0){
-        return "";
+    const orderedNames = [];
+    [...afterParts, ...currentParts, ...targetParts].forEach((part)=>{
+      if(!orderedNames.includes(part.name)){
+        orderedNames.push(part.name);
       }
-      const canvas = document.createElement("canvas");
-      canvas.width = 320;
-      canvas.height = 320;
-      const ctx = canvas.getContext("2d");
-      if(!ctx){
-        return "";
-      }
-      const cx = canvas.width / 2;
-      const cy = canvas.height / 2;
-      const radius = 118;
-      const innerRadius = 64;
-      let acc = -Math.PI / 2;
-      parts.forEach((part, idx)=>{
-        const ratio = part.value / total;
-        const next = acc + ratio * Math.PI * 2;
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.arc(cx, cy, radius, acc, next);
-        ctx.closePath();
-        ctx.fillStyle = getSeriesColor(idx);
-        ctx.fill();
-        acc = next;
-      });
-      ctx.beginPath();
-      ctx.arc(cx, cy, innerRadius, 0, Math.PI * 2);
-      ctx.fillStyle = "#ffffff";
-      ctx.fill();
-      ctx.fillStyle = "#64748b";
-      ctx.font = "700 16px Arial";
-      ctx.textAlign = "center";
-      ctx.fillText(label, cx, cy - 8);
-      ctx.fillStyle = "#0f172a";
-      ctx.font = "800 28px Arial";
-      ctx.fillText("100%", cx, cy + 24);
-      return canvas.toDataURL("image/png");
+    });
+    const colorByName = new Map();
+    orderedNames.forEach((name, idx)=>{
+      colorByName.set(name, getSeriesColor(idx));
+    });
+    const toValueMap = (parts)=>{
+      const m = new Map();
+      parts.forEach((p)=>m.set(p.name, p.value));
+      return m;
     };
-    const currentChartSrc = drawDonut(currentParts, "현재");
-    const targetChartSrc = drawDonut(targetParts, "목표");
-    const afterChartSrc = drawDonut(afterParts, "이후");
-    const legends = afterParts.map((part, idx)=>{
-      const color = getSeriesColor(idx);
-      return `<li><span class="dot" style="background:${color}"></span><span class="name">${escapeHtml(part.name)}</span><span class="pct">${escapeHtml(part.value.toFixed(1))}%</span></li>`;
+    const currentMap = toValueMap(currentParts);
+    const targetMap = toValueMap(targetParts);
+    const afterMap = toValueMap(afterParts);
+    const buildStackBar = (title, valueMap)=>{
+      const segments = orderedNames.map((name)=>{
+        const value = Number(valueMap.get(name) || 0);
+        if(value <= 0) return "";
+        return `<span class="alloc-seg" style="width:${value.toFixed(2)}%;background:${colorByName.get(name)}" title="${escapeHtml(name)} ${value.toFixed(1)}%"></span>`;
+      }).join("");
+      return `
+        <div class="pie-card">
+          <p class="pie-card-title">${title}</p>
+          <div class="alloc-bar-track">${segments}</div>
+          <p class="alloc-bar-total">100%</p>
+        </div>
+      `;
+    };
+    const targetGapRows = orderedNames
+      .map((name)=>({
+        name,
+        gap: (Number(afterMap.get(name) || 0) - Number(targetMap.get(name) || 0))
+      }))
+      .sort((a, b)=>Math.abs(b.gap) - Math.abs(a.gap))
+      .slice(0, 5);
+    const maxAbsGap = targetGapRows.reduce((max, row)=>Math.max(max, Math.abs(row.gap)), 0) || 1;
+    const legendHtml = orderedNames.map((name)=>{
+      const value = Number(afterMap.get(name) || 0);
+      const color = colorByName.get(name);
+      return `<li><span class="dot" style="background:${color}"></span><span class="name">${escapeHtml(name)}</span><span class="pct">${escapeHtml(value.toFixed(1))}%</span></li>`;
     }).join("");
-
-    const targetGapItems = targetGapRows.length > 0
-      ? targetGapRows.map((row)=>{
+    const targetGapHtml = targetGapRows.length === 0
+      ? `<li class="gap-empty">유의미한 비중 차이가 없습니다.</li>`
+      : targetGapRows.map((row)=>{
         const dirClass = row.gap >= 0 ? "up" : "down";
+        const width = Math.max(4, (Math.abs(row.gap) / maxAbsGap) * 100);
         const sign = row.gap > 0 ? "+" : "";
-        return `<li><span class="dot"></span><span class="name">${escapeHtml(row.name)}</span><span class="gap ${dirClass}">${sign}${escapeHtml(row.gap.toFixed(1))}%p</span></li>`;
-      }).join("")
-      : `<li><span class="dot"></span><span class="name">-</span><span class="gap">0.0%p</span></li>`;
-
-    const residualBars = residualRows.length > 0
-      ? residualRows.map((row)=>{
-        const dirClass = row.residual >= 0 ? "up" : "down";
-        const sign = row.residual > 0 ? "+" : "";
-        return `<li><span class="dot"></span><span class="name">${escapeHtml(row.name)}</span><span class="val ${dirClass}">${sign}${row.residual.toFixed(1)}%p</span></li>`;
-      }).join("")
-      : `<li><span class="dot"></span><span class="name">-</span><span class="val">0.0%p</span></li>`;
+        return `
+          <li>
+            <span class="gap-name">${escapeHtml(row.name)}</span>
+            <span class="gap-val ${dirClass}">${sign}${escapeHtml(row.gap.toFixed(1))}%p</span>
+            <span class="gap-track"><span class="gap-bar ${dirClass}" style="width:${width.toFixed(1)}%"></span></span>
+          </li>
+        `;
+      }).join("");
 
     return `
       <div class="pie-compare-wrap">
-        ${currentChartSrc ? `<div class="pie-card"><p class="pie-card-title">현재 비중</p><img class="pie" src="${currentChartSrc}" alt="현재 비중 차트" width="120" height="120"></div>` : ""}
-        ${targetChartSrc ? `<div class="pie-card"><p class="pie-card-title">목표 비중</p><img class="pie" src="${targetChartSrc}" alt="목표 비중 차트" width="120" height="120"></div>` : ""}
-        ${afterChartSrc ? `<div class="pie-card"><p class="pie-card-title">리밸런싱 후 비중</p><img class="pie" src="${afterChartSrc}" alt="리밸런싱 후 비중 차트" width="120" height="120"></div>` : ""}
+        ${buildStackBar("현재 비중", currentMap)}
+        ${buildStackBar("목표 비중", targetMap)}
+        ${buildStackBar("리밸런싱 후 비중", afterMap)}
       </div>
       <div class="pie-wrap">
         <div class="pie-legend-box">
-          <p class="pie-legend-title">리밸런싱 후 비중</p>
-          <ul class="pie-legend">${legends}</ul>
+          <p class="pie-legend-title">자산별 비중 비교</p>
+          <ul class="pie-legend">${legendHtml}</ul>
         </div>
         <div class="target-gap-box">
-          <p class="target-gap-title">리밸런싱 후 목표 대비 차이</p>
-          <ul class="target-gap-list">${targetGapItems}</ul>
-        </div>
-        <div class="residual-box">
-          <p class="target-gap-title">잔여 오차(목표-리밸런싱 후)</p>
-          <ul class="residual-list">${residualBars}</ul>
+          <p class="pie-legend-title">목표 대비 차이(리밸런싱 후)</p>
+          <ul class="target-gap-list">${targetGapHtml}</ul>
         </div>
       </div>
     `;
@@ -1018,10 +781,103 @@
     `;
     const currentStockPct = totalAssetValue > 0 ? ((currentBucketTotals["주식"] || 0) / totalAssetValue) * 100 : 0;
     const currentBondPct = totalAssetValue > 0 ? ((currentBucketTotals["채권"] || 0) / totalAssetValue) * 100 : 0;
+    const currentGoldPct = totalAssetValue > 0 ? ((currentBucketTotals["금/원자재"] || 0) / totalAssetValue) * 100 : 0;
     const afterStockPct = totalAfterValue > 0 ? ((bucketTotals["주식"] || 0) / totalAfterValue) * 100 : 0;
     const afterBondPct = totalAfterValue > 0 ? ((bucketTotals["채권"] || 0) / totalAfterValue) * 100 : 0;
+    const afterGoldPct = totalAfterValue > 0 ? ((bucketTotals["금/원자재"] || 0) / totalAfterValue) * 100 : 0;
     const stockShift = afterStockPct - currentStockPct;
     const bondShift = afterBondPct - currentBondPct;
+    const goldShift = afterGoldPct - currentGoldPct;
+    const driftRecoveryPct = currentAvgDrift > 0
+      ? Math.max(0, Math.min(100, (1 - (afterAvgDiff / currentAvgDrift)) * 100))
+      : 100;
+    const labelByThreshold = (value, goodMax, warnMin)=>{
+      if(value >= warnMin) return "주의";
+      if(value <= goodMax) return "좋음";
+      return "보통";
+    };
+    const concentrationStatus = labelByThreshold(top3Concentration, 55, 70);
+    const maxWeightStatus = labelByThreshold((maxWeightRow?.afterWeightValue || 0), 30, 35);
+    const turnoverStatus = labelByThreshold(turnoverPct, 10, 20);
+    const cashStatus = cashRatio <= 0.5 ? "좋음" : cashRatio <= 1 ? "보통" : "주의";
+
+    const reasonRows = sortedByAbsDiff.slice(0, 3);
+    const reasonRowsHtml = reasonRows.map((row)=>{
+      const diff = row.currentWeightValue - row.targetValue;
+      const sign = diff >= 0 ? "+" : "-";
+      return `<li>${escapeHtml(row.name)} 비중이 목표보다 ${sign}${escapeHtml(Math.abs(diff).toFixed(1))}%p ${diff >= 0 ? "높음" : "낮음"}</li>`;
+    }).join("");
+    const reasonRiskText = currentStockPct > afterStockPct
+      ? "현재 상태는 주식 비중이 상대적으로 높아 변동성이 커질 수 있습니다."
+      : "현재 상태는 목표 대비 자산군 편차가 있어 목표 자산배분 이탈 위험이 있습니다.";
+    const reasonExplanationHtml = `
+      <div class="narrative-box">
+        <h3 class="subsection-title">리밸런싱 필요 이유</h3>
+        <p class="narrative-text">현재 포트폴리오는 다음과 같은 편차가 발생했습니다.</p>
+        <ul class="bullet-list">${reasonRowsHtml || "<li>의미 있는 비중 편차가 없습니다.</li>"}</ul>
+        <p class="narrative-text">${reasonRiskText} 따라서 편차가 큰 자산을 조정해 목표 자산배분으로 복귀하도록 설계했습니다.</p>
+      </div>
+    `;
+    const rebalanceChangeHtml = `
+      <div class="narrative-box">
+        <h3 class="subsection-title">리밸런싱 전후 포트폴리오 변화</h3>
+        <table aria-label="전후 비중 변화">
+          <thead>
+            <tr><th>자산군</th><th class="num">조정 전</th><th class="num">조정 후</th><th class="num">변화</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>주식 비중</td><td class="num">${currentStockPct.toFixed(1)}%</td><td class="num">${afterStockPct.toFixed(1)}%</td><td class="num">${stockShift >= 0 ? "+" : ""}${stockShift.toFixed(1)}%p</td></tr>
+            <tr><td>채권 비중</td><td class="num">${currentBondPct.toFixed(1)}%</td><td class="num">${afterBondPct.toFixed(1)}%</td><td class="num">${bondShift >= 0 ? "+" : ""}${bondShift.toFixed(1)}%p</td></tr>
+            <tr><td>금 비중</td><td class="num">${currentGoldPct.toFixed(1)}%</td><td class="num">${afterGoldPct.toFixed(1)}%</td><td class="num">${goldShift >= 0 ? "+" : ""}${goldShift.toFixed(1)}%p</td></tr>
+          </tbody>
+        </table>
+        <p class="narrative-text">리밸런싱 후 포트폴리오는 ${stockShift < 0 ? "주식 의존도가 낮아지고 안정 자산 비중이 높아져" : "자산군 편차가 줄어"} 전체 변동성 관리에 유리한 구조로 개선됩니다.</p>
+      </div>
+    `;
+    const executionGuideHtml = `
+      <div class="narrative-box">
+        <h3 class="subsection-title">실행 가이드</h3>
+        <ol class="step-list">
+          <li>먼저 매도 주문을 실행합니다.</li>
+          <li>매도 체결 후 매수 주문을 실행합니다.</li>
+          <li>장중 급변 구간을 피하려면 장 마감 근처 또는 다음 거래일 분할 실행을 권장합니다.</li>
+        </ol>
+      </div>
+    `;
+    const investorChecklistHtml = `
+      <div class="narrative-box">
+        <h3 class="subsection-title">투자자 체크 포인트</h3>
+        <ul class="bullet-list">
+          <li>리밸런싱은 보통 6개월~1년 주기로 점검합니다.</li>
+          <li>목표 비중과 실제 비중 차이가 5%p 이상이면 실행을 고려합니다.</li>
+          <li>리밸런싱은 수익률 예측이 아니라 자산배분 관리 전략입니다.</li>
+        </ul>
+      </div>
+    `;
+    const chartInterpretationHtml = `
+      <p class="narrative-text chart-interpretation">리밸런싱 후 포트폴리오는 주식 ${afterStockPct.toFixed(1)}%, 채권 ${afterBondPct.toFixed(1)}%, 금 ${afterGoldPct.toFixed(1)}% 구조로 조정되어 보다 균형 잡힌 자산배분 상태에 가까워집니다.</p>
+    `;
+    const performanceSummaryHtml = `
+      <div class="narrative-box">
+        <h3 class="subsection-title">리밸런싱 성과 요약</h3>
+        <p class="narrative-text">목표 비중 평균 오차: <strong>${currentAvgDrift.toFixed(1)}%p</strong> → <strong>${afterAvgDiff.toFixed(1)}%p</strong></p>
+        <p class="narrative-text">포트폴리오는 목표 자산배분에 약 <strong>${driftRecoveryPct.toFixed(0)}%</strong> 수준으로 복귀했습니다.</p>
+      </div>
+    `;
+    const diagnosisCommentHtml = `
+      <div class="narrative-box">
+        <h3 class="subsection-title">포트폴리오 진단 코멘트</h3>
+        <p class="narrative-text">현재 포트폴리오는 ${currentStockPct > afterStockPct ? "주식 비중이 높아 단기 변동성이 확대될 수 있는 구조이며" : "자산군 편차가 누적되어 목표 비중 이탈이 관찰되며"} 리밸런싱을 통해 채권·금 비중을 보완해 안정성이 개선되는 방향으로 조정되었습니다.</p>
+      </div>
+    `;
+    const page1OutcomeHtml = `
+      <div class="narrative-box">
+        <h3 class="subsection-title">리밸런싱 효과</h3>
+        <p class="narrative-text"><strong>목표 비중 오차</strong> ${currentAvgDrift.toFixed(1)}%p → ${afterAvgDiff.toFixed(1)}%p</p>
+        <p class="narrative-text"><strong>목표 포트폴리오 복귀</strong> 약 ${driftRecoveryPct.toFixed(0)}%</p>
+        <p class="narrative-text">리밸런싱을 통해 포트폴리오는 목표 자산배분에 더 가까운 안정 구조로 복귀합니다.</p>
+      </div>
+    `;
 
     const currentTableRowsHtml = rows.map((row)=>{
       const isBuy = row.diffValue >= 0;
@@ -1047,24 +903,31 @@
         <td class="num">${escapeHtml(row.afterWeightText)}</td>
       </tr>
     `).join("");
-    const sellPlanItemsHtml = sellPlans.length > 0
-      ? `<ul class="trade-list">${sellPlans.map((row)=>
-        `<li><span class="asset">${escapeHtml(row.name)}</span> <span class="qty">${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주 매도</span> <span class="amt">(예상 ${escapeHtml(fmtKRW(row.expectedTradeAmount))})</span></li>`
-      ).join("")}</ul>`
-      : `<p class="muted">매도 대상 종목이 없습니다.</p>`;
-    const buyPlanItemsHtml = buyPlans.length > 0
-      ? `<ul class="trade-list">${buyPlans.map((row)=>
-        `<li><span class="asset">${escapeHtml(row.name)}</span> <span class="qty">${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주 매수</span> <span class="amt">(예상 ${escapeHtml(fmtKRW(row.expectedTradeAmount))})</span></li>`
-      ).join("")}</ul>`
-      : `<p class="muted">매수 대상 종목이 없습니다.</p>`;
+    const buildPlanSummaryList = (plans, verb, maxItems = 5)=>{
+      if(plans.length === 0){
+        return `<p class="muted">${verb} 대상 종목이 없습니다.</p>`;
+      }
+      const sorted = [...plans].sort((a, b)=>b.expectedTradeAmount - a.expectedTradeAmount);
+      const visible = sorted.slice(0, maxItems);
+      const hiddenCount = Math.max(0, sorted.length - visible.length);
+      const itemsHtml = visible.map((row)=>
+        `<li><span class="asset">${escapeHtml(row.name)}</span> <span class="qty">${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주 ${verb}</span> <span class="amt">${escapeHtml(fmtKRW(row.expectedTradeAmount))}</span></li>`
+      ).join("");
+      const moreHtml = hiddenCount > 0 ? `<li class="more">+${hiddenCount} more</li>` : "";
+      return `<ul class="trade-list compact-list ${verb === "매도" ? "sell-list" : "buy-list"}">${itemsHtml}${moreHtml}</ul>`;
+    };
+    const sellPlanItemsHtml = buildPlanSummaryList(sellPlans, "매도", 5);
+    const buyPlanItemsHtml = buildPlanSummaryList(buyPlans, "매수", 5);
     const buyPlansByHighPrice = [...buyPlans].sort((a, b)=>b.currentPriceValue - a.currentPriceValue);
     const executionStepRows = [...sellPlans, ...buyPlansByHighPrice];
-    const executionSteps = executionStepRows.map((row, idx)=>
-      `<li><span class="step-num">${idx + 1}</span><span class="step-text">${escapeHtml(row.name)} ${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주 ${escapeHtml(row.decision)}</span></li>`
+    const executionSteps = executionStepRows.map((row, idx)=>{
+      const action = row.decision === "매도" ? "매도" : "매수";
+      const actionClass = action === "매도" ? "sell" : "buy";
+      return `<li><span class="step-label">${idx + 1}</span><span class="step-text"><span class="order-action ${actionClass}">${action}</span> ${escapeHtml(row.name)} ${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주</span></li>`;
+    }
     ).join("");
-    const executionOrderClass = executionStepRows.length >= 8 ? "exec-order compact" : "exec-order";
     const executionOrderHtml = executionSteps
-      ? `<ul class="${executionOrderClass}">${executionSteps}</ul>`
+      ? `<ol class="exec-order step-order">${executionSteps}</ol>`
       : `<p class="muted">실행이 필요한 주문이 없습니다.</p>`;
     const resultSummaryHtml = `
       <ul class="result-summary">
@@ -1073,27 +936,20 @@
         <li>가장 큰 조정 필요 종목은 ${escapeHtml(topDiff?.name || "-")}이었습니다.</li>
       </ul>
     `;
-    const quickTradeItems = (plans, verb)=>plans.slice(0, 4).map((row)=>
-      `<li><span class="asset">${escapeHtml(row.name)}</span><span class="qty">${escapeHtml(fmt(Math.abs(row.tradeQtyValue)))}주 ${verb}</span><span class="amt">${escapeHtml(fmtKRW(row.expectedTradeAmount))}</span></li>`
-    ).join("");
-    const actionSummaryHtml = `
-      <section class="action-hero">
-        <div class="action-top">
-          <div class="action-kpi"><strong>매도 ${sellCount}건</strong> / <strong>매수 ${buyCount}건</strong></div>
-          <div class="action-meta">거래 발생 종목 ${adjustedCount}개 · 예상 잔여 현금 ${escapeHtml(fmtKRW(cashResidual))}</div>
-        </div>
-        <div class="action-grid">
-          <div class="action-box sell">
-            <p class="action-title">예상 매도 목록</p>
-            ${quickTradeItems(sellPlans, "매도") ? `<ul class="action-list">${quickTradeItems(sellPlans, "매도")}</ul>` : `<p class="muted">매도 대상 없음</p>`}
-          </div>
-          <div class="action-box buy">
-            <p class="action-title">예상 매수 목록</p>
-            ${quickTradeItems(buyPlans, "매수") ? `<ul class="action-list">${quickTradeItems(buyPlans, "매수")}</ul>` : `<p class="muted">매수 대상 없음</p>`}
-          </div>
-        </div>
-      </section>
+    const weightComparisonRowsHtml = sortedByAbsDiff.map((row)=>{
+      const diff = row.targetValue - row.currentWeightValue;
+      const action = diff > 0 ? "매수" : diff < 0 ? "매도" : "유지";
+      const sign = diff > 0 ? "+" : "";
+      return `
+      <tr>
+        <td class="left">${escapeHtml(row.name)}</td>
+        <td class="num">${escapeHtml(row.currentWeightText)}</td>
+        <td class="num">${escapeHtml(row.targetText)}</td>
+        <td class="num">${sign}${escapeHtml(diff.toFixed(1))}%p</td>
+        <td>${action}</td>
+      </tr>
     `;
+    }).join("");
     const largestSell = [...sellPlans].sort((a, b)=>b.expectedTradeAmount - a.expectedTradeAmount)[0];
     const largestBuy = [...buyPlans].sort((a, b)=>b.expectedTradeAmount - a.expectedTradeAmount)[0];
     const strategyHeadline = largestSell && largestBuy
@@ -1118,27 +974,33 @@
       .map((row)=>({ name: row.name, gap: row.afterWeightValue - row.targetValue }))
       .sort((a, b)=>Math.abs(b.gap) - Math.abs(a.gap))
       .slice(0, 5);
-    const residualRows = [...rows]
-      .map((row)=>({ name: row.name, residual: row.targetValue - row.afterWeightValue }))
-      .sort((a, b)=>Math.abs(b.residual) - Math.abs(a.residual))
-      .slice(0, 6);
+    const targetGapSummaryHtml = `
+      <div class="narrative-box">
+        <h3 class="subsection-title">목표 대비 차이 (상위)</h3>
+        <ul class="bullet-list">
+          ${targetGapRows.length > 0
+            ? targetGapRows.map((row)=>{
+              const sign = row.gap > 0 ? "+" : "";
+              return `<li>${escapeHtml(row.name)} ${sign}${escapeHtml(row.gap.toFixed(1))}%p</li>`;
+            }).join("")
+            : "<li>유의미한 차이가 없습니다.</li>"}
+        </ul>
+      </div>
+    `;
     const pieChartHtml = buildPieChartSvg(
       rows.map((row)=>({ name: row.name, value: row.currentWeightValue })),
       rows.map((row)=>({ name: row.name, value: row.targetValue })),
-      rows.map((row)=>({ name: row.name, value: row.afterWeightValue })),
-      targetGapRows,
-      residualRows
+      rows.map((row)=>({ name: row.name, value: row.afterWeightValue }))
     );
     const effectSummaryHtml = `
       <div class="effect-card">
-        <p class="effect-title">리밸런싱 효과</p>
         <div class="effect-grid">
           <div class="effect-box">
-            <p class="k">목표 대비 평균 오차 (Before)</p>
+            <p class="k">목표 대비 평균 오차 (조정 전)</p>
             <p class="v before">${currentAvgDrift.toFixed(1)}%p</p>
           </div>
           <div class="effect-box">
-            <p class="k">목표 대비 평균 오차 (After)</p>
+            <p class="k">목표 대비 평균 오차 (조정 후)</p>
             <p class="v after">${afterAvgDiff.toFixed(1)}%p</p>
           </div>
           <div class="effect-box">
@@ -1149,13 +1011,7 @@
         <p class="effect-note">목표 자산배분 복귀 수준: ${afterAvgDiff <= 0.5 ? "매우 양호" : afterAvgDiff <= 1.5 ? "양호" : "추가 조정 권장"}</p>
       </div>
     `;
-    const isVeryLargePortfolio = rows.length >= 14;
-    const reportClassNames = [
-      "report",
-      "report-container",
-      "report-dense",
-      isVeryLargePortfolio ? "report-xdense" : ""
-    ].filter(Boolean).join(" ");
+    const reportClassNames = ["report", "report-container"].join(" ");
 
     const reportHtml = `<!doctype html>
 <html lang="ko">
@@ -1164,1231 +1020,531 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>리밸런싱 계산 결과 보고서</title>
   <style>
-    @page { size: A4 portrait; margin: 8mm 20mm 28mm 20mm; }
-    :root { color-scheme: light; }
+    @page { size: A4 portrait; margin: 4mm 8mm 10mm 8mm; }
+    :root {
+      color-scheme: light;
+      --line: #dbe2ea;
+      --head: #f4f7fb;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #1e3a8a;
+      --buy: #15803d;
+      --sell: #b91c1c;
+      --accent: #0f172a;
+    }
     body {
       margin: 0;
       background: #fff;
-      color: #111;
-      font-family: Arial, "Noto Sans KR", sans-serif;
-      font-size: 13px;
-      line-height: 1.45;
+      color: var(--text);
+      font-family: "Pretendard", "SUIT", "Noto Sans KR", Arial, sans-serif;
+      font-size: 12px;
+      line-height: 1.5;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
-    }
-    :root {
-      --primary: #1f3a8a;
-      --buy: #2563eb;
-      --sell: #dc2626;
-      --neutral: #6b7280;
-      --table-head: #f3f4f6;
-      --text-main: #111827;
-      --text-muted: #6b7280;
-      --text-soft: #475569;
     }
     .report,
     .report-container {
       width: 100%;
-      max-width: 100%;
+      max-width: 720px;
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      overflow: visible;
     }
-    .report > :first-child {
-      margin-top: 0 !important;
-      page-break-before: auto !important;
-      break-before: auto !important;
+    .report-container { margin: 0 auto; }
+    .report-page {
+      break-inside: auto;
+      page-break-inside: auto;
     }
-    .header {
-      border-left: 6px solid var(--primary);
-      border-bottom: 2px solid #111;
-      padding-left: 10px;
-      padding-bottom: 10px;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 14px;
+    .report-section {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      break-inside: auto;
+      page-break-inside: auto;
     }
-    .header-main{
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-    .title {
-      font-size: 22px;
-      font-weight: 700;
-      margin: 0 0 2px;
-      line-height: 1.3;
-      color: var(--primary);
-    }
-    .title-sub{
-      margin: 0 0 8px;
-      font-size: 12px;
-      color: #64748b;
-      font-weight: 600;
-    }
-    .brand-sub {
-      margin: 0 0 4px;
-      font-size: 12px;
-      color: var(--neutral);
-      font-weight: 600;
-      letter-spacing: .02em;
-    }
-    .action-hero{
-      border: 1px solid #cdd6ea;
-      background: #f8fbff;
-      border-radius: 12px;
+    .content-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
       padding: 10px 12px;
-      margin-bottom: 12px;
-      break-inside: avoid;
+      background: #fff;
+      break-inside: avoid-page;
       page-break-inside: avoid;
     }
-    .action-top{
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 10px;
-      margin-bottom: 8px;
-      border-bottom: 1px solid #dbe4f3;
-      padding-bottom: 7px;
+    .keep-together {
+      break-inside: avoid-page;
+      page-break-inside: avoid;
     }
-    .action-kpi{
-      font-size: 16px;
-      font-weight: 800;
-      color: #0f172a;
-    }
-    .action-meta{
-      font-size: 11px;
-      color: #475569;
-      text-align: right;
-    }
-    .action-grid{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .action-box{
-      border: 1px solid #d7deea;
-      background: #fff;
-      border-radius: 10px;
-      padding: 8px;
-    }
-    .action-box.sell{
-      border-color: #f3caca;
-      background: #fff7f7;
-    }
-    .action-box.buy{
-      border-color: #c7dafb;
-      background: #f4f9ff;
-    }
-    .action-title{
-      margin: 0 0 6px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #1f2937;
-    }
-    .action-list{
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: grid;
-      gap: 4px;
-      font-size: 11.5px;
-    }
-    .action-list li{
-      display: grid;
-      grid-template-columns: minmax(0,1fr) auto auto;
-      gap: 6px;
-      align-items: center;
-    }
-    .action-list .asset{
-      font-weight: 700;
-      color: #0f172a;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .action-list .qty{ color: #334155; }
-    .action-list .amt{
-      color: #475569;
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;
-    }
-    .meta { font-size: 13px; color: #444; line-height: 1.55; }
-    .meta div { margin-bottom: 3px; }
-    .summary {
-      width: 100%;
-      border-collapse: collapse;
+    .header {
+      border-bottom: 2px solid #1f2937;
+      padding-bottom: 10px;
       margin-bottom: 12px;
     }
-    .summary td {
-      width: 25%;
-      border: 1px solid #e5e7eb;
-      padding: 13px 11px;
-      vertical-align: top;
-      background: #f8fafc;
-      border-top: 3px solid #d1d5db;
-    }
-    .summary td.sell { border-top-color: #ef9a9a; }
-    .summary td.buy { border-top-color: #93c5fd; }
-    .summary td.primary { border-top-color: #93a8dc; }
-    .summary td.neutral { border-top-color: #b6c2d1; }
-    .summary-label { font-size: 12px; color: #666; margin-bottom: 6px; }
-    .summary-value { font-size: 22px; font-weight: 800; color: var(--primary); line-height: 1.15; }
-    .summary-value.sell { color: var(--sell); }
-    .summary-value.buy { color: var(--buy); }
-    .summary-value.cash { color: var(--neutral); }
-    .summary-value.count { color: var(--primary); }
-    .section,
-    .report-section {
-      margin-bottom: 24px;
-      overflow: visible;
-      padding-left: 0;
-      padding-right: 0;
-      box-sizing: border-box;
-      page-break-inside: auto;
-      break-inside: auto;
-    }
-    .page-break{
-      page-break-before: auto;
-      break-before: auto;
-    }
+    .title { margin: 0; color: var(--primary); font-size: 22px; }
+    .title-sub { margin: 2px 0 10px; color: #64748b; }
+    .meta { color: #334155; }
     .section-title {
-      font-size: 16px;
-      font-weight: 700;
       margin: 0 0 10px;
-      margin-left: 0;
-      padding-left: 16px;
-      padding-bottom: 6px;
       border-bottom: 1px solid #1f2937;
-      color: var(--text-main);
-      page-break-after: avoid;
-      break-after: avoid-page;
+      padding-bottom: 6px;
+      font-size: 16px;
+      color: var(--primary);
     }
-    .section + .section { padding-top: 4px; }
-    .subsection-title{
-      margin: 0 0 10px;
-      font-size: 14px;
-      color: var(--text-main);
-      font-weight: 700;
+    .subsection-title {
+      margin: 0 0 8px;
+      font-size: 13px;
+      color: #1f2937;
     }
     table {
       width: 100%;
       border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    thead { display: table-header-group; }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px;
+      vertical-align: top;
+      white-space: normal;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      height: auto;
+      line-height: 1.45;
+    }
+    th {
+      background: var(--head);
+      font-weight: 600;
+      color: #334155;
+      text-align: center;
+    }
+    td.left { text-align: left; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    th.num { text-align: center; font-variant-numeric: tabular-nums; }
+    tr { break-inside: avoid; page-break-inside: avoid; }
+    .table-compact {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .table-compact th,
+    .table-compact td {
+      padding: 8px;
+      white-space: normal !important;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      height: auto;
+    }
+    .current-table th {
+      white-space: nowrap !important;
+    }
+    .table-compact td.left { overflow-wrap: anywhere; }
+    .metrics-table {
       table-layout: auto;
       font-size: 12px;
     }
-    th, td {
-      padding: 10px 12px;
-      text-align: center;
-      word-break: keep-all;
-      overflow-wrap: anywhere;
-      vertical-align: middle;
-      border-bottom: 1px solid #e5e7eb;
+    .metrics-table th,
+    .metrics-table td {
+      padding: 8px;
     }
-    th { background: #f8fafc; font-weight: 600; color: var(--text-muted); }
-    td { color: var(--text-soft); }
-    tbody tr:nth-child(even){ background: #fafafa; }
-    td.left { text-align: left; }
-    th.left { text-align: center; }
-    .risk-card table td.left{
-      white-space: normal;
-      word-break: keep-all;
-      overflow-wrap: normal;
-      line-break: auto;
-    }
-    .current-table thead th {
-      text-align: center;
-      background: #f1f5f9;
-      white-space: normal;
-      overflow-wrap: anywhere;
-    }
-    .after-table thead th {
-      text-align: center;
-      background: #f1f5f9;
-    }
-    .current-table tbody td.left { text-align: left; }
-    .current-table td.diff{
-      white-space: normal;
-      overflow-wrap: anywhere;
-      word-break: keep-all;
-      line-height: 1.3;
-      font-size: 10.5px;
-      text-align: center;
-    }
-    .current-table td.diff .dir-tag{
-      margin-right: 2px;
-    }
-    td.num { text-align: right; font-variant-numeric: tabular-nums; }
-    th.num { text-align: right; font-variant-numeric: tabular-nums; }
-    .current-table td.num,
-    .after-table td.num,
-    .drift-table td.num,
-    .score-grid td.score {
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-    }
-    td.diff.pos { color: #16a34a; font-weight: 800; }
-    td.diff.neg { color: var(--sell); font-weight: 700; }
-    td.diff { white-space: nowrap; font-size: 11px; }
-    .drift-table th:last-child,
-    .drift-table td:last-child{
-      width: 36%;
-      min-width: 120px;
-    }
-    .drift-table td.diff{
-      white-space: normal;
-      overflow-wrap: anywhere;
-      word-break: keep-all;
-      line-height: 1.2;
-      text-align: right;
-      font-size: 10.5px;
-    }
-    .dir-tag{
-      display: inline-block;
-      margin-right: 4px;
-      padding: 1px 5px;
-      border-radius: 999px;
-      border: 1px solid #cbd5e1;
-      background: #f8fafc;
-      font-size: 10px;
-      font-weight: 700;
-      color: #334155;
-      vertical-align: baseline;
-    }
-    .dir-tag.pos{
-      border-color: #bfdbfe;
-      background: #eff6ff;
-      color: #1d4ed8;
-    }
-    .dir-tag.neg{
-      border-color: #fecaca;
-      background: #fff1f2;
-      color: #b91c1c;
-    }
-    tbody tr { break-inside: avoid; page-break-inside: avoid; }
-    thead { display: table-header-group; }
-    .trade-box-wrap {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 8px 0;
-      margin-left: 0;
-      margin-right: 0;
-    }
-    .trade-box-wrap td {
-      width: 50%;
-      border: 1px solid #ddd;
-      padding: 12px;
-      vertical-align: top;
+    .metrics-table td.metric-name,
+    .metrics-table td.metric-desc {
       text-align: left;
     }
-    .trade-box-wrap td.sell-box { background: #fef2f2; }
-    .trade-box-wrap td.buy-box { background: #eff6ff; }
-    .trade-title { font-size: 15px; font-weight: 700; margin: 0 0 8px; }
-    .trade-title.sell { color: var(--sell); }
-    .trade-title.buy { color: var(--buy); }
-    .trade-list {
-      margin: 0;
-      padding-left: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    .metrics-table td.metric-value {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
     }
-    .trade-list li { margin-bottom: 0; line-height: 1.5; }
-    .trade-list .asset{ font-weight: 700; color: #0f172a; }
-    .trade-list .qty{ color: #334155; }
-    .trade-list .amt{ color: #475569; }
-    .exec-heading {
-      margin: 19px 0 16px;
-      font-size: 13px;
-      font-weight: 700;
+    .metrics-table td.metric-status { text-align: center; }
+    .metrics-table td.metric-desc {
+      white-space: normal !important;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+      line-height: 1.5;
     }
-    .exec-order {
-      margin: 0;
-      padding-left: 0;
-      font-size: 12.5px;
-      list-style: none;
+    .analysis-compare-table {
+      font-size: 12px;
+      line-height: 1.5;
     }
-    .exec-order li {
-      margin-bottom: 14px;
-      line-height: 1.45;
-      display: grid;
-      grid-template-columns: 26px minmax(0, 1fr);
-      align-items: start;
-      column-gap: 8px;
+    .analysis-compare-table th,
+    .analysis-compare-table td {
+      padding: 8px;
     }
-    .exec-order.compact{
+    .summary td { width: 25%; }
+    .summary-label { color: #64748b; font-size: 11px; }
+    .summary-value { margin-top: 3px; font-size: 18px; font-weight: 700; }
+    .summary-value.sell { color: var(--sell); }
+    .summary-value.buy { color: var(--buy); }
+    .summary-value.cash { color: var(--accent); }
+    .summary-value.count { color: var(--accent); }
+    .two-col {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px 12px;
-      align-items: start;
+      gap: 16px;
     }
-    .exec-order.compact li{
-      margin-bottom: 0;
-    }
-    .exec-order .step-num{
-      font-variant-numeric: tabular-nums;
-      font-weight: 700;
-      color: #0f172a;
-      text-align: center;
-      display: inline-flex;
-      width: 22px;
-      height: 22px;
-      align-items: center;
-      justify-content: center;
-      border-radius: 999px;
-      background: #e2e8f0;
-      white-space: nowrap;
-      font-size: 11.5px;
-    }
-    .exec-order .step-text{
-      display: inline-block;
-      min-width: 0;
-    }
-    .effect-card{
-      border: 1px solid #d2dbea;
-      border-radius: 10px;
-      background: #f8fbff;
-      padding: 11px;
-      margin-top: 10px;
-      break-inside: avoid-page;
-      page-break-inside: avoid;
-    }
-    .effect-title{
-      margin: 0 0 10px;
-      font-size: 13px;
-      font-weight: 800;
-      color: #1f2937;
-    }
-    .effect-grid{
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-    .effect-box{
-      border: 1px solid #d8e2f0;
-      border-radius: 8px;
-      padding: 8px;
-      background: #fff;
-    }
-    .effect-box .k{
-      margin: 0 0 4px;
-      font-size: 10.5px;
-      color: #64748b;
-      font-weight: 700;
-    }
-    .effect-box .v{
+    .panel { padding: 0; min-height: 90px; }
+    .trade-list, .exec-order, .result-summary {
       margin: 0;
-      font-size: 16px;
-      font-weight: 800;
-      color: #0f172a;
-      font-variant-numeric: tabular-nums;
-    }
-    .effect-box .v.before{ color: #b91c1c; }
-    .effect-box .v.after{ color: #0369a1; }
-    .effect-box .v.gain{ color: #1d4ed8; }
-    .effect-note{
-      margin: 10px 0 0;
-      font-size: 11.5px;
-      color: #334155;
-      font-weight: 600;
-      break-before: avoid-page;
-      page-break-before: avoid;
-    }
-    .after-visuals{
-      break-inside: avoid-page;
-      page-break-inside: avoid;
-    }
-    .result-summary {
-      margin: 8px 0 0;
       padding-left: 18px;
-      color: #2f3b4b;
-      font-size: 12.5px;
-      line-height: 1.55;
     }
-    .result-summary li { margin-bottom: 6px; }
-    .dashboard-grid,
-    .risk-grid{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      align-items: start;
-      grid-auto-rows: auto;
-      width: 100%;
+    .trade-list li, .exec-order li, .result-summary li { margin-bottom: 4px; }
+    .trade-list .asset { font-weight: 700; }
+    .trade-list.sell-list .qty { color: var(--sell); font-weight: 700; }
+    .trade-list.buy-list .qty { color: var(--buy); font-weight: 700; }
+    .trade-list.compact-list .more { color: var(--muted); font-style: italic; }
+    .exec-heading { margin: 10px 0 6px; font-weight: 700; }
+    .strategy-note {
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      padding: 10px;
     }
-    .dashboard-grid .dashboard-card{
-      min-height: 0;
-      padding: 16px;
-      gap: 6px;
-    }
-    .dashboard-grid .kpi-grid{
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-    .dashboard-grid .kpi-card{
-      padding: 8px;
-    }
-    .dashboard-card,
-    .risk-card{
-      border: 1px solid #e5e7eb;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 12px;
-      font-size: 12.5px;
-      line-height: 1.5;
-      height: auto;
-      min-height: 0;
-      break-inside: auto;
-      page-break-inside: auto;
-      overflow: visible;
-      box-sizing: border-box;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      gap: 10px;
-    }
-    .risk-card strong{
-      color: var(--text-main);
-      font-weight: 800;
-    }
-    .kpi-grid{
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 4px;
-      margin-bottom: 2px;
-    }
-    .kpi-card{
-      border: 1px solid #e5e7eb;
-      background: #ffffff;
-      border-radius: 10px;
-      padding: 8px;
-      min-height: 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 2px;
-    }
-    .metric-label,
-    .kpi-label{
-      margin: 0 0 2px;
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 500;
-      line-height: 1.1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .metric-value,
-    .kpi-value{
-      margin: 0;
-      font-size: 13px;
-      line-height: 1.15;
-      font-weight: 700;
-      color: var(--text-main);
-      letter-spacing: 0;
-    }
-    .kpi-sub{
-      margin: 0;
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.1;
-      min-height: 0;
-    }
-    .kpi-sub.empty{
-      visibility: hidden;
-    }
-    .info-box{
-      background: #f9fafb;
-      font-size: 13px;
-      color: var(--text-soft);
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-    }
-    .info-box div + div{
-      margin-top: 4px;
-    }
-    .risk-summary{
-      margin: 0;
-      border: none;
-      line-height: 1.5;
-    }
-    .metric-hint{
-      margin: 5px 0 0;
-      font-size: 13px;
-    }
-    .card-brief{
-      margin: 0 0 8px;
-      line-height: 1.45;
-      color: var(--text-soft);
-    }
-    .risk-note{
-      margin-top: 6px;
-      color: #6b7280;
+    .strategy-title { margin: 0 0 6px; font-size: 13px; }
+    .strategy-line { margin: 0 0 4px; color: #334155; }
+    .strategy-line:last-child { margin-bottom: 0; }
+    .report-disclaimer {
+      margin-top: 12px;
+      border-top: 1px dashed #cbd5e1;
+      padding-top: 8px;
+      color: #475569;
       font-size: 11px;
     }
-    .risk-pill{
-      display: inline-flex;
-      align-items: center;
-      padding: 1px 6px;
-      border: 1px solid #d1d5db;
-      border-radius: 999px;
-      font-size: 10.5px;
-      font-weight: 700;
-      color: #374151;
-      background: #ffffff;
-      margin-left: 4px;
+    .effect-card { margin-top: 10px; }
+    .effect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .effect-box { border-top: 1px solid #d8e2f0; padding: 6px 0; min-height: 90px; }
+    .effect-box .k { margin: 0 0 4px; color: #64748b; font-size: 12px; font-weight: 700; }
+    .effect-box .v { margin: 0; font-size: 14px; font-weight: 700; }
+    .effect-note { margin: 8px 0 0; color: #334155; font-size: 12px; font-weight: 700; }
+    .pie-compare-wrap {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
     }
-    .bucket-bar-box{
-      margin: 2px 0 8px;
-      padding: 8px 10px;
-      border-radius: 8px;
-      background: #f8fafc;
-      border: 1px solid #e5e7eb;
-    }
-    .bucket-stack-track{
-      width: 100%;
-      height: 12px;
-      border-radius: 999px;
-      background: #e5e7eb;
-      overflow: hidden;
+    .pie-card { border: 1px solid var(--line); padding: 6px; text-align: center; }
+    .pie-card-title { margin: 0 0 6px; font-size: 11px; font-weight: 700; }
+    .pie { width: 100%; max-width: 102px; display: block; margin: 0 auto; }
+    .alloc-bar-track {
       display: flex;
+      width: 100%;
+      height: 16px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #e5e7eb;
+      border: 1px solid #d1d5db;
     }
-    .bucket-stack-segment{
+    .alloc-seg {
       display: block;
       height: 100%;
       min-width: 2px;
     }
-    .bucket-stack-legend{
-      list-style: none;
-      margin: 8px 0 0;
-      padding: 0;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5px 10px;
-      font-size: 11.5px;
-    }
-    .bucket-stack-legend li{
-      display: grid;
-      grid-template-columns: 10px 1fr auto;
-      gap: 6px;
-      align-items: center;
-      min-width: 0;
-    }
-    .bucket-stack-legend .dot{
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      display: inline-block;
-    }
-    .bucket-stack-legend .name{
-      color: #334155;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .bucket-stack-legend .pct{
-      color: #334155;
-      font-variant-numeric: tabular-nums;
-      text-align: right;
-      white-space: nowrap;
-    }
-    .score-grid{
-      table-layout: auto;
-    }
-    .score-grid td{
-      white-space: normal;
-      overflow-wrap: anywhere;
-      word-break: keep-all;
-    }
-    .pie-compare-wrap{
-      margin-top: 10px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      break-inside: avoid;
-      page-break-inside: avoid;
-    }
-    .pie-card{
-      border: 1px solid #d6dce7;
-      border-radius: 10px;
-      background: #f8fafc;
-      padding: 8px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .pie-card-title{
-      margin: 0 0 6px;
-      font-size: 11.5px;
+    .alloc-bar-total {
+      margin: 6px 0 0;
+      font-size: 10px;
+      color: #64748b;
       font-weight: 700;
-      color: #334155;
+      text-align: right;
     }
     .pie-wrap {
-      margin-top: 10px;
-      border: 1px solid #ddd;
-      padding: 10px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-      align-items: stretch;
-      break-inside: auto;
-      page-break-inside: auto;
-    }
-    .pie {
-      width: 130px;
-      height: 130px;
-      flex: 0 0 auto;
-      display: block;
-      margin: 0 auto;
-      object-fit: contain;
-    }
-    .pie-legend-box{
-      border: 1px solid #d1d5db;
-      background: #f8fafc;
-      border-radius: 8px;
+      margin-top: 8px;
+      border: 1px solid var(--line);
       padding: 8px;
-      align-self: stretch;
-      width: auto;
-      min-width: 0;
-      height: auto;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
     }
-    .pie-legend-title,
-    .target-gap-title{
-      margin: 0 0 8px;
-      font-size: 12px;
-      color: #334155;
-      font-weight: 700;
-      line-height: 1.3;
-      letter-spacing: 0;
+    .pie-legend-box {
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      padding: 8px;
     }
+    .pie-legend-title { margin: 0 0 8px; font-size: 11.5px; }
     .pie-legend {
+      list-style: none;
       margin: 0;
       padding: 0;
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 11.5px;
-      line-height: 1.3;
-      width: 100%;
+      display: grid;
+      gap: 4px;
+      font-size: 11px;
     }
     .pie-legend li {
       display: grid;
-      grid-template-columns: 10px 1fr auto;
-      align-items: center;
+      grid-template-columns: 10px minmax(0, 1fr) auto;
       gap: 6px;
-      min-height: 18px;
+      align-items: center;
     }
     .pie-legend .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      display: inline-block;
-    }
-    .pie-legend .name { color: #1f2937; }
-    .pie-legend .pct { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--text-main); text-align: right; }
-    .target-gap-box{
-      border: 1px solid #d1d5db;
-      background: #f8fafc;
-      border-radius: 8px;
-      padding: 8px;
-      align-self: stretch;
-      width: auto;
-      min-width: 0;
-      height: auto;
-      display: flex;
-      flex-direction: column;
-    }
-    .target-gap-list,
-    .residual-list{
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 11.5px;
-      line-height: 1.3;
-      width: 100%;
-    }
-    .target-gap-list li,
-    .residual-list li{
-      display: grid;
-      grid-template-columns: 10px 1fr auto;
-      align-items: center;
-      gap: 6px;
-      min-height: 18px;
-    }
-    .target-gap-list .dot,
-    .residual-list .dot{
-      width: 10px;
-      height: 10px;
+      inline-size: 10px;
+      block-size: 10px;
       border-radius: 999px;
       background: #94a3b8;
       display: inline-block;
     }
-    .target-gap-list .name,
-    .residual-list .name{
-      color: var(--text-soft);
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .chart-empty { border: 1px dashed #cbd5e1; padding: 10px; color: #64748b; }
+    .muted { margin: 0; color: #64748b; }
+    .narrative-box { padding: 8px 0; margin-top: 16px; }
+    .narrative-text {
+      margin: 0 0 8px;
+      color: #334155;
+      line-height: 1.6;
     }
-    .target-gap-list .gap,
-    .residual-list .val{
-      font-variant-numeric: tabular-nums;
+    .narrative-text:last-child { margin-bottom: 0; }
+    .bullet-list, .step-list {
+      margin: 0 0 8px;
+      padding-left: 18px;
+      color: #334155;
+      line-height: 1.55;
+    }
+    .bullet-list li, .step-list li { margin-bottom: 4px; }
+    .chart-interpretation { margin-top: 10px; }
+    .step-order {
+      list-style: none;
+      padding-left: 0;
+    }
+    .step-order li {
+      margin-bottom: 6px;
+      border-bottom: 1px solid #eef2f7;
+      padding-bottom: 4px;
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr);
+      gap: 8px;
+      align-items: baseline;
+    }
+    .step-label { color: #334155; font-weight: 700; }
+    .step-text { color: #0f172a; font-weight: 600; }
+    .order-action {
+      display: inline-block;
+      margin-right: 6px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      font-size: 10px;
       font-weight: 700;
-      color: var(--text-main);
-      white-space: nowrap;
-      text-align: right;
-    }
-    .target-gap-list .gap.up{ color: #16a34a; }
-    .target-gap-list .gap.down{ color: #dc2626; }
-    .residual-box{
       border: 1px solid #d1d5db;
-      background: #f8fafc;
-      border-radius: 8px;
-      padding: 8px;
-      align-self: stretch;
-      width: auto;
-      min-width: 0;
-      height: auto;
-      display: flex;
-      flex-direction: column;
+      color: #334155;
+      background: #fff;
     }
-    .pie-legend-box .pie-legend,
-    .target-gap-box .target-gap-list,
-    .residual-box .residual-list{
-      flex: 1 1 auto;
-      align-content: start;
+    .order-action.sell { border-color: #fecaca; color: #991b1b; background: #fef2f2; }
+    .order-action.buy { border-color: #bbf7d0; color: #166534; background: #f0fdf4; }
+    .status-chip {
+      display: inline-block;
+      padding: 1px 8px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      border: 1px solid #d1d5db;
+      color: #334155;
+      background: #fff;
     }
-    .residual-list .val.up{ color: #1d4ed8; }
-    .residual-list .val.down{ color: #b91c1c; }
-    .score-grid{
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-    }
-    .score-grid td{
-      border: 1px solid #d8dee8;
+    .status-chip.good { border-color: #bfdbfe; color: #1d4ed8; background: #eff6ff; }
+    .status-chip.mid { border-color: #fde68a; color: #92400e; background: #fffbeb; }
+    .status-chip.warn { border-color: #fed7aa; color: #9a3412; background: #fff7ed; }
+    .target-gap-box {
+      border: 1px solid var(--line);
       background: #ffffff;
-      text-align: left;
-      padding: 7px 8px;
+      padding: 8px;
     }
-    .score-grid td.score{
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-      font-weight: 800;
-      color: #0f172a;
-    }
-    .score-grid td.status{
-      text-align: center;
-      width: 68px;
-      font-weight: 700;
-      color: #334155;
-      background: #f8fafc;
-    }
-    .score-grid td.desc{
-      text-align: left;
-      color: #475569;
-      font-size: 11px;
-      width: auto;
-      white-space: normal;
-      overflow-wrap: anywhere;
-      word-break: keep-all;
-    }
-    .score-grid tr.total td{
-      background: #eef2ff;
-      border-color: #c7d2fe;
-      font-weight: 800;
-    }
-    .score-grid tr.total td,
-    .score-grid tr.total td.score,
-    .score-grid tr.total td.status,
-    .score-grid tr.total td.desc{
-      text-align: left;
-      font-size: 12px;
-      color: #1f2937;
-      font-weight: 800;
-    }
-    .score-grid tr.total td.score{ text-align: right; }
-    .score-grid tr.total td.status{ text-align: center; }
-    .score-basis{
-      margin: 8px 0 0;
-      font-size: 11px;
-      color: #475569;
-    }
-    .score-section .risk-card{
-      min-height: 0;
-    }
-    .strategy-note{
-      margin-top: 8px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      background: #f8fafc;
-      padding: 9px 10px;
-      font-size: 12px;
-      color: #334155;
-      line-height: 1.5;
-    }
-    .strategy-title{
-      margin: 0 0 5px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #1f2937;
-    }
-    .strategy-line{
-      margin: 0 0 4px;
-    }
-    .strategy-line:last-child{
-      margin-bottom: 0;
-    }
-    .report-disclaimer{
-      margin-top: 10px;
-      border-top: 1px dashed #cbd5e1;
-      padding-top: 8px;
-      color: #475569;
-      font-size: 11.5px;
-      line-height: 1.65;
-      letter-spacing: 0;
-    }
-    .chart-empty {
-      border: 1px dashed #cbd5e1;
-      padding: 12px;
-      color: #64748b;
-      font-size: 12px;
-    }
-    .report-dense .report-section{
-      margin-bottom: 20px;
-    }
-    .report-dense .dashboard-card,
-    .report-dense .risk-card{
-      padding: 14px;
-      gap: 8px;
-    }
-    .report-dense .risk-grid{
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
-    .report-dense .kpi-card{
-      padding: 7px;
-      min-height: 36px;
-    }
-    .report-dense th,
-    .report-dense td{
-      padding: 8px 9px;
-      font-size: 11.5px;
-    }
-    .report-dense .trade-list{
-      gap: 4px;
-    }
-    .report-dense .pie-wrap{
-      gap: 8px;
-    }
-    .report-dense .pie{
-      width: 120px;
-      height: 120px;
-    }
-    .report-xdense .risk-grid{
-      gap: 14px;
-    }
-    .report-xdense .dashboard-card,
-    .report-xdense .risk-card{
-      padding: 12px;
+    .target-gap-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
       gap: 6px;
-    }
-    .report-xdense .subsection-title{
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-    .report-xdense th,
-    .report-xdense td{
-      padding: 7px 8px;
       font-size: 11px;
     }
-    .report-xdense .kpi-grid{
-      gap: 3px;
+    .target-gap-list li {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 6px;
+      align-items: center;
     }
-    .report-xdense .kpi-card{
-      padding: 6px;
-      min-height: 34px;
+    .gap-name {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      color: #334155;
+      font-weight: 600;
     }
-    .muted { margin: 0; color: #666; }
-    @media print {
-      html, body { width: 210mm; }
-      .report { padding-bottom: 0; }
-      .report-section{
-        padding-left: 16px;
-        padding-right: 16px;
-        overflow: visible;
-        box-sizing: border-box;
-      }
-      .risk-grid{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-        align-items: stretch;
-        page-break-inside: auto;
-        break-inside: auto;
-      }
-      .risk-card{
-        margin: 0;
-        page-break-inside: auto;
-        break-inside: auto;
-      }
-      .risk-card table,
-      .kpi-grid,
-      .trade-box-wrap{
-        page-break-inside: auto;
-        break-inside: auto;
-      }
+    .gap-val {
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      white-space: nowrap;
     }
+    .gap-val.up { color: #2563eb; }
+    .gap-val.down { color: #b91c1c; }
+    .gap-track {
+      grid-column: 1 / -1;
+      height: 4px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+    .gap-bar {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+    }
+    .gap-bar.up { background: #60a5fa; }
+    .gap-bar.down { background: #f87171; }
+    .gap-empty { color: #64748b; }
   </style>
 </head>
-<body>
+  <body>
   <main class="${reportClassNames}">
     <section class="header">
       <div class="header-main">
         <h1 class="title">포트폴리오 리밸런싱 보고서</h1>
-        <p class="title-sub">Portfolio Rebalancing Report</p>
+        <p class="title-sub">포트폴리오 리밸런싱 리포트</p>
         <div class="meta">
-          <div><strong>포트폴리오 이름:</strong> ${escapeHtml(portfolioName)}</div>
-          <div><strong>생성일:</strong> ${escapeHtml(nowText)}</div>
-          <div><strong>총 포트폴리오 금액:</strong> ${escapeHtml(sumValueText)}</div>
+          <strong>포트폴리오 이름:</strong> ${escapeHtml(portfolioName)}
+          <span> · </span>
+          <strong>생성일:</strong> ${escapeHtml(nowText)}
+          <span> · </span>
+          <strong>총 포트폴리오 금액:</strong> ${escapeHtml(sumValueText)}
         </div>
       </div>
     </section>
 
-    ${actionSummaryHtml}
-
-    <table class="summary" aria-label="요약">
-      <tr>
-        <td class="sell">
-          <div class="summary-label">예상 매도 금액</div>
-          <div class="summary-value sell">${escapeHtml(fmtKRW(totalSellAmount))}</div>
-        </td>
-        <td class="buy">
-          <div class="summary-label">예상 매수 금액</div>
-          <div class="summary-value buy">${escapeHtml(fmtKRW(totalBuyAmount))}</div>
-        </td>
-        <td class="neutral">
-          <div class="summary-label">예상 잔여 현금</div>
-          <div class="summary-value cash">${escapeHtml(fmtKRW(cashResidual))}</div>
-        </td>
-        <td class="primary">
-          <div class="summary-label">거래 발생 종목</div>
-          <div class="summary-value count">${escapeHtml(String(adjustedCount))}개</div>
-        </td>
-      </tr>
-    </table>
-
-    <section class="section report-section">
-      <h2 class="section-title">실행 요약</h2>
-      <table class="trade-box-wrap" aria-label="리밸런싱 실행 계획">
-        <tr>
-          <td class="sell-box">
-            <div class="trade-title sell">매도</div>
+    <section class="report-page">
+      <section class="report-section content-card keep-together">
+        <h2 class="section-title">리밸런싱 결과 요약</h2>
+        <div class="two-col" aria-label="매수매도 요약">
+          <div class="panel">
+            <h3 class="subsection-title">매도</h3>
             ${sellPlanItemsHtml}
-          </td>
-          <td class="buy-box">
-            <div class="trade-title buy">매수</div>
+          </div>
+          <div class="panel">
+            <h3 class="subsection-title">매수</h3>
             ${buyPlanItemsHtml}
-          </td>
-        </tr>
-      </table>
-      <div class="exec-heading">실행 순서 (기준: 매도 우선, 매수는 현재가 높은 순)</div>
-      ${executionOrderHtml}
-      ${effectSummaryHtml}
-    </section>
-
-    <section class="section report-section page-break">
-      <h2 class="section-title">포트폴리오 분석</h2>
-      <div class="dashboard-grid risk-grid">
-        <div class="dashboard-card risk-card">
-          <div class="subsection-title">핵심 지표</div>
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <p class="metric-label kpi-label">최대 단일 비중</p>
-              <p class="metric-value kpi-value">${maxWeightRow ? `${maxWeightRow.afterWeightValue.toFixed(1)}%` : "-"}</p>
-              <p class="kpi-sub empty">.</p>
-            </div>
-            <div class="kpi-card">
-              <p class="metric-label kpi-label">상위 3종목 집중도</p>
-              <p class="metric-value kpi-value">${top3Concentration.toFixed(1)}%</p>
-              <p class="kpi-sub empty">.</p>
-            </div>
-            <div class="kpi-card">
-              <p class="metric-label kpi-label">매매 회전율</p>
-              <p class="metric-value kpi-value">${turnoverPct.toFixed(1)}%</p>
-              <p class="kpi-sub empty">.</p>
-            </div>
-            <div class="kpi-card">
-              <p class="metric-label kpi-label">거래 집중도</p>
-              <p class="metric-value kpi-value">${top3TradeConcentration.toFixed(1)}%</p>
-              <p class="kpi-sub empty">.</p>
-            </div>
-            <div class="kpi-card">
-              <p class="metric-label kpi-label">잔여금 효율</p>
-              <p class="metric-value kpi-value">${cashRatioText}</p>
-              <p class="kpi-sub">${escapeHtml(cashEfficiencyLabel)}</p>
-            </div>
-            <div class="kpi-card">
-              <p class="metric-label kpi-label">최대 거래 종목</p>
-              <p class="metric-value kpi-value">${escapeHtml(largestTradeDisplay)}</p>
-              <p class="kpi-sub empty">.</p>
-            </div>
           </div>
-          <p class="risk-summary info-box">${escapeHtml(riskSummaryText)}</p>
-          <p class="metric-hint info-box">최대 단일 비중 ${(maxWeightRow?.afterWeightValue || 0).toFixed(1)}% → ${escapeHtml(maxWeightHint)}</p>
         </div>
-        <div class="dashboard-card risk-card">
-          <div class="subsection-title">비중 차이 지표 (현재 비중 vs 목표 비중)</div>
-          <div class="card-brief"><strong>평균 차이</strong> ${currentAvgDrift.toFixed(1)}%p · <strong>가장 큰 차이</strong> ${currentMaxDrift.toFixed(1)}%p</div>
-          <table class="drift-table">
-            <thead>
-              <tr>
-                <th class="left">자산명</th>
-                <th class="num">현재</th>
-                <th class="num">목표</th>
-                <th class="num">조정(목표-현재)</th>
-              </tr>
-            </thead>
-            <tbody>${driftRowsHtml || `<tr><td class="left">-</td><td class="num">0.0%</td><td class="num">0.0%</td><td class="num diff pos"><span class="dir-tag pos">매수</span>▲ 0.0%p</td></tr>`}</tbody>
-          </table>
-        </div>
-        <div class="dashboard-card risk-card">
-          <div class="subsection-title">거래 부담 지표 (내 보유 대비 주문 크기)</div>
-          <div class="info-box card-brief">
-            <div><strong>총 거래금액</strong> ${escapeHtml(fmtKRW(totalTradeAmount))}</div>
-            <div><strong>포트폴리오 대비</strong> ${tradeBurdenPct.toFixed(1)}% (${tradeBurdenHint})</div>
-          </div>
-          <div class="card-brief"><strong>최고 비율</strong> ${maxLiquidityRow ? `${maxLiquidityRow.liquidityRatio.toFixed(1)}%` : "0.0%"} · <strong>주의 종목</strong> ${highLiquidityCount}개 (25% 이상)</div>
-          <table>
-            <thead>
-              <tr>
-                <th class="left">자산명</th>
-                <th class="num">거래금액</th>
-                <th class="num">비율</th>
-              </tr>
-            </thead>
-            <tbody>${liquidityRowsHtml || `<tr><td class="left">-</td><td class="num">₩ 0</td><td class="num">0.0%</td></tr>`}</tbody>
-          </table>
-        </div>
-        <div class="dashboard-card risk-card">
-          <div class="subsection-title">자산군 비중(리밸런싱 후)</div>
-          <div class="bucket-bar-box">
-            ${bucketBarHtml || ""}
-          </div>
-          <table>
-            <thead>
-              <tr>
-                <th class="left">자산군</th>
-                <th class="num">보유액</th>
-                <th class="num">비중</th>
-              </tr>
-            </thead>
-            <tbody>${bucketRowsHtml || `<tr><td class="left">-</td><td class="num">₩ 0</td><td class="num">0.0%</td></tr>`}</tbody>
-          </table>
-        </div>
-      </div>
+        ${page1OutcomeHtml}
+      </section>
+      <section class="report-section content-card keep-together">
+        <h2 class="section-title">리밸런싱 실행 순서</h2>
+        ${executionOrderHtml}
+      </section>
+      <section class="report-section content-card keep-together">
+        <h2 class="section-title">리밸런싱 효과</h2>
+        ${effectSummaryHtml}
+      </section>
     </section>
 
-    <section class="section report-section score-section page-break">
-      <h2 class="section-title">포트폴리오 평가 점수</h2>
-      <div class="risk-card">
-          <div class="subsection-title">포트폴리오 평가 점수</div>
-          <table class="score-grid">
-            <tbody>
-              <tr>
-                <td>자산 분산 상태</td>
-                <td class="score">${diversificationScore} / 100</td>
-                <td class="status">${diversificationLabel}</td>
-                <td class="desc">${escapeHtml(diversificationReason)}</td>
-              </tr>
-              <tr>
-                <td>목표 비중 유지력</td>
-                <td class="score">${driftStabilityScore} / 100</td>
-                <td class="status">${driftLabel}</td>
-                <td class="desc">${escapeHtml(driftReason)}</td>
-              </tr>
-              <tr>
-                <td>거래 부담 효율</td>
-                <td class="score">${tradeEfficiencyScore} / 100</td>
-                <td class="status">${tradeLabel}</td>
-                <td class="desc">${escapeHtml(tradeReason)}</td>
-              </tr>
-              <tr class="total">
-                <td>총점</td>
-                <td class="score">${portfolioTotalScore} / 100</td>
-                <td class="status">${totalLabel}</td>
-                <td class="desc">종합 평가</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="score-basis">기준: 80+ 양호 / 60-79 보통 / 0-59 개선 필요</p>
+    <section class="report-page">
+      <section class="report-section content-card">
+        <h2 class="section-title">리밸런싱 이유</h2>
+        ${reasonExplanationHtml}
+      </section>
+      <section class="report-section content-card">
+        <h2 class="section-title">목표 대비 차이</h2>
+        ${targetGapSummaryHtml}
+      </section>
+    </section>
+
+    <section class="report-page">
+      <section class="report-section content-card">
+        <h2 class="section-title">포트폴리오 분석</h2>
+        <h3 class="subsection-title">핵심 지표</h3>
+        <table class="metrics-table" aria-label="핵심 지표">
+          <colgroup>
+            <col style="width:24%">
+            <col style="width:12%">
+            <col style="width:12%">
+            <col style="width:52%">
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="metric-name">지표</th>
+              <th class="metric-value">수치</th>
+              <th class="metric-status">상태</th>
+              <th class="metric-desc">설명</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="metric-name">상위 3개 자산 집중도</td><td class="metric-value">${top3Concentration.toFixed(1)}%</td><td class="metric-status"><span class="status-chip ${concentrationStatus === "좋음" ? "good" : concentrationStatus === "보통" ? "mid" : "warn"}">${concentrationStatus}</span></td><td class="metric-desc">포트폴리오 자산이 상위 종목에 ${top3Concentration >= 70 ? "상당히" : top3Concentration >= 55 ? "다소" : "크게"} 집중되어 있습니다.</td></tr>
+            <tr><td class="metric-name">단일 자산 최대 비중</td><td class="metric-value">${maxWeightRow ? `${maxWeightRow.afterWeightValue.toFixed(1)}%` : "-"}</td><td class="metric-status"><span class="status-chip ${maxWeightStatus === "좋음" ? "good" : maxWeightStatus === "보통" ? "mid" : "warn"}">${maxWeightStatus}</span></td><td class="metric-desc">특정 자산 비중이 ${((maxWeightRow?.afterWeightValue || 0) >= 35) ? "비교적 높은" : "과도하지 않은"} 상태입니다.</td></tr>
+            <tr><td class="metric-name">매매 회전율</td><td class="metric-value">${turnoverPct.toFixed(1)}%</td><td class="metric-status"><span class="status-chip ${turnoverStatus === "좋음" ? "good" : turnoverStatus === "보통" ? "mid" : "warn"}">${turnoverStatus}</span></td><td class="metric-desc">이번 조정에서 거래 규모는 전체 포트폴리오 대비 ${tradeBurdenHint}입니다.</td></tr>
+            <tr><td class="metric-name">잔여 현금 효율</td><td class="metric-value">${cashRatioText}</td><td class="metric-status"><span class="status-chip ${cashStatus === "좋음" ? "good" : cashStatus === "보통" ? "mid" : "warn"}">${cashStatus}</span></td><td class="metric-desc">리밸런싱 후 현금 비중은 ${escapeHtml(cashEfficiencyLabel)} 수준입니다.</td></tr>
+          </tbody>
+        </table>
+        <h3 class="subsection-title" style="margin-top:12px;">비중 비교</h3>
+        <table class="analysis-compare-table" aria-label="비중 비교 테이블">
+          <thead>
+            <tr>
+              <th>자산</th>
+              <th class="num">현재</th>
+              <th class="num">목표</th>
+              <th class="num">차이</th>
+              <th>조치</th>
+            </tr>
+          </thead>
+          <tbody>${weightComparisonRowsHtml || `<tr><td class="left">-</td><td class="num">0.0%</td><td class="num">0.0%</td><td class="num">0.0%p</td><td>유지</td></tr>`}</tbody>
+        </table>
+      </section>
+      <section class="report-section content-card split-allow">
+        <h2 class="section-title">현재 포트폴리오</h2>
+        <table class="current-table table-compact">
+          <colgroup>
+            <col style="width:22%">
+            <col style="width:10%">
+            <col style="width:11%">
+            <col style="width:17%">
+            <col style="width:9%">
+            <col style="width:9%">
+            <col style="width:22%">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>자산</th>
+              <th class="num">수량(주)</th>
+              <th class="num">현재가(원)</th>
+              <th class="num">보유액(원)</th>
+              <th class="num">현재비중</th>
+              <th class="num">목표비중</th>
+              <th class="num">조정(%p)</th>
+            </tr>
+          </thead>
+          <tbody>${currentTableRowsHtml}</tbody>
+        </table>
+      </section>
+    </section>
+
+    <section class="report-page">
+      <section class="report-section content-card split-allow">
+        <h2 class="section-title">리밸런싱 후 포트폴리오</h2>
+        <table class="after-table table-compact">
+          <thead>
+            <tr>
+              <th>자산명</th>
+              <th class="num">최종 보유 수량</th>
+              <th class="num">리밸런싱 후 보유액</th>
+              <th class="num">리밸런싱 후 비중</th>
+            </tr>
+          </thead>
+          <tbody>${afterTableRowsHtml}</tbody>
+        </table>
+        ${resultSummaryHtml}
+        ${rebalanceChangeHtml}
+      </section>
+      <section class="report-section content-card">
+        <h2 class="section-title">포트폴리오 비중 차트</h2>
+        ${pieChartHtml}
+        ${chartInterpretationHtml}
+      </section>
+    </section>
+
+    <section class="report-page">
+      <section class="report-section content-card">
+        <h2 class="section-title">전략 요약</h2>
+        ${strategySummaryHtml}
+        ${performanceSummaryHtml}
+        ${diagnosisCommentHtml}
+      </section>
+      <section class="report-section content-card">
+        <h2 class="section-title">투자 체크 포인트</h2>
+        ${executionGuideHtml}
+        ${investorChecklistHtml}
+        <div class="report-disclaimer">
+          <div>본 보고서는 거래 수수료·세금·슬리피지 미반영(브로커/상품별 상이).</div>
+          <div>주문 수량은 정수 단위 반올림으로 목표 대비 소폭 오차가 남을 수 있음.</div>
+          <div>%p는 퍼센트포인트 단위.</div>
         </div>
-    </section>
-
-    <section class="section report-section page-break">
-      <h2 class="section-title">현재 포트폴리오</h2>
-      <table class="current-table">
-        <colgroup>
-          <col style="width:25%">
-          <col style="width:10%">
-          <col style="width:13%">
-          <col style="width:15%">
-          <col style="width:10%">
-          <col style="width:10%">
-          <col style="width:17%">
-        </colgroup>
-        <thead>
-          <tr>
-            <th class="left">자산명</th>
-            <th class="num">현재 수량</th>
-            <th class="num">현재가</th>
-            <th class="num">현재 보유액</th>
-            <th class="num">현재 비중</th>
-            <th class="num">목표 비중</th>
-            <th class="num">조정(목표-현재)</th>
-          </tr>
-        </thead>
-        <tbody>${currentTableRowsHtml}</tbody>
-      </table>
-    </section>
-
-    <section class="section report-section page-break">
-      <h2 class="section-title">리밸런싱 후 포트폴리오</h2>
-      <table class="after-table">
-        <thead>
-          <tr>
-            <th class="left">자산명</th>
-            <th class="num">최종 보유 수량</th>
-            <th class="num">리밸런싱 후 보유액</th>
-            <th class="num">리밸런싱 후 비중</th>
-          </tr>
-        </thead>
-        <tbody>${afterTableRowsHtml}</tbody>
-      </table>
-      ${resultSummaryHtml}
-    </section>
-
-    <section class="section report-section page-break after-visuals">
-      <h2 class="section-title">리밸런싱 시각 요약</h2>
-      ${pieChartHtml}
-      ${strategySummaryHtml}
-      <div class="report-disclaimer">
-        <div>본 보고서는 거래 수수료·세금·슬리피지 미반영(브로커/상품별 상이).</div>
-        <div>주문 수량은 정수 단위 반올림으로 목표 대비 소폭 오차가 남을 수 있음.</div>
-        <div>%p는 퍼센트포인트 단위.</div>
-      </div>
+      </section>
     </section>
   </main>
 </body>
@@ -2412,38 +1568,29 @@
     styleEl.setAttribute("data-pdf-capture-style", "true");
     const captureFixCss = `
       [data-pdf-capture-host] .report { width: 100% !important; }
-      [data-pdf-capture-host] .trade-box-wrap { margin-left: 0 !important; margin-right: 0 !important; }
+      [data-pdf-capture-host] .report,
+      [data-pdf-capture-host] .report-page { margin-top: 0 !important; padding-top: 0 !important; }
+      [data-pdf-capture-host] .report > .header { margin-top: 0 !important; }
       [data-pdf-capture-host] table { max-width: 100% !important; }
-      [data-pdf-capture-host] .report-section { margin-bottom: 18px !important; }
-      [data-pdf-capture-host] .risk-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
-      [data-pdf-capture-host] .action-grid { grid-template-columns: 1fr !important; }
+      [data-pdf-capture-host] .report-section { margin-bottom: 14px !important; }
       [data-pdf-capture-host] .pie-wrap { grid-template-columns: 1fr !important; gap: 8px !important; }
       [data-pdf-capture-host] .pie-compare-wrap { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 8px !important; }
       [data-pdf-capture-host] .pie-card,
-      [data-pdf-capture-host] .pie-legend-box,
-      [data-pdf-capture-host] .target-gap-box,
-      [data-pdf-capture-host] .residual-box { min-width: 0 !important; }
-      [data-pdf-capture-host] .pie-legend li,
-      [data-pdf-capture-host] .target-gap-list li,
-      [data-pdf-capture-host] .residual-list li { grid-template-columns: 10px minmax(0, 1fr) auto !important; }
-      [data-pdf-capture-host] .pie-legend .name,
-      [data-pdf-capture-host] .target-gap-list .name,
-      [data-pdf-capture-host] .residual-list .name {
+      [data-pdf-capture-host] .pie-legend-box { min-width: 0 !important; }
+      [data-pdf-capture-host] .pie-legend li { grid-template-columns: 10px minmax(0, 1fr) auto !important; }
+      [data-pdf-capture-host] .pie-legend .name {
         min-width: 0 !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        white-space: nowrap !important;
+        overflow-wrap: anywhere !important;
       }
       [data-pdf-capture-host] th,
-      [data-pdf-capture-host] td { padding: 8px 9px !important; font-size: 11.5px !important; }
-      [data-pdf-capture-host] tbody tr { break-inside: avoid !important; page-break-inside: avoid !important; }
-      [data-pdf-capture-host] .risk-card,
-      [data-pdf-capture-host] .effect-card,
-      [data-pdf-capture-host] .effect-note,
-      [data-pdf-capture-host] .strategy-note,
-      [data-pdf-capture-host] .after-visuals,
-      [data-pdf-capture-host] .pie-wrap,
-      [data-pdf-capture-host] .score-grid { break-inside: avoid !important; page-break-inside: avoid !important; }
+      [data-pdf-capture-host] td { padding: 10px !important; font-size: 13px !important; line-height: 1.45 !important; }
+      [data-pdf-capture-host] .table-compact th,
+      [data-pdf-capture-host] .table-compact td { padding: 8px !important; font-size: 12px !important; line-height: 1.4 !important; overflow-wrap: anywhere !important; }
+      [data-pdf-capture-host] .metrics-table { table-layout: auto !important; }
+      [data-pdf-capture-host] .metrics-table th,
+      [data-pdf-capture-host] .metrics-table td { padding: 8px !important; font-size: 12px !important; white-space: normal !important; overflow-wrap: anywhere !important; }
+      [data-pdf-capture-host] .analysis-compare-table th,
+      [data-pdf-capture-host] .analysis-compare-table td { padding: 8px !important; font-size: 12px !important; line-height: 1.5 !important; }
     `;
     styleEl.textContent = `${styleText}\n${captureFixCss}`;
     document.head.appendChild(styleEl);
@@ -2451,8 +1598,8 @@
     const host = document.createElement("div");
     host.setAttribute("data-pdf-capture-host", "true");
     host.style.position = "static";
-    host.style.width = "718px"; // A4(210mm) with 10mm left/right margin in html2pdf
-    host.style.maxWidth = "718px";
+    host.style.width = "720px"; // safe A4 content width for wide tables
+    host.style.maxWidth = "720px";
     host.style.margin = "0 auto";
     host.style.background = "#fff";
     host.style.pointerEvents = "auto";
@@ -2472,14 +1619,14 @@
       .then(()=>{
         return window.html2pdf()
           .set({
-            margin: [10, 10, 18, 10],
+            margin: [4, 8, 10, 8],
             filename,
             image: { type: "jpeg", quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
             jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
             pagebreak: {
-              mode: ["avoid-all", "css", "legacy"],
-              avoid: ["tr", ".risk-card", ".effect-card", ".strategy-note", ".pie-wrap", ".score-grid", ".section-title"]
+              mode: ["css", "legacy"],
+              avoid: [".section-title", ".content-card"]
             }
           })
           .from(host)
@@ -2498,7 +1645,7 @@
               pdf.setFontSize(8);
               pdf.text(`Report ID ${reportId} | v1.3 | KST/UTC`, pageWidth / 2, pageHeight - 6, { align: "center" });
               pdf.setFontSize(9);
-              pdf.text(`Page ${i} of ${totalPages}`, pageWidth - 8, pageHeight - 6, { align: "right" });
+              pdf.text(`${i} / ${totalPages}쪽`, pageWidth - 8, pageHeight - 6, { align: "right" });
             }
           })
           .save();
@@ -2513,301 +1660,136 @@
       });
   }
   function setTotalSummary(keyText, valueText){
-    sumTotalKey.textContent = keyText;
-    sumTotalLabel.textContent = valueText;
-    if(mobileSumTotalKey) mobileSumTotalKey.textContent = keyText;
-    if(mobileSumTotalLabel) mobileSumTotalLabel.textContent = valueText;
+    setTotalSummaryHelper(summaryRefs, keyText, valueText);
   }
   function setCashSummary(valueText){
-    cashLabel.textContent = valueText;
-    if(mobileCashLabel) mobileCashLabel.textContent = valueText;
+    setCashSummaryHelper(summaryRefs, valueText);
   }
   function resetSummaryKeyLabels(){
-    sumTotalKey.textContent = "현재 보유액";
-    if(cashKey) cashKey.textContent = "현금 잔액";
+    resetSummaryKeyLabelsHelper(summaryRefs);
   }
   function applyResultSummaryKeyLabels(afterHoldings, cashResidual){
-    const shouldWrap = afterHoldings >= LARGE_AMOUNT_WRAP_THRESHOLD || cashResidual >= LARGE_AMOUNT_WRAP_THRESHOLD;
-    sumTotalKey.innerHTML = shouldWrap ? "매매 후<br>보유액" : "매매 후 보유액";
-    if(cashKey){
-      cashKey.innerHTML = shouldWrap ? "현금<br>잔액" : "현금 잔액";
-    }
+    applyResultSummaryKeyLabelsHelper(summaryRefs, afterHoldings, cashResidual, LARGE_AMOUNT_WRAP_THRESHOLD);
   }
 
   function showToast(message){
-    toastMsg.textContent = message;
-    toast.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(()=>toast.classList.remove("show"), 1700);
+    showToastHelper(feedbackRefs, message, feedbackState);
   }
 
   function scrollToEl(el){
-    if(!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToElHelper(el);
   }
 
   function clearInvalidMarks(){
-    document.querySelectorAll(".invalidField").forEach(el=>el.classList.remove("invalidField"));
+    clearInvalidMarksHelper();
   }
 
   function hideErrorSummary(){
-    if(!errorSummary) return;
-    errorSummary.hidden = true;
-    errorSummary.textContent = "";
+    hideErrorSummaryHelper(feedbackRefs);
   }
 
   function showErrorSummary(message){
-    if(!errorSummary){
-      showToast(message);
-      return;
-    }
-    errorSummary.textContent = message;
-    errorSummary.hidden = false;
+    showErrorSummaryHelper(feedbackRefs, message, showToast);
   }
 
   function setDirtyState(next){
-    isDirtyAfterCalc = Boolean(next);
-    updateExportPdfButtonState();
-    if(!staleBadge) return;
-
-    if(!hasComputed){
-      staleBadge.hidden = true;
-      staleBadge.classList.remove("dirty", "clean");
-      staleBadge.textContent = "입력 변경됨 · 다시 계산 필요";
-      return;
-    }
-
-    staleBadge.hidden = false;
-    staleBadge.classList.toggle("dirty", isDirtyAfterCalc);
-    staleBadge.classList.toggle("clean", !isDirtyAfterCalc);
-    staleBadge.textContent = isDirtyAfterCalc
-      ? "입력 변경됨 · 다시 계산 필요"
-      : "최신 계산 결과가 반영됨";
+    setDirtyStateHelper(uiStateRefs, next, uiState, { updateExportPdfButtonState });
   }
 
   function markDirtyIfNeeded(){
-    if(hasComputed && mode === "current"){
-      setDirtyState(true);
-    }
+    markDirtyIfNeededHelper(uiState, { setDirtyState });
   }
 
   function showEditWarningNearInput(inputEl){
-    if(!editWarningFloat || !inputEl) return;
-    const rect = inputEl.getBoundingClientRect();
-    const vw = window.innerWidth;
-    const bubbleWidth = Math.min(280, vw - 16);
-    let left = rect.left + rect.width / 2 - bubbleWidth / 2;
-    let top = rect.top - 44;
-
-    if(left < 8) left = 8;
-    if(left + bubbleWidth > vw - 8) left = vw - bubbleWidth - 8;
-    if(top < 8) top = rect.bottom + 8;
-
-    editWarningFloat.style.width = `${bubbleWidth}px`;
-    editWarningFloat.style.left = `${left}px`;
-    editWarningFloat.style.top = `${top}px`;
-    editWarningFloat.hidden = false;
-
-    clearTimeout(editWarningFloatTimer);
-    editWarningFloatTimer = setTimeout(()=>{
-      editWarningFloat.hidden = true;
-    }, 2200);
+    showEditWarningNearInputHelper(uiStateRefs, inputEl, uiState);
   }
 
   function switchToCurrentOnEdit(inputEl){
-    if(mode !== "result") return;
-    setMode("current");
-    showEditWarningNearInput(inputEl);
+    switchToCurrentOnEditHelper(uiState, inputEl, { setMode, showEditWarningNearInput });
   }
 
   function warnOnResultFocus(inputEl){
-    if(mode !== "result") return;
-    showEditWarningNearInput(inputEl);
+    warnOnResultFocusHelper(uiState, inputEl, { showEditWarningNearInput });
   }
 
   function focusInvalidField(el){
-    if(!el) return;
-    el.classList.add("invalidField");
-    scrollToEl(el);
-    el.focus({ preventScroll: true });
+    focusInvalidFieldHelper(el);
   }
 
   function setTheme(theme){
-    const nextTheme = theme === "light" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", nextTheme);
-    localStorage.setItem(THEME_KEY, nextTheme);
-
-    if(themeToggle){
-      const nextLabel = nextTheme === "dark" ? "화이트 테마" : "블랙 테마";
-      themeToggle.textContent = nextLabel;
-      themeToggle.setAttribute("aria-label", `${nextLabel}로 전환`);
-      themeToggle.setAttribute("title", `${nextLabel}로 전환`);
-    }
+    setThemeHelper(theme, THEME_KEY, { themeToggle });
   }
 
   function resetSummaryCounts(){
-    buyCountEl.textContent = "0";
-    sellCountEl.textContent = "0";
-    holdCountEl.textContent = "0";
+    resetSummaryCountsHelper(summaryRefs);
   }
 
   function setMode(nextMode){
-    mode = nextMode;
-    hideAllNameSuggestions();
-
-    const inputEls = document.querySelectorAll(".g-input");
-    const currentEls = document.querySelectorAll(".g-current");
-    const resultEls  = document.querySelectorAll(".g-result");
-
-    if(mode === "current"){
-      inputEls.forEach(el=>el.classList.remove("hide"));
-      currentEls.forEach(el=>el.classList.add("hide"));
-      resultEls.forEach(el=>el.classList.add("hide"));
-      calcBtn.textContent = "계산";
-      if(mobileCalcBtn) mobileCalcBtn.textContent = "계산하기";
-      tableCard.classList.add("mode-current");
-      tableCard.classList.remove("mode-result");
-      modeLabel.textContent = "입력";
-      if(mobileResultList){
-        mobileResultList.hidden = true;
-        mobileResultList.innerHTML = "";
+    setModeHelper(modeRefs, nextMode, {
+      get mode() {
+        return mode;
+      },
+      set mode(value) {
+        mode = value;
       }
-      if(mobileDetailToggle){
-        mobileDetailToggle.hidden = true;
-        mobileDetailToggle.textContent = "상세 보기";
-        mobileDetailToggle.setAttribute("aria-expanded", "false");
-      }
-      tableCard.classList.remove("mobile-details-open-global");
-
-      // 입력 모드: 결과/현금은 의미가 약하니 0으로 정리
-      cashPill.classList.remove("negative");
-      setCashSummary(fmtKRW(0));
-      setTotalSummary("현재 보유액", document.querySelector("#sumValue").textContent);
-      resetSummaryKeyLabels();
-      resetSummaryCounts();
-      tbody.querySelectorAll("tr").forEach(tr=>setRowDetailOpen(tr, false));
-    }else{
-      inputEls.forEach(el=>el.classList.add("hide"));
-      currentEls.forEach(el=>el.classList.add("hide"));
-      resultEls.forEach(el=>el.classList.remove("hide"));
-      calcBtn.textContent = "현재 보기";
-      if(mobileCalcBtn) mobileCalcBtn.textContent = "입력 보기";
-      tableCard.classList.add("mode-result");
-      tableCard.classList.remove("mode-current");
-      modeLabel.textContent = "결과";
-      setDirtyState(false);
-      tbody.querySelectorAll("tr").forEach(tr=>setRowDetailOpen(tr, false));
-      if(mobileResultList){
-        mobileResultList.hidden = false;
-      }
-      if(mobileDetailToggle){
-        mobileDetailToggle.hidden = false;
-        mobileDetailToggle.textContent = "상세 보기";
-        mobileDetailToggle.setAttribute("aria-expanded", "false");
-      }
-      tableCard.classList.remove("mobile-details-open-global");
-    }
-    updateExportPdfButtonState();
+    }, {
+      fmtKRW,
+      hideAllNameSuggestions,
+      resetSummaryCounts,
+      resetSummaryKeyLabels,
+      setCashSummary,
+      setDirtyState,
+      setRowDetailOpen,
+      setTotalSummary,
+      updateExportPdfButtonState
+    });
   }
 
   function setRowDetailOpen(tr, open){
-    if(!tr) return;
-    const nextOpen = Boolean(open);
-    tr.classList.toggle("mobile-details-open", nextOpen);
-    const btn = tr.querySelector(".detailToggleBtn");
-    if(btn){
-      btn.setAttribute("aria-expanded", nextOpen ? "true" : "false");
-      btn.textContent = nextOpen ? "접기" : "상세 보기";
-    }
+    setRowDetailOpenHelper(tr, open);
   }
 
   function sumTargets(exceptInput=null){
-    let sum = 0;
-    const inputs = tbody.querySelectorAll(".target");
-    inputs.forEach(inp=>{
-      if(inp === exceptInput) return;
-      sum += clampMin0(parseNum(inp.value));
-    });
-    return sum;
+    return sumTargetsHelper(targetRefs, { clampMin0, parseNum }, exceptInput);
   }
 
   function updateProgress(sumPct){
-    const clamped = Math.max(0, sumPct);
-    const widthPct = Math.min(100, clamped);
-    progressBar.style.width = widthPct + "%";
-    progressText.textContent = clamped.toFixed(1) + "%";
-    if(mobileProgressText) mobileProgressText.textContent = clamped.toFixed(1) + "%";
-    progressWrap.classList.toggle("over", clamped > 100.0001);
+    updateProgressHelper(targetRefs, sumPct);
   }
 
   function updateTargetSumUI(){
-    const sum = sumTargets(null);
-    sumTargetEl.textContent = sum.toFixed(1);
-    sumTargetEl.style.color = (sum > 100.0001) ? "var(--sell)" : "var(--sum-ok)";
-    if(mobileTargetSumLabel){
-      mobileTargetSumLabel.textContent = `${sum.toFixed(1)}%`;
-    }
-    updateProgress(sum);
-    updateCalcActionState(sum);
+    updateTargetSumUIHelper(targetRefs, { clampMin0, parseNum }, { updateCalcActionState, updateProgress });
   }
 
   function attachTargetGuard(targetInput){
-    targetInput.addEventListener("input", ()=>{
-      let v = clampMin0(parseNum(targetInput.value));
-      if(parseNum(targetInput.value) < 0) targetInput.value = "0";
-      if(v > 100){
-        targetInput.value = "100";
-      }
-      updateTargetSumUI();
-    });
-
-    targetInput.addEventListener("blur", ()=>{
-      if(String(targetInput.value).trim() === ""){
-        updateTargetSumUI();
-        return;
-      }
-      let v = clampMin0(parseNum(targetInput.value));
-      if(v > 100) v = 100;
-      targetInput.value = (Math.round(v * 100) / 100).toString();
-      updateTargetSumUI();
-    });
+    attachTargetGuardHelper(targetInput, { clampMin0, parseNum }, { updateTargetSumUI });
   }
 
   function rowCount(){
-    return tbody.querySelectorAll("tr").length;
+    return rowCountHelper(targetRefs);
   }
 
   function deleteRow(tr){
-    if(rowCount() <= 1){
-      showToast("최소 1개 행은 남겨야 해요.");
-      return;
-    }
-    hideNameSuggestions(tr);
-    clearRowQuoteState(tr);
-    tr.remove();
-    updateTargetSumUI();
-    updateCurrentUI();
-
-    if(mode === "result"){
-      setMode("current");
-      showToast("행이 변경되어 현재 보기로 돌아왔어요. 다시 계산하세요.");
-    }
-    markDirtyIfNeeded();
-    hideErrorSummary();
-    clearInvalidMarks();
+    deleteRowHelper({}, tr, {
+      get mode() {
+        return mode;
+      }
+    }, {
+      clearInvalidMarks,
+      clearRowQuoteState,
+      hideErrorSummary,
+      hideNameSuggestions,
+      markDirtyIfNeeded,
+      rowCount,
+      setMode,
+      showToast,
+      updateCurrentUI,
+      updateTargetSumUI
+    });
   }
 
   function setTradeCell(tr, tradeQty, decision){
-    const cell = tr.querySelector(".tradeQtyCell");
-    const numEl = cell.querySelector(".tradeNum");
-    const iconEl = cell.querySelector(".tradeIcon");
-
-    numEl.textContent =
-  (tradeQty === 0) ? "0주"
-  : (tradeQty < 0 ? "-" : "") + fmt(Math.abs(tradeQty)) + "주";
-
-    iconEl.className = "tradeIcon " + (decision === "매수" ? "buy" : decision === "매도" ? "sell" : "hold");
-    iconEl.textContent = (decision === "매수") ? "▲" : (decision === "매도") ? "▼" : "·";
+    setTradeCellHelper({ fmt }, tr, tradeQty, decision);
   }
 
   function addRow(){
@@ -3010,59 +1992,14 @@ syncRowPriceInputMode(tr);
   }
 
   function updateCurrentUI(){
-  const { rows, total } = snapshotRows();
-
-  // 행별 현재 보유액/비중
-  rows.forEach(r=>{
-    r.tr.querySelector(".val").textContent = fmtKRW(r.value);
-    r.tr.querySelector(".w").textContent = fmtPct01(r.weight);
-  });
-
-  // 하단 합계(현재)
-  document.querySelector("#sumValue").textContent = fmtKRW(total);
-  document.querySelector("#sumWeight").textContent = fmtPct01(rows.reduce((s,r)=>s+r.weight,0));
-
-  // 상단 현재 보유액
-  setTotalSummary("현재 보유액", fmtKRW(total));
-  if(mobileTotalAssetLabel){
-    mobileTotalAssetLabel.textContent = fmtKRW(total);
+    updateCurrentUIHelper(rowRefs, { fmtKRW, fmtPct01 }, snapshotRows, { setTotalSummary });
   }
-}
 
   function syncRowDisplayName(tr){
-    const nameInput = tr.querySelector(".name");
-    const nameCell = tr.querySelector(".col-name");
-    if(!nameInput || !nameCell) return;
-    const raw = String(nameInput.value || "").trim();
-    nameCell.setAttribute("data-name", raw || "종목명 미입력");
-    nameCell.setAttribute("data-mobile-header", raw || "종목명 미입력");
-    nameCell.setAttribute("data-mobile-decision", "유지");
+    syncRowDisplayNameHelper(tr);
   }
   function setMobileDetailHeader(tr, { nameText = "", decision = "유지", tradeText = "" } = {}){
-    if(!tr) return;
-    const nameCell = tr.querySelector(".col-name");
-    if(!nameCell) return;
-    let rich = nameCell.querySelector(".mobileHeaderRich");
-    if(!rich){
-      rich = document.createElement("div");
-      rich.className = "mobileHeaderRich";
-      rich.innerHTML = `
-        <span class="mobileHeaderName"></span>
-        <span class="mobileHeaderSep"> : </span>
-        <span class="mobileHeaderTrade"></span>
-        <span class="mobileHeaderDecision"></span>
-      `;
-      nameCell.appendChild(rich);
-    }
-    const nameEl = rich.querySelector(".mobileHeaderName");
-    const decisionEl = rich.querySelector(".mobileHeaderDecision");
-    const tradeEl = rich.querySelector(".mobileHeaderTrade");
-    if(nameEl) nameEl.textContent = nameText || "이름 미입력";
-    if(decisionEl){
-      decisionEl.textContent = `[${decision}]`;
-      decisionEl.className = `mobileHeaderDecision ${decision === "매수" ? "buy" : decision === "매도" ? "sell" : "hold"}`;
-    }
-    if(tradeEl) tradeEl.textContent = tradeText || "";
+    setMobileDetailHeaderHelper(tr, { decision, nameText, tradeText });
   }
 
   function snapshotRows(){
@@ -3203,52 +2140,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
   }
 
   function renderMobileResultList(trades, cashResidual){
-    if(!mobileResultList) return;
-    mobileResultList.innerHTML = "";
-
-    const activeTrades = trades.filter((t)=>!t.inactive);
-    if(!activeTrades.length){
-      const empty = document.createElement("li");
-      empty.className = "mobileResultItem empty";
-      empty.textContent = "표시할 계산 결과가 없습니다.";
-      mobileResultList.appendChild(empty);
-      return;
-    }
-
-    activeTrades.forEach((t)=>{
-      const item = document.createElement("li");
-      item.className = "mobileResultItem";
-      const name = String(t.tr?.querySelector(".name")?.value || "").trim() || "이름 미입력";
-      const decision = t.tradeQty > 0 ? "매수" : t.tradeQty < 0 ? "매도" : "유지";
-      const qtyText = t.tradeQty === 0
-        ? "0주"
-        : `${t.tradeQty > 0 ? "+" : "-"}${fmt(Math.abs(t.tradeQty))}주`;
-      const nameEl = document.createElement("span");
-      nameEl.className = "name";
-      nameEl.textContent = name;
-      const decisionEl = document.createElement("span");
-      decisionEl.className = `decision ${decision === "매수" ? "buy" : decision === "매도" ? "sell" : "hold"}`;
-      decisionEl.textContent = decision;
-      const qtyEl = document.createElement("span");
-      qtyEl.className = "qty";
-      qtyEl.textContent = qtyText;
-      item.append(nameEl, decisionEl, qtyEl);
-      mobileResultList.appendChild(item);
-    });
-
-    const cashItem = document.createElement("li");
-    cashItem.className = "mobileResultItem cash";
-    const cashName = document.createElement("span");
-    cashName.className = "name";
-    cashName.textContent = "현금";
-    const cashDecision = document.createElement("span");
-    cashDecision.className = `decision ${cashResidual >= 0 ? "buy" : "sell"}`;
-    cashDecision.textContent = cashResidual >= 0 ? "잔액" : "부족";
-    const cashQty = document.createElement("span");
-    cashQty.className = "qty";
-    cashQty.textContent = `${cashResidual < 0 ? "-" : ""}${fmt(Math.round(Math.abs(cashResidual)))}원`;
-    cashItem.append(cashName, cashDecision, cashQty);
-    mobileResultList.appendChild(cashItem);
+    renderMobileResultListHelper(mobileRefs, { fmt }, trades, cashResidual);
   }
 
   function calc(){

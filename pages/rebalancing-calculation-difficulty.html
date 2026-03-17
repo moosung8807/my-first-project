@@ -9,12 +9,7 @@
   <link rel="canonical" href="https://rebalancing.kr/pages/rebalancing-calculation-difficulty.html" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9973322388801174"
      crossorigin="anonymous"></script>
-  <script>
-    (function () {
-      var theme = localStorage.getItem("rb-theme") || "dark";
-      document.documentElement.setAttribute("data-theme", theme === "light" ? "light" : "dark");
-    })();
-  </script>
+  <script src="../assets/js/theme-init.js"></script>
 
   <meta property="og:type" content="article" />
   <meta property="og:title" content="리밸런싱 계산이 어려운 이유 — 포트폴리오 리밸런싱 계산의 복잡성" />
@@ -28,53 +23,29 @@
   <meta name="twitter:title" content="리밸런싱 계산이 어려운 이유 — 포트폴리오 리밸런싱 계산의 복잡성" />
   <meta name="twitter:description" content="리밸런싱 계산이 왜 어려운지 자세히 설명합니다. 포트폴리오 리밸런싱 계산의 복잡한 이유와 계산기 사용이 필요한 이유를 쉽게 정리했습니다." />
   <meta name="twitter:image" content="https://rebalancing.kr/assets/og/sample.png" />
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "리밸런싱이 특히 어렵게 느껴지는 이유는 무엇인가요?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "포트폴리오 리밸런싱 계산에서는 현재가, 보유 수량, 현재 비중, 목표 비중, 매수·매도 수량을 동시에 계산해야 하므로 실수가 발생하기 쉽습니다."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "비중은 이해했는데 매수·매도 수량 계산이 어려운 이유는 무엇인가요?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "비중 개념과 실제 거래 단위 계산은 다르기 때문에, 목표 비중을 맞추기 위한 리밸런싱 계산 방법이 없으면 자산별 매수·매도 수량을 직관적으로 계산하기 어렵습니다."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "엑셀로도 리밸런싱 계산이 가능한가요?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "엑셀로 리밸런싱 계산은 가능하지만, 수식 오류 가능성과 자산 변경 시 유지보수 부담, 모바일 사용성 문제로 꾸준히 사용하기는 어렵습니다."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "리밸런싱에서 더 중요한 것은 판단인가요 계산인가요?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "많은 경우 포트폴리오 리밸런싱에서는 판단보다 계산이 병목이 되며, 리밸런싱 계산기를 활용해 계산을 자동화하면 투자자는 의사결정에 더 집중하기 쉬워집니다."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "리밸런싱 계산기를 사용하면 어떤 점이 좋아지나요?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "리밸런싱 계산기를 사용하면 현재 상태를 빠르게 정리하고 목표 비중 기준으로 매수·매도 수량을 한 번에 확인할 수 있어, 실수와 시간 소모를 줄이는 데 도움이 됩니다."
-          }
-        }
-      ]
-    }
+  <script id="faqData" type="application/json">
+    [
+      {
+        "question": "리밸런싱이 특히 어렵게 느껴지는 이유는 무엇인가요?",
+        "answer": "포트폴리오 리밸런싱 계산에서는 현재가, 보유 수량, 현재 비중, 목표 비중, 매수·매도 수량을 동시에 계산해야 하므로 실수가 발생하기 쉽습니다."
+      },
+      {
+        "question": "비중은 이해했는데 매수·매도 수량 계산이 어려운 이유는 무엇인가요?",
+        "answer": "비중 개념과 실제 거래 단위 계산은 다르기 때문에, 목표 비중을 맞추기 위한 리밸런싱 계산 방법이 없으면 자산별 매수·매도 수량을 직관적으로 계산하기 어렵습니다."
+      },
+      {
+        "question": "엑셀로도 리밸런싱 계산이 가능한가요?",
+        "answer": "엑셀로 리밸런싱 계산은 가능하지만, 수식 오류 가능성과 자산 변경 시 유지보수 부담, 모바일 사용성 문제로 꾸준히 사용하기는 어렵습니다."
+      },
+      {
+        "question": "리밸런싱에서 더 중요한 것은 판단인가요 계산인가요?",
+        "answer": "많은 경우 포트폴리오 리밸런싱에서는 판단보다 계산이 병목이 되며, 리밸런싱 계산기를 활용해 계산을 자동화하면 투자자는 의사결정에 더 집중하기 쉬워집니다."
+      },
+      {
+        "question": "리밸런싱 계산기를 사용하면 어떤 점이 좋아지나요?",
+        "answer": "리밸런싱 계산기를 사용하면 현재 상태를 빠르게 정리하고 목표 비중 기준으로 매수·매도 수량을 한 번에 확인할 수 있어, 실수와 시간 소모를 줄이는 데 도움이 됩니다."
+      }
+    ]
   </script>
   <link rel="stylesheet" href="../assets/css/docs.css" />
 </head>
@@ -162,38 +133,7 @@
       <h2 class="numbered-section">5. 자주 묻는 질문 (FAQ)</h2>
       <div class="section-content">
 
-      <h3 class="faqQuestion">Q1. 리밸런싱이 특히 어렵게 느껴지는 이유는 무엇인가요?</h3>
-      <p class="faqAnswer">
-      현재가, 보유 수량, 현재 비중, 목표 비중, 매수·매도 수량을
-      동시에 계산해야 하므로 실수가 발생하기 쉽기 때문입니다.
-      </p>
-
-      <h3 class="faqQuestion">Q2. 비중은 이해했는데 매수·매도 수량 계산이 어려운 이유는 무엇인가요?</h3>
-      <p class="faqAnswer">
-      비중 개념과 실제 거래 단위 계산은 다르며,
-      목표 비중을 맞추기 위해 자산별로 얼마를 사고팔지
-      직관적으로 계산하기 어렵기 때문입니다.
-      </p>
-
-      <h3 class="faqQuestion">Q3. 엑셀로도 리밸런싱 계산이 가능한가요?</h3>
-      <p class="faqAnswer">
-      가능합니다.
-      다만 수식 오류, 자산 변경 시 유지보수,
-      모바일 사용성 문제로 꾸준히 사용하기 어렵습니다.
-      </p>
-
-      <h3 class="faqQuestion">Q4. 리밸런싱에서 더 중요한 것은 판단인가요 계산인가요?</h3>
-      <p class="faqAnswer">
-      많은 경우 판단보다 계산이 병목이 되며,
-      계산을 자동화하면 투자자는 의사결정에 집중하기 쉬워집니다.
-      </p>
-
-      <h3 class="faqQuestion">Q5. 리밸런싱 계산기를 사용하면 어떤 점이 좋아지나요?</h3>
-      <p class="faqAnswer">
-      현재 상태를 빠르게 정리하고 목표 비중 기준으로
-      매수·매도 수량을 한 번에 확인할 수 있어
-      실수와 시간 소모를 줄일 수 있습니다.
-      </p>
+      <div id="faqList"></div>
       </div>
 
       <section class="guideHub" aria-label="관련 가이드">
@@ -222,5 +162,7 @@
     </main>
 
   </div>
+  <script src="../assets/js/faq-renderer.js"></script>
+  <script src="../assets/js/docs-page.js"></script>
 </body>
 </html>

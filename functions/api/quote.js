@@ -127,9 +127,7 @@ async function getYahooSession() {
     headers: baseHeaders,
     redirect: "manual"
   });
-  const setCookie = cookieResp.headers.get("set-cookie");
-  if (!setCookie) return null;
-  const cookie = setCookie.split(",").map((item) => item.trim().split(";")[0]).join("; ");
+  const cookie = extractCookieHeader(cookieResp.headers);
   if (!cookie) return null;
 
   const crumbResp = await fetch("https://query1.finance.yahoo.com/v1/test/getcrumb", {
@@ -144,6 +142,20 @@ async function getYahooSession() {
   if (!crumb) return null;
 
   return { cookie, crumb };
+}
+
+function extractCookieHeader(headers) {
+  if (typeof headers.getSetCookie === "function") {
+    const cookieParts = headers.getSetCookie()
+      .map((value) => String(value || "").split(";")[0].trim())
+      .filter(Boolean);
+    if (cookieParts.length > 0) return cookieParts.join("; ");
+  }
+
+  const rawCookie = headers.get("set-cookie");
+  if (!rawCookie) return null;
+  const firstCookie = String(rawCookie).split(";")[0].trim();
+  return firstCookie || null;
 }
 
 function jsonResponse(body, status = 200) {
