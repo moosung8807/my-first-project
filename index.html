@@ -108,6 +108,33 @@
     실제 거래 전 주문 가능 수량과 비용을 함께 확인하세요.
   </p>
 
+  <section class="presetSection" aria-labelledby="presetTitle">
+    <div class="presetHeading">
+      <div>
+        <p class="presetEyebrow">빠르게 시작하기</p>
+        <h2 id="presetTitle">예시 포트폴리오 프리셋</h2>
+      </div>
+      <p class="presetIntro">대표적인 자산배분 예시를 불러와 바로 계산해볼 수 있습니다.</p>
+    </div>
+    <div class="presetGrid" role="list" aria-label="예시 포트폴리오 목록">
+      <button class="presetCard" type="button" data-preset="balanced" aria-pressed="false">
+        <span class="presetTag">기본형</span>
+        <strong>균형형 4자산</strong>
+        <span>국내주식 · 미국주식 · 채권 · 금을 함께 담은 기본 예시</span>
+      </button>
+      <button class="presetCard" type="button" data-preset="growth" aria-pressed="false">
+        <span class="presetTag">성장형</span>
+        <strong>성장형 80/20</strong>
+        <span>주식 비중을 높이고 채권을 최소화한 공격적 예시</span>
+      </button>
+      <button class="presetCard" type="button" data-preset="income" aria-pressed="false">
+        <span class="presetTag">안정형</span>
+        <strong>현금흐름 중시형</strong>
+        <span>배당 · 채권 · 현금성 자산 중심으로 흔들림을 줄인 예시</span>
+      </button>
+    </div>
+  </section>
+
   <template id="guideTemplate">
     <h2>■ 리밸런싱 계산기 사용 방법</h2>
     <p>
@@ -153,142 +180,171 @@
     </section>
   </template>
 
-  <div class="card" id="inputSection">
-    <div class="sectionHeading">
-      <h2>1. 입력 설정</h2>
-      <div class="sectionHeadingActions controlActions">
-        <span class="statusBadge" id="staleBadge" hidden>입력 변경됨 · 다시 계산 필요</span>
-        <button class="secondary" id="addRow">종목 추가</button>
-        <button class="secondary" id="heroDemoBtn" type="button">예시로 실행</button>
-        <button class="primary" id="calcBtn">계산</button>
-        <button class="secondary" id="reset">초기화</button>
-      </div>
-    </div>
-    <div class="mobileInputStatus" id="mobileInputStatus" aria-live="polite">
-      <span class="label">목표비중 합계</span>
-      <strong id="mobileTargetSumLabel">0.0%</strong>
-      <span class="warn" id="mobileTargetWarning" hidden>100%를 초과했습니다</span>
-    </div>
-  </div>
-
-  <div class="card" id="tableCard">
-    <div class="sectionHeading resultHeading">
-      <h2 id="resultSection">2. 계산 결과</h2>
-      <div class="sectionHeadingActions">
-        <button class="secondary" id="exportPdfBtn" type="button" disabled>PDF 보고서</button>
-      </div>
-      <p>요약과 자산별 매수/매도 결과를 확인하세요.</p>
-    </div>
-    <div id="errorSummary" class="errorSummary" role="alert" aria-live="assertive" hidden></div>
-    <ul class="mobileResultList" id="mobileResultList" hidden></ul>
-    <button class="mobileDetailToggle" id="mobileDetailToggle" type="button" hidden aria-expanded="false">상세 보기</button>
-    <!-- Summary bar -->
-    <div class="summaryBar" id="summaryBar">
-      <div class="summaryLeft">
-        <span class="pill">
-          <span class="k">상태</span>
-          <span class="v hintMode" id="modeLabel">입력</span>
-        </span>
-
-        <span class="pill">
-          <span class="k" id="sumTotalKey">현재 보유액</span>
-          <span class="v" id="sumTotalLabel">₩ 0</span>
-        </span>
-
-        <span class="pill cash" id="cashPill">
-          <span class="k" id="cashKey">현금 잔액</span>
-          <span class="v" id="cashLabel">₩ 0</span>
-        </span>
-<span class="pill sell">
-          <span class="k">매도</span>
-          <span class="v" id="sellCount">0</span>
-        </span>
-        <span class="pill buy">
-          <span class="k">매수</span>
-          <span class="v" id="buyCount">0</span>
-        </span>
-        <span class="pill hold">
-          <span class="k">유지</span>
-          <span class="v" id="holdCount">0</span>
-        </span>
-      </div>
-
-      <div class="summaryRight">
-        <span>기준% 합계</span>
-        <div class="progressWrap" id="progressWrap" aria-label="기준% 합계 진행">
-          <div class="progressBar" id="progressBar"></div>
+  <div class="mainLayout">
+    <div class="calculatorArea">
+      <div class="card" id="inputSection">
+        <div class="sectionHeading">
+          <h2>1. 입력 설정</h2>
+          <div class="sectionHeadingActions controlActions">
+            <span class="statusBadge" id="staleBadge" hidden>입력 변경됨 · 다시 계산 필요</span>
+            <button class="secondary" id="addRow">종목 추가</button>
+            <button class="secondary" id="heroDemoBtn" type="button">예시로 실행</button>
+            <button class="primary" id="calcBtn">계산</button>
+            <button class="secondary" id="reset">초기화</button>
+          </div>
         </div>
-        <span id="progressText">0.00%</span>
+        <div class="mobileInputStatus" id="mobileInputStatus" aria-live="polite">
+          <span class="label">목표비중 합계</span>
+          <strong id="mobileTargetSumLabel">0.0%</strong>
+          <span class="warn" id="mobileTargetWarning" hidden>100%를 초과했습니다</span>
+        </div>
+      </div>
+
+      <div class="card" id="tableCard">
+        <div class="sectionHeading resultHeading">
+          <h2 id="resultSection">2. 계산 결과</h2>
+          <div class="sectionHeadingActions">
+            <button class="secondary" id="exportPdfBtn" type="button" disabled>PDF 보고서</button>
+          </div>
+          <p>요약과 자산별 매수/매도 결과를 확인하세요.</p>
+        </div>
+        <div id="errorSummary" class="errorSummary" role="alert" aria-live="assertive" hidden></div>
+        <ul class="mobileResultList" id="mobileResultList" hidden></ul>
+        <button class="mobileDetailToggle" id="mobileDetailToggle" type="button" hidden aria-expanded="false">상세 보기</button>
+        <!-- Summary bar -->
+        <div class="summaryBar" id="summaryBar">
+          <div class="summaryLeft">
+            <span class="pill">
+              <span class="k">상태</span>
+              <span class="v hintMode" id="modeLabel">입력</span>
+            </span>
+
+            <span class="pill">
+              <span class="k" id="sumTotalKey">현재 보유액</span>
+              <span class="v" id="sumTotalLabel">₩ 0</span>
+            </span>
+
+            <span class="pill cash" id="cashPill">
+              <span class="k" id="cashKey">현금 잔액</span>
+              <span class="v" id="cashLabel">₩ 0</span>
+            </span>
+  <span class="pill sell">
+              <span class="k">매도</span>
+              <span class="v" id="sellCount">0</span>
+            </span>
+            <span class="pill buy">
+              <span class="k">매수</span>
+              <span class="v" id="buyCount">0</span>
+            </span>
+            <span class="pill hold">
+              <span class="k">유지</span>
+              <span class="v" id="holdCount">0</span>
+            </span>
+          </div>
+
+          <div class="summaryRight">
+            <span>기준% 합계</span>
+            <div class="progressWrap" id="progressWrap" aria-label="기준% 합계 진행">
+              <div class="progressBar" id="progressBar"></div>
+            </div>
+            <span id="progressText">0.00%</span>
+          </div>
+        </div>
+
+        <div class="tableWrap">
+          <table id="tbl" aria-describedby="tableAssist">
+            <caption id="tableAssist" class="srOnly">종목별 목표비중과 현재 보유 상태를 입력하고 계산 결과를 확인하는 표</caption>
+            <thead>
+              <tr class="group">
+                <th class="col-name" rowspan="2">종목명</th>
+                <th class="g-input col-target" rowspan="2">목표비중</th>
+                <th class="g-input col-price" rowspan="2">현재가 [원]</th>
+                <th class="g-input col-qty" rowspan="2">수량 [주]</th>
+
+                <th class="g-current" colspan="2">현재</th>
+                <th class="g-result" colspan="2">매도/매수</th>
+                <th class="g-result" colspan="3">리밸런싱 후</th>
+
+                <th class="g-input col-del" rowspan="2">삭제</th>
+              </tr>
+              <tr class="sub">
+                <th class="g-current col-val">보유액 [원]</th>
+                <th class="g-current col-w">비중</th>
+
+                <th class="g-result col-decision">판단</th>
+                <th class="g-result col-trade">수량</th>
+
+                <th class="g-result col-afterqty">최종수량[주]</th>
+                <th class="g-result col-afterval">보유액</th>
+                <th class="g-result col-afterw">비중</th>
+              </tr>
+            </thead>
+
+            <tbody></tbody>
+
+            <tfoot>
+              <tr>
+                <th class="col-name">합 계</th>
+                <th class="g-input col-target" id="sumTarget">0.00%</th>
+                <th class="g-input col-price"></th>
+                <th class="g-input col-qty"></th>
+                <th class="g-current col-val" id="sumValue">₩ 0</th>
+                <th class="g-current col-w" id="sumWeight">0.00%</th>
+
+                <th class="g-result col-decision"></th>
+                <th class="g-result col-trade"></th>
+
+                <th class="g-result col-afterqty"></th>
+                <th class="g-result col-afterval" id="sumAfterValue">₩ 0</th>
+                <th class="g-result col-afterw" id="sumAfterWeight">0.00%</th>
+
+                <th class="g-input col-del"></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="mobileStickySummary" id="mobileStickySummary" aria-live="polite">
+          <span class="miniItem"><span class="k" id="mobileSumTotalKey">현재 보유액</span><span class="v" id="mobileSumTotalLabel">₩ 0</span></span>
+          <span class="miniItem"><span class="k">기준%</span><span class="v" id="mobileProgressText">0.00%</span></span>
+          <span class="miniItem"><span class="k">현금</span><span class="v" id="mobileCashLabel">₩ 0</span></span>
+        </div>
+      </div>
+      <div class="mobileCalcBar" id="mobileCalcBar" aria-live="polite">
+        <div class="mobileCalcMeta">
+          <span class="k">총 자산</span>
+          <strong class="v" id="mobileTotalAssetLabel">₩ 0</strong>
+        </div>
+        <button class="primary" id="mobileCalcBtn" type="button">계산하기</button>
+        <button class="secondary" id="mobileResetBtn" type="button">초기화</button>
       </div>
     </div>
 
-    <div class="tableWrap">
-      <table id="tbl" aria-describedby="tableAssist">
-        <caption id="tableAssist" class="srOnly">종목별 목표비중과 현재 보유 상태를 입력하고 계산 결과를 확인하는 표</caption>
-        <thead>
-          <tr class="group">
-            <th class="col-name" rowspan="2">종목명</th>
-            <th class="g-input col-target" rowspan="2">목표비중</th>
-            <th class="g-input col-price" rowspan="2">현재가 [원]</th>
-            <th class="g-input col-qty" rowspan="2">수량 [주]</th>
+    <aside class="guideRail" aria-labelledby="guideRailTitle">
+      <div class="guideRailInner">
+        <p class="guideRailEyebrow">Guide</p>
+        <h2 class="guideRailTitle" id="guideRailTitle">리밸런싱 가이드</h2>
+        <p class="guideRailIntro">개념을 먼저 이해하고 계산기를 쓰면 결과 해석이 훨씬 쉬워집니다.</p>
 
-            <th class="g-current" colspan="2">현재</th>
-            <th class="g-result" colspan="2">매도/매수</th>
-            <th class="g-result" colspan="3">리밸런싱 후</th>
+        <a class="guideRailCard" href="pages/why-rebalancing.html">
+          <span class="guideRailCardTag">개념</span>
+          <strong>리밸런싱을 해야 하는 이유</strong>
+          <span>포트폴리오 위험을 관리하는 핵심 전략을 먼저 이해해보세요.</span>
+        </a>
 
-            <th class="g-input col-del" rowspan="2">삭제</th>
-          </tr>
-          <tr class="sub">
-            <th class="g-current col-val">보유액 [원]</th>
-            <th class="g-current col-w">비중</th>
+        <a class="guideRailCard" href="pages/rebalancing-frequency.html">
+          <span class="guideRailCardTag">주기</span>
+          <strong>리밸런싱 주기 정하는 법</strong>
+          <span>연 1회, 반기, 비중 기준 방식의 차이를 짧게 비교합니다.</span>
+        </a>
 
-            <th class="g-result col-decision">판단</th>
-            <th class="g-result col-trade">수량</th>
-
-            <th class="g-result col-afterqty">최종수량[주]</th>
-            <th class="g-result col-afterval">보유액</th>
-            <th class="g-result col-afterw">비중</th>
-          </tr>
-        </thead>
-
-        <tbody></tbody>
-
-        <tfoot>
-          <tr>
-            <th class="col-name">합 계</th>
-            <th class="g-input col-target" id="sumTarget">0.00%</th>
-            <th class="g-input col-price"></th>
-            <th class="g-input col-qty"></th>
-            <th class="g-current col-val" id="sumValue">₩ 0</th>
-            <th class="g-current col-w" id="sumWeight">0.00%</th>
-
-            <th class="g-result col-decision"></th>
-            <th class="g-result col-trade"></th>
-
-            <th class="g-result col-afterqty"></th>
-            <th class="g-result col-afterval" id="sumAfterValue">₩ 0</th>
-            <th class="g-result col-afterw" id="sumAfterWeight">0.00%</th>
-
-            <th class="g-input col-del"></th>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-
-    <div class="mobileStickySummary" id="mobileStickySummary" aria-live="polite">
-      <span class="miniItem"><span class="k" id="mobileSumTotalKey">현재 보유액</span><span class="v" id="mobileSumTotalLabel">₩ 0</span></span>
-      <span class="miniItem"><span class="k">기준%</span><span class="v" id="mobileProgressText">0.00%</span></span>
-      <span class="miniItem"><span class="k">현금</span><span class="v" id="mobileCashLabel">₩ 0</span></span>
-    </div>
-  </div>
-
-  <div class="mobileCalcBar" id="mobileCalcBar" aria-live="polite">
-    <div class="mobileCalcMeta">
-      <span class="k">총 자산</span>
-      <strong class="v" id="mobileTotalAssetLabel">₩ 0</strong>
-    </div>
-    <button class="primary" id="mobileCalcBtn" type="button">계산하기</button>
-    <button class="secondary" id="mobileResetBtn" type="button">초기화</button>
+        <a class="guideRailCard" href="pages/rebalancing-calculation-difficulty.html">
+          <span class="guideRailCardTag">계산</span>
+          <strong>리밸런싱 계산이 어려운 이유</strong>
+          <span>왜 많은 투자자가 계산기를 쓰는지 실제 계산 맥락으로 설명합니다.</span>
+        </a>
+      </div>
+    </aside>
   </div>
 
     <section class="faqSection" aria-labelledby="faqTitle">

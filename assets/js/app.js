@@ -7,6 +7,7 @@
   const heroCalcBtn = document.querySelector("#heroCalcBtn");
   const heroDemoBtn = document.querySelector("#heroDemoBtn");
   const heroDemoBtnMobile = document.querySelector("#heroDemoBtnMobile");
+  const presetButtons = [...document.querySelectorAll(".presetCard[data-preset]")];
   const inputSection = document.querySelector("#inputSection");
   const resultSection = document.querySelector("#resultSection");
   const errorSummary = document.querySelector("#errorSummary");
@@ -214,6 +215,35 @@
   const LARGE_AMOUNT_WRAP_THRESHOLD = 1000000000;
   const YAHOO_PROXY_ENDPOINT = "/api/quote";
   const PRICE_FETCH_DEBOUNCE_MS = 550;
+  const PRESET_PORTFOLIOS = {
+    balanced: {
+      toastMessage: "균형형 4자산 예시로 계산을 완료했어요.",
+      samples: [
+        { name: "KODEX 200", target: "35", price: "35,200", qty: "110" },
+        { name: "TIGER 미국S&P500", target: "35", price: "18,450", qty: "180" },
+        { name: "KOSEF 국고채10년", target: "20", price: "10,230", qty: "120" },
+        { name: "KODEX 골드선물(H)", target: "10", price: "14,120", qty: "60" }
+      ]
+    },
+    growth: {
+      toastMessage: "성장형 80/20 예시로 계산을 완료했어요.",
+      samples: [
+        { name: "TIGER 미국나스닥100", target: "40", price: "12,880", qty: "210" },
+        { name: "TIGER 미국S&P500", target: "25", price: "18,450", qty: "150" },
+        { name: "KODEX 200", target: "15", price: "35,200", qty: "70" },
+        { name: "KOSEF 국고채10년", target: "20", price: "10,230", qty: "110" }
+      ]
+    },
+    income: {
+      toastMessage: "현금흐름 중시형 예시로 계산을 완료했어요.",
+      samples: [
+        { name: "TIGER 미국배당다우존스", target: "35", price: "16,980", qty: "150" },
+        { name: "KOSEF 국고채10년", target: "30", price: "10,230", qty: "180" },
+        { name: "KBSTAR 단기통안채", target: "20", price: "52,400", qty: "45" },
+        { name: "KODEX 골드선물(H)", target: "15", price: "14,120", qty: "55" }
+      ]
+    }
+  };
   let hasComputed = false;
   let isDirtyAfterCalc = false;
   let autoQuoteEnabled = true;
@@ -310,6 +340,12 @@
   }
   function getInitialRowCount(){
     return window.matchMedia("(max-width: 768px)").matches ? 3 : 7;
+  }
+  function setActivePreset(presetKey){
+    presetButtons.forEach((button)=>{
+      const isActive = button.dataset.preset === presetKey;
+      button.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
   }
   function syncRowPriceInputMode(tr){
     if(!tr) return;
@@ -1875,7 +1911,10 @@ const focusNextFieldInRow = (currentEl)=>{
 };
 
 attachTargetGuard(targetEl);
-tr.querySelector(".delBtn").addEventListener("click", ()=>deleteRow(tr));
+tr.querySelector(".delBtn").addEventListener("click", ()=>{
+  setActivePreset(null);
+  deleteRow(tr);
+});
 tr.querySelector(".detailToggleBtn").addEventListener("click", ()=>{
   const next = !tr.classList.contains("mobile-details-open");
   setRowDetailOpen(tr, next);
@@ -1885,6 +1924,7 @@ nameEl.addEventListener("input", ()=>{
   showNameSuggestions(tr, nameEl.value);
   syncRowDisplayName(tr);
   switchToCurrentOnEdit(nameEl);
+  setActivePreset(null);
   if(autoQuoteEnabled) scheduleAutoPriceFetch(tr);
   markDirtyIfNeeded();
 });
@@ -1935,6 +1975,7 @@ nameEl.addEventListener("keydown", (event)=>{
 targetEl.addEventListener("focus", ()=>warnOnResultFocus(targetEl));
 targetEl.addEventListener("input", ()=>{
   switchToCurrentOnEdit(targetEl);
+  setActivePreset(null);
   targetEl.classList.remove("invalidField");
   if(mode === "current") updateCurrentUI();
   markDirtyIfNeeded();
@@ -1950,6 +1991,7 @@ const rowManualPriceToggleEl = tr.querySelector(".rowManualPriceToggle");
   });
   el.addEventListener("input", ()=>{
     switchToCurrentOnEdit(el);
+    setActivePreset(null);
     el.classList.remove("invalidField");
     formatInputWithComma(el);
     if(mode === "current") updateCurrentUI();
@@ -1975,6 +2017,7 @@ if(rowAutoToggleEl){
 if(rowManualPriceToggleEl){
   rowManualPriceToggleEl.addEventListener("change", ()=>{
     syncRowPriceInputMode(tr);
+    setActivePreset(null);
     if(autoQuoteEnabled && !rowManualPriceToggleEl.checked){
       scheduleAutoPriceFetch(tr, { immediate: true });
     }
@@ -2104,14 +2147,10 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     return true;
   }
 
-  function fillDemoAndRun(){
-    const samples = [
-      { name: "KODEX 200", target: "35", price: "35,200", qty: "110" },
-      { name: "TIGER 미국S&P500", target: "35", price: "18,450", qty: "180" },
-      { name: "KOSEF 국고채10년", target: "20", price: "10,230", qty: "120" },
-      { name: "KODEX 골드선물(H)", target: "10", price: "14,120", qty: "60" }
-    ];
-
+  function applyPresetPortfolio(presetKey){
+    const preset = PRESET_PORTFOLIOS[presetKey];
+    if(!preset) return;
+    const { samples, toastMessage } = preset;
     clearAllRowQuoteStates();
     tbody.innerHTML = "";
     samples.forEach(()=>addRow());
@@ -2135,8 +2174,12 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
       hasComputed = true;
       setMode("result");
       setDirtyState(false);
-      showToast("예시 데이터로 계산을 완료했어요.");
+      setActivePreset(presetKey);
+      showToast(toastMessage || "예시 데이터로 계산을 완료했어요.");
     }
+  }
+  function fillDemoAndRun(){
+    applyPresetPortfolio("balanced");
   }
 
   function renderMobileResultList(trades, cashResidual){
@@ -2294,6 +2337,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
 
   document.querySelector("#addRow").onclick = ()=>{
     addRow();
+    setActivePreset(null);
     markDirtyIfNeeded();
     hideErrorSummary();
     clearInvalidMarks();
@@ -2332,6 +2376,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     setDirtyState(false);
     hideErrorSummary();
     clearInvalidMarks();
+    setActivePreset(null);
     updateTargetSumUI();
     updateCurrentUI();
   }
@@ -2397,8 +2442,17 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
   if(heroDemoBtnMobile){
     heroDemoBtnMobile.addEventListener("click", fillDemoAndRun);
   }
+  presetButtons.forEach((button)=>{
+    button.addEventListener("click", ()=>{
+      const presetKey = button.dataset.preset;
+      if(!presetKey) return;
+      applyPresetPortfolio(presetKey);
+      scrollToEl(inputSection);
+    });
+  });
 
   for(let i=0;i<getInitialRowCount();i++) addRow();
+  setActivePreset(null);
   setMode("current");
   setTotalSummary("현재 보유액", fmtKRW(0));
   setCashSummary(fmtKRW(0));
