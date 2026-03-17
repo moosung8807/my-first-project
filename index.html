@@ -180,9 +180,8 @@
     </section>
   </template>
 
-  <div class="mainLayout">
-    <div class="calculatorArea">
-      <div class="card" id="inputSection">
+  <div class="calculatorArea">
+    <div class="card" id="inputSection">
         <div class="sectionHeading">
           <h2>1. 입력 설정</h2>
           <div class="sectionHeadingActions controlActions">
@@ -200,6 +199,7 @@
         </div>
       </div>
 
+    <div class="contentLayout">
       <div class="card" id="tableCard">
         <div class="sectionHeading resultHeading">
           <h2 id="resultSection">2. 계산 결과</h2>
@@ -310,41 +310,33 @@
           <span class="miniItem"><span class="k">현금</span><span class="v" id="mobileCashLabel">₩ 0</span></span>
         </div>
       </div>
-      <div class="mobileCalcBar" id="mobileCalcBar" aria-live="polite">
-        <div class="mobileCalcMeta">
-          <span class="k">총 자산</span>
-          <strong class="v" id="mobileTotalAssetLabel">₩ 0</strong>
+
+      <aside class="guideRail" aria-labelledby="guideRailTitle">
+        <div class="guideRailInner">
+        <div class="guideRailHeader">
+          <p class="guideRailEyebrow">Guide</p>
+          <h2 class="guideRailTitle" id="guideRailTitle">리밸런싱 가이드</h2>
+          <p class="guideRailIntro">개념을 먼저 이해하고 계산기를 쓰면 결과 해석이 훨씬 쉬워집니다.</p>
         </div>
-        <button class="primary" id="mobileCalcBtn" type="button">계산하기</button>
-        <button class="secondary" id="mobileResetBtn" type="button">초기화</button>
-      </div>
+
+        <div class="guideRailToolbar">
+          <span class="guideRailMeta">랜덤 3편</span>
+          <button class="secondary guideRailRefreshBtn" id="guideRailRefreshBtn" type="button">다른 글 보기</button>
+        </div>
+
+        <div class="guideRailList" id="guideRailList" role="list" aria-live="polite"></div>
+        </div>
+      </aside>
     </div>
 
-    <aside class="guideRail" aria-labelledby="guideRailTitle">
-      <div class="guideRailInner">
-        <p class="guideRailEyebrow">Guide</p>
-        <h2 class="guideRailTitle" id="guideRailTitle">리밸런싱 가이드</h2>
-        <p class="guideRailIntro">개념을 먼저 이해하고 계산기를 쓰면 결과 해석이 훨씬 쉬워집니다.</p>
-
-        <a class="guideRailCard" href="pages/why-rebalancing.html">
-          <span class="guideRailCardTag">개념</span>
-          <strong>리밸런싱을 해야 하는 이유</strong>
-          <span>포트폴리오 위험을 관리하는 핵심 전략을 먼저 이해해보세요.</span>
-        </a>
-
-        <a class="guideRailCard" href="pages/rebalancing-frequency.html">
-          <span class="guideRailCardTag">주기</span>
-          <strong>리밸런싱 주기 정하는 법</strong>
-          <span>연 1회, 반기, 비중 기준 방식의 차이를 짧게 비교합니다.</span>
-        </a>
-
-        <a class="guideRailCard" href="pages/rebalancing-calculation-difficulty.html">
-          <span class="guideRailCardTag">계산</span>
-          <strong>리밸런싱 계산이 어려운 이유</strong>
-          <span>왜 많은 투자자가 계산기를 쓰는지 실제 계산 맥락으로 설명합니다.</span>
-        </a>
+    <div class="mobileCalcBar" id="mobileCalcBar" aria-live="polite">
+      <div class="mobileCalcMeta">
+        <span class="k">총 자산</span>
+        <strong class="v" id="mobileTotalAssetLabel">₩ 0</strong>
       </div>
-    </aside>
+      <button class="primary" id="mobileCalcBtn" type="button">계산하기</button>
+      <button class="secondary" id="mobileResetBtn" type="button">초기화</button>
+    </div>
   </div>
 
     <section class="faqSection" aria-labelledby="faqTitle">
@@ -380,12 +372,6 @@
 <script src="assets/js/faq-renderer.js"></script>
 <script src="assets/js/main-page.js"></script>
 <footer class="siteFooter">
-  <div class="footerGuideLinks">
-    <span class="guideLabel">리밸런싱 가이드</span>
-    <a href="pages/why-rebalancing.html">리밸런싱을 해야 하는 이유</a>
-    <a href="pages/rebalancing-frequency.html">리밸런싱 주기</a>
-    <a href="pages/rebalancing-calculation-difficulty.html">리밸런싱 계산이 어려운 이유</a>
-  </div>
   <div class="footerTopLinks">
     <a href="pages/about.html">소개</a>
     <a href="pages/privacy.html">개인정보 처리방침</a>

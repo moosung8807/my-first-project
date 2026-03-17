@@ -8,6 +8,8 @@
   const heroDemoBtn = document.querySelector("#heroDemoBtn");
   const heroDemoBtnMobile = document.querySelector("#heroDemoBtnMobile");
   const presetButtons = [...document.querySelectorAll(".presetCard[data-preset]")];
+  const guideRailList = document.querySelector("#guideRailList");
+  const guideRailRefreshBtn = document.querySelector("#guideRailRefreshBtn");
   const inputSection = document.querySelector("#inputSection");
   const resultSection = document.querySelector("#resultSection");
   const errorSummary = document.querySelector("#errorSummary");
@@ -244,9 +246,31 @@
       ]
     }
   };
+  const GUIDE_RAIL_VISIBLE_COUNT = 3;
+  const GUIDE_RAIL_ITEMS = [
+    {
+      href: "pages/why-rebalancing.html",
+      tag: "개념",
+      title: "리밸런싱을 해야 하는 이유",
+      description: "목표 비중을 유지해야 하는 이유와 위험 관리 관점을 먼저 정리합니다."
+    },
+    {
+      href: "pages/rebalancing-frequency.html",
+      tag: "주기",
+      title: "리밸런싱 주기 정하는 법",
+      description: "연 1회, 반기, 비중 기준 방식이 실제로 어떻게 다른지 빠르게 비교합니다."
+    },
+    {
+      href: "pages/rebalancing-calculation-difficulty.html",
+      tag: "계산",
+      title: "리밸런싱 계산이 어려운 이유",
+      description: "손계산이 복잡해지는 지점과 계산기가 필요한 이유를 짚어줍니다."
+    }
+  ];
   let hasComputed = false;
   let isDirtyAfterCalc = false;
   let autoQuoteEnabled = true;
+  let guideRailSelectionKey = "";
   const rowQuoteStates = new Map();
   function applySuggestionSelection(tr, item){
     const nameEl = getNameInput(tr);
@@ -346,6 +370,58 @@
       const isActive = button.dataset.preset === presetKey;
       button.setAttribute("aria-pressed", isActive ? "true" : "false");
     });
+  }
+  function shuffleItems(items){
+    const nextItems = [...items];
+    for(let i = nextItems.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [nextItems[i], nextItems[j]] = [nextItems[j], nextItems[i]];
+    }
+    return nextItems;
+  }
+  function pickGuideRailItems(){
+    if(!GUIDE_RAIL_ITEMS.length){
+      return [];
+    }
+    if(GUIDE_RAIL_ITEMS.length <= GUIDE_RAIL_VISIBLE_COUNT){
+      return shuffleItems(GUIDE_RAIL_ITEMS);
+    }
+
+    let nextItems = [];
+    let nextKey = "";
+    let attempt = 0;
+    do{
+      nextItems = shuffleItems(GUIDE_RAIL_ITEMS).slice(0, GUIDE_RAIL_VISIBLE_COUNT);
+      nextKey = nextItems.map((item)=>item.href).sort().join("|");
+      attempt += 1;
+    }while(nextKey === guideRailSelectionKey && attempt < 8);
+
+    return nextItems;
+  }
+  function renderGuideRail(){
+    if(!guideRailList) return;
+    const items = pickGuideRailItems();
+    if(!items.length){
+      guideRailList.innerHTML = "";
+      if(guideRailRefreshBtn){
+        guideRailRefreshBtn.disabled = true;
+      }
+      return;
+    }
+    guideRailSelectionKey = items.map((item)=>item.href).sort().join("|");
+    guideRailList.innerHTML = items.map((item)=>`
+      <a class="guideRailCard" href="${item.href}" role="listitem">
+        <span class="guideRailCardBody">
+          <span class="guideRailCardTag">${escapeHtml(item.tag)}</span>
+          <strong>${escapeHtml(item.title)}</strong>
+          <span>${escapeHtml(item.description)}</span>
+        </span>
+        <span class="guideRailCardArrow" aria-hidden="true">→</span>
+      </a>
+    `).join("");
+    if(guideRailRefreshBtn){
+      guideRailRefreshBtn.disabled = GUIDE_RAIL_ITEMS.length < 2;
+    }
   }
   function syncRowPriceInputMode(tr){
     if(!tr) return;
@@ -2450,8 +2526,12 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
       scrollToEl(inputSection);
     });
   });
+  if(guideRailRefreshBtn){
+    guideRailRefreshBtn.addEventListener("click", ()=>renderGuideRail());
+  }
 
   for(let i=0;i<getInitialRowCount();i++) addRow();
+  renderGuideRail();
   setActivePreset(null);
   setMode("current");
   setTotalSummary("현재 보유액", fmtKRW(0));
