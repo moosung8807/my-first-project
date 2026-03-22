@@ -2119,8 +2119,8 @@ td.col-qty::after{
         grid-template-columns:repeat(2, minmax(0, 1fr)) auto;
         grid-template-areas:
           "name name del"
-          "qty target del"
-          "price price del";
+          "price qty del"
+          "target target del";
         gap:8px;
         border:1px solid var(--line);
         border-radius:14px;
@@ -2129,11 +2129,11 @@ td.col-qty::after{
         background:linear-gradient(180deg, var(--card2), var(--card));
       }
       #tableCard.mode-current #tbl tbody tr{
-        grid-template-columns:repeat(2, minmax(0, 1fr)) auto;
+        grid-template-columns:minmax(0, 1.32fr) minmax(0, .68fr) auto;
         grid-template-areas:
           "name name del"
-          "qty target del"
-          "price price del";
+          "price qty del"
+          "target target del";
       }
       #tbl tbody td{
         border-bottom:0;
@@ -2178,6 +2178,11 @@ td.col-qty::after{
         max-width:none;
         min-height:38px;
         font-size:12px;
+      }
+      #tableCard.mode-current #tbl tbody td.col-name input::placeholder{
+        font-size:12px;
+        font-weight:400;
+        color:var(--muted);
       }
       td.col-target input,
       td.col-price input,
@@ -2239,6 +2244,38 @@ td.col-qty::after{
       td.col-price::before,
       td.col-qty::before{
         display:none;
+      }
+      #tableCard.mode-current #tbl tbody td.col-target::before{
+        content:"목표비중 :";
+        display:block;
+        position:absolute;
+        left:14px;
+        top:50%;
+        transform:translateY(-50%);
+        margin:0;
+        font-size:12px;
+        font-weight:400;
+        color:var(--muted);
+        pointer-events:none;
+      }
+      #tableCard.mode-current #tbl tbody td.col-price::before{
+        content:"현재가:";
+        display:block;
+        position:absolute;
+        left:14px;
+        top:50%;
+        transform:translateY(-50%);
+        margin:0;
+        font-size:12px;
+        font-weight:400;
+        color:var(--muted);
+        pointer-events:none;
+      }
+      #tableCard.mode-current #tbl tbody td.col-price input{
+        padding-left:60px;
+      }
+      #tableCard.mode-current #tbl tbody td.col-target input{
+        padding-left:92px;
       }
       td.col-val::before{content:"보유액"}
       td.col-w::before{content:"비중"}

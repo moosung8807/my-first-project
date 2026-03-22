@@ -1923,12 +1923,11 @@
         </div>
       </td>
 
+      <td class="g-input col-price"><input class="g-input price" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 1,234" aria-label="현재가 원"></td>
+      <td class="g-input col-qty"><input class="g-input qty" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 123" aria-label="수량 주"></td>
       <td class="g-input col-target">
         <input class="g-input target" type="number" min="0" max="100" step="0.1" inputmode="numeric" placeholder="예: 30%" aria-label="목표비중 퍼센트">
       </td>
-
-      <td class="g-input col-price"><input class="g-input price" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 1,234" aria-label="현재가 원"></td>
-      <td class="g-input col-qty"><input class="g-input qty" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 123" aria-label="수량 주"></td>
 
       <td class="g-current col-val val">₩ 0</td>
       <td class="g-current col-w w">0.00%</td>
@@ -1977,113 +1976,113 @@
       resultCells.forEach(el=>el.classList.remove("hide"));
     }
 
-const focusNextFieldInRow = (currentEl)=>{
-  const fieldOrder = [nameEl, qtyEl, priceEl, targetEl];
-  const currentIndex = fieldOrder.indexOf(currentEl);
-  if(currentIndex < 0) return;
-  const nextEl = fieldOrder[currentIndex + 1];
-  if(!nextEl) return;
-  nextEl.focus({ preventScroll: true });
-};
+    const focusNextFieldInRow = (currentEl)=>{
+      const fieldOrder = [nameEl, priceEl, qtyEl, targetEl];
+      const currentIndex = fieldOrder.indexOf(currentEl);
+      if(currentIndex < 0) return;
+      const nextEl = fieldOrder[currentIndex + 1];
+      if(!nextEl) return;
+      nextEl.focus({ preventScroll: true });
+    };
 
-attachTargetGuard(targetEl);
-tr.querySelector(".delBtn").addEventListener("click", ()=>{
-  setActivePreset(null);
-  deleteRow(tr);
-});
-tr.querySelector(".detailToggleBtn").addEventListener("click", ()=>{
-  const next = !tr.classList.contains("mobile-details-open");
-  setRowDetailOpen(tr, next);
-});
-nameEl.addEventListener("focus", ()=>warnOnResultFocus(nameEl));
-nameEl.addEventListener("input", ()=>{
-  showNameSuggestions(tr, nameEl.value);
-  syncRowDisplayName(tr);
-  switchToCurrentOnEdit(nameEl);
-  setActivePreset(null);
-  if(autoQuoteEnabled) scheduleAutoPriceFetch(tr);
-  markDirtyIfNeeded();
-});
-nameEl.addEventListener("focus", ()=>{
-  if(nameEl && String(nameEl.value || "").trim()){
-    showNameSuggestions(tr, nameEl.value);
-  }
-});
-nameEl.addEventListener("blur", ()=>{
-  setTimeout(()=>hideNameSuggestions(tr), 120);
-  if(autoQuoteEnabled) scheduleAutoPriceFetch(tr, { immediate: true });
-});
-nameEl.addEventListener("keydown", (event)=>{
-  if(event.isComposing) return;
-  const items = getNameSuggestionItems(tr);
-  const isOpen = items.length > 0;
-  if(event.key === "ArrowDown" && isOpen){
-    event.preventDefault();
-    const next = Math.min(getSuggestionActiveIndex(tr) + 1, items.length - 1);
-    setSuggestionActiveIndex(tr, next);
-    return;
-  }
-  if(event.key === "ArrowUp" && isOpen){
-    event.preventDefault();
-    const next = getSuggestionActiveIndex(tr) <= 0 ? items.length - 1 : getSuggestionActiveIndex(tr) - 1;
-    setSuggestionActiveIndex(tr, next);
-    return;
-  }
-  if(event.key === "Enter"){
-    if(isOpen){
-      event.preventDefault();
-      const activeIndex = getSuggestionActiveIndex(tr);
-      const picked = activeIndex >= 0 ? items[activeIndex] : items[0];
-      if(picked){
-        applySuggestionSelection(tr, picked);
+    attachTargetGuard(targetEl);
+    tr.querySelector(".delBtn").addEventListener("click", ()=>{
+      setActivePreset(null);
+      deleteRow(tr);
+    });
+    tr.querySelector(".detailToggleBtn").addEventListener("click", ()=>{
+      const next = !tr.classList.contains("mobile-details-open");
+      setRowDetailOpen(tr, next);
+    });
+    nameEl.addEventListener("focus", ()=>warnOnResultFocus(nameEl));
+    nameEl.addEventListener("input", ()=>{
+      showNameSuggestions(tr, nameEl.value);
+      syncRowDisplayName(tr);
+      switchToCurrentOnEdit(nameEl);
+      setActivePreset(null);
+      if(autoQuoteEnabled) scheduleAutoPriceFetch(tr);
+      markDirtyIfNeeded();
+    });
+    nameEl.addEventListener("focus", ()=>{
+      if(nameEl && String(nameEl.value || "").trim()){
+        showNameSuggestions(tr, nameEl.value);
+      }
+    });
+    nameEl.addEventListener("blur", ()=>{
+      setTimeout(()=>hideNameSuggestions(tr), 120);
+      if(autoQuoteEnabled) scheduleAutoPriceFetch(tr, { immediate: true });
+    });
+    nameEl.addEventListener("keydown", (event)=>{
+      if(event.isComposing) return;
+      const items = getNameSuggestionItems(tr);
+      const isOpen = items.length > 0;
+      if(event.key === "ArrowDown" && isOpen){
+        event.preventDefault();
+        const next = Math.min(getSuggestionActiveIndex(tr) + 1, items.length - 1);
+        setSuggestionActiveIndex(tr, next);
         return;
       }
-    }
-    hideNameSuggestions(tr);
-    if(autoQuoteEnabled) scheduleAutoPriceFetch(tr, { immediate: true });
-    event.preventDefault();
-    focusNextFieldInRow(nameEl);
-  }
-  if(event.key === "Escape"){
-    hideNameSuggestions(tr);
-  }
-});
-targetEl.addEventListener("focus", ()=>warnOnResultFocus(targetEl));
-targetEl.addEventListener("input", ()=>{
-  switchToCurrentOnEdit(targetEl);
-  setActivePreset(null);
-  targetEl.classList.remove("invalidField");
-  if(mode === "current") updateCurrentUI();
-  markDirtyIfNeeded();
-});
-const rowAutoToggleEl = tr.querySelector(".rowAutoQuoteToggle");
-const rowManualPriceToggleEl = tr.querySelector(".rowManualPriceToggle");
-[priceEl, qtyEl].forEach(el=>{
-  el.addEventListener("focus", ()=>warnOnResultFocus(el));
-  el.addEventListener("keydown", (event)=>{
-    if(event.key !== "Enter" || event.isComposing) return;
-    event.preventDefault();
-    focusNextFieldInRow(el);
-  });
-  el.addEventListener("input", ()=>{
-    switchToCurrentOnEdit(el);
-    setActivePreset(null);
-    el.classList.remove("invalidField");
-    formatInputWithComma(el);
-    if(mode === "current") updateCurrentUI();
-    markDirtyIfNeeded();
-  });
-  el.addEventListener("blur", ()=>{
-    formatInputWithComma(el);
-    if(mode === "current") updateCurrentUI();
-    markDirtyIfNeeded();
-  });
-});
-targetEl.addEventListener("keydown", (event)=>{
-  if(event.key !== "Enter" || event.isComposing) return;
-  event.preventDefault();
-  focusNextFieldInRow(targetEl);
-});
+      if(event.key === "ArrowUp" && isOpen){
+        event.preventDefault();
+        const next = getSuggestionActiveIndex(tr) <= 0 ? items.length - 1 : getSuggestionActiveIndex(tr) - 1;
+        setSuggestionActiveIndex(tr, next);
+        return;
+      }
+      if(event.key === "Enter"){
+        if(isOpen){
+          event.preventDefault();
+          const activeIndex = getSuggestionActiveIndex(tr);
+          const picked = activeIndex >= 0 ? items[activeIndex] : items[0];
+          if(picked){
+            applySuggestionSelection(tr, picked);
+            return;
+          }
+        }
+        hideNameSuggestions(tr);
+        if(autoQuoteEnabled) scheduleAutoPriceFetch(tr, { immediate: true });
+        event.preventDefault();
+        focusNextFieldInRow(nameEl);
+      }
+      if(event.key === "Escape"){
+        hideNameSuggestions(tr);
+      }
+    });
+    targetEl.addEventListener("focus", ()=>warnOnResultFocus(targetEl));
+    targetEl.addEventListener("input", ()=>{
+      switchToCurrentOnEdit(targetEl);
+      setActivePreset(null);
+      targetEl.classList.remove("invalidField");
+      if(mode === "current") updateCurrentUI();
+      markDirtyIfNeeded();
+    });
+    const rowAutoToggleEl = tr.querySelector(".rowAutoQuoteToggle");
+    const rowManualPriceToggleEl = tr.querySelector(".rowManualPriceToggle");
+    [priceEl, qtyEl].forEach(el=>{
+      el.addEventListener("focus", ()=>warnOnResultFocus(el));
+      el.addEventListener("keydown", (event)=>{
+        if(event.key !== "Enter" || event.isComposing) return;
+        event.preventDefault();
+        focusNextFieldInRow(el);
+      });
+      el.addEventListener("input", ()=>{
+        switchToCurrentOnEdit(el);
+        setActivePreset(null);
+        el.classList.remove("invalidField");
+        formatInputWithComma(el);
+        if(mode === "current") updateCurrentUI();
+        markDirtyIfNeeded();
+      });
+      el.addEventListener("blur", ()=>{
+        formatInputWithComma(el);
+        if(mode === "current") updateCurrentUI();
+        markDirtyIfNeeded();
+      });
+    });
+    targetEl.addEventListener("keydown", (event)=>{
+      if(event.key !== "Enter" || event.isComposing) return;
+      event.preventDefault();
+      focusNextFieldInRow(targetEl);
+    });
 
 if(rowAutoToggleEl){
   rowAutoToggleEl.addEventListener("change", ()=>{
