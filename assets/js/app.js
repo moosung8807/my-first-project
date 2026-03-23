@@ -255,6 +255,12 @@
       description: "목표 비중을 유지해야 하는 이유와 위험 관리 관점을 먼저 정리합니다."
     },
     {
+      href: "pages/monthly-dca-rebalancing.html",
+      tag: "적립식",
+      title: "월 적립식 매수 비중 계산기",
+      description: "매도 없이 이번 달 적립금을 어떤 종목에 얼마씩 넣을지 빠르게 계산합니다."
+    },
+    {
       href: "pages/rebalancing-frequency.html",
       tag: "주기",
       title: "리밸런싱 주기 정하는 법",
