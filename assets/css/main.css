@@ -1348,6 +1348,25 @@
     }
     .pill .k{color:var(--pill-k);font-weight:600;font-size:11.5px}
     .pill .v{color:var(--pill-v);font-weight:800}
+    .pill.sell .v::before,
+    .pill.buy .v::before,
+    .pill.hold .v::before{
+      display:inline-block;
+      margin-right:4px;
+      font-size:11px;
+      line-height:1;
+      font-weight:900;
+      vertical-align:baseline;
+    }
+    .pill.sell .v::before{
+      content:"↘";
+    }
+    .pill.buy .v::before{
+      content:"↗";
+    }
+    .pill.hold .v::before{
+      content:"−";
+    }
     #sumTotalKey,
     #cashKey,
     #mobileSumTotalKey{
@@ -1804,6 +1823,25 @@ td.col-qty::after{
     .tradeIcon.hold{color:var(--trade-hold-color); border-color:var(--trade-hold-border); background:var(--trade-hold-bg)}
     .tradeNum{min-width:44px; text-align:right; font-weight:800;} /* ✅ 숫자 폭 고정 */
     .detailToggleBtn{display:none!important;}
+    .decisionLabel{
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+    }
+    .decisionIcon{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:12px;
+      height:12px;
+      flex:0 0 auto;
+      font-size:11px;
+      line-height:1;
+      font-weight:900;
+    }
+    .decisionText{
+      line-height:1;
+    }
 
     /* ===== Toast ===== */
     .toast{
@@ -2088,7 +2126,7 @@ td.col-qty::after{
         min-height:40px;
       }
       #heroCalcBtn{
-        display:none;
+        display:inline-flex;
       }
       .summaryBar{display:none}
       #inputSection .sectionHeading h2{
@@ -2461,12 +2499,20 @@ td.col-qty::after{
         display:none;
       }
       #tableCard.mode-result #tbl tbody td.col-decision .decisionLabel{
+        display:inline-flex;
+        align-items:center;
+        gap:5px;
         border-radius:999px;
-        padding:3px 8px;
+        padding:4px 9px;
         font-size:12px;
         font-weight:800;
         line-height:1.15;
         white-space:nowrap;
+      }
+      #tableCard.mode-result #tbl tbody td.col-decision .decisionIcon{
+        width:13px;
+        height:13px;
+        font-size:11px;
       }
       #tableCard.mode-result #tbl tbody td.col-decision.buy .decisionLabel{
         color:var(--buy);
@@ -2679,8 +2725,16 @@ td.col-qty::after{
         font-weight:700;
       }
       .mobileResultItem .decision{
+        display:inline-flex;
+        align-items:center;
+        gap:4px;
         font-weight:800;
         letter-spacing:.01em;
+      }
+      .mobileResultItem .decision .decisionIcon{
+        width:12px;
+        height:12px;
+        font-size:11px;
       }
       .mobileResultItem .decision.buy{
         color:var(--buy);
@@ -2933,5 +2987,1130 @@ td.col-qty::after{
       .guideContent li + li,
       .faqSection li + li{
         margin-top:2px;
+      }
+    }
+
+    @font-face{
+      font-family:"NotoKRLocal";
+      src:url("../fonts/noto-sans-kr-400.ttf") format("truetype");
+      font-weight:400;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face{
+      font-family:"NotoKRLocal";
+      src:url("../fonts/noto-sans-kr-700.ttf") format("truetype");
+      font-weight:700;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face{
+      font-family:"NotoKRLocal";
+      src:url("../fonts/noto-sans-kr-800.ttf") format("truetype");
+      font-weight:800;
+      font-style:normal;
+      font-display:swap;
+    }
+
+    /* ===== V0-inspired refresh ===== */
+    :root{
+      --bg-top:#0d1524;
+      --bg-bottom:#060b14;
+      --line:rgba(136,161,198,.16);
+      --text:#edf3fd;
+      --muted:#93a3bd;
+
+      --gold:#5a8cff;
+      --gold-soft:#9fc0ff;
+
+      --buy:#4dbb78;
+      --sell:#f06f6a;
+      --hold:#8b9bb2;
+
+      --toast-bg:rgba(10,16,28,.94);
+      --toast-line:rgba(90,140,255,.28);
+      --toast-shadow:rgba(0,0,0,.48);
+      --toast-badge-bg:rgba(90,140,255,.14);
+      --toast-badge-line:rgba(90,140,255,.24);
+      --toast-msg:#eef4ff;
+
+      --card:#0f1728;
+      --card2:#141f36;
+      --surface:#0b1322;
+      --card-shadow:rgba(0,0,0,.34);
+      --hero-bg1:#16243d;
+      --hero-bg2:#0e1628;
+      --hero-glow:rgba(90,140,255,.22);
+      --hero-shadow:rgba(0,0,0,.34);
+      --hero-eyebrow:#a9bce0;
+
+      --summary-border:rgba(112,138,177,.2);
+      --summary-bg1:rgba(18,28,47,.96);
+      --summary-bg2:rgba(13,20,35,.96);
+      --summary-left:#edf3fd;
+      --summary-right:#a4b3cc;
+      --pill-border:rgba(117,144,186,.18);
+      --pill-bg:rgba(255,255,255,.04);
+      --pill-k:#8ea0be;
+      --pill-v:#eef4ff;
+      --pill-hold:#a1afc2;
+      --pill-cash:#9fc0ff;
+
+      --progress-border:rgba(107,132,170,.22);
+      --progress-bg:#0b1322;
+      --progress-ok-1:#5a8cff;
+      --progress-ok-2:#86b0ff;
+
+      --thead-bg:#111c31;
+      --thead-group:#bfd2f6;
+      --thead-sub:#96aac9;
+      --thead-del:#91a0b8;
+      --tfoot-bg:#111c31;
+
+      --row-hover:rgba(90,140,255,.06);
+      --unit:#8698b6;
+      --sum-ok:#9fc0ff;
+      --mode-hint:#9fc0ff;
+
+      --del-border:rgba(139,155,178,.22);
+      --del-bg:#0d1523;
+      --del-color:rgba(170,181,198,.72);
+
+      --trade-border:rgba(117,144,186,.24);
+      --trade-bg:rgba(255,255,255,.04);
+      --trade-hold-color:#a4b3c8;
+      --trade-hold-border:rgba(139,155,178,.24);
+      --trade-hold-bg:rgba(255,255,255,.05);
+
+      --footer-bg:rgba(8,12,20,.8);
+      --footer-border:rgba(136,161,198,.18);
+      --footer-link:#dbe7fb;
+      --footer-link-hover:#ffffff;
+      --footer-link-under:rgba(219,231,251,.9);
+      --footer-sep:rgba(157,171,191,.55);
+      --mobile-sticky-border:rgba(115,151,214,.28);
+      --mobile-sticky-bg1:rgba(20,30,49,.96);
+      --mobile-sticky-bg2:rgba(10,16,28,.98);
+      --mobile-sticky-key:#8ea1bf;
+      --mobile-sticky-value:#eef4ff;
+      --signal-accent:#5a8cff;
+      --signal-accent-2:#86b0ff;
+      --signal-chip-bg:rgba(90,140,255,.12);
+      --signal-chip-line:rgba(90,140,255,.22);
+      --signal-glow:rgba(90,140,255,.26);
+
+      --radius-card:24px;
+      --radius-control:14px;
+      --font-body:"NotoKRLocal","Paperlogy","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+      --font-display:"NotoKRLocal","Paperlogy","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    }
+
+    html[data-theme="light"]{
+      --bg-top:#eef3f9;
+      --bg-bottom:#d6e0ea;
+      --line:rgba(108,127,153,.18);
+      --text:#152033;
+      --muted:#5e6f87;
+
+      --gold:#4f7ff0;
+      --gold-soft:#7ca4ff;
+
+      --buy:#2f9b61;
+      --sell:#d05a56;
+      --hold:#73829a;
+
+      --toast-bg:rgba(248,251,255,.96);
+      --toast-line:rgba(79,127,240,.16);
+      --toast-shadow:rgba(32,43,59,.18);
+      --toast-badge-bg:rgba(79,127,240,.08);
+      --toast-badge-line:rgba(79,127,240,.16);
+      --toast-msg:#122034;
+
+      --card:#ffffff;
+      --card2:#f4f7fb;
+      --surface:#f6f9fc;
+      --card-shadow:rgba(37,51,71,.12);
+      --hero-bg1:#ffffff;
+      --hero-bg2:#edf2f8;
+      --hero-glow:rgba(110,150,255,.14);
+      --hero-shadow:rgba(39,51,71,.12);
+      --hero-eyebrow:#5c7190;
+
+      --summary-border:rgba(108,127,153,.16);
+      --summary-bg1:rgba(255,255,255,.98);
+      --summary-bg2:rgba(241,246,252,.98);
+      --summary-left:#172337;
+      --summary-right:#62758e;
+      --pill-border:rgba(108,127,153,.14);
+      --pill-bg:rgba(244,248,252,.88);
+      --pill-k:#64748b;
+      --pill-v:#172337;
+      --pill-hold:#6d7b8f;
+      --pill-cash:#4f7ff0;
+
+      --progress-border:rgba(108,127,153,.16);
+      --progress-bg:#e8eef6;
+      --progress-ok-1:#4f7ff0;
+      --progress-ok-2:#7ca4ff;
+
+      --thead-bg:#eef3f9;
+      --thead-group:#28425f;
+      --thead-sub:#5f7390;
+      --thead-del:#667789;
+      --tfoot-bg:#edf2f8;
+
+      --row-hover:rgba(79,127,240,.05);
+      --unit:#73849c;
+      --sum-ok:#4f7ff0;
+      --mode-hint:#4f7ff0;
+
+      --del-border:rgba(108,127,153,.18);
+      --del-bg:#f5f8fb;
+      --del-color:rgba(96,111,132,.78);
+
+      --trade-border:rgba(108,127,153,.18);
+      --trade-bg:rgba(79,127,240,.06);
+      --trade-hold-color:#71839b;
+      --trade-hold-border:rgba(108,127,153,.16);
+      --trade-hold-bg:#eef3f8;
+
+      --footer-bg:rgba(244,248,252,.84);
+      --footer-border:rgba(108,127,153,.14);
+      --footer-link:#34465c;
+      --footer-link-hover:#0f1a2a;
+      --footer-link-under:rgba(52,70,92,.42);
+      --footer-sep:rgba(96,111,132,.48);
+      --mobile-sticky-border:rgba(108,127,153,.18);
+      --mobile-sticky-bg1:rgba(255,255,255,.96);
+      --mobile-sticky-bg2:rgba(241,246,252,.98);
+      --mobile-sticky-key:#60728b;
+      --mobile-sticky-value:#172337;
+      --signal-accent:#4f7ff0;
+      --signal-accent-2:#7ca4ff;
+      --signal-chip-bg:rgba(79,127,240,.08);
+      --signal-chip-line:rgba(79,127,240,.16);
+      --signal-glow:rgba(79,127,240,.18);
+      --font-body:"NotoKRLocal","Paperlogy","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+      --font-display:"NotoKRLocal","Paperlogy","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    }
+
+    body{
+      padding:30px 24px 108px;
+      background:
+        radial-gradient(circle at top left, rgba(90,140,255,.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(107,214,255,.1), transparent 24%),
+        linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+    }
+
+    html[data-theme="light"] body{
+      background:
+        radial-gradient(circle at top left, rgba(79,127,240,.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(160,190,255,.12), transparent 24%),
+        linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+    }
+
+    .layoutShell,
+    .container{
+      max-width:1280px;
+    }
+
+    .heroSection,
+    .presetSection,
+    .card,
+    .guideRailInner,
+    .faqSection{
+      border-color:var(--line);
+      border-radius:var(--radius-card);
+      box-shadow:0 22px 48px var(--card-shadow);
+    }
+
+    .heroSection{
+      position:relative;
+      min-height:clamp(560px, 78svh, 760px);
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+      padding:86px 36px 58px;
+      margin:0 0 26px;
+      border:0;
+      border-radius:0;
+      box-shadow:none;
+      text-align:center;
+      background:none;
+    }
+
+    html[data-theme="light"] .heroSection{
+      background:none;
+      box-shadow:none;
+    }
+
+    .heroTopRow{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:24px;
+      gap:14px;
+    }
+
+    .heroEyebrow{
+      display:inline-flex;
+      align-items:center;
+      min-height:36px;
+      padding:0 16px;
+      border:0;
+      border-radius:999px;
+      background:rgba(79,127,240,.09);
+      color:var(--signal-accent);
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:-.01em;
+      box-shadow:none;
+    }
+
+    .heroSection .themeToggle{
+      position:absolute;
+      top:26px;
+      right:26px;
+    }
+
+    .heroSection h1{
+      max-width:none;
+      margin:0 auto 22px;
+      font-size:clamp(3rem, 5vw, 4.7rem);
+      line-height:1.02;
+      letter-spacing:-.03em;
+      word-break:keep-all;
+      overflow-wrap:normal;
+      line-break:strict;
+      font-weight:800;
+    }
+
+    .heroTitleLine{
+      display:block;
+    }
+
+    .heroTitleAccent{
+      color:var(--signal-accent);
+    }
+
+    .heroDesc{
+      max-width:620px;
+      margin:0 auto 30px;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.8;
+      text-align:center;
+    }
+
+    .heroActions{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .heroActions #heroCalcBtn{
+      min-width:138px;
+      min-height:48px;
+      padding:0 20px;
+      border-radius:999px;
+    }
+
+    .heroSteps{
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      gap:54px;
+      max-width:640px;
+      margin:0 auto;
+      padding:0;
+    }
+
+    .heroSteps li{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:12px;
+      min-width:96px;
+      padding:0;
+      border:0;
+      background:transparent;
+      text-align:center;
+    }
+
+    .heroSteps li + li::before{
+      content:"→";
+      position:absolute;
+      left:-34px;
+      top:32px;
+      color:var(--muted);
+      font-size:22px;
+      font-weight:500;
+    }
+
+    .heroStepCard{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:58px;
+      height:58px;
+      border-radius:18px;
+      border:1px solid rgba(79,127,240,.12);
+      background:rgba(255,255,255,.74);
+      box-shadow:0 10px 24px rgba(37,51,71,.08);
+      color:var(--signal-accent);
+    }
+
+    .heroStepBadge{
+      position:absolute;
+      top:-8px;
+      right:18px;
+      z-index:1;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:26px;
+      height:26px;
+      border-radius:999px;
+      background:var(--signal-accent);
+      color:#fff;
+      font-size:13px;
+      font-weight:800;
+      box-shadow:0 8px 18px rgba(79,127,240,.22);
+    }
+
+    .heroStepIcon{
+      width:24px;
+      height:24px;
+    }
+
+    .heroStepLabel{
+      color:var(--text);
+      font-size:15px;
+      font-weight:700;
+      line-height:1.35;
+    }
+
+    .introText{
+      margin:0 0 22px;
+      max-width:none;
+      padding-left:10px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.72;
+      text-align:left;
+      word-break:keep-all;
+      overflow-wrap:normal;
+      line-break:strict;
+    }
+
+    .calculatorArea{
+      min-width:0;
+      margin-top:72px;
+    }
+
+    .presetSection{
+      padding:24px;
+      margin:72px 0 22px;
+      background:
+        radial-gradient(140% 180% at 0% 0%, var(--signal-chip-bg), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+    }
+
+    html[data-theme="light"] .presetSection{
+      background:
+        radial-gradient(140% 180% at 0% 0%, var(--signal-chip-bg), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(245,248,252,.96));
+      box-shadow:0 22px 48px var(--card-shadow);
+    }
+
+    .presetHeading{
+      align-items:flex-end;
+      gap:22px;
+      margin-bottom:18px;
+    }
+
+    .presetHeading h2{
+      font-size:28px;
+      line-height:1.12;
+      letter-spacing:-.02em;
+    }
+
+    .presetIntro{
+      max-width:430px;
+      text-align:left;
+      font-size:14px;
+    }
+
+    .presetGrid{
+      gap:14px;
+    }
+
+    button.presetCard{
+      min-height:172px;
+      padding:20px;
+      border-radius:20px;
+      border-color:var(--signal-chip-line);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow:0 16px 30px rgba(0,0,0,.14);
+    }
+
+    html[data-theme="light"] button.presetCard{
+      background:linear-gradient(180deg, #ffffff, #f5f8fc);
+      box-shadow:0 16px 30px var(--card-shadow);
+    }
+
+    button.presetCard:hover{
+      border-color:var(--signal-accent);
+      box-shadow:0 18px 34px var(--signal-glow);
+      transform:translateY(-3px);
+    }
+
+    button.presetCard[aria-pressed="true"]{
+      border-color:var(--signal-accent);
+      box-shadow:0 0 0 1px var(--signal-chip-line), 0 20px 36px var(--signal-glow);
+    }
+
+    .presetTag{
+      min-height:28px;
+      padding:0 11px;
+    }
+
+    .presetCard strong{
+      font-size:18px;
+      line-height:1.35;
+    }
+
+    .presetCard span:last-child{
+      font-size:13.5px;
+    }
+
+    .contentLayout{
+      grid-template-columns:minmax(0, 1fr) 320px;
+      gap:24px;
+      align-items:stretch;
+    }
+
+    .guideRail{
+      display:flex;
+      align-self:stretch;
+    }
+
+    .guideRailInner{
+      flex:1;
+      top:28px;
+      padding:22px;
+      min-height:100%;
+      background:
+        radial-gradient(140% 180% at 100% 0%, var(--signal-chip-bg), transparent 52%),
+        linear-gradient(180deg, var(--card2), var(--card));
+    }
+
+    html[data-theme="light"] .guideRailInner{
+      background:
+        radial-gradient(140% 180% at 100% 0%, var(--signal-chip-bg), transparent 52%),
+        linear-gradient(180deg, var(--card2), var(--card));
+      box-shadow:0 22px 48px var(--card-shadow);
+    }
+
+    .guideRailHeader{
+      margin-bottom:16px;
+      padding-bottom:16px;
+    }
+
+    .guideRailTitle{
+      font-size:24px;
+      letter-spacing:-.02em;
+    }
+
+    .guideRailCard{
+      border-radius:18px;
+      border:1px solid var(--signal-chip-line);
+      background:rgba(255,255,255,.04);
+      box-shadow:0 14px 28px rgba(0,0,0,.12);
+    }
+
+    .card{
+      padding:0;
+      overflow:hidden;
+      background:linear-gradient(180deg, var(--card2), var(--card));
+    }
+
+    html[data-theme="light"] .card{
+      background:linear-gradient(180deg, var(--card2), var(--card));
+      box-shadow:0 22px 48px var(--card-shadow);
+    }
+
+    .sectionHeading{
+      gap:14px;
+      margin:0;
+      padding:22px 24px 18px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+    }
+
+    .sectionHeadingActions{
+      gap:10px;
+    }
+
+    .sectionHeading h2{
+      font-size:22px;
+      line-height:1.2;
+      letter-spacing:-.02em;
+    }
+
+    .sectionHeading p{
+      margin-top:4px;
+      font-size:14px;
+      line-height:1.65;
+    }
+
+    #inputSection .sectionHeading h2{
+      margin-left:0;
+    }
+
+    .statusBadge{
+      min-height:34px;
+      padding:0 12px;
+      border-color:var(--signal-chip-line);
+      background:var(--signal-chip-bg);
+    }
+
+    .errorSummary{
+      margin:18px 24px 0;
+      border-radius:16px;
+      padding:13px 14px;
+    }
+
+    .faqSection{
+      padding:0;
+      margin:10px 0 22px;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+    }
+
+    .faqSection h2{
+      margin:0;
+      padding:22px 24px 8px;
+      font-size:22px;
+      letter-spacing:-.02em;
+    }
+
+    #faqList{
+      padding:0 24px 22px;
+    }
+
+    .faqItem{
+      padding:14px 0;
+    }
+
+    .faqQuestion{
+      font-size:15px;
+      line-height:1.55;
+    }
+
+    .faqAnswer{
+      font-size:14px;
+    }
+
+    input{
+      height:44px;
+      border-radius:14px;
+      border-color:rgba(255,255,255,.06);
+      background:rgba(255,255,255,.04);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+    }
+
+    html[data-theme="light"] input{
+      border-color:rgba(108,127,153,.14);
+      background:#f7fafe;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.98);
+    }
+
+    input:focus{
+      border-color:var(--signal-accent);
+      box-shadow:0 0 0 4px rgba(90,140,255,.12);
+    }
+
+    button{
+      height:44px;
+      padding:0 18px;
+      border-radius:999px;
+    }
+
+    button.primary{
+      background:linear-gradient(135deg, var(--signal-accent), var(--signal-accent-2));
+      box-shadow:0 14px 26px var(--signal-glow);
+    }
+
+    html[data-theme="light"] button.primary{
+      background:linear-gradient(135deg, var(--signal-accent), var(--signal-accent-2));
+      box-shadow:0 14px 26px var(--signal-glow);
+      color:#f8fbff;
+    }
+
+    button.secondary{
+      background:rgba(255,255,255,.05);
+      border-color:var(--signal-chip-line);
+    }
+
+    html[data-theme="light"] button.secondary{
+      background:#f7fafe;
+      border-color:rgba(108,127,153,.14);
+      box-shadow:none;
+    }
+
+    .themeToggle{
+      min-width:124px;
+      color:var(--text);
+    }
+
+    html[data-theme="light"] .themeToggle{
+      background:#f7fafe;
+      color:var(--text);
+      border-color:rgba(108,127,153,.14);
+      box-shadow:none;
+    }
+
+    .themeToggle:hover,
+    button.secondary:hover{
+      border-color:var(--signal-accent);
+    }
+
+    #heroDemoBtn,
+    #heroDemoBtnMobile{
+      border-color:var(--signal-chip-line);
+      color:var(--text);
+      background:rgba(255,255,255,.05);
+      box-shadow:none;
+    }
+
+    html[data-theme="light"] #heroDemoBtn,
+    html[data-theme="light"] #heroDemoBtnMobile{
+      background:#f7fafe;
+      border-color:rgba(108,127,153,.14);
+      color:var(--text);
+      box-shadow:none;
+    }
+
+    .mobileInputStatus{
+      margin:16px 24px 0;
+      padding:12px 14px;
+      border-radius:16px;
+      border-color:var(--signal-chip-line);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    }
+
+    .summaryBar{
+      margin:18px 24px 16px;
+      padding:14px 16px;
+      border-radius:18px;
+      border-color:var(--summary-border);
+      justify-content:flex-start;
+    }
+
+    html[data-theme="light"] .summaryBar{
+      box-shadow:0 12px 24px rgba(37,51,71,.08);
+    }
+
+    #tableCard .summaryRight{
+      display:none;
+    }
+
+    .summaryLeft{
+      gap:8px;
+    }
+
+    .pill{
+      min-height:38px;
+      padding:0 11px;
+    }
+
+    .progressWrap{
+      width:180px;
+      height:12px;
+      border-color:var(--progress-border);
+    }
+
+    .tableWrap{
+      margin:0 24px 21px;
+      border-radius:20px;
+      border-color:var(--line);
+      background:rgba(255,255,255,.015);
+    }
+
+    #tableCard.mode-current .tableWrap{
+      margin-top:24px;
+    }
+
+    table{
+      font-size:13.5px;
+    }
+
+    thead th{
+      padding:14px 8px;
+    }
+
+    tbody td{
+      padding:14px 8px;
+    }
+
+    tfoot th{
+      padding:15px 8px;
+      border-top-color:var(--signal-accent);
+    }
+
+    .nameSuggest{
+      border-radius:18px;
+      border-color:var(--signal-chip-line);
+    }
+
+    .delBtn{
+      border-radius:12px;
+    }
+
+    .tradeIcon{
+      border-radius:8px;
+    }
+
+    .siteFooter{
+      padding:16px 20px;
+      border-top-color:var(--footer-border);
+      background:var(--footer-bg);
+    }
+
+    html[data-theme="light"] .siteFooter{
+      box-shadow:0 -12px 26px rgba(37,51,71,.08);
+    }
+
+    @media (max-width: 1100px){
+      .contentLayout{
+        grid-template-columns:minmax(0, 1fr);
+        align-items:start;
+      }
+
+      .guideRail{
+        display:block;
+      }
+
+      .guideRailInner{
+        top:auto;
+        min-height:0;
+      }
+    }
+
+    @media (max-width: 768px){
+      body{
+        padding:18px 12px calc(128px + env(safe-area-inset-bottom, 0px));
+      }
+
+      .heroSection,
+      .presetSection,
+      .card,
+      .guideRailInner,
+      .faqSection{
+        border-radius:20px;
+      }
+
+      .heroSection{
+        min-height:calc(100svh - 146px);
+        padding:34px 18px 28px;
+        margin-bottom:18px;
+        border:0;
+        border-radius:0;
+        box-shadow:none;
+        text-align:left;
+      }
+
+      .heroTopRow{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+        margin-bottom:18px;
+      }
+
+      .heroSection .themeToggle{
+        position:static;
+      }
+
+      .heroSection h1{
+        max-width:none;
+        margin-bottom:18px;
+        font-size:42px;
+        line-height:1.04;
+      }
+
+      .heroDesc{
+        max-width:none;
+        margin-bottom:22px;
+        font-size:15px;
+        text-align:left;
+      }
+
+      .heroActions{
+        display:flex;
+        margin-top:16px;
+        gap:10px;
+        justify-content:flex-start;
+      }
+
+      .heroActions button{
+        width:100%;
+        min-height:46px;
+      }
+
+      .heroSteps{
+        display:grid;
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+        gap:14px 10px;
+        max-width:none;
+        margin:0;
+        padding:0;
+        justify-content:stretch;
+      }
+
+      .heroSteps li{
+        gap:10px;
+        min-width:0;
+      }
+
+      .heroSteps li + li::before{
+        display:none;
+      }
+
+      .heroStepCard{
+        width:54px;
+        height:54px;
+        border-radius:16px;
+      }
+
+      .heroStepBadge{
+        right:8px;
+      }
+
+      .heroStepLabel{
+        font-size:13px;
+      }
+
+      .introText{
+        margin-bottom:18px;
+        padding:0 2px;
+        font-size:13.5px;
+        text-align:left;
+      }
+
+      .calculatorArea{
+        margin-top:44px;
+      }
+
+      .presetSection{
+        display:block;
+        padding:18px;
+        margin:44px 0 16px;
+      }
+
+      .presetHeading{
+        gap:10px;
+        margin-bottom:14px;
+      }
+
+      .presetHeading h2{
+        font-size:22px;
+      }
+
+      .presetIntro{
+        font-size:13px;
+      }
+
+      .presetGrid{
+        grid-template-columns:1fr;
+      }
+
+      button.presetCard{
+        min-height:0;
+        padding:16px;
+      }
+
+      .guideRailInner{
+        padding:18px 16px;
+      }
+
+      .card{
+        padding:0;
+      }
+
+      .sectionHeading{
+        padding:18px 16px 14px;
+      }
+
+      .sectionHeading h2{
+        font-size:20px;
+      }
+
+      .sectionHeading p{
+        font-size:13px;
+      }
+
+      .sectionHeadingActions{
+        width:100%;
+      }
+
+      .mobileInputStatus{
+        margin:14px 16px 0;
+      }
+
+      .errorSummary{
+        margin:14px 16px 0;
+      }
+
+      .tableWrap{
+        margin:0 16px 13px;
+      }
+
+      #tableCard.mode-current .tableWrap{
+        margin-top:16px;
+      }
+
+      #tbl tbody tr{
+        border-color:var(--line);
+        border-radius:18px;
+        padding:14px;
+        margin-bottom:10px;
+        background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+        box-shadow:0 14px 26px rgba(0,0,0,.16);
+      }
+
+      html[data-theme="light"] #tbl tbody tr{
+        background:linear-gradient(180deg, #ffffff, #f5f8fc);
+      }
+
+      td.col-name input,
+      td.col-target input,
+      td.col-price input,
+      td.col-qty input{
+        min-height:44px;
+        border-radius:14px;
+        font-size:13px;
+      }
+
+      .mobileResultList{
+        margin:0 16px 12px;
+      }
+
+      .mobileResultItem{
+        padding:12px 12px;
+        border-radius:16px;
+        border-color:var(--line);
+      }
+
+      .mobileDetailToggle{
+        margin:0 16px 12px;
+        min-height:42px;
+        border-radius:14px;
+      }
+
+      .mobileCalcBar{
+        left:12px;
+        right:12px;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 12px);
+        gap:8px;
+        padding:10px;
+        border-radius:18px;
+        border-color:var(--mobile-sticky-border);
+      }
+
+      .mobileCalcMeta .k{
+        font-size:11px;
+      }
+
+      .mobileCalcMeta .v{
+        font-size:15px;
+      }
+
+      #mobileCalcBtn,
+      #mobileResetBtn{
+        min-height:44px;
+        border-radius:14px;
+      }
+
+      #mobileCalcBtn{
+        min-width:106px;
+      }
+
+      #mobileResetBtn{
+        min-width:74px;
+      }
+
+      .mobileStickySummary{
+        margin:8px 16px 0;
+        border-radius:16px;
+      }
+
+      .faqSection{
+        margin-top:12px;
+      }
+
+      .faqSection h2{
+        padding:18px 16px 8px;
+        font-size:19px;
+      }
+
+      #faqList{
+        padding:0 16px 16px;
+      }
+
+      .siteFooter{
+        padding:18px 10px calc(96px + env(safe-area-inset-bottom, 0px));
+      }
+    }
+
+    @media (max-width: 640px){
+      .heroSection h1{
+        font-size:27px;
+      }
+
+      .heroEyebrow{
+        min-height:32px;
+        padding:0 12px;
+        font-size:11px;
+      }
+
+      .themeToggle{
+        min-width:112px;
+      }
+    }
+
+    @media (max-width: 390px){
+      .heroSection{
+        padding:20px 16px 18px;
+      }
+
+      .heroSection h1{
+        font-size:24px;
+      }
+
+      .heroSteps li{
+        padding:11px 12px;
+        font-size:12.5px;
+      }
+
+      .sectionHeading{
+        padding:16px 14px 13px;
+      }
+
+      .tableWrap,
+      .mobileResultList,
+      .mobileDetailToggle,
+      .mobileStickySummary{
+        margin-left:14px;
+        margin-right:14px;
+      }
+
+      .mobileCalcBar{
+        left:10px;
+        right:10px;
       }
     }

@@ -1,4 +1,22 @@
 (function () {
+  function getDecisionIcon(decision) {
+    if (decision === "매수") return "↗";
+    if (decision === "매도") return "↘";
+    return "−";
+  }
+
+  function appendDecisionBadge(target, decision) {
+    if (!target) return;
+    const icon = document.createElement("span");
+    icon.className = "decisionIcon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = getDecisionIcon(decision);
+    const text = document.createElement("span");
+    text.className = "decisionText";
+    text.textContent = decision;
+    target.replaceChildren(icon, text);
+  }
+
   function setMobileDetailHeader(tr, { nameText = "", decision = "유지", tradeText = "" } = {}) {
     if (!tr) return;
     const nameCell = tr.querySelector(".col-name");
@@ -50,7 +68,7 @@
       nameEl.textContent = name;
       const decisionEl = document.createElement("span");
       decisionEl.className = `decision ${decision === "매수" ? "buy" : decision === "매도" ? "sell" : "hold"}`;
-      decisionEl.textContent = decision;
+      appendDecisionBadge(decisionEl, decision);
       const qtyEl = document.createElement("span");
       qtyEl.className = "qty";
       qtyEl.textContent = qtyText;
