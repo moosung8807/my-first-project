@@ -20,7 +20,6 @@
   const mobileTargetWarning = document.querySelector("#mobileTargetWarning");
   const mobileResultList = document.querySelector("#mobileResultList");
   const mobileDetailToggle = document.querySelector("#mobileDetailToggle");
-  const mobileTotalAssetLabel = document.querySelector("#mobileTotalAssetLabel");
   const mobileCalcBtn = document.querySelector("#mobileCalcBtn");
   const mobileResetBtn = document.querySelector("#mobileResetBtn");
   const exportPdfBtn = document.querySelector("#exportPdfBtn");
@@ -51,10 +50,6 @@
   const progressWrap = document.querySelector("#progressWrap");
   const progressBar = document.querySelector("#progressBar");
   const progressText = document.querySelector("#progressText");
-  const mobileSumTotalKey = document.querySelector("#mobileSumTotalKey");
-  const mobileSumTotalLabel = document.querySelector("#mobileSumTotalLabel");
-  const mobileProgressText = document.querySelector("#mobileProgressText");
-  const mobileCashLabel = document.querySelector("#mobileCashLabel");
 
   // Toast
   const toast = document.querySelector("#toast");
@@ -175,15 +170,11 @@
     cashKey,
     cashLabel,
     holdCountEl,
-    mobileCashLabel,
-    mobileSumTotalKey,
-    mobileSumTotalLabel,
     sellCountEl,
     sumTotalKey,
     sumTotalLabel
   };
   const targetRefs = {
-    mobileProgressText,
     mobileTargetSumLabel,
     progressBar,
     progressText,
@@ -202,7 +193,6 @@
     tbody
   };
   const rowRefs = {
-    mobileTotalAssetLabel,
     sumValue: document.querySelector("#sumValue"),
     sumWeight: document.querySelector("#sumWeight")
   };
@@ -2734,9 +2724,6 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     setMode("current");
     setTotalSummary("현재 보유액", fmtKRW(0));
     setCashSummary(fmtKRW(0));
-    if(mobileTotalAssetLabel){
-      mobileTotalAssetLabel.textContent = fmtKRW(0);
-    }
     cashPill.classList.remove("negative");
     hasComputed = false;
     setDirtyState(false);
