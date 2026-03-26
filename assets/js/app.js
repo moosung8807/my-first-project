@@ -1,8 +1,8 @@
   const tbody = document.querySelector("#tbl tbody");
   const tableCard = document.querySelector("#tableCard");
   const addRowBtn = document.querySelector("#addRow");
-  const calcBtn = document.querySelector("#calcBtn");
-  const resetBtn = document.querySelector("#reset");
+  let calcBtn = document.querySelector("#calcBtn");
+  let resetBtn = document.querySelector("#reset");
   const sumTargetEl = document.querySelector("#sumTarget");
   const themeToggle = document.querySelector("#themeToggle");
   const heroCalcBtn = document.querySelector("#heroCalcBtn");
@@ -24,6 +24,16 @@
   const mobileCalcBtn = document.querySelector("#mobileCalcBtn");
   const mobileResetBtn = document.querySelector("#mobileResetBtn");
   const exportPdfBtn = document.querySelector("#exportPdfBtn");
+
+  // Defensive cleanup for cached older HTML that still contains header calc/reset buttons.
+  if(calcBtn){
+    calcBtn.remove();
+    calcBtn = null;
+  }
+  if(resetBtn){
+    resetBtn.remove();
+    resetBtn = null;
+  }
 
   // Summary UI
   const modeLabel = document.querySelector("#modeLabel");
