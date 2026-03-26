@@ -3907,7 +3907,7 @@ td.col-qty::after{
 
     @media (max-width: 768px){
       body{
-        padding:18px 12px calc(108px + env(safe-area-inset-bottom, 0px));
+        padding:18px 12px calc(56px + env(safe-area-inset-bottom, 0px));
       }
 
       .desktopIntroText{
@@ -3928,8 +3928,8 @@ td.col-qty::after{
 
       .heroSection{
         min-height:calc(100svh - 146px);
-        padding:34px 18px 60px;
-        margin-bottom:46px;
+        padding:34px 18px 68px;
+        margin-bottom:58px;
         border:0;
         border-radius:0;
         box-shadow:none;
@@ -4040,7 +4040,7 @@ td.col-qty::after{
       }
 
       .calculatorArea{
-        margin-top:64px;
+        margin-top:92px;
       }
 
       #inputSection{
@@ -4089,8 +4089,9 @@ td.col-qty::after{
 
       #inputSection .sectionHeading{
         display:grid;
-        grid-template-columns:minmax(0, 1fr) auto;
+        grid-template-columns:minmax(0, 1fr);
         align-items:start;
+        gap:12px;
       }
 
       .sectionHeading h2{
@@ -4106,9 +4107,23 @@ td.col-qty::after{
       }
 
       #inputSection .sectionHeadingActions{
-        width:auto;
+        width:100%;
         margin-left:0;
-        justify-self:end;
+        justify-self:stretch;
+        display:grid;
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+        gap:8px;
+      }
+
+      #inputSection .sectionHeadingActions .statusBadge{
+        grid-column:1 / -1;
+      }
+
+      #inputSection .sectionHeadingActions #calcBtn,
+      #inputSection .sectionHeadingActions #reset{
+        display:inline-flex;
+        width:100%;
+        justify-content:center;
       }
 
       .errorSummary{
@@ -4162,22 +4177,14 @@ td.col-qty::after{
       }
 
       .mobileCalcBar{
-        left:12px;
-        right:12px;
-        bottom:calc(env(safe-area-inset-bottom, 0px) + 12px);
-        gap:6px;
-        padding:8px 8px 8px 10px;
-        border-radius:16px;
-        border-color:var(--mobile-sticky-border);
-        grid-template-columns:minmax(0, 1fr) auto auto;
-        box-shadow:0 -8px 20px rgba(0,0,0,.18);
+        display:none !important;
       }
       .mobileLimitFloat{
         display:block;
         top:auto;
         left:12px;
         right:12px;
-        bottom:calc(env(safe-area-inset-bottom, 0px) + 68px);
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 12px);
         max-width:none;
         padding:10px 12px;
         border-radius:14px;
@@ -4218,6 +4225,10 @@ td.col-qty::after{
         border-radius:16px;
       }
 
+      .container{
+        padding-bottom:32px;
+      }
+
       .faqSection{
         margin-top:12px;
       }
@@ -4232,7 +4243,7 @@ td.col-qty::after{
       }
 
       .siteFooter{
-        padding:18px 10px calc(84px + env(safe-area-inset-bottom, 0px));
+        padding:18px 10px calc(28px + env(safe-area-inset-bottom, 0px));
       }
     }
 
@@ -4256,8 +4267,8 @@ td.col-qty::after{
 
       .heroSection{
         min-height:calc(100svh - 132px);
-        padding:30px 16px 52px;
-        margin-bottom:40px;
+        padding:30px 16px 58px;
+        margin-bottom:48px;
       }
 
       .heroTopRow{
@@ -4294,7 +4305,7 @@ td.col-qty::after{
 
       .heroSection{
         min-height:calc(100svh - 124px);
-        padding:24px 16px 44px;
+        padding:24px 16px 48px;
       }
 
       .heroSection h1{
@@ -4327,25 +4338,11 @@ td.col-qty::after{
         margin-right:14px;
       }
 
-      .mobileCalcBar{
-        left:10px;
-        right:10px;
-        bottom:calc(env(safe-area-inset-bottom, 0px) + 10px);
-        padding:7px 7px 7px 9px;
-      }
       .mobileLimitFloat{
         left:10px;
         right:10px;
-        bottom:calc(env(safe-area-inset-bottom, 0px) + 64px);
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 10px);
         padding:9px 11px;
         font-size:11.5px;
-      }
-
-      #mobileCalcBtn{
-        min-width:90px;
-      }
-
-      #mobileResetBtn{
-        min-width:62px;
       }
     }

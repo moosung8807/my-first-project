@@ -401,7 +401,7 @@
     return window.matchMedia("(max-width: 768px)").matches;
   }
   function getInitialRowCount(){
-    return isMobileViewport() ? 1 : 7;
+    return isMobileViewport() ? 2 : 7;
   }
   function setActivePreset(){
   }
