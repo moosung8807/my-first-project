@@ -953,6 +953,13 @@
       z-index:10001;
       pointer-events:none;
     }
+    .mobileLimitFloat{
+      display:none;
+    }
+
+    .mobileLimitFloat[hidden]{
+      display:none !important;
+    }
     .faqSection{
       margin:6px 0 20px;
       border:1px solid var(--line);
@@ -2016,15 +2023,24 @@ td.col-qty::after{
         font-size:16px !important;
       }
       .guide-tab-button{
-        top:22%;
-        left:-6px;
-        width:38px;
-        min-height:124px;
-        padding:9px 6px 9px 6px;
-        border-radius:0 10px 10px 0;
+        top:23%;
+        left:-10px;
+        width:32px;
+        min-height:104px;
+        padding:7px 4px;
+        gap:6px;
+        border-radius:0 9px 9px 0;
+      }
+      .guide-tab-arrow{
+        font-size:10px;
+        position:relative;
+        left:5px;
       }
       .guide-tab-label{
-        font-size:11px;
+        font-size:10px;
+        line-height:1.1;
+        position:relative;
+        left:3px;
       }
       body{padding:20px 14px calc(132px + env(safe-area-inset-bottom, 0px))}
       body,
@@ -2130,21 +2146,18 @@ td.col-qty::after{
       }
       .summaryBar{display:none}
       #inputSection .sectionHeading h2{
-        font-size:18px;
+        font-size:20px;
       }
       .controlActions{
         width:100%;
         justify-content:stretch;
       }
       .controlActions .autoQuoteToggle,
+      .controlActions #addRow,
       .controlActions #heroDemoBtn,
       .controlActions #calcBtn,
       .controlActions #reset{
         display:none;
-      }
-      .controlActions #addRow{
-        width:100%;
-        min-height:44px;
       }
       .mobileInputStatus{
         display:flex;
@@ -2492,8 +2505,10 @@ td.col-qty::after{
         justify-self:start;
         display:flex;
         flex-direction:column;
-        align-items:flex-start;
+        align-items:stretch;
         gap:6px;
+        width:max-content;
+        max-width:64px;
       }
       #tableCard.mode-result #tbl tbody td.col-decision::before{
         display:none;
@@ -2501,7 +2516,10 @@ td.col-qty::after{
       #tableCard.mode-result #tbl tbody td.col-decision .decisionLabel{
         display:inline-flex;
         align-items:center;
+        justify-content:center;
         gap:5px;
+        width:100%;
+        box-sizing:border-box;
         border-radius:999px;
         padding:4px 9px;
         font-size:12px;
@@ -2557,15 +2575,23 @@ td.col-qty::after{
         justify-self:auto;
         margin-left:0;
         flex:none;
-        white-space:nowrap;
-        height:28px;
-        padding:0 10px;
+        white-space:normal;
+        word-break:keep-all;
+        text-align:center;
+        line-height:1.15;
+        min-height:30px;
+        width:100%;
+        min-width:0;
+        max-width:100%;
+        box-sizing:border-box;
+        padding:4px 4px;
         border-radius:10px;
         border:1px solid var(--line);
         background:var(--surface);
         color:var(--muted);
-        font-size:12px;
+        font-size:10px;
         font-weight:700;
+        letter-spacing:-.02em;
       }
       #tableCard.mode-result #tbl tbody tr:not(.mobile-details-open) td.col-afterqty,
       #tableCard.mode-result #tbl tbody tr:not(.mobile-details-open) td.col-afterw,
@@ -2758,8 +2784,12 @@ td.col-qty::after{
       }
       .mobileDetailToggle{
         margin:0 0 12px;
-        width:100%;
+        width:91.5%;
+        min-width:0;
+        max-width:none;
         min-height:38px;
+        margin-left:auto;
+        padding:0 22px;
         border-radius:12px;
         border:1px solid var(--signal-chip-line);
         background:linear-gradient(180deg, var(--signal-chip-bg), rgba(255,255,255,.02));
@@ -2884,8 +2914,22 @@ td.col-qty::after{
     @media (max-width: 640px){
       body{padding:18px 12px calc(132px + env(safe-area-inset-bottom, 0px));}
       .guide-tab-button{
-        top:21%;
-        left:-7px;
+        top:23%;
+        left:-11px;
+        width:30px;
+        min-height:96px;
+        padding:6px 4px;
+        gap:5px;
+      }
+      .guide-tab-arrow{
+        font-size:9px;
+        position:relative;
+        left:5px;
+      }
+      .guide-tab-label{
+        font-size:9px;
+        position:relative;
+        left:3px;
       }
       .themeToggle{
         width:auto;
@@ -3277,7 +3321,7 @@ td.col-qty::after{
       max-width:none;
       margin:0 auto 22px;
       font-size:clamp(3rem, 5vw, 4.7rem);
-      line-height:1.02;
+      line-height:1.07;
       letter-spacing:-.03em;
       word-break:keep-all;
       overflow-wrap:normal;
@@ -3406,6 +3450,14 @@ td.col-qty::after{
       word-break:keep-all;
       overflow-wrap:normal;
       line-break:strict;
+    }
+
+    .mobileIntroText{
+      display:none;
+    }
+
+    .desktopIntroText{
+      display:block;
     }
 
     .calculatorArea{
@@ -3569,8 +3621,55 @@ td.col-qty::after{
       line-height:1.65;
     }
 
+    #tableCard .resultHeading{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) auto;
+      align-items:center;
+    }
+
+    #tableCard .resultHeading h2{
+      margin:0;
+    }
+
+    #tableCard .resultHeading .sectionHeadingActions{
+      margin-left:0;
+      justify-self:end;
+    }
+
+    #tableCard .resultHeading p{
+      grid-column:1 / -1;
+      margin-top:6px;
+    }
+
     #inputSection .sectionHeading h2{
       margin-left:0;
+    }
+
+    @media (min-width: 769px){
+      #inputSection .sectionHeading{
+        align-items:center;
+        padding-top:20px;
+        padding-bottom:20px;
+      }
+
+      #inputSection .sectionHeading h2{
+        display:flex;
+        align-items:center;
+        min-height:44px;
+        line-height:1.15;
+      }
+
+      #inputSection .sectionHeadingActions .statusBadge,
+      #inputSection .sectionHeadingActions button{
+        font-size:13px;
+        line-height:1;
+      }
+
+      #inputSection .sectionHeadingActions .statusBadge{
+        min-height:44px;
+        padding:0 14px;
+        justify-content:center;
+      }
     }
 
     .statusBadge{
@@ -3804,7 +3903,15 @@ td.col-qty::after{
 
     @media (max-width: 768px){
       body{
-        padding:18px 12px calc(128px + env(safe-area-inset-bottom, 0px));
+        padding:18px 12px calc(108px + env(safe-area-inset-bottom, 0px));
+      }
+
+      .desktopIntroText{
+        display:none;
+      }
+
+      .mobileIntroText{
+        display:block;
       }
 
       .heroSection,
@@ -3817,8 +3924,8 @@ td.col-qty::after{
 
       .heroSection{
         min-height:calc(100svh - 146px);
-        padding:34px 18px 28px;
-        margin-bottom:18px;
+        padding:34px 18px 48px;
+        margin-bottom:30px;
         border:0;
         border-radius:0;
         box-shadow:none;
@@ -3826,40 +3933,64 @@ td.col-qty::after{
       }
 
       .heroTopRow{
-        flex-direction:column;
+        position:relative;
         align-items:flex-start;
+        justify-content:flex-start;
+        min-height:44px;
         gap:12px;
-        margin-bottom:18px;
+        margin-bottom:26px;
       }
 
       .heroSection .themeToggle{
-        position:static;
+        position:absolute;
+        top:0;
+        right:0;
+        min-width:0;
+        min-height:36px;
+        height:36px;
+        padding:0 14px;
+        font-size:13px;
       }
 
       .heroSection h1{
         max-width:none;
-        margin-bottom:18px;
-        font-size:42px;
-        line-height:1.04;
+        margin:0 0 22px;
+        width:100%;
+        font-size:clamp(2.2rem, 11.3vw, 2.9rem);
+        line-height:1.15;
+        letter-spacing:-.04em;
+        text-align:center;
+      }
+
+      .heroSection .heroTitleLine:last-child{
+        white-space:nowrap;
       }
 
       .heroDesc{
         max-width:none;
-        margin-bottom:22px;
-        font-size:15px;
+        margin:0 0 34px;
+        font-size:13px;
         text-align:left;
       }
 
       .heroActions{
         display:flex;
-        margin-top:16px;
+        margin-top:24px;
         gap:10px;
         justify-content:flex-start;
       }
 
       .heroActions button{
         width:100%;
-        min-height:46px;
+        min-height:52px;
+      }
+
+      .heroActions #heroCalcBtn{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        line-height:1;
       }
 
       .heroSteps{
@@ -3896,14 +4027,16 @@ td.col-qty::after{
       }
 
       .introText{
-        margin-bottom:18px;
-        padding:0 2px;
-        font-size:13.5px;
+        max-width:none;
+        margin:12px 0 0;
+        padding:0;
+        font-size:12px;
+        line-height:1.58;
         text-align:left;
       }
 
       .calculatorArea{
-        margin-top:44px;
+        margin-top:0;
       }
 
       .presetSection{
@@ -3946,6 +4079,12 @@ td.col-qty::after{
         padding:18px 16px 14px;
       }
 
+      #inputSection .sectionHeading{
+        display:grid;
+        grid-template-columns:minmax(0, 1fr) auto;
+        align-items:start;
+      }
+
       .sectionHeading h2{
         font-size:20px;
       }
@@ -3958,8 +4097,10 @@ td.col-qty::after{
         width:100%;
       }
 
-      .mobileInputStatus{
-        margin:14px 16px 0;
+      #inputSection .sectionHeadingActions{
+        width:auto;
+        margin-left:0;
+        justify-self:end;
       }
 
       .errorSummary{
@@ -4016,32 +4157,52 @@ td.col-qty::after{
         left:12px;
         right:12px;
         bottom:calc(env(safe-area-inset-bottom, 0px) + 12px);
-        gap:8px;
-        padding:10px;
-        border-radius:18px;
+        gap:6px;
+        padding:8px 8px 8px 10px;
+        border-radius:16px;
         border-color:var(--mobile-sticky-border);
+        grid-template-columns:minmax(0, 1fr) auto auto;
+        box-shadow:0 -8px 20px rgba(0,0,0,.18);
+      }
+      .mobileLimitFloat{
+        display:block;
+        top:auto;
+        left:12px;
+        right:12px;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 68px);
+        max-width:none;
+        padding:10px 12px;
+        border-radius:14px;
+        font-size:12px;
+        line-height:1.45;
+        text-align:center;
+        background:rgba(126, 18, 18, .94);
+        color:#fff1f2;
+        box-shadow:0 -8px 24px rgba(0,0,0,.22);
       }
 
       .mobileCalcMeta .k{
-        font-size:11px;
+        font-size:10px;
       }
 
       .mobileCalcMeta .v{
-        font-size:15px;
+        font-size:14px;
       }
 
       #mobileCalcBtn,
       #mobileResetBtn{
-        min-height:44px;
-        border-radius:14px;
+        min-height:40px;
+        border-radius:13px;
       }
 
       #mobileCalcBtn{
-        min-width:106px;
+        min-width:96px;
+        padding:0 16px;
       }
 
       #mobileResetBtn{
-        min-width:74px;
+        min-width:66px;
+        padding:0 12px;
       }
 
       .mobileStickySummary{
@@ -4063,13 +4224,13 @@ td.col-qty::after{
       }
 
       .siteFooter{
-        padding:18px 10px calc(96px + env(safe-area-inset-bottom, 0px));
+        padding:18px 10px calc(84px + env(safe-area-inset-bottom, 0px));
       }
     }
 
     @media (max-width: 640px){
       .heroSection h1{
-        font-size:27px;
+        font-size:clamp(2.2rem, 11.3vw, 2.9rem);
       }
 
       .heroEyebrow{
@@ -4078,23 +4239,72 @@ td.col-qty::after{
         font-size:11px;
       }
 
-      .themeToggle{
-        min-width:112px;
+      .heroSection .themeToggle{
+        min-height:32px;
+        height:32px;
+        padding:0 12px;
+        font-size:11px;
+      }
+
+      .heroSection{
+        min-height:calc(100svh - 132px);
+        padding:30px 16px 44px;
+        margin-bottom:26px;
+      }
+
+      .heroTopRow{
+        margin-bottom:24px;
+        padding-right:124px;
+      }
+
+      .heroDesc{
+        margin-bottom:30px;
+      }
+
+      .heroActions{
+        margin-top:22px;
+      }
+
+      .introText{
+        font-size:11.5px;
       }
     }
 
     @media (max-width: 390px){
+      .guide-tab-button{
+        left:-12px;
+        width:28px;
+        min-height:90px;
+        padding:5px 3px;
+      }
+
+      .guide-tab-label{
+        font-size:8.5px;
+        position:relative;
+        left:3px;
+      }
+
       .heroSection{
-        padding:20px 16px 18px;
+        min-height:calc(100svh - 124px);
+        padding:24px 16px 38px;
       }
 
       .heroSection h1{
-        font-size:24px;
+        font-size:clamp(2.2rem, 11.3vw, 2.9rem);
+      }
+
+      .heroTopRow{
+        margin-bottom:20px;
+        padding-right:116px;
       }
 
       .heroSteps li{
         padding:11px 12px;
         font-size:12.5px;
+      }
+
+      .introText{
+        font-size:11px;
       }
 
       .sectionHeading{
@@ -4112,5 +4322,22 @@ td.col-qty::after{
       .mobileCalcBar{
         left:10px;
         right:10px;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 10px);
+        padding:7px 7px 7px 9px;
+      }
+      .mobileLimitFloat{
+        left:10px;
+        right:10px;
+        bottom:calc(env(safe-area-inset-bottom, 0px) + 64px);
+        padding:9px 11px;
+        font-size:11.5px;
+      }
+
+      #mobileCalcBtn{
+        min-width:90px;
+      }
+
+      #mobileResetBtn{
+        min-width:62px;
       }
     }

@@ -1,5 +1,6 @@
   const tbody = document.querySelector("#tbl tbody");
   const tableCard = document.querySelector("#tableCard");
+  const addRowBtn = document.querySelector("#addRow");
   const calcBtn = document.querySelector("#calcBtn");
   const resetBtn = document.querySelector("#reset");
   const sumTargetEl = document.querySelector("#sumTarget");
@@ -13,6 +14,7 @@
   const errorSummary = document.querySelector("#errorSummary");
   const staleBadge = document.querySelector("#staleBadge");
   const editWarningFloat = document.querySelector("#editWarningFloat");
+  const mobileLimitFloat = document.querySelector("#mobileLimitFloat");
   const autoQuoteToggle = document.querySelector("#autoQuoteToggle");
   const mobileTargetSumLabel = document.querySelector("#mobileTargetSumLabel");
   const mobileTargetWarning = document.querySelector("#mobileTargetWarning");
@@ -315,6 +317,7 @@
     if(autoQuoteEnabled){
       scheduleAutoPriceFetch(tr, { immediate: true, symbolOverride: symbol });
     }
+    maybeAppendAutoRow(tr);
     nameEl.focus({ preventScroll: true });
   }
   function hideNameSuggestions(tr){
@@ -394,8 +397,11 @@
   function clearAllRowQuoteStates(){
     [...rowQuoteStates.keys()].forEach((tr)=>clearRowQuoteState(tr));
   }
+  function isMobileViewport(){
+    return window.matchMedia("(max-width: 768px)").matches;
+  }
   function getInitialRowCount(){
-    return window.matchMedia("(max-width: 768px)").matches ? 3 : 7;
+    return isMobileViewport() ? 1 : 7;
   }
   function setActivePreset(){
   }
@@ -492,6 +498,12 @@
     setCalcButtonDisabled(overLimit);
     if(mobileTargetWarning){
       mobileTargetWarning.hidden = !overLimit;
+    }
+    if(mobileLimitFloat){
+      mobileLimitFloat.hidden = !overLimit;
+      if(overLimit){
+        mobileLimitFloat.textContent = `목표비중 합계가 ${sumPct.toFixed(1)}%라서 계산할 수 없습니다. 100% 이하로 맞춰주세요.`;
+      }
     }
   }
   function setAutoQuoteEnabled(nextEnabled, { notify = false } = {}){
@@ -2107,6 +2119,7 @@
   }
 
   function deleteRow(tr){
+    const beforeCount = rowCount();
     deleteRowHelper({}, tr, {
       get mode() {
         return mode;
@@ -2123,10 +2136,36 @@
       updateCurrentUI,
       updateTargetSumUI
     });
+    if(rowCount() < beforeCount){
+      ensureTrailingEmptyRow();
+    }
   }
 
   function setTradeCell(tr, tradeQty, decision){
     setTradeCellHelper({ fmt }, tr, tradeQty, decision);
+  }
+
+  function rowHasAnyInput(tr){
+    if(!tr) return false;
+    return [".name", ".price", ".qty", ".target"].some((selector)=>{
+      const input = tr.querySelector(selector);
+      return Boolean(input && String(input.value || "").trim());
+    });
+  }
+
+  function ensureTrailingEmptyRow(){
+    if(!isMobileViewport()) return;
+    const lastRow = tbody.lastElementChild;
+    if(!lastRow || rowHasAnyInput(lastRow)){
+      addRow();
+    }
+  }
+
+  function maybeAppendAutoRow(tr){
+    if(!isMobileViewport()) return;
+    if(!tr || tr !== tbody.lastElementChild) return;
+    if(!rowHasAnyInput(tr)) return;
+    ensureTrailingEmptyRow();
   }
 
   function addRow(){
@@ -2227,6 +2266,7 @@
       setActivePreset(null);
       if(autoQuoteEnabled) scheduleAutoPriceFetch(tr);
       markDirtyIfNeeded();
+      maybeAppendAutoRow(tr);
     });
     nameEl.addEventListener("focus", ()=>{
       if(nameEl && String(nameEl.value || "").trim()){
@@ -2279,6 +2319,7 @@
       targetEl.classList.remove("invalidField");
       if(mode === "current") updateCurrentUI();
       markDirtyIfNeeded();
+      maybeAppendAutoRow(tr);
     });
     const rowAutoToggleEl = tr.querySelector(".rowAutoQuoteToggle");
     const rowManualPriceToggleEl = tr.querySelector(".rowManualPriceToggle");
@@ -2296,6 +2337,7 @@
         formatInputWithComma(el);
         if(mode === "current") updateCurrentUI();
         markDirtyIfNeeded();
+        maybeAppendAutoRow(tr);
       });
       el.addEventListener("blur", ()=>{
         formatInputWithComma(el);
@@ -2465,6 +2507,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
       tr.querySelector(".price").value = sample.price;
       tr.querySelector(".qty").value = sample.qty;
     });
+    ensureTrailingEmptyRow();
 
     updateTargetSumUI();
     updateCurrentUI();
@@ -2638,13 +2681,15 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     updateTargetSumUI();
   }
 
-  document.querySelector("#addRow").onclick = ()=>{
-    addRow();
-    setActivePreset(null);
-    markDirtyIfNeeded();
-    hideErrorSummary();
-    clearInvalidMarks();
-  };
+  if(addRowBtn){
+    addRowBtn.onclick = ()=>{
+      addRow();
+      setActivePreset(null);
+      markDirtyIfNeeded();
+      hideErrorSummary();
+      clearInvalidMarks();
+    };
+  }
 
   function runCalcAction(){
     if(mode === "current"){

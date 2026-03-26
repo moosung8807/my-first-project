@@ -137,9 +137,13 @@
     <div class="heroActions">
       <button class="primary" id="heroCalcBtn" type="button">시작하기</button>
     </div>
+    <p class="introText mobileIntroText">
+      계산 결과는 비중 기준 참고값이며 세금·수수료·유동성은 포함되지 않습니다.
+      실제 거래 전 주문 가능 수량과 비용을 함께 확인하세요.
+    </p>
   </section>
 
-  <p class="introText">
+  <p class="introText desktopIntroText">
     계산 결과는 비중 기준 참고값이며 세금·수수료·유동성은 포함되지 않습니다.
     실제 거래 전 주문 가능 수량과 비용을 함께 확인하세요.
   </p>
@@ -201,11 +205,6 @@
           <button class="primary" id="calcBtn">계산</button>
           <button class="secondary" id="reset">초기화</button>
         </div>
-      </div>
-      <div class="mobileInputStatus" id="mobileInputStatus" aria-live="polite">
-        <span class="label">목표비중 합계</span>
-        <strong id="mobileTargetSumLabel">0.0%</strong>
-        <span class="warn" id="mobileTargetWarning" hidden>100%를 초과했습니다</span>
       </div>
     </div>
 
@@ -363,6 +362,9 @@
 </div>
 <div class="floatingWarning" id="editWarningFloat" role="status" aria-live="polite" hidden>
   입력값이 수정되면 다시 계산해야 합니다.
+</div>
+<div class="floatingWarning mobileLimitFloat" id="mobileLimitFloat" role="status" aria-live="polite" hidden>
+  목표비중 합계가 100%를 초과해 계산할 수 없습니다.
 </div>
 
 <script src="assets/js/core-format.js"></script>
