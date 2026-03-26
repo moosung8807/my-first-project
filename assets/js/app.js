@@ -2736,7 +2736,9 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     updateTargetSumUI();
     updateCurrentUI();
   }
-  calcBtn.onclick = runCalcAction;
+  if(calcBtn){
+    calcBtn.onclick = runCalcAction;
+  }
   if(mobileCalcBtn){
     mobileCalcBtn.addEventListener("click", runCalcAction);
   }
