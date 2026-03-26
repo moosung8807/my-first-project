@@ -12,6 +12,11 @@
   const inputSection = document.querySelector("#inputSection");
   const resultSection = document.querySelector("#resultSection");
   const errorSummary = document.querySelector("#errorSummary");
+  const tableWrap = document.querySelector(".tableWrap");
+  const mobileInlineActions = document.querySelector(".mobileInlineActions");
+  const mobileCurrentMount = document.querySelector("#mobileCurrentMount");
+  const tableCardErrorMount = document.querySelector("#tableCardErrorMount");
+  const tableCardInputMount = document.querySelector("#tableCardInputMount");
   const staleBadge = document.querySelector("#staleBadge");
   const editWarningFloat = document.querySelector("#editWarningFloat");
   const mobileLimitFloat = document.querySelector("#mobileLimitFloat");
@@ -2082,6 +2087,26 @@
       setTotalSummary,
       updateExportPdfButtonState
     });
+    syncMobileCurrentLayout();
+  }
+
+  function syncMobileCurrentLayout(){
+    const shouldInlineCurrent = isMobileViewport() && mode === "current";
+    if(shouldInlineCurrent){
+      if(mobileCurrentMount){
+        if(errorSummary) mobileCurrentMount.append(errorSummary);
+        if(tableWrap) mobileCurrentMount.append(tableWrap);
+        if(mobileInlineActions) mobileCurrentMount.append(mobileInlineActions);
+      }
+      return;
+    }
+    if(tableCardErrorMount && errorSummary){
+      tableCardErrorMount.append(errorSummary);
+    }
+    if(tableCardInputMount){
+      if(tableWrap) tableCardInputMount.append(tableWrap);
+      if(mobileInlineActions) tableCardInputMount.append(mobileInlineActions);
+    }
   }
 
   function setRowDetailOpen(tr, open){
@@ -2701,6 +2726,9 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
       clearInvalidMarks();
     }else{
       setMode("current");
+      if(isMobileViewport()){
+        scrollToEl(inputSection);
+      }
     }
   }
   function resetAllRows(){
@@ -2768,6 +2796,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     }
     hideAllNameSuggestions();
   });
+  window.addEventListener("resize", syncMobileCurrentLayout);
   if(themeToggle){
     themeToggle.addEventListener("click", ()=>{
       const currentTheme = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
@@ -2776,7 +2805,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
   }
   if(heroCalcBtn){
     heroCalcBtn.addEventListener("click", ()=>{
-      scrollToEl(isMobileViewport() ? tableCard : inputSection);
+      scrollToEl(inputSection);
       const firstInput = tbody.querySelector("tr .name");
       if(firstInput) firstInput.focus({ preventScroll: true });
     });

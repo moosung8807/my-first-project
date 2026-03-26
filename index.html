@@ -206,6 +206,7 @@
           <button class="secondary" id="reset" type="button">초기화</button>
         </div>
       </div>
+      <div class="mobileCurrentMount" id="mobileCurrentMount"></div>
     </div>
 
     <div class="contentLayout">
@@ -217,7 +218,9 @@
           </div>
           <p>요약과 자산별 매수/매도 결과를 확인하세요.</p>
         </div>
-        <div id="errorSummary" class="errorSummary" role="alert" aria-live="assertive" hidden></div>
+        <div class="tableCardErrorMount" id="tableCardErrorMount">
+          <div id="errorSummary" class="errorSummary" role="alert" aria-live="assertive" hidden></div>
+        </div>
         <ul class="mobileResultList" id="mobileResultList" hidden></ul>
         <button class="mobileDetailToggle" id="mobileDetailToggle" type="button" hidden aria-expanded="false">상세 보기</button>
         <!-- Summary bar -->
@@ -260,62 +263,64 @@
           </div>
         </div>
 
-        <div class="tableWrap">
-          <table id="tbl" aria-describedby="tableAssist">
-            <caption id="tableAssist" class="srOnly">종목별 목표비중과 현재 보유 상태를 입력하고 계산 결과를 확인하는 표</caption>
-            <thead>
-              <tr class="group">
-                <th class="col-name" rowspan="2">종목명</th>
-                <th class="g-input col-price" rowspan="2">현재가 [원]</th>
-                <th class="g-input col-qty" rowspan="2">수량 [주]</th>
-                <th class="g-input col-target" rowspan="2">목표비중</th>
+        <div class="tableCardInputMount" id="tableCardInputMount">
+          <div class="tableWrap">
+            <table id="tbl" aria-describedby="tableAssist">
+              <caption id="tableAssist" class="srOnly">종목별 목표비중과 현재 보유 상태를 입력하고 계산 결과를 확인하는 표</caption>
+              <thead>
+                <tr class="group">
+                  <th class="col-name" rowspan="2">종목명</th>
+                  <th class="g-input col-price" rowspan="2">현재가 [원]</th>
+                  <th class="g-input col-qty" rowspan="2">수량 [주]</th>
+                  <th class="g-input col-target" rowspan="2">목표비중</th>
 
-                <th class="g-current" colspan="2">현재</th>
-                <th class="g-result" colspan="2">매도/매수</th>
-                <th class="g-result" colspan="3">리밸런싱 후</th>
+                  <th class="g-current" colspan="2">현재</th>
+                  <th class="g-result" colspan="2">매도/매수</th>
+                  <th class="g-result" colspan="3">리밸런싱 후</th>
 
-                <th class="g-input col-del" rowspan="2">삭제</th>
-              </tr>
-              <tr class="sub">
-                <th class="g-current col-val">보유액 [원]</th>
-                <th class="g-current col-w">비중</th>
+                  <th class="g-input col-del" rowspan="2">삭제</th>
+                </tr>
+                <tr class="sub">
+                  <th class="g-current col-val">보유액 [원]</th>
+                  <th class="g-current col-w">비중</th>
 
-                <th class="g-result col-decision">판단</th>
-                <th class="g-result col-trade">수량</th>
+                  <th class="g-result col-decision">판단</th>
+                  <th class="g-result col-trade">수량</th>
 
-                <th class="g-result col-afterqty">최종수량[주]</th>
-                <th class="g-result col-afterval">보유액</th>
-                <th class="g-result col-afterw">비중</th>
-              </tr>
-            </thead>
+                  <th class="g-result col-afterqty">최종수량[주]</th>
+                  <th class="g-result col-afterval">보유액</th>
+                  <th class="g-result col-afterw">비중</th>
+                </tr>
+              </thead>
 
-            <tbody></tbody>
+              <tbody></tbody>
 
-            <tfoot>
-              <tr>
-                <th class="col-name">합 계</th>
-                <th class="g-input col-price"></th>
-                <th class="g-input col-qty"></th>
-                <th class="g-input col-target" id="sumTarget">0.00%</th>
-                <th class="g-current col-val" id="sumValue">₩ 0</th>
-                <th class="g-current col-w" id="sumWeight">0.00%</th>
+              <tfoot>
+                <tr>
+                  <th class="col-name">합 계</th>
+                  <th class="g-input col-price"></th>
+                  <th class="g-input col-qty"></th>
+                  <th class="g-input col-target" id="sumTarget">0.00%</th>
+                  <th class="g-current col-val" id="sumValue">₩ 0</th>
+                  <th class="g-current col-w" id="sumWeight">0.00%</th>
 
-                <th class="g-result col-decision"></th>
-                <th class="g-result col-trade"></th>
+                  <th class="g-result col-decision"></th>
+                  <th class="g-result col-trade"></th>
 
-                <th class="g-result col-afterqty"></th>
-                <th class="g-result col-afterval" id="sumAfterValue">₩ 0</th>
-                <th class="g-result col-afterw" id="sumAfterWeight">0.00%</th>
+                  <th class="g-result col-afterqty"></th>
+                  <th class="g-result col-afterval" id="sumAfterValue">₩ 0</th>
+                  <th class="g-result col-afterw" id="sumAfterWeight">0.00%</th>
 
-                <th class="g-input col-del"></th>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+                  <th class="g-input col-del"></th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
 
-        <div class="mobileInlineActions" aria-label="모바일 계산 액션">
-          <button class="primary" id="mobileCalcBtn" type="button">계산하기</button>
-          <button class="secondary" id="mobileResetBtn" type="button">초기화</button>
+          <div class="mobileInlineActions" aria-label="모바일 계산 액션">
+            <button class="primary" id="mobileCalcBtn" type="button">계산하기</button>
+            <button class="secondary" id="mobileResetBtn" type="button">초기화</button>
+          </div>
         </div>
       </div>
 

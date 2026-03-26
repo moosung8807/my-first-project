@@ -885,6 +885,11 @@
       gap:8px;
       flex-wrap:wrap;
     }
+    .mobileCurrentMount,
+    .tableCardErrorMount,
+    .tableCardInputMount{
+      display:contents;
+    }
     .sectionHeading h2{
       margin:0;
       font-size:18px;
@@ -4008,6 +4013,12 @@ td.col-qty::after{
 
       #tableCard{
         scroll-margin-top:20px;
+      }
+      #tableCard.mode-current{
+        display:none;
+      }
+      #tableCard.mode-result{
+        display:block;
       }
 
       .presetSection{
