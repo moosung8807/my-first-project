@@ -2137,6 +2137,7 @@
       updateTargetSumUI
     });
     if(rowCount() < beforeCount){
+      ensureMinimumMobileRows();
       ensureTrailingEmptyRow();
     }
   }
@@ -2151,6 +2152,13 @@
       const input = tr.querySelector(selector);
       return Boolean(input && String(input.value || "").trim());
     });
+  }
+
+  function ensureMinimumMobileRows(minRows = 2){
+    if(!isMobileViewport()) return;
+    while(rowCount() < minRows){
+      addRow();
+    }
   }
 
   function ensureTrailingEmptyRow(){
@@ -2713,6 +2721,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     clearAllRowQuoteStates();
     tbody.innerHTML = "";
     for(let i=0;i<getInitialRowCount();i++) addRow();
+    ensureMinimumMobileRows();
     setMode("current");
     setTotalSummary("현재 보유액", fmtKRW(0));
     setCashSummary(fmtKRW(0));
@@ -2792,6 +2801,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
   }
 
   for(let i=0;i<getInitialRowCount();i++) addRow();
+  ensureMinimumMobileRows();
   renderGuideRail();
   setActivePreset(null);
   setMode("current");

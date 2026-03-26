@@ -3928,8 +3928,8 @@ td.col-qty::after{
 
       .heroSection{
         min-height:calc(100svh - 146px);
-        padding:34px 18px 68px;
-        margin-bottom:58px;
+        padding:34px 18px 80px;
+        margin-bottom:72px;
         border:0;
         border-radius:0;
         box-shadow:none;
@@ -4040,7 +4040,7 @@ td.col-qty::after{
       }
 
       .calculatorArea{
-        margin-top:92px;
+        margin-top:116px;
       }
 
       #inputSection{
@@ -4121,9 +4121,10 @@ td.col-qty::after{
 
       #inputSection .sectionHeadingActions #calcBtn,
       #inputSection .sectionHeadingActions #reset{
-        display:inline-flex;
+        display:inline-flex !important;
         width:100%;
         justify-content:center;
+        min-height:46px;
       }
 
       .errorSummary{
@@ -4267,8 +4268,8 @@ td.col-qty::after{
 
       .heroSection{
         min-height:calc(100svh - 132px);
-        padding:30px 16px 58px;
-        margin-bottom:48px;
+        padding:30px 16px 68px;
+        margin-bottom:56px;
       }
 
       .heroTopRow{
@@ -4305,7 +4306,7 @@ td.col-qty::after{
 
       .heroSection{
         min-height:calc(100svh - 124px);
-        padding:24px 16px 48px;
+        padding:24px 16px 56px;
       }
 
       .heroSection h1{
