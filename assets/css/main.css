@@ -1259,6 +1259,9 @@
     .mobileDetailToggle{
       display:none;
     }
+    .mobileInlineActions{
+      display:none;
+    }
     .mobileCalcBar{
       display:none;
     }
@@ -4125,10 +4128,7 @@ td.col-qty::after{
 
       #inputSection .sectionHeadingActions #calcBtn,
       #inputSection .sectionHeadingActions #reset{
-        display:inline-flex !important;
-        width:100%;
-        justify-content:center;
-        min-height:46px;
+        display:none !important;
       }
 
       .errorSummary{
@@ -4141,6 +4141,20 @@ td.col-qty::after{
 
       #tableCard.mode-current .tableWrap{
         margin-top:16px;
+      }
+
+      .mobileInlineActions{
+        display:grid;
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+        gap:10px;
+        margin:0 16px 14px;
+      }
+
+      .mobileInlineActions #mobileCalcBtn,
+      .mobileInlineActions #mobileResetBtn{
+        width:100%;
+        min-width:0;
+        justify-content:center;
       }
 
       #tbl tbody tr{
