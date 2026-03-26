@@ -24,16 +24,6 @@
   const mobileResetBtn = document.querySelector("#mobileResetBtn");
   const exportPdfBtn = document.querySelector("#exportPdfBtn");
 
-  // Defensive cleanup for cached older HTML that still contains header calc/reset buttons.
-  if(calcBtn){
-    calcBtn.remove();
-    calcBtn = null;
-  }
-  if(resetBtn){
-    resetBtn.remove();
-    resetBtn = null;
-  }
-
   // Summary UI
   const modeLabel = document.querySelector("#modeLabel");
   const sumTotalKey = document.querySelector("#sumTotalKey");
