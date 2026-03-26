@@ -3928,8 +3928,8 @@ td.col-qty::after{
 
       .heroSection{
         min-height:calc(100svh - 146px);
-        padding:34px 18px 80px;
-        margin-bottom:72px;
+        padding:34px 18px 92px;
+        margin-bottom:92px;
         border:0;
         border-radius:0;
         box-shadow:none;
@@ -4040,11 +4040,15 @@ td.col-qty::after{
       }
 
       .calculatorArea{
-        margin-top:116px;
+        margin-top:136px;
       }
 
       #inputSection{
         scroll-margin-top:68px;
+      }
+
+      #tableCard{
+        scroll-margin-top:20px;
       }
 
       .presetSection{
@@ -4268,8 +4272,8 @@ td.col-qty::after{
 
       .heroSection{
         min-height:calc(100svh - 132px);
-        padding:30px 16px 68px;
-        margin-bottom:56px;
+        padding:30px 16px 78px;
+        margin-bottom:72px;
       }
 
       .heroTopRow{
@@ -4306,7 +4310,8 @@ td.col-qty::after{
 
       .heroSection{
         min-height:calc(100svh - 124px);
-        padding:24px 16px 56px;
+        padding:24px 16px 64px;
+        margin-bottom:64px;
       }
 
       .heroSection h1{

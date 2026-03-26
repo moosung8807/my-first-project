@@ -2137,7 +2137,7 @@
       updateTargetSumUI
     });
     if(rowCount() < beforeCount){
-      ensureMinimumMobileRows();
+      ensureMinimumRows();
       ensureTrailingEmptyRow();
     }
   }
@@ -2154,8 +2154,7 @@
     });
   }
 
-  function ensureMinimumMobileRows(minRows = 2){
-    if(!isMobileViewport()) return;
+  function ensureMinimumRows(minRows = 2){
     while(rowCount() < minRows){
       addRow();
     }
@@ -2721,7 +2720,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     clearAllRowQuoteStates();
     tbody.innerHTML = "";
     for(let i=0;i<getInitialRowCount();i++) addRow();
-    ensureMinimumMobileRows();
+    ensureMinimumRows();
     setMode("current");
     setTotalSummary("현재 보유액", fmtKRW(0));
     setCashSummary(fmtKRW(0));
@@ -2788,7 +2787,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
   }
   if(heroCalcBtn){
     heroCalcBtn.addEventListener("click", ()=>{
-      scrollToEl(inputSection);
+      scrollToEl(isMobileViewport() ? tableCard : inputSection);
       const firstInput = tbody.querySelector("tr .name");
       if(firstInput) firstInput.focus({ preventScroll: true });
     });
@@ -2801,7 +2800,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
   }
 
   for(let i=0;i<getInitialRowCount();i++) addRow();
-  ensureMinimumMobileRows();
+  ensureMinimumRows();
   renderGuideRail();
   setActivePreset(null);
   setMode("current");
