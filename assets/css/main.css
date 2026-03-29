@@ -1255,6 +1255,15 @@
     .controlActions button{
       flex-shrink:0;
     }
+    .saveStatusText{
+      display:inline-flex;
+      align-items:center;
+      min-height:38px;
+      color:var(--muted);
+      font-size:12.5px;
+      line-height:1.45;
+      white-space:nowrap;
+    }
     .mobileInputStatus{
       display:none;
     }
@@ -2161,6 +2170,15 @@ td.col-qty::after{
       .controlActions #reset{
         display:none;
       }
+      .controlActions #saveWorkBtn,
+      .controlActions #loadWorkBtn{
+        flex:1 1 calc(50% - 4px);
+      }
+      .saveStatusText{
+        width:100%;
+        min-height:auto;
+        white-space:normal;
+      }
       .mobileInputStatus{
         display:flex;
         align-items:center;
@@ -2922,6 +2940,9 @@ td.col-qty::after{
         width:100%;
         justify-content:center;
       }
+      .saveStatusText{
+        width:100%;
+      }
       .siteFooter{padding:12px 8px;font-size:12.5px;}
       .footerTopLinks{gap:12px;}
       .footerTopLinks a{
@@ -3577,6 +3598,11 @@ td.col-qty::after{
       gap:10px;
     }
 
+    .saveStatusText{
+      min-height:44px;
+      font-size:12.5px;
+    }
+
     .sectionHeading h2{
       font-size:22px;
       line-height:1.2;
@@ -3628,7 +3654,8 @@ td.col-qty::after{
       }
 
       #inputSection .sectionHeadingActions .statusBadge,
-      #inputSection .sectionHeadingActions button{
+      #inputSection .sectionHeadingActions button,
+      #inputSection .sectionHeadingActions .saveStatusText{
         font-size:13px;
         line-height:1;
       }
@@ -3637,6 +3664,10 @@ td.col-qty::after{
         min-height:44px;
         padding:0 14px;
         justify-content:center;
+      }
+
+      #inputSection .sectionHeadingActions .saveStatusText{
+        min-height:44px;
       }
     }
 
@@ -4091,6 +4122,13 @@ td.col-qty::after{
 
       #inputSection .sectionHeadingActions .statusBadge{
         grid-column:1 / -1;
+      }
+
+      #inputSection .sectionHeadingActions .saveStatusText{
+        grid-column:1 / -1;
+        min-height:auto;
+        padding:0 2px;
+        line-height:1.45;
       }
 
       #inputSection .sectionHeadingActions #calcBtn,

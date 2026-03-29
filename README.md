@@ -26,6 +26,90 @@
 Yahoo Finance 현재가 자동 조회 기능은 `/api/quote` 서버리스 프록시를 사용하므로,
 로컬 파일 직접 열기(`file://`)가 아니라 서버 환경(예: Cloudflare Pages Functions)에서 실행해야 동작합니다.
 
+### 로컬 정적 서버 예시
+
+```bash
+npx --yes serve -l 4173 .
+```
+
+브라우저에서 `http://127.0.0.1:4173` 으로 접속합니다.
+
+## Playwright 검증
+
+### 기본 검증
+
+이 저장소에는 system Chromium 기준 Playwright CLI 래퍼가 포함되어 있습니다.
+
+```bash
+./scripts/pwcli-local.sh open http://127.0.0.1:4173
+./scripts/pwcli-local.sh snapshot
+./scripts/pwcli-local.sh screenshot
+./scripts/pwcli-local.sh close-all
+```
+
+- `scripts/pwcli-local.sh` 는 현재 머신에서 사용 가능한 `chromium` 또는 `google-chrome` 실행 파일을 자동으로 찾습니다.
+- Playwright 결과물은 `output/playwright/` 아래에 저장됩니다.
+
+### 모바일 검증
+
+이 환경에서는 Playwright 번들 Chromium보다 system Chromium + CDP 연결이 더 안정적입니다.
+모바일 검증은 `scripts/pwcli-mobile.sh` 를 사용합니다.
+
+- `scripts/pwcli-mobile.sh` 는 내부적으로 `tmux` 세션을 사용해 headless Chromium CDP 브라우저를 유지합니다.
+- 같은 모바일 검증 흐름에서는 `start`, `open`, `snapshot`, `screenshot`, `stop` 을 모두 이 래퍼로 실행합니다.
+
+1. 로컬 서버를 띄웁니다.
+
+```bash
+npx --yes serve -l 4173 .
+```
+
+2. 모바일 CDP 브라우저를 시작합니다.
+
+```bash
+./scripts/pwcli-mobile.sh start
+```
+
+3. 같은 브라우저 세션으로 모바일 화면을 열고 검증합니다.
+
+```bash
+./scripts/pwcli-mobile.sh -s=mobile open http://127.0.0.1:4173
+./scripts/pwcli-mobile.sh -s=mobile snapshot
+./scripts/pwcli-mobile.sh -s=mobile screenshot
+```
+
+4. 검증이 끝나면 브라우저를 정리합니다.
+
+```bash
+./scripts/pwcli-mobile.sh stop
+```
+
+추가 메모:
+- 기본 모바일 viewport 는 `390x844` 입니다.
+- 다른 크기로 확인하려면 `PWCLI_MOBILE_VIEWPORT=430x932 ./scripts/pwcli-mobile.sh start` 처럼 실행합니다.
+- 상태가 꼬이면 `./scripts/pwcli-mobile.sh reset` 으로 프로필과 프로세스를 같이 초기화합니다.
+- 이 스크립트는 `http://127.0.0.1:9333` CDP 포트를 재사용하므로, 모바일 검증 명령은 같은 래퍼를 계속 사용해야 합니다.
+- `tmux` 가 없는 환경에서는 이 스크립트가 동작하지 않습니다.
+
+### 화면 캡처 검증
+
+이 저장소에서 가장 간단하고 안정적인 모바일 시각 검증 방법은
+`scripts/xvfb-shot.sh` 입니다. `Xvfb + app-mode Chromium + scrot` 조합으로
+실제 작은 브라우저 창을 띄운 뒤 그대로 캡처합니다.
+
+```bash
+./scripts/xvfb-shot.sh mobile
+./scripts/xvfb-shot.sh desktop
+./scripts/xvfb-shot.sh mobile "http://127.0.0.1:4173/#inputSection"
+./scripts/xvfb-shot.sh mobile "http://127.0.0.1:4173/#tableCard" output/playwright/mobile-table.png
+```
+
+- `desktop` 은 기본 `1280x720`, `mobile` 은 기본 `390x844` 로 캡처합니다.
+- 세 번째 인자를 주지 않으면 결과물은 `output/playwright/` 아래 기본 파일명으로 저장됩니다.
+- 렌더 대기 시간을 늘리려면 `XVFB_SHOT_WAIT=8 ./scripts/xvfb-shot.sh mobile` 처럼 실행합니다.
+- 창 크기를 바꾸려면 `XVFB_SHOT_WIDTH=430 XVFB_SHOT_HEIGHT=932 ./scripts/xvfb-shot.sh mobile` 처럼 실행합니다.
+- 이 방식은 모바일/데스크톱 레이아웃 확인용 기준 절차로 쓰고, 저장/불러오기 같은 상호작용 검증은 Playwright 래퍼를 계속 사용합니다.
+
 ## 개발 메모
 - DOM id/class의 기준 파일은 `index.html`입니다.
 - 셀렉터나 마크업을 바꾸기 전에는 `assets/css`, `assets/js` 연결을 함께 확인해야 합니다.

@@ -3,6 +3,9 @@
   const addRowBtn = document.querySelector("#addRow");
   let calcBtn = document.querySelector("#calcBtn");
   let resetBtn = document.querySelector("#reset");
+  const saveWorkBtn = document.querySelector("#saveWorkBtn");
+  const loadWorkBtn = document.querySelector("#loadWorkBtn");
+  const saveStatusText = document.querySelector("#saveStatusText");
   const sumTargetEl = document.querySelector("#sumTarget");
   const themeToggle = document.querySelector("#themeToggle");
   const heroCalcBtn = document.querySelector("#heroCalcBtn");
@@ -235,6 +238,7 @@
   let mode = "current"; // "current" | "result"
   const THEME_KEY = "rb-theme";
   const AUTO_QUOTE_KEY = "rb-auto-quote-enabled";
+  const WORKSPACE_SAVE_KEY = "rb-saved-workspace-v1";
   const FIXED_TOLERANCE_PERCENT_POINT = 0.1;
   const FIXED_TOLERANCE_RATIO = FIXED_TOLERANCE_PERCENT_POINT / 100;
   const LARGE_AMOUNT_WRAP_THRESHOLD = 1000000000;
@@ -2169,6 +2173,184 @@
     });
   }
 
+  function collectWorkspaceRows(){
+    return [...tbody.querySelectorAll("tr")]
+      .filter((tr)=>rowHasAnyInput(tr))
+      .map((tr)=>({
+        manualPrice: Boolean(tr.querySelector(".rowManualPriceToggle")?.checked),
+        name: String(tr.querySelector(".name")?.value || "").trim(),
+        price: String(tr.querySelector(".price")?.value || "").trim(),
+        qty: String(tr.querySelector(".qty")?.value || "").trim(),
+        target: String(tr.querySelector(".target")?.value || "").trim()
+      }));
+  }
+
+  function hasWorkspaceData(){
+    return collectWorkspaceRows().length > 0;
+  }
+
+  function buildWorkspaceSnapshot(){
+    return {
+      autoQuoteEnabled,
+      hasComputed,
+      isDirtyAfterCalc,
+      portfolioName: String(localStorage.getItem("rb-portfolio-name") || "").trim(),
+      resumeToResult: hasComputed && mode === "result" && !isDirtyAfterCalc,
+      rows: collectWorkspaceRows(),
+      savedAt: new Date().toISOString(),
+      version: 1
+    };
+  }
+
+  function normalizeSavedWorkspace(payload){
+    if(!payload || typeof payload !== "object"){
+      return null;
+    }
+
+    const rows = Array.isArray(payload.rows)
+      ? payload.rows.slice(0, 80).map((row)=>({
+        manualPrice: Boolean(row?.manualPrice),
+        name: String(row?.name || "").trim(),
+        price: String(row?.price || "").trim(),
+        qty: String(row?.qty || "").trim(),
+        target: String(row?.target || "").trim()
+      })).filter((row)=>row.name || row.price || row.qty || row.target)
+      : [];
+
+    return {
+      autoQuoteEnabled: Boolean(payload.autoQuoteEnabled),
+      hasComputed: Boolean(payload.hasComputed),
+      isDirtyAfterCalc: Boolean(payload.isDirtyAfterCalc),
+      portfolioName: String(payload.portfolioName || "").trim(),
+      resumeToResult: Boolean(payload.resumeToResult),
+      rows,
+      savedAt: String(payload.savedAt || "").trim(),
+      version: Number(payload.version) || 1
+    };
+  }
+
+  function readSavedWorkspace(){
+    try{
+      const raw = localStorage.getItem(WORKSPACE_SAVE_KEY);
+      if(!raw){
+        return null;
+      }
+      const snapshot = normalizeSavedWorkspace(JSON.parse(raw));
+      if(snapshot){
+        return snapshot;
+      }
+    }catch(_error){
+    }
+    localStorage.removeItem(WORKSPACE_SAVE_KEY);
+    return null;
+  }
+
+  function formatSavedWorkspaceText(snapshot){
+    if(!snapshot){
+      return "최근 저장 없음";
+    }
+    const savedDate = snapshot.savedAt ? new Date(snapshot.savedAt) : null;
+    const savedText = savedDate && !Number.isNaN(savedDate.getTime())
+      ? formatReportDate(savedDate)
+      : "시간 정보 없음";
+    const rowCountText = snapshot.rows.length > 0 ? `${snapshot.rows.length}개 종목` : "입력 없음";
+    return `최근 저장 ${savedText} · ${rowCountText}`;
+  }
+
+  function updateSavedWorkspaceUi(snapshot){
+    if(saveStatusText){
+      saveStatusText.textContent = formatSavedWorkspaceText(snapshot);
+    }
+    if(loadWorkBtn){
+      loadWorkBtn.disabled = !snapshot;
+    }
+  }
+
+  function saveWorkspaceSnapshot(){
+    if(!hasWorkspaceData()){
+      showToast("저장할 입력값이 없습니다.");
+      return;
+    }
+    const snapshot = buildWorkspaceSnapshot();
+    try{
+      localStorage.setItem(WORKSPACE_SAVE_KEY, JSON.stringify(snapshot));
+    }catch(_error){
+      showToast("브라우저 저장 공간에 작업을 저장하지 못했습니다.");
+      return;
+    }
+    updateSavedWorkspaceUi(snapshot);
+    showToast("현재 작업을 이 브라우저에 저장했어요.");
+  }
+
+  function restoreWorkspaceSnapshot(snapshot){
+    if(!snapshot){
+      showToast("불러올 저장 작업이 없습니다.");
+      return;
+    }
+
+    const hasCurrentWork = hasWorkspaceData() || hasComputed;
+    if(hasCurrentWork && !window.confirm("현재 입력값을 덮어쓰고 최근 저장 작업을 불러올까요?")){
+      return;
+    }
+
+    clearAllRowQuoteStates();
+    tbody.innerHTML = "";
+    setActivePreset(null);
+    setAutoQuoteEnabled(snapshot.autoQuoteEnabled);
+
+    if(snapshot.rows.length > 0){
+      snapshot.rows.forEach(()=>addRow());
+      const rows = [...tbody.querySelectorAll("tr")];
+      snapshot.rows.forEach((savedRow, index)=>{
+        const tr = rows[index];
+        if(!tr){
+          return;
+        }
+        tr.querySelector(".name").value = savedRow.name;
+        tr.querySelector(".price").value = savedRow.price;
+        tr.querySelector(".qty").value = savedRow.qty;
+        tr.querySelector(".target").value = savedRow.target;
+        const manualToggle = tr.querySelector(".rowManualPriceToggle");
+        if(manualToggle){
+          manualToggle.checked = savedRow.manualPrice;
+        }
+        syncRowDisplayName(tr);
+        syncRowPriceInputMode(tr);
+      });
+    }else{
+      for(let i = 0; i < getInitialRowCount(); i++) addRow();
+    }
+
+    ensureMinimumRows();
+    ensureTrailingEmptyRow();
+    clearInvalidMarks();
+    hideErrorSummary();
+    updateTargetSumUI();
+    updateCurrentUI();
+
+    if(snapshot.portfolioName){
+      localStorage.setItem("rb-portfolio-name", snapshot.portfolioName);
+    }
+
+    hasComputed = Boolean(snapshot.hasComputed);
+    setMode("current");
+    setDirtyState(Boolean(snapshot.hasComputed && snapshot.isDirtyAfterCalc));
+
+    if(snapshot.resumeToResult && validateBeforeCalc()){
+      calc();
+      hasComputed = true;
+      setMode("result");
+      setDirtyState(false);
+      showToast("최근 저장 작업을 결과 화면으로 불러왔어요.");
+      return;
+    }
+
+    hideErrorSummary();
+    clearInvalidMarks();
+    updateExportPdfButtonState();
+    showToast("최근 저장 작업을 불러왔어요.");
+  }
+
   function ensureMinimumRows(minRows = 2){
     while(rowCount() < minRows){
       addRow();
@@ -2768,6 +2950,14 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
   if(resetBtn){
     resetBtn.onclick = resetAllRows;
   }
+  if(saveWorkBtn){
+    saveWorkBtn.addEventListener("click", saveWorkspaceSnapshot);
+  }
+  if(loadWorkBtn){
+    loadWorkBtn.addEventListener("click", ()=>{
+      restoreWorkspaceSnapshot(readSavedWorkspace());
+    });
+  }
   if(mobileResetBtn){
     mobileResetBtn.addEventListener("click", (event)=>{
       event.preventDefault();
@@ -2785,6 +2975,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
   const defaultTheme = window.matchMedia("(max-width: 768px)").matches ? "dark" : "light";
   setTheme(savedTheme || defaultTheme);
   setAutoQuoteEnabled(false);
+  updateSavedWorkspaceUi(readSavedWorkspace());
   if(autoQuoteToggle){
     autoQuoteToggle.addEventListener("change", ()=>{
       setAutoQuoteEnabled(autoQuoteToggle.checked, { notify: true });

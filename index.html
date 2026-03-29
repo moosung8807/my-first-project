@@ -59,7 +59,7 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9973322388801174"
      crossorigin="anonymous"></script>
 
-  <link rel="stylesheet" href="assets/css/main.css?v=20260326c" />
+  <link rel="stylesheet" href="assets/css/main.css?v=20260329a" />
 </head>
 
 <body>
@@ -201,9 +201,12 @@
         <div class="sectionHeadingActions controlActions">
           <span class="statusBadge" id="staleBadge" hidden>입력 변경됨 · 다시 계산 필요</span>
           <button class="secondary" id="addRow">종목 추가</button>
+          <button class="secondary" id="saveWorkBtn" type="button">현재 작업 저장</button>
+          <button class="secondary" id="loadWorkBtn" type="button" disabled>최근 저장 불러오기</button>
           <button class="secondary" id="heroDemoBtn" type="button">기본 예시 실행</button>
           <button class="primary" id="calcBtn" type="button">계산</button>
           <button class="secondary" id="reset" type="button">초기화</button>
+          <span class="saveStatusText" id="saveStatusText" aria-live="polite">최근 저장 없음</span>
         </div>
       </div>
       <div class="mobileCurrentMount" id="mobileCurrentMount"></div>
@@ -375,7 +378,7 @@
 <script src="assets/js/mode-helpers.js?v=20260326b"></script>
 <script src="assets/js/row-helpers.js?v=20260326b"></script>
 <script src="assets/js/mobile-helpers.js?v=20260326b"></script>
-<script src="assets/js/app.js?v=20260326c"></script>
+<script src="assets/js/app.js?v=20260329a"></script>
 <script src="assets/js/faq-renderer.js?v=20260326b"></script>
 <script src="assets/js/main-page.js?v=20260326b"></script>
 <footer class="siteFooter">
