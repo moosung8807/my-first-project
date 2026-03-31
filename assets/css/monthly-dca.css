@@ -55,6 +55,70 @@
   justify-content: flex-end;
 }
 
+.toolStatusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -2px 0 16px;
+  flex-wrap: wrap;
+}
+
+.toolModeSwitch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 auto 16px;
+  width: min(100%, 980px);
+}
+
+.toolModeCard {
+  display: grid;
+  gap: 4px;
+  padding: 14px 15px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 88%, var(--accent-soft) 12%);
+  color: var(--text);
+  text-decoration: none;
+  transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.toolModeCard:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--accent) 28%, var(--line));
+}
+
+.toolModeCard.isActive {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--accent) 12%, var(--panel)),
+    color-mix(in srgb, var(--panel) 90%, var(--accent-soft) 10%)
+  );
+  box-shadow: 0 10px 22px rgba(52, 84, 156, 0.12);
+}
+
+.toolModeEyebrow {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.toolModeTitle {
+  font-size: 15px;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.toolModeDesc {
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
 .toolButton,
 .iconButton {
   appearance: none;
@@ -69,7 +133,11 @@
 }
 
 .toolButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px 14px;
+  text-decoration: none;
 }
 
 .toolButton.primary {
@@ -89,6 +157,41 @@
 .toolButton:hover,
 .iconButton:hover {
   transform: translateY(-1px);
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--accent-soft) 52%, var(--panel) 48%);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.statusBadge.dirty {
+  border-color: rgba(209, 77, 69, 0.34);
+  background: color-mix(in srgb, #d14d45 14%, var(--panel));
+  color: #c6453b;
+}
+
+.statusBadge.clean {
+  border-color: rgba(34, 197, 94, 0.35);
+  background: color-mix(in srgb, #22c55e 12%, var(--panel));
+  color: #16803d;
+}
+
+.saveStatusText {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.45;
 }
 
 .controlGrid {
@@ -177,7 +280,7 @@ html[data-theme="dark"] #targetTotalLabel.isInvalid {
 .toolTable {
   width: 100%;
   border-collapse: collapse;
-  min-width: 760px;
+  min-width: 880px;
 }
 
 .toolTable th,
@@ -209,6 +312,80 @@ html[data-theme="dark"] #targetTotalLabel.isInvalid {
   background: color-mix(in srgb, var(--panel) 94%, var(--accent-soft) 6%);
   color: var(--text);
   font: inherit;
+}
+
+.dcaNameField {
+  position: relative;
+  min-width: 220px;
+}
+
+.dcaSuggest {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: 2px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 96%, var(--accent-soft) 4%);
+  box-shadow: 0 16px 30px rgba(17, 24, 39, 0.12);
+}
+
+.dcaSuggestItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+
+.dcaSuggestItem:hover,
+.dcaSuggestItem.isActive {
+  background: color-mix(in srgb, var(--accent-soft) 65%, var(--panel) 35%);
+}
+
+.dcaSuggestName {
+  font-weight: 700;
+}
+
+.dcaSuggestSymbol {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.quoteStatus {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.quoteStatus[data-tone="success"] {
+  color: color-mix(in srgb, var(--accent) 78%, var(--text) 22%);
+}
+
+.quoteStatus[data-tone="manual"] {
+  color: color-mix(in srgb, var(--text) 62%, var(--muted) 38%);
+}
+
+.quoteStatus[data-tone="warn"],
+.quoteStatus[data-tone="error"] {
+  color: #d14d45;
+}
+
+.quoteStatus[data-tone="loading"] {
+  color: var(--accent);
 }
 
 .toolTable input:focus,
@@ -310,9 +487,61 @@ html[data-theme="dark"] .invalidField {
   color: var(--accent);
 }
 
+.resultTable {
+  min-width: 1180px;
+}
+
 .resultEmpty {
   text-align: center;
   color: var(--muted);
+}
+
+.dcaToast {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%) translateY(12px);
+  min-width: 280px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
+  background: color-mix(in srgb, var(--panel) 90%, #101726 10%);
+  box-shadow: 0 18px 40px rgba(12, 18, 28, 0.24);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 9999;
+}
+
+.dcaToast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.dcaToast .badge {
+  flex: 0 0 auto;
+  width: 52px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
+  background: color-mix(in srgb, var(--accent-soft) 68%, var(--panel) 32%);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+}
+
+.dcaToast .msg {
+  display: flex;
+  align-items: center;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.25;
 }
 
 @media (max-width: 860px) {
@@ -325,6 +554,15 @@ html[data-theme="dark"] .invalidField {
 
   .toolActions {
     justify-content: flex-start;
+  }
+
+  .toolStatusRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .toolModeSwitch {
+    grid-template-columns: 1fr;
   }
 
   .controlGrid,
@@ -356,6 +594,10 @@ html[data-theme="dark"] .invalidField {
 
   .toolActions .toolButton {
     flex: 1 1 100%;
+  }
+
+  .saveStatusText {
+    min-height: 0;
   }
 
   .fieldCard,

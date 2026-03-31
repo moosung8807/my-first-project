@@ -7,8 +7,15 @@
   <meta name="description" content="월 적립 투자금으로 각 종목을 얼마씩 사야 목표 비중에 가까워지는지 계산하는 한국어 적립식 매수 비중 계산기입니다." />
   <meta name="robots" content="index,follow" />
   <link rel="canonical" href="https://rebalancing.kr/pages/monthly-dca-rebalancing.html" />
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9973322388801174"
-     crossorigin="anonymous"></script>
+  <script>
+    if (!/^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname)) {
+      const adsScript = document.createElement("script");
+      adsScript.async = true;
+      adsScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9973322388801174";
+      adsScript.crossOrigin = "anonymous";
+      document.head.appendChild(adsScript);
+    }
+  </script>
   <script src="../assets/js/theme-init.js"></script>
 
   <meta property="og:type" content="article" />
@@ -83,13 +90,33 @@
               <div>
                 <p class="toolEyebrow">Monthly DCA Rebalancing</p>
                 <h3 id="dcaToolTitle" class="toolTitle">이번 달 매수 금액 배분</h3>
-                <p class="toolIntro">현재 평가금액을 입력하면 종목별 권장 매수 금액과 매수 후 예상 비중을 바로 확인할 수 있습니다.</p>
+                <p class="toolIntro">현재 평가금액을 입력하면 종목별 권장 매수 금액과 매수 후 예상 비중을 바로 확인할 수 있습니다. 현재가까지 입력하면 실제 매수 수량과 잔여 현금도 함께 계산합니다.</p>
               </div>
               <div class="toolActions">
+                <button class="toolButton secondary" id="dcaSaveBtn" type="button">현재 작업 저장</button>
+                <button class="toolButton secondary" id="dcaLoadBtn" type="button" disabled>최근 저장 불러오기</button>
                 <button class="toolButton secondary" id="dcaDemoBtn" type="button">예시 불러오기</button>
                 <button class="toolButton secondary" id="dcaResetBtn" type="button">초기화</button>
                 <button class="toolButton primary" id="dcaCalcBtn" type="button">계산하기</button>
               </div>
+            </div>
+
+            <nav class="toolModeSwitch" aria-label="관련 계산기 전환">
+              <a class="toolModeCard" href="../index.html">
+                <span class="toolModeEyebrow">Main Tool</span>
+                <strong class="toolModeTitle">포트폴리오 리밸런싱 계산기</strong>
+                <span class="toolModeDesc">매수·매도를 포함한 전체 비중 조정</span>
+              </a>
+              <a class="toolModeCard isActive" href="./monthly-dca-rebalancing.html" aria-current="page">
+                <span class="toolModeEyebrow">Sub Tool</span>
+                <strong class="toolModeTitle">월 적립식 매수 계산기</strong>
+                <span class="toolModeDesc">매도 없이 새 적립금만 배분</span>
+              </a>
+            </nav>
+
+            <div class="toolStatusRow">
+              <span class="statusBadge" id="dcaStaleBadge" hidden>입력 변경됨 · 다시 계산 필요</span>
+              <span class="saveStatusText" id="dcaSaveStatusText" aria-live="polite">최근 저장 없음</span>
             </div>
 
             <div class="controlGrid" aria-label="월 적립식 매수 입력">
@@ -129,6 +156,7 @@
                   <tr>
                     <th>종목명</th>
                     <th class="num">현재 보유액</th>
+                    <th class="num">현재가</th>
                     <th class="num">현재 비중</th>
                     <th class="num">목표 비중</th>
                     <th>삭제</th>
@@ -154,9 +182,14 @@
                   <span class="metricMeta">입력 전</span>
                 </article>
                 <article class="metricCard">
-                  <span class="metricLabel">매수 후 총자산</span>
-                  <strong class="metricValue" id="metricAfterTotal">₩ 0</strong>
-                  <span class="metricMeta">현재 보유액 + 적립금</span>
+                  <span class="metricLabel">실제 매수 예정액</span>
+                  <strong class="metricValue" id="metricActualBuyTotal">₩ 0</strong>
+                  <span class="metricMeta">정수 수량 기준 예상 주문액</span>
+                </article>
+                <article class="metricCard">
+                  <span class="metricLabel">예상 잔여 현금</span>
+                  <strong class="metricValue" id="metricResidualCash">₩ 0</strong>
+                  <span class="metricMeta" id="metricResidualCashMeta">수량 계산 후 남는 현금</span>
                 </article>
                 <article class="metricCard">
                   <span class="metricLabel">평균 비중 오차</span>
@@ -182,14 +215,17 @@
                       <th>종목명</th>
                       <th class="num">현재 비중</th>
                       <th class="num">목표 비중</th>
-                      <th class="num">목표 대비 부족분</th>
-                      <th class="num">권장 매수액</th>
+                      <th class="num">목표 기준 배분액</th>
+                      <th class="num">현재가</th>
+                      <th class="num">권장 매수 수량</th>
+                      <th class="num">실제 매수액</th>
+                      <th class="num">잔여 현금</th>
                       <th class="num">매수 후 비중</th>
                     </tr>
                   </thead>
                   <tbody id="resultTableBody">
                     <tr>
-                      <td class="resultEmpty" colspan="6">입력 후 계산하면 결과가 나타납니다.</td>
+                      <td class="resultEmpty" colspan="8">입력 후 계산하면 결과가 나타납니다.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -212,7 +248,7 @@
           </ul>
           <div class="note">
             월 적립식 매수만으로는 비중이 크게 어긋난 포트폴리오를 한 번에 바로잡기 어렵습니다.
-            큰 편차가 있다면 <a class="inlineLink" href="../index.html">메인 리밸런싱 계산기</a>로
+            큰 편차가 있다면 상단의 포트폴리오 리밸런싱 계산기로 이동해
             매수·매도 기준을 함께 점검하는 편이 더 정확합니다.
           </div>
         </div>
@@ -260,7 +296,13 @@
       </article>
     </main>
   </div>
+  <div class="toast dcaToast" id="dcaToast">
+    <div class="badge">알림</div>
+    <div class="msg" id="dcaToastMsg"></div>
+  </div>
   <script src="../assets/js/core-format.js"></script>
+  <script src="../assets/js/core-utils.js"></script>
+  <script src="../assets/js/core-symbols.js"></script>
   <script src="../assets/js/monthly-dca-page.js"></script>
   <script src="../assets/js/faq-renderer.js"></script>
   <script src="../assets/js/docs-page.js"></script>
