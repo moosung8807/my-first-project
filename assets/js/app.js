@@ -298,6 +298,41 @@
       tag: "계산",
       title: "리밸런싱 계산이 어려운 이유",
       description: "손계산이 복잡해지는 지점과 계산기가 필요한 이유를 짚어줍니다."
+    },
+    {
+      href: "https://blog.naver.com/rebalancing_/224236461413",
+      tag: "사용법",
+      title: "리밸런싱 계산기 사용법",
+      description: "ETF 비중 계산과 수량 자동 맞추는 흐름을 네이버 블로그 글로 자세히 안내합니다.",
+      external: true
+    },
+    {
+      href: "https://blog.naver.com/rebalancing_/224229403746",
+      tag: "사용법",
+      title: "엑셀없이 쉽게 ETF 리밸런싱 하는방법",
+      description: "엑셀 없이 리밸런싱 계산기를 활용해 ETF 비중을 쉽게 맞추는 흐름을 설명합니다.",
+      external: true
+    },
+    {
+      href: "https://blog.naver.com/rebalancing_/224225914521",
+      tag: "월배당",
+      title: "월배당 ETF로 월 30만원 만들기",
+      description: "월 30만원 배당을 목표로 할 때 필요한 자금 규모와 현실적인 계산 방법을 정리합니다.",
+      external: true
+    },
+    {
+      href: "https://blog.naver.com/rebalancing_/224220149514",
+      tag: "월배당",
+      title: "월배당 ETF 투자하면 생기는 착각",
+      description: "월배당 ETF 투자에서 자주 생기는 오해와 실제로 확인해야 할 포인트를 짚어봅니다.",
+      external: true
+    },
+    {
+      href: "https://blog.naver.com/rebalancing_/224220133118",
+      tag: "개념",
+      title: "리밸런싱 하면 수익률이 좋아질까?",
+      description: "리밸런싱이 수익률을 무조건 높여준다고 믿기 쉬운 지점과 실제로 봐야 할 기준을 설명합니다.",
+      external: true
     }
   ];
   let hasComputed = false;
@@ -443,7 +478,7 @@
     }
     guideRailSelectionKey = items.map((item)=>item.href).sort().join("|");
     guideRailList.innerHTML = items.map((item)=>`
-      <a class="guideRailCard" href="${item.href}" role="listitem">
+      <a class="guideRailCard" href="${item.href}" role="listitem"${item.external ? ' target="_blank" rel="noopener noreferrer"' : ""}>
         <span class="guideRailCardBody">
           <span class="guideRailCardTag">${escapeHtml(item.tag)}</span>
           <strong>${escapeHtml(item.title)}</strong>
