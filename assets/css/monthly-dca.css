@@ -1,3 +1,43 @@
+.monthlyToolPage .monthlyPage {
+  max-width: 1200px;
+}
+
+.monthlyToolPage .monthlyHeroSection {
+  margin-bottom: 14px;
+}
+
+.monthlyToolPage .themeToggle {
+  min-width: 124px;
+}
+
+.monthlyHeroActions {
+  margin-top: 28px;
+}
+
+.monthlyHeroActions button {
+  min-width: 156px;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 999px;
+}
+
+.monthlyIntroText {
+  margin-bottom: 22px;
+}
+
+.monthlyCalculatorArea {
+  margin-bottom: 22px;
+}
+
+.monthlyToolCard,
+.monthlyResultCard {
+  margin-bottom: 18px;
+}
+
+.monthlyPrimaryActions {
+  align-items: center;
+}
+
 .srOnly {
   position: absolute;
   width: 1px;
@@ -8,190 +48,6 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-.toolPanel {
-  margin: 10px 0 18px;
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background:
-    radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 14%, transparent), transparent 28%),
-    linear-gradient(180deg, color-mix(in srgb, var(--panel) 94%, var(--accent-soft) 6%), var(--panel));
-}
-
-.toolHero {
-  display: flex;
-  justify-content: space-between;
-  gap: 18px;
-  align-items: flex-start;
-  margin-bottom: 18px;
-}
-
-.toolEyebrow {
-  margin-bottom: 6px;
-  color: var(--accent);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.toolTitle {
-  margin: 0 0 6px;
-  font-size: 29px;
-  line-height: 1.2;
-}
-
-.toolIntro {
-  margin: 0;
-  color: var(--muted);
-}
-
-.toolActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: flex-end;
-}
-
-.toolStatusRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin: -2px 0 16px;
-  flex-wrap: wrap;
-}
-
-.toolModeSwitch {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin: 0 auto 16px;
-  width: min(100%, 980px);
-}
-
-.toolModeCard {
-  display: grid;
-  gap: 4px;
-  padding: 14px 15px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--panel) 88%, var(--accent-soft) 12%);
-  color: var(--text);
-  text-decoration: none;
-  transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease, box-shadow 0.16s ease;
-}
-
-.toolModeCard:hover {
-  transform: translateY(-1px);
-  border-color: color-mix(in srgb, var(--accent) 28%, var(--line));
-}
-
-.toolModeCard.isActive {
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--accent) 12%, var(--panel)),
-    color-mix(in srgb, var(--panel) 90%, var(--accent-soft) 10%)
-  );
-  box-shadow: 0 10px 22px rgba(52, 84, 156, 0.12);
-}
-
-.toolModeEyebrow {
-  color: var(--accent);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.toolModeTitle {
-  font-size: 15px;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-}
-
-.toolModeDesc {
-  color: var(--muted);
-  font-size: 12.5px;
-  line-height: 1.5;
-}
-
-.toolButton,
-.iconButton {
-  appearance: none;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--panel);
-  color: var(--text);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
-}
-
-.toolButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 14px;
-  text-decoration: none;
-}
-
-.toolButton.primary {
-  background: var(--accent);
-  border-color: color-mix(in srgb, var(--accent) 82%, #000 18%);
-  color: #fff;
-}
-
-.toolButton.secondary {
-  background: color-mix(in srgb, var(--panel) 80%, var(--accent-soft) 20%);
-}
-
-.iconButton {
-  padding: 8px 10px;
-}
-
-.toolButton:hover,
-.iconButton:hover {
-  transform: translateY(-1px);
-}
-
-.statusBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--accent-soft) 52%, var(--panel) 48%);
-  color: var(--muted);
-  border-radius: 999px;
-  padding: 5px 10px;
-  font-size: 12px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.statusBadge.dirty {
-  border-color: rgba(209, 77, 69, 0.34);
-  background: color-mix(in srgb, #d14d45 14%, var(--panel));
-  color: #c6453b;
-}
-
-.statusBadge.clean {
-  border-color: rgba(34, 197, 94, 0.35);
-  background: color-mix(in srgb, #22c55e 12%, var(--panel));
-  color: #16803d;
-}
-
-.saveStatusText {
-  display: inline-flex;
-  align-items: center;
-  min-height: 38px;
-  color: var(--muted);
-  font-size: 12.5px;
-  line-height: 1.45;
 }
 
 .controlGrid {
@@ -205,10 +61,17 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 14px 16px;
-  border: 1px solid var(--line);
+  padding: 16px;
+  border: 1px solid rgba(154, 166, 186, 0.22);
   border-radius: 16px;
-  background: color-mix(in srgb, var(--panel) 84%, var(--accent-soft) 16%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+}
+
+html[data-theme="light"] .fieldCard {
+  border-color: rgba(106, 116, 126, 0.18);
+  background:
+    repeating-linear-gradient(108deg, rgba(255, 255, 255, 0.06) 0 2px, rgba(255, 255, 255, 0) 2px 8px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(221, 228, 233, 0.92));
 }
 
 .fieldCard.compact {
@@ -217,101 +80,128 @@
 
 .fieldLabel {
   color: var(--muted);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
 }
 
 .fieldValue {
   font-size: clamp(24px, 3vw, 30px);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--text);
 }
 
 .fieldHint {
   color: var(--muted);
   font-size: 13px;
+  line-height: 1.55;
 }
 
-#targetTotalLabel.isInvalid {
-  color: #d14d45;
+#targetTotalLabel.isInvalid,
+.quoteStatus[data-tone="warn"],
+.quoteStatus[data-tone="error"] {
+  color: var(--sell);
 }
 
-html[data-theme="dark"] #targetTotalLabel.isInvalid {
-  color: #ff8d85;
-}
-
-.toolTableHeader,
-.resultHeader {
+.toolTableHeader {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 14px;
-  align-items: center;
   margin: 18px 0 10px;
 }
 
 .toolSectionTitle {
   margin: 0 0 4px;
-  font-size: 21px;
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1.45;
 }
 
 .toolSectionCopy {
   margin: 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .toolError {
   margin-bottom: 12px;
   padding: 12px 14px;
-  border: 1px solid color-mix(in srgb, #cf3f37 36%, var(--line));
+  border: 1px solid rgba(224, 90, 90, 0.5);
   border-radius: 12px;
-  background: color-mix(in srgb, #cf3f37 10%, var(--panel));
-  color: color-mix(in srgb, #cf3f37 82%, var(--text) 18%);
+  background: rgba(224, 90, 90, 0.12);
+  color: var(--text);
+  font-size: 13px;
   font-weight: 700;
+  line-height: 1.55;
 }
 
 .toolTableWrap {
   overflow-x: auto;
   border: 1px solid var(--line);
   border-radius: 16px;
-  background: var(--panel);
+  background: linear-gradient(180deg, rgba(10, 15, 24, 0.24), rgba(10, 15, 24, 0.1));
+}
+
+html[data-theme="light"] .toolTableWrap {
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .toolTable {
   width: 100%;
+  min-width: 920px;
   border-collapse: collapse;
-  min-width: 880px;
+}
+
+.resultTable {
+  min-width: 1180px;
 }
 
 .toolTable th,
 .toolTable td {
   padding: 12px 14px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(154, 166, 186, 0.18);
   vertical-align: middle;
   text-align: left;
 }
 
 .toolTable th {
-  background: color-mix(in srgb, var(--accent-soft) 70%, var(--panel) 30%);
-  font-size: 14px;
+  background: rgba(90, 162, 255, 0.12);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+html[data-theme="light"] .toolTable th {
+  background: rgba(107, 130, 151, 0.12);
 }
 
 .toolTable tbody tr:last-child td {
   border-bottom: 0;
 }
 
+.toolTable tbody tr:hover td {
+  background: var(--row-hover);
+}
+
 .toolTable .num {
   text-align: right;
 }
 
-.toolTable input {
+.toolTable input,
+.moneyInput {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--panel) 94%, var(--accent-soft) 6%);
-  color: var(--text);
-  font: inherit;
+}
+
+.iconButton {
+  min-width: 0;
+  padding: 0 12px;
+}
+
+.moneyInput {
+  font-size: 16px;
 }
 
 .dcaNameField {
@@ -330,8 +220,14 @@ html[data-theme="dark"] #targetTotalLabel.isInvalid {
   padding: 8px;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: color-mix(in srgb, var(--panel) 96%, var(--accent-soft) 4%);
-  box-shadow: 0 16px 30px rgba(17, 24, 39, 0.12);
+  background: linear-gradient(180deg, rgba(24, 33, 51, 0.98), rgba(18, 25, 38, 0.98));
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.22);
+}
+
+html[data-theme="light"] .dcaSuggest {
+  background:
+    repeating-linear-gradient(108deg, rgba(255, 255, 255, 0.06) 0 2px, rgba(255, 255, 255, 0) 2px 8px),
+    linear-gradient(180deg, rgba(250, 251, 252, 0.98), rgba(227, 233, 237, 0.98));
 }
 
 .dcaSuggestItem {
@@ -340,6 +236,7 @@ html[data-theme="dark"] #targetTotalLabel.isInvalid {
   justify-content: space-between;
   gap: 10px;
   width: 100%;
+  min-height: 0;
   padding: 9px 10px;
   border: 0;
   border-radius: 10px;
@@ -352,7 +249,12 @@ html[data-theme="dark"] #targetTotalLabel.isInvalid {
 
 .dcaSuggestItem:hover,
 .dcaSuggestItem.isActive {
-  background: color-mix(in srgb, var(--accent-soft) 65%, var(--panel) 35%);
+  background: rgba(90, 162, 255, 0.14);
+}
+
+html[data-theme="light"] .dcaSuggestItem:hover,
+html[data-theme="light"] .dcaSuggestItem.isActive {
+  background: rgba(107, 130, 151, 0.12);
 }
 
 .dcaSuggestName {
@@ -368,41 +270,20 @@ html[data-theme="dark"] #targetTotalLabel.isInvalid {
   margin: 8px 0 0;
   color: var(--muted);
   font-size: 12px;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
-.quoteStatus[data-tone="success"] {
-  color: color-mix(in srgb, var(--accent) 78%, var(--text) 22%);
+.quoteStatus[data-tone="success"],
+.resultTable .emphasis {
+  color: var(--signal-accent);
 }
 
 .quoteStatus[data-tone="manual"] {
-  color: color-mix(in srgb, var(--text) 62%, var(--muted) 38%);
-}
-
-.quoteStatus[data-tone="warn"],
-.quoteStatus[data-tone="error"] {
-  color: #d14d45;
+  color: color-mix(in srgb, var(--text) 58%, var(--muted) 42%);
 }
 
 .quoteStatus[data-tone="loading"] {
-  color: var(--accent);
-}
-
-.toolTable input:focus,
-.moneyInput:focus {
-  outline: 2px solid color-mix(in srgb, var(--accent) 48%, transparent);
-  outline-offset: 1px;
-}
-
-.moneyInput {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--panel) 94%, var(--accent-soft) 6%);
-  color: var(--text);
-  font: inherit;
-  font-size: 17px;
+  color: var(--gold-soft);
 }
 
 .weightPreview {
@@ -410,40 +291,25 @@ html[data-theme="dark"] #targetTotalLabel.isInvalid {
   font-variant-numeric: tabular-nums;
 }
 
-.invalidField {
-  border-color: #d14d45 !important;
-  background: color-mix(in srgb, #d14d45 8%, var(--panel));
-}
-
-html[data-theme="dark"] .invalidField {
-  border-color: #ff8d85 !important;
-}
-
-.resultPanel {
-  margin-top: 18px;
-  padding: 16px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background:
-    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 26%),
-    color-mix(in srgb, var(--panel) 84%, var(--accent-soft) 16%);
-}
-
 .resultBadge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 11px;
+  justify-content: center;
+  min-height: 34px;
+  padding: 6px 12px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--accent) 14%, var(--panel));
-  color: var(--accent);
-  font-size: 13px;
+  border: 1px solid var(--signal-chip-line);
+  background: var(--signal-chip-bg);
+  color: var(--signal-accent-2);
+  font-size: 12px;
   font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .metricGrid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -452,14 +318,16 @@ html[data-theme="dark"] .invalidField {
   flex-direction: column;
   gap: 6px;
   padding: 15px 16px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(154, 166, 186, 0.2);
   border-radius: 16px;
-  background: color-mix(in srgb, var(--panel) 88%, var(--accent-soft) 12%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
 }
 
-.metricLabel,
-.metricMeta {
-  font-size: 13px;
+html[data-theme="light"] .metricCard {
+  border-color: rgba(106, 116, 126, 0.18);
+  background:
+    repeating-linear-gradient(108deg, rgba(255, 255, 255, 0.06) 0 2px, rgba(255, 255, 255, 0) 2px 8px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(221, 228, 233, 0.92));
 }
 
 .metricLabel,
@@ -468,27 +336,30 @@ html[data-theme="dark"] .invalidField {
   color: var(--muted);
 }
 
+.metricLabel,
+.metricMeta {
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
 .metricValue {
-  font-size: clamp(21px, 2.7vw, 28px);
-  line-height: 1.18;
-  letter-spacing: -0.02em;
+  color: var(--text);
+  font-size: clamp(20px, 2.2vw, 28px);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
 }
 
 .allocationNote {
   margin: 14px 0;
-  padding: 12px 14px;
-  border-left: 4px solid var(--accent);
+  padding: 14px 16px;
+  border-left: 4px solid var(--signal-accent);
   border-radius: 12px;
-  background: color-mix(in srgb, var(--accent-soft) 60%, var(--panel) 40%);
+  background: rgba(90, 162, 255, 0.12);
+  line-height: 1.65;
 }
 
-.resultTable .emphasis {
-  font-weight: 800;
-  color: var(--accent);
-}
-
-.resultTable {
-  min-width: 1180px;
+html[data-theme="light"] .allocationNote {
+  background: rgba(107, 130, 151, 0.1);
 }
 
 .resultEmpty {
@@ -496,117 +367,198 @@ html[data-theme="dark"] .invalidField {
   color: var(--muted);
 }
 
-.dcaToast {
-  position: fixed;
-  left: 50%;
-  bottom: 22px;
-  transform: translateX(-50%) translateY(12px);
-  min-width: 280px;
-  min-height: 44px;
+.monthlySupportLayout {
+  margin-bottom: 8px;
+}
+
+.monthlyGuideColumn {
+  min-width: 0;
+}
+
+.monthlyInfoCard {
+  margin-bottom: 18px;
+}
+
+.monthlyInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.monthlyInfoBlock {
+  padding: 16px;
+  border: 1px solid rgba(154, 166, 186, 0.2);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015));
+}
+
+html[data-theme="light"] .monthlyInfoBlock {
+  border-color: rgba(106, 116, 126, 0.18);
+  background:
+    repeating-linear-gradient(108deg, rgba(255, 255, 255, 0.06) 0 2px, rgba(255, 255, 255, 0) 2px 8px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(223, 229, 234, 0.9));
+}
+
+.monthlyInfoEyebrow,
+.monthlyCatchEyebrow {
+  margin: 0 0 8px;
+  color: var(--hero-eyebrow);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.monthlyInfoBlock h3 {
+  margin: 0 0 10px;
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.monthlyInfoBlock p,
+.monthlyInfoList {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.72;
+}
+
+.monthlyInfoList {
+  padding-left: 18px;
+}
+
+.monthlyInfoList li + li {
+  margin-top: 6px;
+}
+
+.monthlyFaqSection {
+  margin-bottom: 18px;
+}
+
+.monthlyFaqSection .faqQuestion {
+  cursor: default;
+}
+
+.monthlyFaqSection .faqQuestion::after {
+  content: none;
+}
+
+.monthlyCatchCard {
   display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 0;
+}
+
+.monthlyCatchTitle {
+  margin: 0;
+  max-width: 720px;
+  color: var(--text);
+  font-size: clamp(26px, 3.6vw, 38px);
+  line-height: 1.28;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.monthlyCatchLink {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
-  background: color-mix(in srgb, var(--panel) 90%, #101726 10%);
-  box-shadow: 0 18px 40px rgba(12, 18, 28, 0.24);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(154, 166, 186, 0.28);
+  background: linear-gradient(180deg, rgba(23, 32, 49, 0.9), rgba(16, 24, 38, 0.92));
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.14s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.monthlyCatchLink:hover {
+  transform: translateY(-1px);
+  border-color: var(--gold);
+}
+
+html[data-theme="light"] .monthlyCatchLink {
+  border-color: rgba(116, 125, 134, 0.28);
+  background:
+    repeating-linear-gradient(108deg, rgba(255, 255, 255, 0.07) 0 2px, rgba(255, 255, 255, 0) 2px 8px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(217, 224, 229, 0.95));
+}
+
+.dcaToast {
   z-index: 9999;
 }
 
-.dcaToast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
+@media (max-width: 1100px) {
+  .metricGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
-.dcaToast .badge {
-  flex: 0 0 auto;
-  width: 52px;
-  padding: 3px 10px;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
-  background: color-mix(in srgb, var(--accent-soft) 68%, var(--panel) 32%);
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 900;
-  line-height: 1;
-  text-align: center;
-}
-
-.dcaToast .msg {
-  display: flex;
-  align-items: center;
-  color: var(--text);
-  font-size: 13px;
-  line-height: 1.25;
+  .monthlyInfoGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 860px) {
-  .toolHero,
+  .controlGrid {
+    grid-template-columns: 1fr;
+  }
+
   .toolTableHeader,
-  .resultHeader {
+  .monthlyResultHeading {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .toolActions {
-    justify-content: flex-start;
-  }
-
-  .toolStatusRow {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .toolModeSwitch {
-    grid-template-columns: 1fr;
-  }
-
-  .controlGrid,
-  .metricGrid {
-    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .toolPanel,
-  .resultPanel {
-    padding: 14px;
-    border-radius: 14px;
+  .monthlyToolPage .container {
+    max-width: none;
   }
 
-  .toolTitle {
-    font-size: 25px;
+  .monthlyHeroActions {
+    gap: 8px;
   }
 
-  .toolButton,
-  .iconButton {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .toolActions {
+  .monthlyHeroActions button {
     width: 100%;
   }
 
-  .toolActions .toolButton {
-    flex: 1 1 100%;
+  .monthlyPrimaryActions {
+    width: 100%;
+    margin-left: 0;
   }
 
-  .saveStatusText {
-    min-height: 0;
+  .monthlyPrimaryActions > * {
+    width: 100%;
+  }
+
+  .monthlyPrimaryActions .statusBadge,
+  .monthlyPrimaryActions .saveStatusText {
+    justify-content: flex-start;
   }
 
   .fieldCard,
-  .metricCard {
-    padding: 13px 14px;
+  .metricCard,
+  .monthlyInfoBlock {
+    padding: 14px;
+  }
+
+  .metricGrid {
+    grid-template-columns: 1fr;
   }
 
   .toolTable th,
   .toolTable td {
     padding: 11px 12px;
+  }
+
+  .monthlyCatchTitle {
+    font-size: 28px;
   }
 }

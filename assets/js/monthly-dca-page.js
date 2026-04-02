@@ -859,7 +859,7 @@
     metricDrift.textContent = "0.0%p → 0.0%p";
     metricTopBuy.textContent = "없음";
     metricTopBuyMeta.textContent = "계산 후 표시됩니다.";
-    resultTableBody.innerHTML = '<tr><td class="resultEmpty" colspan="8">입력 후 계산하면 결과가 나타납니다.</td></tr>';
+    resultTableBody.innerHTML = '<tr><td class="resultEmpty" colspan="9">입력 후 계산하면 결과가 나타납니다.</td></tr>';
     updateStaleBadge();
   }
 
