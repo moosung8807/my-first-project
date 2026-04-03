@@ -3499,6 +3499,7 @@ td.col-qty::after{
 
     .desktopIntroText{
       display:block;
+      margin-bottom:72px;
     }
 
     .calculatorArea{
