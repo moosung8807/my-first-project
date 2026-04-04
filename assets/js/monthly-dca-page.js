@@ -49,7 +49,6 @@
   const QUOTE_ENDPOINT = "/api/quote";
   const WORKSPACE_SAVE_KEY = "rb-monthly-dca-saved-workspace-v1";
   const rowStates = new WeakMap();
-  const DEFAULT_QUOTE_STATUS = "최근 종가는 직접 입력하거나 종목을 선택해 자동으로 불러올 수 있습니다.";
   const DEFAULT_ROWS = [
     { name: "", amount: "", price: "", target: "" },
     { name: "", amount: "", price: "", target: "" },
@@ -89,12 +88,6 @@
     toastTimer = setTimeout(() => {
       toast.classList.remove("show");
     }, 1700);
-  }
-
-  function formatBaseDateLabel(value) {
-    const raw = String(value || "").trim();
-    if (!/^\d{8}$/.test(raw)) return "";
-    return `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)} 기준`;
   }
 
   function updateStaleBadge() {
@@ -286,8 +279,10 @@
   function setRowQuoteStatus(tr, message, tone = "idle") {
     const statusEl = tr.querySelector(".quoteStatus");
     if (!statusEl) return;
-    statusEl.textContent = message || DEFAULT_QUOTE_STATUS;
+    const nextMessage = String(message || "").trim();
+    statusEl.textContent = nextMessage;
     statusEl.dataset.tone = tone;
+    statusEl.hidden = !nextMessage;
   }
 
   function abortQuoteRequest(tr) {
@@ -304,10 +299,31 @@
     if (!box || !nameInput) return;
     box.hidden = true;
     box.innerHTML = "";
+    box.classList.remove("isAbove");
+    box.style.removeProperty("max-height");
     ensureRowState(tr).activeIndex = -1;
     nameInput.setAttribute("aria-expanded", "false");
     nameInput.removeAttribute("aria-controls");
     nameInput.removeAttribute("aria-activedescendant");
+  }
+
+  function updateSuggestionPlacement(tr) {
+    const box = getSuggestBox(tr);
+    const nameInput = tr.querySelector(".nameInput");
+    if (!box || !nameInput || box.hidden) return;
+
+    box.classList.remove("isAbove");
+
+    const inputRect = nameInput.getBoundingClientRect();
+    const desiredHeight = Math.min(box.scrollHeight || 0, 220);
+    const availableBelow = Math.max(0, window.innerHeight - inputRect.bottom - 12);
+    const availableAbove = Math.max(0, inputRect.top - 12);
+    const shouldOpenAbove = availableBelow < Math.min(desiredHeight, 180) && availableAbove > availableBelow;
+    const availableSpace = shouldOpenAbove ? availableAbove : availableBelow;
+    const cappedHeight = Math.max(88, Math.min(220, availableSpace - 8));
+
+    box.classList.toggle("isAbove", shouldOpenAbove);
+    box.style.maxHeight = `${cappedHeight}px`;
   }
 
   function applySuggestionSelection(tr, item) {
@@ -357,6 +373,7 @@
       box.id = `dcaSuggest-${Math.random().toString(36).slice(2, 8)}`;
     }
     nameInput.setAttribute("aria-controls", box.id);
+    updateSuggestionPlacement(tr);
     setActiveSuggestionIndex(tr, 0);
   }
 
@@ -400,7 +417,7 @@
     }
 
     if (!force && priceInput.dataset.edited === "manual" && parseNum(priceInput.value) > 0) {
-      setRowQuoteStatus(tr, "최근 종가 직접 입력값을 사용 중입니다.", "manual");
+      setRowQuoteStatus(tr, "", "manual");
       return;
     }
 
@@ -416,10 +433,9 @@
       tr.dataset.resolvedSymbol = result.symbol;
       priceInput.value = withComma(String(Math.round(result.price)));
       delete priceInput.dataset.edited;
-      const baseDateLabel = formatBaseDateLabel(result.baseDate);
       setRowQuoteStatus(
         tr,
-        baseDateLabel ? `${baseDateLabel} 최근 종가를 불러왔습니다.` : `${result.symbol} 최근 종가를 불러왔습니다.`,
+        "",
         "success"
       );
       updateInputSummary();
@@ -439,7 +455,7 @@
     const tr = document.createElement("tr");
     tr.dataset.resolvedSymbol = row.symbol || "";
     tr.innerHTML = `
-      <td>
+      <td class="col-name">
         <div class="dcaNameField">
           <input
             class="nameInput"
@@ -452,22 +468,21 @@
             aria-expanded="false"
           />
           <div class="dcaSuggest" hidden role="listbox"></div>
-          <p class="quoteStatus" data-tone="idle">${escapeHtml(DEFAULT_QUOTE_STATUS)}</p>
         </div>
       </td>
-      <td class="num">
+      <td class="num col-amount">
         <input class="moneyInput" data-field="amount" inputmode="numeric" placeholder="0" value="${escapeHtml(row.amount || "")}" />
       </td>
-      <td class="num">
+      <td class="num col-price">
         <input class="moneyInput priceInput" data-field="price" inputmode="numeric" placeholder="예: 12,345" value="${escapeHtml(row.price || "")}" />
       </td>
-      <td class="num">
+      <td class="num col-weight">
         <span class="weightPreview">0.0%</span>
       </td>
-      <td class="num">
+      <td class="num col-target">
         <input class="percentInput" data-field="target" inputmode="decimal" placeholder="0" value="${escapeHtml(row.target || "")}" />
       </td>
-      <td>
+      <td class="col-del">
         <button class="iconButton" type="button" aria-label="종목 삭제">삭제</button>
       </td>
     `;
@@ -483,7 +498,7 @@
     }
 
     if (parseNum(priceInput.value) > 0) {
-      setRowQuoteStatus(tr, "최근 종가 직접 입력값을 사용 중입니다.", "manual");
+      setRowQuoteStatus(tr, "", "manual");
       priceInput.dataset.edited = "manual";
     }
 
@@ -499,9 +514,9 @@
       formatInputWithComma(priceInput);
       priceInput.dataset.edited = parseNum(priceInput.value) > 0 ? "manual" : "";
       if (parseNum(priceInput.value) > 0) {
-        setRowQuoteStatus(tr, "최근 종가 직접 입력값을 사용 중입니다.", "manual");
+        setRowQuoteStatus(tr, "", "manual");
       } else {
-        setRowQuoteStatus(tr, DEFAULT_QUOTE_STATUS, "idle");
+        setRowQuoteStatus(tr, "", "idle");
       }
       markDirtyIfNeeded();
       clearResults();
@@ -524,13 +539,13 @@
       if (!String(nameInput.value || "").trim()) {
         hideNameSuggestions(tr);
         if (!priceInput.dataset.edited) {
-          setRowQuoteStatus(tr, DEFAULT_QUOTE_STATUS, "idle");
+          setRowQuoteStatus(tr, "", "idle");
         }
         return;
       }
       showNameSuggestions(tr, nameInput.value);
       if (!priceInput.dataset.edited) {
-        setRowQuoteStatus(tr, "종목을 선택하면 최근 종가를 자동으로 불러옵니다.", "idle");
+        setRowQuoteStatus(tr, "", "idle");
       }
     });
     nameInput.addEventListener("focus", () => {
@@ -769,7 +784,7 @@
         row.amountEl.classList.add("invalidField");
         if (!firstInvalid) firstInvalid = row.amountEl;
         if (!errorBox.textContent) {
-          showError(`${index + 1}번째 종목의 현재 보유액을 확인하세요.`);
+          showError(`${index + 1}번째 종목의 현재 평가금액을 확인하세요.`);
         }
       }
       if (row.currentPrice < 0) {

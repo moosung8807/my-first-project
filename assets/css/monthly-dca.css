@@ -34,6 +34,16 @@
   margin-bottom: 18px;
 }
 
+.monthlyToolCard,
+.monthlyResultCard,
+.monthlyInfoCard,
+.monthlyCatchCard,
+.monthlyFaqSection,
+.monthlyGuideRail .guideRailInner {
+  padding-left: 22px;
+  padding-right: 22px;
+}
+
 .monthlyPrimaryActions {
   align-items: center;
 }
@@ -55,6 +65,18 @@
   grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 18px;
+}
+
+.monthlyToolCard .controlGrid,
+.monthlyToolCard .toolTableHeader,
+.monthlyToolCard .toolError,
+.monthlyToolCard .toolTableWrap,
+.monthlyResultCard .metricGrid,
+.monthlyResultCard .allocationNote,
+.monthlyResultCard .toolTableWrap,
+.monthlyInfoCard .monthlyInfoGrid {
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .fieldCard {
@@ -97,9 +119,7 @@ html[data-theme="light"] .fieldCard {
   line-height: 1.55;
 }
 
-#targetTotalLabel.isInvalid,
-.quoteStatus[data-tone="warn"],
-.quoteStatus[data-tone="error"] {
+#targetTotalLabel.isInvalid {
   color: var(--sell);
 }
 
@@ -108,7 +128,11 @@ html[data-theme="light"] .fieldCard {
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  margin: 18px 0 10px;
+  margin: 20px 0 12px;
+}
+
+.toolTableHeader > div {
+  min-width: 0;
 }
 
 .toolSectionTitle {
@@ -139,19 +163,56 @@ html[data-theme="light"] .fieldCard {
 
 .toolTableWrap {
   overflow-x: auto;
-  border: 1px solid var(--line);
+  margin-top: 12px;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border: 1px solid rgba(154, 166, 186, 0.26);
   border-radius: 16px;
-  background: linear-gradient(180deg, rgba(10, 15, 24, 0.24), rgba(10, 15, 24, 0.1));
+  background: linear-gradient(180deg, rgba(12, 18, 29, 0.92), rgba(12, 18, 29, 0.84));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 24px rgba(4, 9, 17, 0.22);
 }
 
 html[data-theme="light"] .toolTableWrap {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(250, 252, 255, 0.96);
+  border-color: rgba(108, 127, 153, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.98);
 }
 
 .toolTable {
   width: 100%;
   min-width: 920px;
   border-collapse: collapse;
+}
+
+#dcaTable {
+  min-width: 940px;
+  table-layout: fixed;
+}
+
+#dcaTable .col-name {
+  width: 232px;
+}
+
+#dcaTable .col-amount {
+  width: 138px;
+}
+
+#dcaTable .col-price {
+  width: 126px;
+}
+
+#dcaTable .col-weight {
+  width: 76px;
+}
+
+#dcaTable .col-target {
+  width: 92px;
+}
+
+#dcaTable .col-del {
+  width: 58px;
 }
 
 .resultTable {
@@ -176,6 +237,49 @@ html[data-theme="light"] .toolTableWrap {
 
 html[data-theme="light"] .toolTable th {
   background: rgba(107, 130, 151, 0.12);
+}
+
+#dcaTable th,
+#dcaTable td {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+#dcaTable thead th {
+  white-space: nowrap;
+}
+
+#dcaTable tbody td {
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#dcaTable th.col-del,
+#dcaTable td.col-del {
+  text-align: center;
+}
+
+#dcaTable th.col-name {
+  text-align: center;
+}
+
+#dcaTable td.col-name {
+  text-align: left;
+}
+
+#dcaTable th.col-weight,
+#dcaTable td.col-weight {
+  text-align: center;
+}
+
+#dcaTable th.col-amount,
+#dcaTable th.col-price,
+#dcaTable th.col-target {
+  text-align: center;
 }
 
 .toolTable tbody tr:last-child td {
@@ -206,7 +310,87 @@ html[data-theme="light"] .toolTable th {
 
 .dcaNameField {
   position: relative;
-  min-width: 220px;
+  min-width: 0;
+}
+
+#dcaTable tbody td.col-name {
+  overflow: visible;
+}
+
+#dcaTable .dcaNameField,
+#dcaTable .nameInput {
+  width: 100%;
+}
+
+#dcaTable td.col-name input,
+#dcaTable td.col-amount input,
+#dcaTable td.col-price input,
+#dcaTable td.col-target input {
+  display: block;
+  height: 42px;
+  margin: 1px 0;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border-color: rgba(154, 166, 186, 0.28);
+  background: rgba(14, 20, 31, 0.92);
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  font-size: 14px;
+  line-height: normal;
+}
+
+html[data-theme="light"] #dcaTable td.col-name input,
+html[data-theme="light"] #dcaTable td.col-amount input,
+html[data-theme="light"] #dcaTable td.col-price input,
+html[data-theme="light"] #dcaTable td.col-target input {
+  border-color: rgba(108, 127, 153, 0.18);
+  background: #f9fbfe;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.98);
+}
+
+#dcaTable td.col-name input {
+  text-align: left;
+}
+
+#dcaTable td.col-amount,
+#dcaTable td.col-price,
+#dcaTable td.col-target {
+  min-width: 0;
+}
+
+#dcaTable td.col-amount,
+#dcaTable td.col-price,
+#dcaTable td.col-target {
+  padding-left: 12px;
+  padding-right: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+#dcaTable .weightPreview {
+  display: inline-flex;
+  min-width: 72px;
+  justify-content: center;
+}
+
+#dcaTable td.col-amount .moneyInput,
+#dcaTable td.col-price .moneyInput,
+#dcaTable td.col-target .percentInput {
+  text-align: right;
+}
+
+#dcaTable td.col-price .moneyInput,
+#dcaTable td.col-target .percentInput {
+  padding-right: 36px;
+}
+
+#dcaTable td.col-price::after,
+#dcaTable td.col-target::after {
+  right: 23px;
+}
+
+#dcaTable .iconButton {
+  min-width: 60px;
+  padding: 0 10px;
 }
 
 .dcaSuggest {
@@ -222,6 +406,17 @@ html[data-theme="light"] .toolTable th {
   border-radius: 14px;
   background: linear-gradient(180deg, rgba(24, 33, 51, 0.98), rgba(18, 25, 38, 0.98));
   box-shadow: 0 16px 30px rgba(0, 0, 0, 0.22);
+  max-height: 220px;
+  overflow: auto;
+}
+
+.dcaSuggest.isAbove {
+  top: auto;
+  bottom: calc(100% + 6px);
+}
+
+.dcaSuggest[hidden] {
+  display: none;
 }
 
 html[data-theme="light"] .dcaSuggest {
@@ -266,24 +461,8 @@ html[data-theme="light"] .dcaSuggestItem.isActive {
   font-size: 12px;
 }
 
-.quoteStatus {
-  margin: 8px 0 0;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.quoteStatus[data-tone="success"],
 .resultTable .emphasis {
-  color: var(--signal-accent);
-}
-
-.quoteStatus[data-tone="manual"] {
-  color: color-mix(in srgb, var(--text) 58%, var(--muted) 42%);
-}
-
-.quoteStatus[data-tone="loading"] {
-  color: var(--gold-soft);
+  color: var(--sell);
 }
 
 .weightPreview {
@@ -519,6 +698,28 @@ html[data-theme="light"] .monthlyCatchLink {
 @media (max-width: 768px) {
   .monthlyToolPage .container {
     max-width: none;
+  }
+
+  .monthlyToolCard,
+  .monthlyResultCard,
+  .monthlyInfoCard,
+  .monthlyCatchCard,
+  .monthlyFaqSection,
+  .monthlyGuideRail .guideRailInner {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .monthlyToolCard .controlGrid,
+  .monthlyToolCard .toolTableHeader,
+  .monthlyToolCard .toolError,
+  .monthlyToolCard .toolTableWrap,
+  .monthlyResultCard .metricGrid,
+  .monthlyResultCard .allocationNote,
+  .monthlyResultCard .toolTableWrap,
+  .monthlyInfoCard .monthlyInfoGrid {
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .monthlyHeroActions {
