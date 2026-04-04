@@ -238,7 +238,8 @@
   const FIXED_TOLERANCE_RATIO = FIXED_TOLERANCE_PERCENT_POINT / 100;
   const LARGE_AMOUNT_WRAP_THRESHOLD = 1000000000;
   const QUOTE_PROXY_ENDPOINT = "/api/quote";
-  const PRICE_FETCH_DEBOUNCE_MS = 550;
+  const PRICE_FETCH_DEBOUNCE_MS = 250;
+  const QUOTE_CACHE_TTL_MS = 5 * 60 * 1000;
   const AUTO_QUOTE_MIGRATION_KEY = "rb-auto-quote-migrated-20260404";
   const PRESET_PORTFOLIOS = {
     balanced: {
@@ -336,6 +337,29 @@
   let autoQuoteEnabled = true;
   let guideRailSelectionKey = "";
   const rowQuoteStates = new Map();
+  const quoteResultCache = new Map();
+  function getQuoteCacheKey(symbol){
+    return String(symbol || "").trim().toUpperCase();
+  }
+  function getCachedQuote(symbol){
+    const key = getQuoteCacheKey(symbol);
+    if(!key) return null;
+    const cached = quoteResultCache.get(key);
+    if(!cached) return null;
+    if((Date.now() - cached.savedAt) > QUOTE_CACHE_TTL_MS){
+      quoteResultCache.delete(key);
+      return null;
+    }
+    return cached.value;
+  }
+  function setCachedQuote(symbol, value){
+    const key = getQuoteCacheKey(symbol);
+    if(!key || !value) return;
+    quoteResultCache.set(key, {
+      value,
+      savedAt: Date.now()
+    });
+  }
   function applySuggestionSelection(tr, item){
     const nameEl = getNameInput(tr);
     if(!nameEl || !item) return;
@@ -587,6 +611,11 @@
     markDirtyIfNeeded();
   }
   async function fetchQuoteFromProxy(symbol, signal){
+    const cached = getCachedQuote(symbol);
+    if(cached){
+      return cached;
+    }
+
     const response = await fetch(`${QUOTE_PROXY_ENDPOINT}?symbol=${encodeURIComponent(symbol)}`, { signal });
     if(!response.ok){
       const payload = await response.json().catch(()=>({}));
@@ -598,11 +627,14 @@
     if(!isFinite(price) || price <= 0){
       throw new Error("조회된 가격이 유효하지 않습니다.");
     }
-    return {
+    const result = {
       symbol: payload?.symbol || symbol,
       price,
       baseDate: payload?.baseDate || ""
     };
+    setCachedQuote(symbol, result);
+    setCachedQuote(result.symbol, result);
+    return result;
   }
   function scheduleAutoPriceFetch(tr, { immediate = false, symbolOverride = "" } = {}){
     if(!autoQuoteEnabled) return;

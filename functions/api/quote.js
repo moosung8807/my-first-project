@@ -4,6 +4,7 @@ const PRODUCT_OPERATIONS = [
   { market: "ETN", path: "getETNPriceInfo" },
   { market: "ELW", path: "getELWPriceInfo" }
 ];
+const SUCCESS_RESPONSE_CACHE_CONTROL = "public, max-age=60, s-maxage=300, stale-while-revalidate=300";
 
 export async function onRequestGet(context) {
   const requestUrl = new URL(context.request.url);
@@ -27,12 +28,17 @@ export async function onRequestGet(context) {
   }
 
   try {
+    const cachedResponse = await matchCachedQuoteResponse(requestUrl);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+
     const result = await fetchSecuritiesProductQuote(rawQuery, serviceKey);
     if (!result) {
       return jsonResponse({ error: "가격 정보를 찾을 수 없습니다." }, 404);
     }
 
-    return jsonResponse(
+    const response = jsonResponse(
       {
         symbol: result.symbol,
         name: result.name,
@@ -40,8 +46,11 @@ export async function onRequestGet(context) {
         price: result.price,
         baseDate: result.baseDate
       },
-      200
+      200,
+      { cacheControl: SUCCESS_RESPONSE_CACHE_CONTROL }
     );
+    cacheQuoteResponse(requestUrl, response, context);
+    return response;
   } catch (error) {
     if (error && error.kind === "upstream_api") {
       return jsonResponse(
@@ -249,12 +258,33 @@ function mapApiError(code, message) {
   };
 }
 
-function jsonResponse(body, status = 200) {
+async function matchCachedQuoteResponse(requestUrl) {
+  const cache = globalThis.caches && globalThis.caches.default;
+  if (!cache) return null;
+  return cache.match(buildCacheKey(requestUrl));
+}
+
+function cacheQuoteResponse(requestUrl, response, context) {
+  const cache = globalThis.caches && globalThis.caches.default;
+  if (!cache) return;
+  const cachePromise = cache.put(buildCacheKey(requestUrl), response.clone());
+  if (context && typeof context.waitUntil === "function") {
+    context.waitUntil(cachePromise);
+    return;
+  }
+  cachePromise.catch(() => {});
+}
+
+function buildCacheKey(requestUrl) {
+  return new Request(requestUrl.toString(), { method: "GET" });
+}
+
+function jsonResponse(body, status = 200, { cacheControl = "no-store" } = {}) {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
       "content-type": "application/json; charset=utf-8",
-      "cache-control": "no-store"
+      "cache-control": cacheControl
     }
   });
 }
