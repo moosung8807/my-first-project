@@ -31,6 +31,7 @@
   const mobileCalcBtn = document.querySelector("#mobileCalcBtn");
   const mobileResetBtn = document.querySelector("#mobileResetBtn");
   const exportPdfBtn = document.querySelector("#exportPdfBtn");
+  const hasAutoQuoteControl = Boolean(autoQuoteToggle);
 
   // Summary UI
   const modeLabel = document.querySelector("#modeLabel");
@@ -541,7 +542,7 @@
     return `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)} 기준`;
   }
   function setAutoQuoteEnabled(nextEnabled, { notify = false } = {}){
-    autoQuoteEnabled = Boolean(nextEnabled);
+    autoQuoteEnabled = hasAutoQuoteControl ? Boolean(nextEnabled) : true;
     if(autoQuoteToggle){
       autoQuoteToggle.checked = autoQuoteEnabled;
     }
@@ -3030,7 +3031,7 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
     localStorage.setItem(AUTO_QUOTE_KEY, "1");
     localStorage.setItem(AUTO_QUOTE_MIGRATION_KEY, "1");
   }
-  const savedAutoQuotePref = localStorage.getItem(AUTO_QUOTE_KEY);
+  const savedAutoQuotePref = hasAutoQuoteControl ? localStorage.getItem(AUTO_QUOTE_KEY) : "1";
   const defaultTheme = window.matchMedia("(max-width: 768px)").matches ? "dark" : "light";
   setTheme(savedTheme || defaultTheme);
   setAutoQuoteEnabled(savedAutoQuotePref !== "0");
