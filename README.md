@@ -13,7 +13,7 @@
 - `assets/js/app.js`: 메인 계산 및 페이지 초기화 로직
 - `assets/js/*-helpers.js`: 모드 전환, 모바일 표시, 요약 UI, 타깃 비중, 피드백 처리 등 보조 로직
 - `assets/js/core-*.js`: 숫자 포맷, 심볼 처리, 공용 유틸리티
-- `functions/api/quote.js`: Yahoo Finance 현재가 프록시 API (서버리스)
+- `functions/api/quote.js`: 공공데이터포털 증권상품시세정보 기반 최근 종가 프록시 API (서버리스)
 - `pages/*.html`: 소개, 개인정보 처리방침, 문의 등 정적 페이지
 - `pages/about.html`: 서비스 소개
 - `pages/privacy.html`: 개인정보 처리방침
@@ -23,8 +23,17 @@
 - 정적 페이지 자체는 브라우저에서 `index.html`을 열어 확인할 수 있습니다.
 - 다만 실제 동작 확인은 `file://` 직접 열기보다 로컬 정적 서버 또는 배포 환경에서 보는 편이 안전합니다.
 
-Yahoo Finance 현재가 자동 조회 기능은 `/api/quote` 서버리스 프록시를 사용하므로,
+최근 종가 자동 조회 기능은 `/api/quote` 서버리스 프록시를 사용하므로,
 로컬 파일 직접 열기(`file://`)가 아니라 서버 환경(예: Cloudflare Pages Functions)에서 실행해야 동작합니다.
+
+`functions/api/quote.js` 는 다음 환경변수 이름을 순서대로 확인합니다.
+
+- `DATA_GO_KR_SERVICE_KEY`
+- `PUBLIC_DATA_PORTAL_SERVICE_KEY`
+- `SECURITIES_PRODUCT_SERVICE_KEY`
+- `SERVICE_KEY`
+
+인증키는 공공데이터포털 증권상품시세정보 API용 일반 인증키를 사용합니다.
 
 ### 로컬 정적 서버 예시
 
@@ -33,6 +42,17 @@ npx --yes serve -l 4173 .
 ```
 
 브라우저에서 `http://127.0.0.1:4173` 으로 접속합니다.
+
+다만 이 방식은 정적 페이지 확인용입니다. `/api/quote` 경로를 함께 제공하지 않으므로
+최근 종가 자동조회까지 보려면 `functions/api/*` 가 실제로 배포되는 서버 환경이 필요합니다.
+
+예를 들어 Cloudflare Pages를 사용 중이라면:
+
+- `functions/api/quote.js` 가 포함된 브랜치를 배포해야 합니다.
+- 현재 보고 있는 환경(`Preview` 또는 `Production`)에 맞게 서비스키를 등록해야 합니다.
+- 배포 URL에서 `/api/quote?symbol=069500` 같은 요청이 JSON으로 응답하는지 먼저 확인하는 편이 안전합니다.
+
+로컬 개인 테스트용 비밀값은 `.env.local` 같은 별도 파일로만 관리하고 커밋하지 않습니다.
 
 ## Playwright 검증
 

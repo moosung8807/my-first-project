@@ -10,3 +10,6 @@ assets/js/v0/
 # Personal reference files
 data/계산기 이미지.jpg
 data/맘에드는 보고서.pdf
+
+# Local secrets
+.env.local
