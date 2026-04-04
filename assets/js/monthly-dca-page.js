@@ -35,7 +35,7 @@
   const RebalancingSymbols = window.RebalancingSymbols || {};
   const RebalancingUtils = window.RebalancingUtils || {};
   const getSuggestionCandidates = RebalancingSymbols.getSuggestionCandidates || (() => []);
-  const resolveYahooSymbol = RebalancingSymbols.resolveYahooSymbol || (() => "");
+  const resolveSecurityQuery = RebalancingSymbols.resolveSecurityQuery || (() => "");
   const formatReportDate = RebalancingUtils.formatReportDate || ((date) => {
     const yyyy = String(date.getFullYear());
     const mm = String(date.getMonth() + 1).padStart(2, "0");
@@ -49,7 +49,7 @@
   const QUOTE_ENDPOINT = "/api/quote";
   const WORKSPACE_SAVE_KEY = "rb-monthly-dca-saved-workspace-v1";
   const rowStates = new WeakMap();
-  const DEFAULT_QUOTE_STATUS = "현재가는 직접 입력하거나 종목을 선택해 자동으로 불러올 수 있습니다.";
+  const DEFAULT_QUOTE_STATUS = "최근 종가는 직접 입력하거나 종목을 선택해 자동으로 불러올 수 있습니다.";
   const DEFAULT_ROWS = [
     { name: "", amount: "", price: "", target: "" },
     { name: "", amount: "", price: "", target: "" },
@@ -59,10 +59,10 @@
   const DEMO_STATE = {
     contribution: "1,000,000",
     rows: [
-      { name: "KODEX 200", amount: "4,800,000", price: "36,400", target: "30", symbol: "069500.KS" },
-      { name: "TIGER 미국S&P500", amount: "3,200,000", price: "19,850", target: "35", symbol: "360750.KS" },
-      { name: "KOSEF 국고채10년", amount: "1,900,000", price: "111,250", target: "20", symbol: "148070.KS" },
-      { name: "KODEX 골드선물(H)", amount: "600,000", price: "15,300", target: "15", symbol: "132030.KS" }
+      { name: "KODEX 200", amount: "4,800,000", price: "36,400", target: "30", symbol: "069500" },
+      { name: "TIGER 미국S&P500", amount: "3,200,000", price: "19,850", target: "35", symbol: "360750" },
+      { name: "KOSEF 국고채10년", amount: "1,900,000", price: "111,250", target: "20", symbol: "148070" },
+      { name: "KODEX 골드선물(H)", amount: "600,000", price: "15,300", target: "15", symbol: "132030" }
     ]
   };
   let hasComputed = false;
@@ -89,6 +89,12 @@
     toastTimer = setTimeout(() => {
       toast.classList.remove("show");
     }, 1700);
+  }
+
+  function formatBaseDateLabel(value) {
+    const raw = String(value || "").trim();
+    if (!/^\d{8}$/.test(raw)) return "";
+    return `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)} 기준`;
   }
 
   function updateStaleBadge() {
@@ -364,17 +370,18 @@
     }
 
     if (!response.ok) {
-      const message = payload && payload.error ? payload.error : "현재가 조회에 실패했습니다.";
+      const message = payload && payload.error ? payload.error : "가격 조회에 실패했습니다.";
       throw new Error(message);
     }
 
     const price = Number(payload && payload.price);
     if (!(price > 0)) {
-      throw new Error("조회된 현재가가 유효하지 않습니다.");
+      throw new Error("조회된 가격이 유효하지 않습니다.");
     }
     return {
       price,
-      symbol: String((payload && payload.symbol) || symbol).toUpperCase()
+      symbol: String((payload && payload.symbol) || symbol).toUpperCase(),
+      baseDate: String((payload && payload.baseDate) || "")
     };
   }
 
@@ -386,14 +393,14 @@
     const name = nameInput.value.trim();
     if (!name) return;
 
-    const symbol = symbolOverride || tr.dataset.resolvedSymbol || resolveYahooSymbol(name);
+    const symbol = symbolOverride || tr.dataset.resolvedSymbol || resolveSecurityQuery(name);
     if (!symbol) {
-      setRowQuoteStatus(tr, "지원되는 종목명이나 티커를 입력해 주세요.", "warn");
+      setRowQuoteStatus(tr, "지원되는 ETF/ETN/ELW 종목명이나 종목코드를 입력해 주세요.", "warn");
       return;
     }
 
     if (!force && priceInput.dataset.edited === "manual" && parseNum(priceInput.value) > 0) {
-      setRowQuoteStatus(tr, "현재가 직접 입력값을 사용 중입니다.", "manual");
+      setRowQuoteStatus(tr, "최근 종가 직접 입력값을 사용 중입니다.", "manual");
       return;
     }
 
@@ -401,7 +408,7 @@
     const state = ensureRowState(tr);
     const controller = new AbortController();
     state.controller = controller;
-    setRowQuoteStatus(tr, "현재가를 조회하고 있습니다...", "loading");
+    setRowQuoteStatus(tr, "최근 종가를 조회하고 있습니다...", "loading");
 
     try {
       const result = await fetchQuoteFromProxy(symbol, controller.signal);
@@ -409,13 +416,18 @@
       tr.dataset.resolvedSymbol = result.symbol;
       priceInput.value = withComma(String(Math.round(result.price)));
       delete priceInput.dataset.edited;
-      setRowQuoteStatus(tr, `${result.symbol} 현재가를 불러왔습니다.`, "success");
+      const baseDateLabel = formatBaseDateLabel(result.baseDate);
+      setRowQuoteStatus(
+        tr,
+        baseDateLabel ? `${baseDateLabel} 최근 종가를 불러왔습니다.` : `${result.symbol} 최근 종가를 불러왔습니다.`,
+        "success"
+      );
       updateInputSummary();
       markDirtyIfNeeded();
       clearResults();
     } catch (error) {
       if (controller.signal.aborted) return;
-      setRowQuoteStatus(tr, error instanceof Error ? `${error.message} 직접 입력으로 계속할 수 있습니다.` : "현재가 자동조회에 실패했습니다. 직접 입력해 주세요.", "error");
+      setRowQuoteStatus(tr, error instanceof Error ? `${error.message} 직접 입력으로 계속할 수 있습니다.` : "최근 종가 자동조회에 실패했습니다. 직접 입력해 주세요.", "error");
     } finally {
       if (state.controller === controller) {
         state.controller = null;
@@ -471,7 +483,7 @@
     }
 
     if (parseNum(priceInput.value) > 0) {
-      setRowQuoteStatus(tr, "현재가 직접 입력값을 사용 중입니다.", "manual");
+      setRowQuoteStatus(tr, "최근 종가 직접 입력값을 사용 중입니다.", "manual");
       priceInput.dataset.edited = "manual";
     }
 
@@ -487,7 +499,7 @@
       formatInputWithComma(priceInput);
       priceInput.dataset.edited = parseNum(priceInput.value) > 0 ? "manual" : "";
       if (parseNum(priceInput.value) > 0) {
-        setRowQuoteStatus(tr, "현재가 직접 입력값을 사용 중입니다.", "manual");
+        setRowQuoteStatus(tr, "최근 종가 직접 입력값을 사용 중입니다.", "manual");
       } else {
         setRowQuoteStatus(tr, DEFAULT_QUOTE_STATUS, "idle");
       }
@@ -518,7 +530,7 @@
       }
       showNameSuggestions(tr, nameInput.value);
       if (!priceInput.dataset.edited) {
-        setRowQuoteStatus(tr, "종목을 선택하면 현재가를 자동으로 불러옵니다.", "idle");
+        setRowQuoteStatus(tr, "종목을 선택하면 최근 종가를 자동으로 불러옵니다.", "idle");
       }
     });
     nameInput.addEventListener("focus", () => {
@@ -764,7 +776,7 @@
         row.priceEl.classList.add("invalidField");
         if (!firstInvalid) firstInvalid = row.priceEl;
         if (!errorBox.textContent) {
-          showError(`${index + 1}번째 종목의 현재가를 확인하세요.`);
+          showError(`${index + 1}번째 종목의 최근 종가를 확인하세요.`);
         }
       }
       if (!Number.isFinite(row.target) || row.target < 0) {
@@ -786,7 +798,7 @@
     if (needsPriceRow) {
       needsPriceRow.priceEl.classList.add("invalidField");
       needsPriceRow.priceEl.focus();
-      showError(`${needsPriceRow.name}의 현재가를 입력하면 권장 매수 수량과 잔여 현금까지 계산할 수 있습니다.`);
+      showError(`${needsPriceRow.name}의 최근 종가를 입력하면 권장 매수 수량과 잔여 현금까지 계산할 수 있습니다.`);
       return null;
     }
 

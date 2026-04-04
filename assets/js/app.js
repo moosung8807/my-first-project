@@ -66,15 +66,9 @@
     withComma
   } = window.RebalancingFormat;
   const {
-    KR_ETF_ALIAS_MAP,
-    STOCK_SUGGESTIONS,
-    SYMBOL_ALIAS_MAP,
     findKrEtfByAlias,
     getSuggestionCandidates,
-    normalizeAliasKey,
-    normalizeKrEtfAlias,
-    normalizeSymbol,
-    resolveYahooSymbol
+    resolveSecurityQuery
   } = window.RebalancingSymbols;
   const {
     getNameInput,
@@ -242,8 +236,9 @@
   const FIXED_TOLERANCE_PERCENT_POINT = 0.1;
   const FIXED_TOLERANCE_RATIO = FIXED_TOLERANCE_PERCENT_POINT / 100;
   const LARGE_AMOUNT_WRAP_THRESHOLD = 1000000000;
-  const YAHOO_PROXY_ENDPOINT = "/api/quote";
+  const QUOTE_PROXY_ENDPOINT = "/api/quote";
   const PRICE_FETCH_DEBOUNCE_MS = 550;
+  const AUTO_QUOTE_MIGRATION_KEY = "rb-auto-quote-migrated-20260404";
   const PRESET_PORTFOLIOS = {
     balanced: {
       toastMessage: "균형형 4자산 예시로 계산을 완료했어요.",
@@ -515,8 +510,8 @@
 
     if(statusEl){
       statusEl.textContent = manualOn
-        ? (autoQuoteEnabled ? "현재가 수동입력 ON · 보유금액 자동 계산" : "현재가를 직접 입력하세요 · 보유금액 자동 계산")
-        : "현재가 자동조회 ON · 보유금액 자동 계산";
+        ? (autoQuoteEnabled ? "최근 종가 수동입력 ON · 보유금액 자동 계산" : "최근 종가를 직접 입력하세요 · 보유금액 자동 계산")
+        : "최근 종가 자동조회 ON · 보유금액 자동 계산";
     }
   }
   function syncAllRowsPriceMode(){
@@ -540,6 +535,11 @@
       }
     }
   }
+  function formatBaseDateLabel(value){
+    const raw = String(value || "").trim();
+    if(!/^\d{8}$/.test(raw)) return "";
+    return `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)} 기준`;
+  }
   function setAutoQuoteEnabled(nextEnabled, { notify = false } = {}){
     autoQuoteEnabled = Boolean(nextEnabled);
     if(autoQuoteToggle){
@@ -550,7 +550,7 @@
       clearAllRowQuoteStates();
     }
     if(notify){
-      showToast(autoQuoteEnabled ? "현재가 자동조회가 켜졌어요." : "현재가 자동조회가 꺼졌어요.");
+      showToast(autoQuoteEnabled ? "최근 종가 자동조회가 켜졌어요." : "최근 종가 자동조회가 꺼졌어요.");
     }
     syncAllRowsPriceMode();
     if(autoQuoteEnabled){
@@ -561,35 +561,47 @@
   }
   function applyFetchedPriceToRow(tr, price){
     const priceEl = tr.querySelector(".price");
+    const statusEl = tr.querySelector(".rowPriceStatus");
     if(!priceEl) return;
     const rounded = Math.round(Number(price));
     if(!isFinite(rounded) || rounded <= 0) return;
     priceEl.value = withComma(String(rounded));
     priceEl.classList.remove("invalidField");
+    if(statusEl && !tr.classList.contains("manual-price-on")){
+      statusEl.textContent = "최근 종가를 반영했습니다.";
+    }
     if(mode === "current") updateCurrentUI();
     markDirtyIfNeeded();
   }
   function clearFetchedPriceFromRow(tr){
     const priceEl = tr.querySelector(".price");
+    const statusEl = tr.querySelector(".rowPriceStatus");
     if(!priceEl) return;
     priceEl.value = "";
     priceEl.classList.remove("invalidField");
+    if(statusEl && !tr.classList.contains("manual-price-on")){
+      statusEl.textContent = "최근 종가를 직접 입력하세요 · 보유금액 자동 계산";
+    }
     if(mode === "current") updateCurrentUI();
     markDirtyIfNeeded();
   }
   async function fetchQuoteFromProxy(symbol, signal){
-    const response = await fetch(`${YAHOO_PROXY_ENDPOINT}?symbol=${encodeURIComponent(symbol)}`, { signal });
+    const response = await fetch(`${QUOTE_PROXY_ENDPOINT}?symbol=${encodeURIComponent(symbol)}`, { signal });
     if(!response.ok){
       const payload = await response.json().catch(()=>({}));
-      const message = payload && payload.error ? payload.error : "현재가 조회에 실패했습니다.";
+      const message = payload && payload.error ? payload.error : "가격 조회에 실패했습니다.";
       throw new Error(message);
     }
     const payload = await response.json();
     const price = Number(payload?.price);
     if(!isFinite(price) || price <= 0){
-      throw new Error("조회된 현재가가 유효하지 않습니다.");
+      throw new Error("조회된 가격이 유효하지 않습니다.");
     }
-    return { symbol: payload?.symbol || symbol, price };
+    return {
+      symbol: payload?.symbol || symbol,
+      price,
+      baseDate: payload?.baseDate || ""
+    };
   }
   function scheduleAutoPriceFetch(tr, { immediate = false, symbolOverride = "" } = {}){
     if(!autoQuoteEnabled) return;
@@ -597,7 +609,7 @@
     const nameEl = tr.querySelector(".name");
     if(!nameEl) return;
     const aliasMatch = symbolOverride ? null : findKrEtfByAlias(nameEl.value);
-    const symbol = symbolOverride || (aliasMatch ? aliasMatch.ticker : resolveYahooSymbol(nameEl.value));
+    const symbol = symbolOverride || (aliasMatch ? aliasMatch.ticker : resolveSecurityQuery(nameEl.value));
     if(!symbol){
       return;
     }
@@ -617,16 +629,23 @@
         const result = await fetchQuoteFromProxy(symbol, state.controller.signal);
         if(currentSeq !== state.seq) return;
         tr.dataset.resolvedSymbol = result.symbol;
-        if(aliasMatch && String(result.symbol || "").toUpperCase() !== String(aliasMatch.ticker).toUpperCase()){
-          console.warn("Invalid Yahoo symbol in aliasMap:", aliasMatch.ticker, aliasMatch.canonical);
+        if(aliasMatch && String(result.symbol || "").trim() !== String(aliasMatch.ticker).trim()){
+          console.warn("Unsupported securities product alias:", aliasMatch.ticker, aliasMatch.canonical);
         }
         applyFetchedPriceToRow(tr, result.price);
+        const statusEl = tr.querySelector(".rowPriceStatus");
+        if(statusEl && !tr.classList.contains("manual-price-on")){
+          const baseDateLabel = formatBaseDateLabel(result.baseDate);
+          statusEl.textContent = baseDateLabel
+            ? `${baseDateLabel} 최근 종가 반영 · 보유금액 자동 계산`
+            : "최근 종가 반영 · 보유금액 자동 계산";
+        }
       }catch(err){
         if(err && (err.name === "AbortError")) return;
         tr.dataset.resolvedSymbol = "";
         clearFetchedPriceFromRow(tr);
         if(aliasMatch){
-          console.warn("Invalid Yahoo symbol in aliasMap:", aliasMatch.ticker, aliasMatch.canonical);
+          console.warn("Unsupported securities product alias:", aliasMatch.ticker, aliasMatch.canonical);
         }
       }
     };
@@ -1930,7 +1949,7 @@
             <tr>
               <th>자산</th>
               <th class="num">수량(주)</th>
-              <th class="num">현재가(원)</th>
+              <th class="num">최근 종가(원)</th>
               <th class="num">보유액(원)</th>
               <th class="num">현재비중</th>
               <th class="num">목표비중</th>
@@ -2412,21 +2431,21 @@
     tr.innerHTML = `
       <td class="left col-name">
         <div class="nameFieldWrap">
-          <input class="name" placeholder="종목명 또는 티커" aria-label="종목명" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false">
+          <input class="name" placeholder="ETF/ETN/ELW 종목명 또는 코드" aria-label="종목명" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false">
           <div class="nameSuggest" hidden role="listbox"></div>
           <div class="rowMetaPanel">
             <div class="rowMetaStatus">
-              <span class="rowPriceStatus">현재가를 직접 입력하세요 · 보유금액 자동 계산</span>
+              <span class="rowPriceStatus">최근 종가를 직접 입력하세요 · 보유금액 자동 계산</span>
             </div>
             <label class="rowManualPriceControl">
-              <input class="rowManualPriceToggle" type="checkbox" aria-label="현재가 수동입력">
-              <span>현재가 수동입력</span>
+              <input class="rowManualPriceToggle" type="checkbox" aria-label="최근 종가 수동입력">
+              <span>최근 종가 수동입력</span>
             </label>
           </div>
         </div>
       </td>
 
-      <td class="g-input col-price"><input class="g-input price" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 1,234" aria-label="현재가 원"></td>
+      <td class="g-input col-price"><input class="g-input price" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 1,234" aria-label="최근 종가 원"></td>
       <td class="g-input col-qty"><input class="g-input qty" type="text" inputmode="numeric" autocomplete="off" placeholder="예: 123" aria-label="수량 주"></td>
       <td class="g-input col-target">
         <input class="g-input target" type="number" min="0" max="100" step="0.1" inputmode="numeric" placeholder="예: 30%" aria-label="목표비중 퍼센트">
@@ -2718,8 +2737,8 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
       const price = clampMin0(parseNum(priceEl.value));
 
       if(target > 0 && price <= 0){
-        showErrorSummary("입력 오류: 목표비중을 입력한 종목은 현재가를 0보다 크게 입력해야 합니다.");
-        showToast("현재가를 확인해주세요.");
+        showErrorSummary("입력 오류: 목표비중을 입력한 종목은 최근 종가를 0보다 크게 입력해야 합니다.");
+        showToast("최근 종가를 확인해주세요.");
         focusInvalidField(priceEl);
         return false;
       }
@@ -3007,9 +3026,14 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
 
   // init
   const savedTheme = localStorage.getItem(THEME_KEY);
+  if(localStorage.getItem(AUTO_QUOTE_MIGRATION_KEY) !== "1"){
+    localStorage.setItem(AUTO_QUOTE_KEY, "1");
+    localStorage.setItem(AUTO_QUOTE_MIGRATION_KEY, "1");
+  }
+  const savedAutoQuotePref = localStorage.getItem(AUTO_QUOTE_KEY);
   const defaultTheme = window.matchMedia("(max-width: 768px)").matches ? "dark" : "light";
   setTheme(savedTheme || defaultTheme);
-  setAutoQuoteEnabled(false);
+  setAutoQuoteEnabled(savedAutoQuotePref !== "0");
   updateSavedWorkspaceUi(readSavedWorkspace());
   if(autoQuoteToggle){
     autoQuoteToggle.addEventListener("change", ()=>{
