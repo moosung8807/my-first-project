@@ -5,9 +5,11 @@ const PRODUCT_OPERATIONS = [
   { market: "ELW", path: "getELWPriceInfo" }
 ];
 const SUCCESS_RESPONSE_CACHE_CONTROL = "public, max-age=60, s-maxage=300, stale-while-revalidate=300";
+const SUGGESTION_RESPONSE_CACHE_CONTROL = "public, max-age=30, s-maxage=120, stale-while-revalidate=120";
 
 export async function onRequestGet(context) {
   const requestUrl = new URL(context.request.url);
+  const mode = String(requestUrl.searchParams.get("mode") || "").trim().toLowerCase();
   const rawQuery = String(
     requestUrl.searchParams.get("symbol") ||
     requestUrl.searchParams.get("query") ||
@@ -28,6 +30,11 @@ export async function onRequestGet(context) {
   }
 
   try {
+    if (mode === "suggest") {
+      const items = await fetchSecuritiesProductSuggestions(rawQuery, serviceKey);
+      return jsonResponse({ items }, 200, { cacheControl: SUGGESTION_RESPONSE_CACHE_CONTROL });
+    }
+
     const cachedResponse = await matchCachedQuoteResponse(requestUrl);
     if (cachedResponse) {
       return cachedResponse;
@@ -78,7 +85,7 @@ export async function onRequestGet(context) {
 
 async function fetchSecuritiesProductQuote(rawQuery, serviceKey) {
   const normalizedQuery = normalizeProductQuery(rawQuery);
-  const isCodeQuery = /^\d{6}$/.test(normalizedQuery);
+  const isCodeQuery = isSecurityCodeQuery(normalizedQuery);
   let lastApiError = null;
 
   for (const operation of PRODUCT_OPERATIONS) {
@@ -91,7 +98,7 @@ async function fetchSecuritiesProductQuote(rawQuery, serviceKey) {
       if (!isFinite(price) || price <= 0) continue;
 
       return {
-        symbol: String(bestItem.srtnCd || normalizedQuery).trim(),
+        symbol: normalizeSecurityCode(bestItem.srtnCd) || normalizeSymbolText(bestItem.srtnCd || normalizedQuery),
         name: String(bestItem.itmsNm || "").trim() || null,
         market: operation.market,
         price,
@@ -110,9 +117,56 @@ async function fetchSecuritiesProductQuote(rawQuery, serviceKey) {
   return null;
 }
 
-async function fetchOperationItems(path, query, serviceKey, { isCodeQuery }) {
+async function fetchSecuritiesProductSuggestions(rawQuery, serviceKey) {
+  const normalizedQuery = normalizeProductQuery(rawQuery);
+  const isCodeQuery = isSecurityCodeQuery(normalizedQuery);
+  const merged = [];
+  const seen = new Set();
+  let lastApiError = null;
+
+  for (const operation of PRODUCT_OPERATIONS) {
+    try {
+      const items = await fetchOperationItems(operation.path, normalizedQuery, serviceKey, {
+        isCodeQuery,
+        numOfRows: isCodeQuery ? 12 : 30
+      });
+      const rankedItems = rankSuggestionItems(items, normalizedQuery, { isCodeQuery });
+
+      rankedItems.forEach((item) => {
+        const symbol = normalizeSecurityCode(item?.srtnCd) || normalizeSymbolText(item?.srtnCd);
+        const name = String(item?.itmsNm || "").trim();
+        if (!symbol || !name) return;
+
+        const dedupeKey = `${symbol}::${name}`;
+        if (seen.has(dedupeKey)) return;
+        seen.add(dedupeKey);
+        merged.push({
+          symbol,
+          name,
+          market: operation.market,
+          price: Number.isFinite(Number(item?.clpr)) ? Number(item.clpr) : null,
+          baseDate: String(item?.basDt || "").trim() || null
+        });
+      });
+    } catch (error) {
+      if (error && error.kind === "upstream_api") {
+        lastApiError = error;
+        continue;
+      }
+      throw error;
+    }
+  }
+
+  if (merged.length) {
+    return merged.slice(0, 8);
+  }
+  if (lastApiError) throw lastApiError;
+  return [];
+}
+
+async function fetchOperationItems(path, query, serviceKey, { isCodeQuery, numOfRows }) {
   const params = new URLSearchParams();
-  params.set("numOfRows", isCodeQuery ? "10" : "20");
+  params.set("numOfRows", String(numOfRows || (isCodeQuery ? 10 : 20)));
   params.set("pageNo", "1");
   params.set("resultType", "json");
 
@@ -153,33 +207,11 @@ async function fetchOperationItems(path, query, serviceKey, { isCodeQuery }) {
 
 function pickBestItem(items, query, { isCodeQuery }) {
   if (!Array.isArray(items) || items.length === 0) return null;
-
-  const queryKey = normalizeSearchKey(query);
   let bestItem = null;
   let bestScore = -1;
 
   for (const item of items) {
-    const code = String(item?.srtnCd || "").trim();
-    const name = String(item?.itmsNm || "").trim();
-    const nameKey = normalizeSearchKey(name);
-    let score = 0;
-
-    if (isCodeQuery) {
-      if (code === query) score += 1000;
-      else if (code.startsWith(query)) score += 600;
-      else if (code.includes(query)) score += 400;
-    } else {
-      if (name === query) score += 950;
-      if (nameKey === queryKey) score += 900;
-      else if (nameKey.startsWith(queryKey)) score += 650;
-      else if (nameKey.includes(queryKey)) score += 500;
-      if (queryKey && normalizeSearchKey(code) === queryKey) score += 850;
-    }
-
-    const price = Number(item?.clpr);
-    if (isFinite(price) && price > 0) {
-      score += 50;
-    }
+    const score = scoreProductItem(item, query, { isCodeQuery });
 
     if (score > bestScore) {
       bestScore = score;
@@ -190,17 +222,67 @@ function pickBestItem(items, query, { isCodeQuery }) {
   return bestScore > 0 ? bestItem : null;
 }
 
+function rankSuggestionItems(items, query, { isCodeQuery }) {
+  if (!Array.isArray(items) || items.length === 0) return [];
+
+  return items
+    .map((item) => ({ item, score: scoreProductItem(item, query, { isCodeQuery }) }))
+    .filter((entry) => entry.score > 0)
+    .sort((a, b) => {
+      if (a.score !== b.score) return b.score - a.score;
+      return String(a.item?.itmsNm || "").localeCompare(String(b.item?.itmsNm || ""), "ko");
+    })
+    .map((entry) => entry.item);
+}
+
+function scoreProductItem(item, query, { isCodeQuery }) {
+  const queryKey = normalizeSearchKey(query);
+  const queryCode = normalizeSecurityCode(query);
+  const code = normalizeSecurityCode(item?.srtnCd) || normalizeSymbolText(item?.srtnCd);
+  const name = String(item?.itmsNm || "").trim();
+  const nameKey = normalizeSearchKey(name);
+  let score = 0;
+
+  if (isCodeQuery) {
+    if (code === queryCode) score += 1200;
+    else if (code.startsWith(queryCode)) score += 800;
+    else if (code.includes(queryCode)) score += 500;
+  } else {
+    if (name === query) score += 1200;
+    if (nameKey === queryKey) score += 1100;
+    else if (nameKey.startsWith(queryKey)) score += 700;
+    else if (nameKey.includes(queryKey)) score += 520;
+    if (queryCode && code === queryCode) score += 950;
+  }
+
+  const price = Number(item?.clpr);
+  if (isFinite(price) && price > 0) {
+    score += 50;
+  }
+
+  return score;
+}
+
 function normalizeProductQuery(value) {
   const input = String(value || "").trim();
   if (!input) return "";
 
-  const upper = input.toUpperCase();
-  const codeMatch = upper.match(/^(\d{6})(?:\.(?:KS|KQ))?$/);
-  if (codeMatch) {
-    return codeMatch[1];
+  const securityCode = normalizeSecurityCode(input);
+  if (securityCode) {
+    return securityCode;
   }
 
   return input.replace(/\s+/g, " ");
+}
+
+function normalizeSecurityCode(value) {
+  const match = normalizeSymbolText(value).match(/^(?:A)?([0-9A-Z]{6})(?:\.(?:KS|KQ))?$/);
+  if (!match) return "";
+  return /\d/.test(match[1]) ? match[1] : "";
+}
+
+function isSecurityCodeQuery(value) {
+  return Boolean(normalizeSecurityCode(value));
 }
 
 function normalizeSearchKey(value) {
@@ -209,6 +291,10 @@ function normalizeSearchKey(value) {
     .toLowerCase()
     .replace(/\s+/g, "")
     .replace(/[^0-9a-zA-Z가-힣]/g, "");
+}
+
+function normalizeSymbolText(value) {
+  return String(value || "").trim().toUpperCase();
 }
 
 function isSupportedQuery(value) {

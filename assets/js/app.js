@@ -69,6 +69,7 @@
   const {
     findKrEtfByAlias,
     getSuggestionCandidates,
+    getSuggestionCandidatesAsync = async (query) => getSuggestionCandidates(query),
     resolveSecurityQuery
   } = window.RebalancingSymbols;
   const {
@@ -337,6 +338,7 @@
   let autoQuoteEnabled = true;
   let guideRailSelectionKey = "";
   const rowQuoteStates = new Map();
+  const rowSuggestionStates = new WeakMap();
   const quoteResultCache = new Map();
   function getQuoteCacheKey(symbol){
     return String(symbol || "").trim().toUpperCase();
@@ -377,6 +379,7 @@
   function hideNameSuggestions(tr){
     const suggestBox = getNameSuggestBox(tr);
     const nameEl = getNameInput(tr);
+    abortRowSuggestionRequest(tr);
     if(!suggestBox) return;
     suggestBox.hidden = true;
     suggestBox.innerHTML = "";
@@ -387,12 +390,45 @@
       nameEl.removeAttribute("aria-activedescendant");
     }
   }
-  function showNameSuggestions(tr, query){
+  function getRowSuggestionState(tr){
+    let state = rowSuggestionStates.get(tr);
+    if(!state){
+      state = { controller: null, seq: 0 };
+      rowSuggestionStates.set(tr, state);
+    }
+    return state;
+  }
+  function abortRowSuggestionRequest(tr){
+    const state = rowSuggestionStates.get(tr);
+    if(!state || !state.controller) return;
+    state.controller.abort();
+    state.controller = null;
+  }
+  async function showNameSuggestions(tr, query){
     const suggestBox = getNameSuggestBox(tr);
     const nameEl = getNameInput(tr);
     if(!suggestBox) return;
 
-    const candidates = getSuggestionCandidates(query);
+    const trimmedQuery = String(query || "").trim();
+    if(!trimmedQuery){
+      hideNameSuggestions(tr);
+      return;
+    }
+
+    const state = getRowSuggestionState(tr);
+    abortRowSuggestionRequest(tr);
+    const controller = new AbortController();
+    state.controller = controller;
+    const currentSeq = ++state.seq;
+
+    const candidates = await getSuggestionCandidatesAsync(trimmedQuery, { signal: controller.signal });
+    if(controller.signal.aborted || currentSeq !== state.seq){
+      return;
+    }
+    state.controller = null;
+    if(!nameEl || String(nameEl.value || "").trim() !== trimmedQuery){
+      return;
+    }
     if(!candidates.length){
       hideNameSuggestions(tr);
       return;

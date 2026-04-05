@@ -23,6 +23,12 @@
     return String(value || "").trim().toUpperCase();
   }
 
+  function normalizeSecurityCode(value) {
+    const match = normalizeSymbol(value).match(/^(?:A)?([0-9A-Z]{6})(?:\.(?:KS|KQ))?$/);
+    if (!match) return "";
+    return /\d/.test(match[1]) ? match[1] : "";
+  }
+
   const KR_ETF_ALIAS_MAP = Object.freeze([
     { ticker: "489250", canonical: "KODEX 미국배당다우존스", aliases: ["미국배당다우존스", "미국배당다우", "미배당다우", "코미당", "미국배당", "453850"] },
     { ticker: "069500", canonical: "KODEX 200", aliases: ["코덱스200", "국내200", "코스피200", "069500"] },
@@ -43,7 +49,18 @@
     { ticker: "381170", canonical: "TIGER 미국테크TOP10 INDXX", aliases: ["미국테크top10", "미국테크10", "381170"] },
     { ticker: "379810", canonical: "KODEX 미국나스닥100TR", aliases: ["미국나스닥100tr", "나스닥100tr", "379810"] },
     { ticker: "229480", canonical: "KODEX 미국S&P500선물(H)", aliases: ["미국s&p500선물", "미국sp500선물", "229480"] },
-    { ticker: "091180", canonical: "KODEX 자동차", aliases: ["자동차", "091180"] }
+    { ticker: "091180", canonical: "KODEX 자동차", aliases: ["자동차", "091180"] },
+    {
+      ticker: "0049M0",
+      canonical: "ACE 미국배당퀄리티+커버드콜액티브",
+      aliases: [
+        "미국배당퀄리티커버드콜액티브",
+        "미국배당퀄리티+커버드콜액티브",
+        "미국배당퀄리티커버드콜",
+        "0049m0",
+        "a0049m0"
+      ]
+    }
   ]);
 
   const KR_ETF_ALIAS_INDEX = Object.freeze(
@@ -75,6 +92,8 @@
     "379800": "379800",
     "379810": "379810",
     "381170": "381170",
+    "0049m0": "0049M0",
+    "a0049m0": "0049M0",
     "489250": "489250",
     "kodex200": "069500",
     "tiger200": "102110",
@@ -103,6 +122,7 @@
     { name: "KODEX 미국S&P500TR", symbol: "379800", aliases: ["379800", "sp500tr"] },
     { name: "KODEX 미국나스닥100TR", symbol: "379810", aliases: ["379810", "나스닥100tr"] },
     { name: "TIGER 미국테크TOP10 INDXX", symbol: "381170", aliases: ["381170", "미국테크top10"] },
+    { name: "ACE 미국배당퀄리티+커버드콜액티브", symbol: "0049M0", aliases: ["0049m0", "a0049m0", "미국배당퀄리티커버드콜액티브"] },
     { name: "KODEX 미국배당다우존스", symbol: "489250", aliases: ["489250", "미국배당다우존스", "미국배당다우"] }
   ]);
 
@@ -140,10 +160,9 @@
     const input = String(rawInput || "").trim();
     if (!input) return "";
 
-    const normalizedSymbol = normalizeSymbol(input);
-    const codeMatch = normalizedSymbol.match(/^(\d{6})(?:\.(?:KS|KQ))?$/);
-    if (codeMatch) {
-      return codeMatch[1];
+    const securityCode = normalizeSecurityCode(input);
+    if (securityCode) {
+      return securityCode;
     }
 
     const etfMatch = findKrEtfByAlias(input);
@@ -191,14 +210,74 @@
     return results.slice(0, 8);
   }
 
+  function mergeSuggestionCandidates(primaryItems, secondaryItems) {
+    const merged = [];
+    const seen = new Set();
+
+    [...(primaryItems || []), ...(secondaryItems || [])].forEach((item) => {
+      if (!item || !item.name || !item.symbol) return;
+      const key = `${normalizeSymbol(item.symbol)}::${normalizeAliasKey(item.name)}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      merged.push({
+        name: String(item.name).trim(),
+        symbol: normalizeSymbol(item.symbol),
+        aliases: Array.isArray(item.aliases) ? item.aliases : []
+      });
+    });
+
+    return merged.slice(0, 8);
+  }
+
+  async function fetchRemoteSuggestionCandidates(rawQuery, { signal } = {}) {
+    const query = String(rawQuery || "").trim();
+    if (query.length < 2) return [];
+
+    try {
+      const response = await fetch(`/api/quote?mode=suggest&query=${encodeURIComponent(query)}`, {
+        signal,
+        headers: {
+          accept: "application/json,text/plain,*/*"
+        }
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) return [];
+      if (!Array.isArray(payload?.items)) return [];
+
+      return payload.items
+        .map((item) => ({
+          name: String(item?.name || "").trim(),
+          symbol: normalizeSymbol(item?.symbol),
+          aliases: []
+        }))
+        .filter((item) => item.name && item.symbol)
+        .slice(0, 8);
+    } catch (_error) {
+      return [];
+    }
+  }
+
+  async function getSuggestionCandidatesAsync(rawQuery, { signal } = {}) {
+    const localItems = getSuggestionCandidates(rawQuery);
+    if (localItems.length) {
+      return localItems;
+    }
+
+    const remoteItems = await fetchRemoteSuggestionCandidates(rawQuery, { signal });
+    return mergeSuggestionCandidates(localItems, remoteItems);
+  }
+
   window.RebalancingSymbols = Object.freeze({
     KR_ETF_ALIAS_MAP,
     PRODUCT_SUGGESTIONS,
     SYMBOL_ALIAS_MAP,
+    fetchRemoteSuggestionCandidates,
     findKrEtfByAlias,
     getSuggestionCandidates,
+    getSuggestionCandidatesAsync,
     normalizeAliasKey,
     normalizeKrEtfAlias,
+    normalizeSecurityCode,
     normalizeSymbol,
     resolveSecurityQuery
   });

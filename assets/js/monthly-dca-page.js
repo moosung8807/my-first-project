@@ -35,6 +35,7 @@
   const RebalancingSymbols = window.RebalancingSymbols || {};
   const RebalancingUtils = window.RebalancingUtils || {};
   const getSuggestionCandidates = RebalancingSymbols.getSuggestionCandidates || (() => []);
+  const getSuggestionCandidatesAsync = RebalancingSymbols.getSuggestionCandidatesAsync || (async (query) => getSuggestionCandidates(query));
   const resolveSecurityQuery = RebalancingSymbols.resolveSecurityQuery || (() => "");
   const formatReportDate = RebalancingUtils.formatReportDate || ((date) => {
     const yyyy = String(date.getFullYear());
@@ -73,7 +74,9 @@
     if (!state) {
       state = {
         activeIndex: -1,
-        controller: null
+        controller: null,
+        suggestController: null,
+        suggestSeq: 0
       };
       rowStates.set(tr, state);
     }
@@ -296,6 +299,7 @@
   function hideNameSuggestions(tr) {
     const box = getSuggestBox(tr);
     const nameInput = tr.querySelector(".nameInput");
+    abortSuggestRequest(tr);
     if (!box || !nameInput) return;
     box.hidden = true;
     box.innerHTML = "";
@@ -305,6 +309,14 @@
     nameInput.setAttribute("aria-expanded", "false");
     nameInput.removeAttribute("aria-controls");
     nameInput.removeAttribute("aria-activedescendant");
+  }
+
+  function abortSuggestRequest(tr) {
+    const state = ensureRowState(tr);
+    if (state.suggestController) {
+      state.suggestController.abort();
+      state.suggestController = null;
+    }
   }
 
   function updateSuggestionPlacement(tr) {
@@ -337,12 +349,31 @@
     requestQuoteForRow(tr, { symbolOverride: symbol, force: true });
   }
 
-  function showNameSuggestions(tr, query) {
+  async function showNameSuggestions(tr, query) {
     const box = getSuggestBox(tr);
     const nameInput = tr.querySelector(".nameInput");
     if (!box || !nameInput) return;
 
-    const items = getSuggestionCandidates(query);
+    const trimmedQuery = String(query || "").trim();
+    if (!trimmedQuery) {
+      hideNameSuggestions(tr);
+      return;
+    }
+
+    const state = ensureRowState(tr);
+    abortSuggestRequest(tr);
+    const controller = new AbortController();
+    state.suggestController = controller;
+    const currentSeq = ++state.suggestSeq;
+
+    const items = await getSuggestionCandidatesAsync(trimmedQuery, { signal: controller.signal });
+    if (controller.signal.aborted || currentSeq !== state.suggestSeq) {
+      return;
+    }
+    state.suggestController = null;
+    if (String(nameInput.value || "").trim() !== trimmedQuery) {
+      return;
+    }
     if (!items.length) {
       hideNameSuggestions(tr);
       return;
