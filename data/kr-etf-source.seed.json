@@ -1,45 +1,7026 @@
 [
-  { "canonical": "KODEX 200", "code": "069500", "turnover1d": 325000000000, "turnover5d": 301000000000, "turnover20d": 287000000000 },
-  { "canonical": "KODEX 레버리지", "code": "122630", "turnover1d": 710000000000, "turnover5d": 665000000000, "turnover20d": 590000000000 },
-  { "canonical": "KODEX 인버스", "code": "114800", "turnover1d": 318000000000, "turnover5d": 292000000000, "turnover20d": 275000000000 },
-  { "canonical": "KODEX 코스닥150레버리지", "code": "233740", "turnover1d": 188000000000, "turnover5d": 170000000000, "turnover20d": 159000000000 },
-  { "canonical": "KODEX 코스닥150", "code": "229200", "turnover1d": 86000000000, "turnover5d": 78000000000, "turnover20d": 70000000000 },
-  { "canonical": "KODEX 2차전지산업", "code": "305720", "turnover1d": 132000000000, "turnover5d": 121000000000, "turnover20d": 103000000000 },
-  { "canonical": "KODEX 미국S&P500TR", "code": "379800", "turnover1d": 92000000000, "turnover5d": 85000000000, "turnover20d": 74000000000 },
-  { "canonical": "KODEX 미국나스닥100TR", "code": "379810", "turnover1d": 91000000000, "turnover5d": 86000000000, "turnover20d": 76000000000 },
-  { "canonical": "KODEX 미국S&P500선물(H)", "code": "229480", "turnover1d": 58000000000, "turnover5d": 52000000000, "turnover20d": 46000000000 },
-  { "canonical": "KODEX 단기채권PLUS", "code": "214980", "turnover1d": 68000000000, "turnover5d": 64000000000, "turnover20d": 61000000000 },
-  { "canonical": "KODEX CD금리액티브(합성)", "code": "459580", "turnover1d": 84000000000, "turnover5d": 81000000000, "turnover20d": 79000000000 },
-  { "canonical": "KODEX 미국나스닥100선물(H)", "code": "304940", "turnover1d": 43000000000, "turnover5d": 39000000000, "turnover20d": 35000000000 },
-  { "canonical": "KODEX 골드선물(H)", "code": "132030", "turnover1d": 77000000000, "turnover5d": 72000000000, "turnover20d": 66000000000 },
-  { "canonical": "KODEX 반도체", "code": "091160", "turnover1d": 64000000000, "turnover5d": 59000000000, "turnover20d": 53000000000 },
-  { "canonical": "KODEX 자동차", "code": "091180", "turnover1d": 28000000000, "turnover5d": 25000000000, "turnover20d": 22000000000 },
-  { "canonical": "KODEX 은행", "code": "091170", "turnover1d": 24000000000, "turnover5d": 22000000000, "turnover20d": 19000000000 },
-  { "canonical": "KODEX 미국배당다우존스", "code": "453850", "turnover1d": 129000000000, "turnover5d": 117000000000, "turnover20d": 99000000000 },
-  { "canonical": "TIGER 200", "code": "102110", "turnover1d": 172000000000, "turnover5d": 159000000000, "turnover20d": 148000000000 },
-  { "canonical": "TIGER 미국S&P500", "code": "360750", "turnover1d": 148000000000, "turnover5d": 137000000000, "turnover20d": 122000000000 },
-  { "canonical": "TIGER 미국나스닥100", "code": "133690", "turnover1d": 167000000000, "turnover5d": 151000000000, "turnover20d": 134000000000 },
-  { "canonical": "TIGER 미국테크TOP10 INDXX", "code": "381170", "turnover1d": 109000000000, "turnover5d": 98000000000, "turnover20d": 86000000000 },
-  { "canonical": "TIGER 2차전지테마", "code": "305540", "turnover1d": 121000000000, "turnover5d": 113000000000, "turnover20d": 96000000000 },
-  { "canonical": "TIGER 차이나전기차SOLACTIVE", "code": "371460", "turnover1d": 32000000000, "turnover5d": 30000000000, "turnover20d": 27000000000 },
-  { "canonical": "TIGER CD금리투자KIS(합성)", "code": "357870", "turnover1d": 81000000000, "turnover5d": 76000000000, "turnover20d": 71000000000 },
-  { "canonical": "TIGER 코스닥150", "code": "232080", "turnover1d": 44000000000, "turnover5d": 41000000000, "turnover20d": 35000000000 },
-  { "canonical": "TIGER 코스닥150레버리지", "code": "233160", "turnover1d": 63000000000, "turnover5d": 57000000000, "turnover20d": 50000000000 },
-  { "canonical": "TIGER TOP10", "code": "292150", "turnover1d": 36000000000, "turnover5d": 33000000000, "turnover20d": 29000000000 },
-  { "canonical": "KOSEF 200", "code": "069660", "turnover1d": 51000000000, "turnover5d": 48000000000, "turnover20d": 43000000000 },
-  { "canonical": "KOSEF 국고채10년", "code": "148070", "turnover1d": 62000000000, "turnover5d": 58000000000, "turnover20d": 55000000000 },
-  { "canonical": "RISE 200", "code": "148020", "turnover1d": 39000000000, "turnover5d": 36000000000, "turnover20d": 31000000000 },
-  { "canonical": "RISE 단기통안채", "code": "196230", "turnover1d": 27000000000, "turnover5d": 25000000000, "turnover20d": 23000000000 },
-  { "canonical": "ACE 미국S&P500", "code": "360200", "turnover1d": 57000000000, "turnover5d": 53000000000, "turnover20d": 46000000000 },
-  { "canonical": "ACE 미국나스닥100", "code": "367380", "turnover1d": 49000000000, "turnover5d": 45000000000, "turnover20d": 39000000000 },
-  { "canonical": "ACE 2차전지액티브", "code": "385550", "turnover1d": 34000000000, "turnover5d": 31000000000, "turnover20d": 28000000000 },
-  { "canonical": "ARIRANG 고배당주", "code": "161510", "turnover1d": 21000000000, "turnover5d": 19000000000, "turnover20d": 17000000000 },
-  { "canonical": "ARIRANG 200", "code": "152100", "turnover1d": 26000000000, "turnover5d": 24000000000, "turnover20d": 22000000000 },
-  { "canonical": "SOL 미국배당다우존스", "code": "446720", "turnover1d": 41000000000, "turnover5d": 38000000000, "turnover20d": 33000000000 },
-  { "canonical": "SOL 2차전지소부장Fn", "code": "469070", "turnover1d": 23000000000, "turnover5d": 21000000000, "turnover20d": 18000000000 },
-  { "canonical": "PLUS K방산", "code": "449450", "turnover1d": 38000000000, "turnover5d": 36000000000, "turnover20d": 32000000000 },
-  { "canonical": "PLUS 고배당주", "code": "161510", "turnover1d": 18000000000, "turnover5d": 16000000000, "turnover20d": 14000000000 },
-  { "canonical": "TIMEFOLIO Kstock액티브", "code": "385710", "turnover1d": 12000000000, "turnover5d": 11000000000, "turnover20d": 10000000000 },
-  { "canonical": "HANARO 200", "code": "304760", "turnover1d": 17000000000, "turnover5d": 15000000000, "turnover20d": 13000000000 },
-  { "canonical": "KINDEX 200", "code": "105190", "turnover1d": 34000000000, "turnover5d": 31000000000, "turnover20d": 29000000000 }
+  {
+    "canonical": "KODEX 레버리지",
+    "code": "122630",
+    "turnover1d": 710000000000,
+    "turnover5d": 665000000000,
+    "turnover20d": 590000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200",
+    "code": "069500",
+    "turnover1d": 325000000000,
+    "turnover5d": 301000000000,
+    "turnover20d": 287000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 인버스",
+    "code": "114800",
+    "turnover1d": 318000000000,
+    "turnover5d": 292000000000,
+    "turnover20d": 275000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코스닥150레버리지",
+    "code": "233740",
+    "turnover1d": 188000000000,
+    "turnover5d": 170000000000,
+    "turnover20d": 159000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200",
+    "code": "102110",
+    "turnover1d": 172000000000,
+    "turnover5d": 159000000000,
+    "turnover20d": 148000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국나스닥100",
+    "code": "133690",
+    "turnover1d": 167000000000,
+    "turnover5d": 151000000000,
+    "turnover20d": 134000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국S&P500",
+    "code": "360750",
+    "turnover1d": 148000000000,
+    "turnover5d": 137000000000,
+    "turnover20d": 122000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 2차전지산업",
+    "code": "305720",
+    "turnover1d": 132000000000,
+    "turnover5d": 121000000000,
+    "turnover20d": 103000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국30년국채액티브(H)",
+    "code": "453850",
+    "turnover1d": 129000000000,
+    "turnover5d": 117000000000,
+    "turnover20d": 99000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 2차전지테마",
+    "code": "305540",
+    "turnover1d": 121000000000,
+    "turnover5d": 113000000000,
+    "turnover20d": 96000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국테크TOP10 INDXX",
+    "code": "381170",
+    "turnover1d": 109000000000,
+    "turnover5d": 98000000000,
+    "turnover20d": 86000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500",
+    "code": "379800",
+    "turnover1d": 92000000000,
+    "turnover5d": 85000000000,
+    "turnover20d": 74000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국나스닥100",
+    "code": "379810",
+    "turnover1d": 91000000000,
+    "turnover5d": 86000000000,
+    "turnover20d": 76000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코스닥150",
+    "code": "229200",
+    "turnover1d": 86000000000,
+    "turnover5d": 78000000000,
+    "turnover20d": 70000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX CD금리액티브(합성)",
+    "code": "459580",
+    "turnover1d": 84000000000,
+    "turnover5d": 81000000000,
+    "turnover20d": 79000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER CD금리투자KIS(합성)",
+    "code": "357870",
+    "turnover1d": 81000000000,
+    "turnover5d": 76000000000,
+    "turnover20d": 71000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 골드선물(H)",
+    "code": "132030",
+    "turnover1d": 77000000000,
+    "turnover5d": 72000000000,
+    "turnover20d": 66000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 단기채권PLUS",
+    "code": "214980",
+    "turnover1d": 68000000000,
+    "turnover5d": 64000000000,
+    "turnover20d": 61000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 반도체",
+    "code": "091160",
+    "turnover1d": 64000000000,
+    "turnover5d": 59000000000,
+    "turnover20d": 53000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코스닥150 레버리지",
+    "code": "233160",
+    "turnover1d": 63000000000,
+    "turnover5d": 57000000000,
+    "turnover20d": 50000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 국고채10년",
+    "code": "148070",
+    "turnover1d": 62000000000,
+    "turnover5d": 58000000000,
+    "turnover20d": 55000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국S&P500",
+    "code": "360200",
+    "turnover1d": 57000000000,
+    "turnover5d": 53000000000,
+    "turnover20d": 46000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 200",
+    "code": "069660",
+    "turnover1d": 51000000000,
+    "turnover5d": 48000000000,
+    "turnover20d": 43000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국나스닥100",
+    "code": "367380",
+    "turnover1d": 49000000000,
+    "turnover5d": 45000000000,
+    "turnover20d": 39000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코스닥150",
+    "code": "232080",
+    "turnover1d": 44000000000,
+    "turnover5d": 41000000000,
+    "turnover20d": 35000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국나스닥100선물(H)",
+    "code": "304940",
+    "turnover1d": 43000000000,
+    "turnover5d": 39000000000,
+    "turnover20d": 35000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국배당다우존스",
+    "code": "446720",
+    "turnover1d": 41000000000,
+    "turnover5d": 38000000000,
+    "turnover20d": 33000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 200",
+    "code": "148020",
+    "turnover1d": 39000000000,
+    "turnover5d": 36000000000,
+    "turnover20d": 31000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS K방산",
+    "code": "449450",
+    "turnover1d": 38000000000,
+    "turnover5d": 36000000000,
+    "turnover20d": 32000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코리아TOP10",
+    "code": "292150",
+    "turnover1d": 36000000000,
+    "turnover5d": 33000000000,
+    "turnover20d": 29000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 200",
+    "code": "105190",
+    "turnover1d": 34000000000,
+    "turnover5d": 31000000000,
+    "turnover20d": 29000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 단기채권알파액티브",
+    "code": "385550",
+    "turnover1d": 34000000000,
+    "turnover5d": 31000000000,
+    "turnover20d": 28000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나전기차SOLACTIVE",
+    "code": "371460",
+    "turnover1d": 32000000000,
+    "turnover5d": 30000000000,
+    "turnover20d": 27000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 자동차",
+    "code": "091180",
+    "turnover1d": 28000000000,
+    "turnover5d": 25000000000,
+    "turnover20d": 22000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 단기통안채",
+    "code": "196230",
+    "turnover1d": 27000000000,
+    "turnover5d": 25000000000,
+    "turnover20d": 23000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 200",
+    "code": "152100",
+    "turnover1d": 26000000000,
+    "turnover5d": 24000000000,
+    "turnover20d": 22000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 은행",
+    "code": "091170",
+    "turnover1d": 24000000000,
+    "turnover5d": 22000000000,
+    "turnover20d": 19000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE AI&로봇",
+    "code": "469070",
+    "turnover1d": 23000000000,
+    "turnover5d": 21000000000,
+    "turnover20d": 18000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 고배당주",
+    "code": "161510",
+    "turnover1d": 18000000000,
+    "turnover5d": 16000000000,
+    "turnover20d": 14000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO KRX300",
+    "code": "304760",
+    "turnover1d": 17000000000,
+    "turnover5d": 15000000000,
+    "turnover20d": 13000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "TIME K이노베이션액티브",
+    "code": "385710",
+    "turnover1d": 12000000000,
+    "turnover5d": 11000000000,
+    "turnover20d": 10000000000,
+    "aliases": []
+  },
+  {
+    "canonical": "1Q 200액티브",
+    "code": "451060",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "1Q 단기금융채액티브",
+    "code": "463290",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "1Q 머니마켓액티브",
+    "code": "479080",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "1Q 코리아밸류업",
+    "code": "495330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "1Q 현대차그룹채권(A+이상)&국고통안",
+    "code": "492500",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "1Q CD금리액티브(합성)",
+    "code": "491610",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "마이다스 일본테크액티브",
+    "code": "488290",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "마이다스 중소형액티브",
+    "code": "438740",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "마이다스 코스피액티브",
+    "code": "403790",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "마이티 26-09 특수채(AAA)액티브",
+    "code": "465780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "마이티 다이나믹퀀트액티브",
+    "code": "442260",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "마이티 코스피100",
+    "code": "159800",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "에셋플러스 글로벌다이나믹시니어액티브",
+    "code": "462340",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "에셋플러스 글로벌대장장이액티브",
+    "code": "433220",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "에셋플러스 글로벌영에이지액티브",
+    "code": "451150",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "에셋플러스 글로벌일등기업포커스10액티브",
+    "code": "477490",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "에셋플러스 글로벌플랫폼액티브",
+    "code": "407830",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "에셋플러스 차이나일등기업포커스10액티브",
+    "code": "474920",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "에셋플러스 코리아대장장이액티브",
+    "code": "442090",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "에셋플러스 코리아플랫폼액티브",
+    "code": "407820",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "파워 200",
+    "code": "152870",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "파워 고배당저변동성",
+    "code": "192720",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "파워 종합채권(AA-이상)액티브",
+    "code": "498180",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "파워 코스피100",
+    "code": "140950",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "파워 K-주주가치액티브",
+    "code": "491510",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 11월만기자동연장회사채AA-이상액티브",
+    "code": "473440",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 200TR",
+    "code": "332500",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 26-06 회사채(AA-이상)액티브",
+    "code": "461270",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 2월만기자동연장회사채AA-이상액티브",
+    "code": "475260",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 2차전지&친환경차액티브",
+    "code": "385600",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 5월만기자동연장회사채AA-이상액티브",
+    "code": "475270",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 8월만기자동연장회사채AA-이상액티브",
+    "code": "475280",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 골드선물 레버리지(합성 H)",
+    "code": "225130",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 구글밸류체인액티브",
+    "code": "483340",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 국고채10년",
+    "code": "365780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 국고채3년",
+    "code": "114460",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 글로벌반도체TOP4 Plus",
+    "code": "446770",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 글로벌브랜드TOP10",
+    "code": "435040",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 글로벌빅파마",
+    "code": "497510",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 글로벌인컴TOP10",
+    "code": "460960",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 글로벌자율주행액티브",
+    "code": "414270",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 글로벌AI맞춤형반도체",
+    "code": "494340",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 단기채권알파액티브",
+    "code": "440640",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 단기통안채",
+    "code": "190620",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 라이프자산주주가치액티브",
+    "code": "494330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 러시아MSCI(합성)",
+    "code": "265690",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 레버리지",
+    "code": "152500",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 마이크로소프트밸류체인액티브",
+    "code": "483330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 머니마켓액티브",
+    "code": "487340",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국30년국채선물레버리지(합성 H)",
+    "code": "452250",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국30년국채액티브",
+    "code": "476760",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국30년국채엔화노출액티브(H)",
+    "code": "476750",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국500데일리타겟커버드콜(합성)",
+    "code": "480030",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국나스닥100미국채혼합50액티브",
+    "code": "438100",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국달러단기채권액티브",
+    "code": "440650",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국달러SOFR금리(합성)",
+    "code": "456880",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국반도체데일리타겟커버드콜(합성)",
+    "code": "480040",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국배당다우존스",
+    "code": "402970",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국부동산리츠(합성 H)",
+    "code": "181480",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국빅테크7+데일리타겟커버드콜(합성)",
+    "code": "480020",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국빅테크TOP7 Plus",
+    "code": "465580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국빅테크TOP7 Plus레버리지(합성)",
+    "code": "465610",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국빅테크TOP7 Plus인버스(합성)",
+    "code": "465620",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국주식베스트셀러",
+    "code": "473590",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국친환경그린테마",
+    "code": "391600",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국하이일드액티브(H)",
+    "code": "455660",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국IT인터넷(합성 H)",
+    "code": "280320",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국S&P500미국채혼합50액티브",
+    "code": "438080",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 미국WideMoat동일가중",
+    "code": "309230",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 베트남VN30(합성)",
+    "code": "245710",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 삼성그룹동일가중",
+    "code": "131890",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 삼성그룹섹터가중",
+    "code": "108450",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 싱가포르리츠",
+    "code": "316300",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 아시아TOP50",
+    "code": "277540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 애플밸류체인액티브",
+    "code": "483420",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 엔비디아밸류체인액티브",
+    "code": "483320",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 엔비디아채권혼합",
+    "code": "448540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 원자력TOP10",
+    "code": "433500",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 인도시장대표BIG5그룹액티브",
+    "code": "487920",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 인도컨슈머파워액티브",
+    "code": "487910",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 인버스",
+    "code": "145670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 일라이릴리밸류체인",
+    "code": "497520",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 일본반도체",
+    "code": "469160",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 일본Nikkei225(H)",
+    "code": "238720",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 일본TOPIX레버리지(H)",
+    "code": "196030",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 일본TOPIX인버스(합성 H)",
+    "code": "205720",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 종합채권(AA-이상)액티브",
+    "code": "356540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 주주환원가치주액티브",
+    "code": "447430",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 중국과창판STAR50",
+    "code": "416090",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 중국본토CSI300",
+    "code": "168580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 중국본토CSI300레버리지(합성)",
+    "code": "219900",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 중장기국공채액티브",
+    "code": "272910",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 차이나항셍테크",
+    "code": "371870",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 코리아밸류업",
+    "code": "496120",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 코리아AI테크핵심산업",
+    "code": "380340",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 코스닥150",
+    "code": "354500",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 코스피",
+    "code": "305050",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 테슬라밸류체인액티브",
+    "code": "457480",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE 포스코그룹포커스",
+    "code": "469170",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE AI반도체TOP3+",
+    "code": "469150",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE ESG액티브",
+    "code": "385590",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE Fn성장소비주도주",
+    "code": "226380",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE KPOP포커스",
+    "code": "475050",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE KRX금현물",
+    "code": "411060",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE MSCI멕시코(합성)",
+    "code": "291130",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE MSCI인도네시아(합성)",
+    "code": "256440",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ACE MSCI필리핀(합성)",
+    "code": "261920",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "BNK 26-06 특수채(AAA이상)액티브",
+    "code": "495710",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "BNK 2차전지양극재",
+    "code": "466810",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "BNK 미래전략기술액티브",
+    "code": "457930",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "BNK 온디바이스AI",
+    "code": "487750",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "BNK 주주가치액티브",
+    "code": "445690",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "DAISHIN343 AI반도체&인프라액티브",
+    "code": "486240",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "DAISHIN343 K200",
+    "code": "434960",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "FOCUS AI코리아액티브",
+    "code": "448570",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "FOCUS ESG리더스",
+    "code": "285690",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 200",
+    "code": "293180",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 200 TOP10",
+    "code": "407310",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 200선물레버리지",
+    "code": "304780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 200선물인버스",
+    "code": "306520",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 200TR",
+    "code": "332930",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 32-10 국고채액티브",
+    "code": "448490",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 글로벌금채굴기업",
+    "code": "473640",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 글로벌럭셔리S&P(합성)",
+    "code": "354350",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 글로벌생성형AI액티브",
+    "code": "461340",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 글로벌워터MSCI(합성)",
+    "code": "424460",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 글로벌탄소배출권선물ICE(합성)",
+    "code": "401590",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 농업융복합산업",
+    "code": "314700",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 머니마켓액티브",
+    "code": "486830",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 미국S&P500",
+    "code": "432840",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 바이오코리아액티브",
+    "code": "498050",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 반도체핵심공정주도주",
+    "code": "476260",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 원자력iSelect",
+    "code": "434730",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 전력설비투자",
+    "code": "491820",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 종합채권(AA-이상)액티브",
+    "code": "461500",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 코리아밸류업",
+    "code": "495750",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 코스닥150",
+    "code": "304770",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 코스닥150선물레버리지",
+    "code": "306530",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO 탄소효율그린뉴딜",
+    "code": "375760",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO CAPEX설비투자iSelect",
+    "code": "454320",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO e커머스",
+    "code": "322400",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO Fn K-게임",
+    "code": "395280",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO Fn K-뉴딜디지털플러스",
+    "code": "368190",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO Fn K-메타버스MZ",
+    "code": "402460",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO Fn K-반도체",
+    "code": "395270",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO Fn K-푸드",
+    "code": "438900",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO Fn K-POP&미디어",
+    "code": "395290",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO Fn5G산업",
+    "code": "367740",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO Fn골프테마",
+    "code": "407300",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO Fn전기&수소차",
+    "code": "381560",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO Fn조선해운",
+    "code": "441540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO Fn친환경에너지",
+    "code": "381570",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO K-뷰티",
+    "code": "479850",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO K고배당",
+    "code": "322410",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO KOFR금리액티브(합성)",
+    "code": "453060",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HANARO MSCI Korea TR",
+    "code": "332940",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HK 200",
+    "code": "491700",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HK 베스트일레븐액티브",
+    "code": "391670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HK 종합채권(AA-이상)액티브",
+    "code": "472920",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "HK S&P코리아로우볼",
+    "code": "215620",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "ITF 200",
+    "code": "472840",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KCGI 미국S&P500 TOP10",
+    "code": "483570",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 200선물레버리지",
+    "code": "253250",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 200선물인버스",
+    "code": "253240",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 200선물인버스2X",
+    "code": "253230",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 200TR",
+    "code": "294400",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 26-09회사채(AA-이상)액티브",
+    "code": "464240",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 고배당",
+    "code": "104530",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 국고채10년레버리지",
+    "code": "167860",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 국고채30년액티브",
+    "code": "471460",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 국고채3년",
+    "code": "114470",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 글로벌전력GRID인프라",
+    "code": "489860",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 글로벌퓨처모빌리티",
+    "code": "394350",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 글로벌AI반도체",
+    "code": "473490",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 단기자금",
+    "code": "130730",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 단기채권ESG액티브",
+    "code": "419890",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 독일DAX",
+    "code": "411860",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 머니마켓액티브",
+    "code": "476450",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 물가채KIS",
+    "code": "430500",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국나스닥100(H)",
+    "code": "453080",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국달러선물",
+    "code": "138230",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국달러선물레버리지",
+    "code": "225800",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국달러선물인버스",
+    "code": "139660",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국달러선물인버스2X",
+    "code": "230480",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국달러SOFR금리액티브(합성)",
+    "code": "460270",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국방어배당성장나스닥",
+    "code": "373790",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국블록버스터바이오테크의약품+",
+    "code": "483030",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국성장기업30액티브",
+    "code": "459790",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국양자컴퓨팅",
+    "code": "498270",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국원유에너지기업",
+    "code": "474800",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국ETF산업STOXX",
+    "code": "426330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국S&P500",
+    "code": "449770",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 미국S&P500(H)",
+    "code": "449780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 블루칩",
+    "code": "104520",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 의료AI",
+    "code": "483020",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 인도Nifty50(합성)",
+    "code": "200250",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 종합채권(AA-이상)액티브",
+    "code": "454780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 차이나내수소비TOP CSI",
+    "code": "454180",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 차이나A50커넥트MSCI",
+    "code": "441330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 코리아밸류업",
+    "code": "496090",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 코스닥150",
+    "code": "316670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 코스닥150선물레버리지",
+    "code": "291630",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 코스닥150선물인버스",
+    "code": "291620",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 코스피100",
+    "code": "153270",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM 통안채1년",
+    "code": "122260",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM CD금리액티브(합성)",
+    "code": "458210",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM Fn유전자혁신기술",
+    "code": "460280",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM K-2차전지북미공급망",
+    "code": "488200",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM K-반도체북미공급망",
+    "code": "488210",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM K-테크TOP10",
+    "code": "469790",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM KRX100",
+    "code": "100910",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM TDF2030액티브",
+    "code": "435530",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM TDF2040액티브",
+    "code": "435540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KIWOOM TDF2050액티브",
+    "code": "435550",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KoAct 글로벌친환경전력인프라액티브",
+    "code": "475070",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KoAct 글로벌AI&로봇액티브",
+    "code": "471040",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KoAct 미국천연가스인프라액티브",
+    "code": "497780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KoAct 미국치매&뇌질환치료제액티브",
+    "code": "490330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KoAct 바이오헬스케어액티브",
+    "code": "462900",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KoAct 반도체&2차전지핵심소재액티브",
+    "code": "482030",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KoAct 배당성장액티브",
+    "code": "476850",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KoAct 코리아밸류업액티브",
+    "code": "495230",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KoAct AI인프라액티브",
+    "code": "487130",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200 중소형",
+    "code": "226980",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200가치저변동",
+    "code": "223190",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200동일가중",
+    "code": "252650",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200롱코스닥150숏선물",
+    "code": "360140",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200미국채혼합",
+    "code": "284430",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200선물인버스2X",
+    "code": "252670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200액티브",
+    "code": "494890",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200타겟위클리커버드콜",
+    "code": "498400",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200ESG",
+    "code": "337160",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200exTOP",
+    "code": "337150",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200IT TR",
+    "code": "363580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 200TR",
+    "code": "278530",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 26-12 회사채(AA-이상)액티브",
+    "code": "473290",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 2차전지산업레버리지",
+    "code": "462330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 2차전지핵심소재10",
+    "code": "461950",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 33-06 국고채액티브",
+    "code": "457690",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 3대농산물선물(H)",
+    "code": "271060",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 53-09 국고채액티브",
+    "code": "457700",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 가치주",
+    "code": "275290",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 건설",
+    "code": "117700",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 게임산업",
+    "code": "300950",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 경기소비재",
+    "code": "266390",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 고배당주",
+    "code": "279530",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 골드선물인버스(H)",
+    "code": "280940",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 구리선물(H)",
+    "code": "138910",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 국고채10년액티브",
+    "code": "471230",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 국고채30년액티브",
+    "code": "439870",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 국고채3년",
+    "code": "114260",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 국채선물10년",
+    "code": "152380",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 국채선물10년인버스",
+    "code": "176950",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 국채선물3년인버스",
+    "code": "292770",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 글로벌로봇(합성)",
+    "code": "276990",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 글로벌비만치료제TOP2 Plus",
+    "code": "476070",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 금융고배당TOP10타겟위클리커버드콜",
+    "code": "498410",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 기계장비",
+    "code": "102960",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 기후변화솔루션",
+    "code": "404260",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 단기변동금리부채권액티브",
+    "code": "273140",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 단기채권",
+    "code": "153130",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 대만테크고배당다우존스",
+    "code": "487950",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 로봇액티브",
+    "code": "445290",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 머니마켓액티브",
+    "code": "488770",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 멀티에셋하이인컴(H)",
+    "code": "321410",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 멀티팩터",
+    "code": "337120",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 메타버스액티브",
+    "code": "401470",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 모멘텀주",
+    "code": "275280",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 모멘텀Plus",
+    "code": "244620",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국10년국채선물",
+    "code": "308620",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국30년국채액티브(H)",
+    "code": "484790",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국30년국채울트라선물(H)",
+    "code": "304660",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국30년국채울트라선물인버스(H)",
+    "code": "304670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국30년국채타겟커버드콜(합성 H)",
+    "code": "481060",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국나스닥100(H)",
+    "code": "449190",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국나스닥100데일리커버드콜OTM",
+    "code": "494300",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국나스닥100레버리지(합성 H)",
+    "code": "409820",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국나스닥100선물인버스(H)",
+    "code": "409810",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국나스닥AI테크액티브",
+    "code": "411420",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국달러선물",
+    "code": "261240",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국달러선물레버리지",
+    "code": "261250",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국달러선물인버스",
+    "code": "261270",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국달러선물인버스2X",
+    "code": "261260",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국달러SOFR금리액티브(합성)",
+    "code": "455030",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국러셀2000(H)",
+    "code": "280930",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국반도체",
+    "code": "390390",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국배당다우존스",
+    "code": "489250",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국배당다우존스타겟커버드콜",
+    "code": "483290",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국배당커버드콜액티브",
+    "code": "441640",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국부동산리츠(H)",
+    "code": "352560",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국빅테크10(H)",
+    "code": "314250",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국서학개미",
+    "code": "473460",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국스마트모빌리티S&P",
+    "code": "390400",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국종합채권ESG액티브(H)",
+    "code": "437080",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국클린에너지나스닥",
+    "code": "419420",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국테크TOP3플러스",
+    "code": "491090",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국AI전력핵심인프라",
+    "code": "487230",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국AI테크TOP10",
+    "code": "485540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국AI테크TOP10타겟커버드콜",
+    "code": "483280",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국ETF산업Top10 Indxx",
+    "code": "428560",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500(H)",
+    "code": "449180",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500경기소비재",
+    "code": "453660",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500금융",
+    "code": "453650",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500배당귀족커버드콜(합성 H)",
+    "code": "276970",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500산업재(합성)",
+    "code": "200030",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500선물(H)",
+    "code": "219480",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500에너지(합성)",
+    "code": "218420",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500유틸리티",
+    "code": "463640",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500커뮤니케이션",
+    "code": "463690",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500테크놀로지",
+    "code": "463680",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500필수소비재",
+    "code": "453630",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P500헬스케어",
+    "code": "453640",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 미국S&P바이오(합성)",
+    "code": "185680",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 바이오",
+    "code": "244580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 반도체레버리지",
+    "code": "494310",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 배당가치",
+    "code": "325020",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 밸류Plus",
+    "code": "244670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 보험",
+    "code": "140700",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 삼성그룹",
+    "code": "102780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 삼성그룹밸류",
+    "code": "213610",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 삼성전자채권혼합",
+    "code": "448330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 성장주",
+    "code": "325010",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 신재생에너지액티브",
+    "code": "385510",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 아시아달러채권ESG플러스액티브",
+    "code": "437070",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 아시아AI반도체exChina액티브",
+    "code": "446690",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 에너지화학",
+    "code": "117460",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 우량주",
+    "code": "275300",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 운송",
+    "code": "140710",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 웹툰&드라마",
+    "code": "395150",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 유럽명품TOP10 STOXX",
+    "code": "456250",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 유럽탄소배출권선물ICE(H)",
+    "code": "400570",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 은선물(H)",
+    "code": "144600",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 인도타타그룹",
+    "code": "477730",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 인도Nifty50",
+    "code": "453810",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 인도Nifty50레버리지(합성)",
+    "code": "453820",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 일본부동산리츠(H)",
+    "code": "352540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 일본TOPIX100",
+    "code": "101280",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 자율주행액티브",
+    "code": "385520",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 장기종합채권(AA-이상)액티브",
+    "code": "363570",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 종합채권(AA-이상)액티브",
+    "code": "273130",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 증권",
+    "code": "102970",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 차이나2차전지MSCI(합성)",
+    "code": "419430",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 차이나과창판STAR50(합성)",
+    "code": "415340",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 차이나심천ChiNext(합성)",
+    "code": "256750",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 차이나항셍테크",
+    "code": "372330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 차이나A50",
+    "code": "169950",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 차이나AI테크액티브",
+    "code": "428510",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 차이나CSI300",
+    "code": "283580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 차이나H",
+    "code": "099140",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 차이나H레버리지(H)",
+    "code": "204450",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 철강",
+    "code": "117680",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 최소변동성",
+    "code": "279540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 친환경조선해운액티브",
+    "code": "445150",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코리아배당성장",
+    "code": "211900",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코리아배당성장채권혼합",
+    "code": "237370",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코리아밸류업",
+    "code": "495850",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코리아혁신성장액티브",
+    "code": "373490",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코스닥150롱코스피200숏선물",
+    "code": "360150",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코스닥150선물인버스",
+    "code": "251340",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코스닥글로벌",
+    "code": "461450",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코스피",
+    "code": "226490",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코스피100",
+    "code": "237350",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코스피대형주",
+    "code": "337140",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 코스피TR",
+    "code": "359210",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 콩선물(H)",
+    "code": "138920",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 퀄리티Plus",
+    "code": "244660",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 탄소효율그린뉴딜",
+    "code": "375770",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 테슬라밸류체인FactSet",
+    "code": "459560",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 테슬라커버드콜채권혼합액티브",
+    "code": "475080",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 필수소비재",
+    "code": "266410",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 한국대만IT프리미어",
+    "code": "298770",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 한국부동산리츠인프라",
+    "code": "476800",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 한중반도체(합성)",
+    "code": "450190",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 한중전기차(합성)",
+    "code": "450180",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 헬스케어",
+    "code": "266420",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX 혁신기술테마액티브",
+    "code": "364690",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX AI반도체",
+    "code": "395160",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX AI반도체핵심장비",
+    "code": "471990",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX AI전력핵심설비",
+    "code": "487240",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX CD1년금리플러스액티브(합성)",
+    "code": "481050",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX ESG종합채권(A-이상)액티브",
+    "code": "439860",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX iShares미국인플레이션국채액티브",
+    "code": "468370",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX iShares미국투자등급회사채액티브",
+    "code": "468630",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX iShares미국하이일드액티브",
+    "code": "468380",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX IT",
+    "code": "266370",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX K-뉴딜디지털플러스",
+    "code": "368680",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX K콘텐츠",
+    "code": "266360",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX KOFR금리액티브(합성)",
+    "code": "423160",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX KRX300",
+    "code": "292190",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX KRX300레버리지",
+    "code": "306950",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX KTOP30",
+    "code": "229720",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX MSCI EM선물(H)",
+    "code": "291890",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX MSCI Korea",
+    "code": "156080",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX MSCI KOREA ESG유니버설",
+    "code": "289040",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX MSCI Korea TR",
+    "code": "278540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX MSCI선진국",
+    "code": "251350",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX S&P글로벌인프라(합성)",
+    "code": "269420",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX TDF2030액티브",
+    "code": "433970",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX TDF2040액티브",
+    "code": "433980",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX TDF2050액티브",
+    "code": "434060",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX Top10동일가중",
+    "code": "395170",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX Top5PlusTR",
+    "code": "315930",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX TRF3070",
+    "code": "329650",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX TRF5050",
+    "code": "329660",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX TRF7030",
+    "code": "329670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX WTI원유선물(H)",
+    "code": "261220",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "KODEX WTI원유선물인버스(H)",
+    "code": "271050",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 200선물레버리지",
+    "code": "253150",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 200선물인버스2X",
+    "code": "253160",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 200TR",
+    "code": "491220",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 고배당저변동50",
+    "code": "251590",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 고배당주위클리커버드콜",
+    "code": "489030",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 고배당주채권혼합",
+    "code": "251600",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 국고채10년액티브",
+    "code": "461460",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 국고채30년액티브",
+    "code": "451600",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 국공채머니마켓액티브",
+    "code": "491230",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 국채선물10년",
+    "code": "289670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 국채선물3년",
+    "code": "298340",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 글로벌방산",
+    "code": "496770",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 글로벌수소&차세대연료전지",
+    "code": "419650",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 글로벌희토류&전략자원생산기업",
+    "code": "415920",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 글로벌AI인프라",
+    "code": "489010",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 글로벌HBM반도체",
+    "code": "442580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 글로벌MSCI(합성 H)",
+    "code": "189400",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 단기채권액티브",
+    "code": "278620",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 머니마켓액티브",
+    "code": "477050",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 미국나스닥테크",
+    "code": "287180",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 미국다우존스고배당주(합성 H)",
+    "code": "213630",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 미국단기회사채(AAA~A)",
+    "code": "332610",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 미국달러SOFR금리액티브(합성)",
+    "code": "456200",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 미국배당증가성장주데일리커버드콜",
+    "code": "494420",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 미국장기우량회사채",
+    "code": "332620",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 미국채30년액티브",
+    "code": "464470",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 미국테크TOP10",
+    "code": "461900",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 미국테크TOP10레버리지(합성)",
+    "code": "461910",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 미국S&P500",
+    "code": "429760",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 미국S&P500(H)",
+    "code": "269540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 미국S&P500성장주",
+    "code": "494410",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 선진국MSCI(합성 H)",
+    "code": "195970",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 스마트베타Quality채권혼합",
+    "code": "238670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 신흥국MSCI(합성 H)",
+    "code": "195980",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 심천차이넥스트(합성)",
+    "code": "256450",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 애플채권혼합",
+    "code": "447660",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 우량회사채50",
+    "code": "239660",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 우주항공&UAM",
+    "code": "421320",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 일본반도체소부장",
+    "code": "464920",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 일본엔화초단기국채(합성)",
+    "code": "489000",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 종합채권(AA-이상)액티브",
+    "code": "451000",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 주도업종",
+    "code": "280920",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 중형주저변동50",
+    "code": "266550",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 코리아밸류업",
+    "code": "495040",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 코스닥150",
+    "code": "301400",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 코스닥150선물인버스",
+    "code": "301410",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 코스피",
+    "code": "227830",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 코스피50",
+    "code": "122090",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 코스피TR",
+    "code": "328370",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS 태양광&ESS",
+    "code": "457990",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS ESG가치주액티브",
+    "code": "395750",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS ESG성장주액티브",
+    "code": "395760",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS K리츠",
+    "code": "429740",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS KOFR금리",
+    "code": "453010",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS S&P글로벌인프라",
+    "code": "269530",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "PLUS TDF2060액티브",
+    "code": "433880",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 200고배당커버드콜ATM",
+    "code": "290080",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 200금융",
+    "code": "284980",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 200선물레버리지",
+    "code": "252400",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 200선물인버스",
+    "code": "252410",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 200선물인버스2X",
+    "code": "252420",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 200위클리커버드콜",
+    "code": "475720",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 200TR",
+    "code": "361580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 2차전지액티브",
+    "code": "422420",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 2차전지TOP10",
+    "code": "465330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 2차전지TOP10인버스(합성)",
+    "code": "465350",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 5대그룹주",
+    "code": "105780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 게임테마",
+    "code": "300640",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 고배당",
+    "code": "266160",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 국고채10년액티브",
+    "code": "481430",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 국고채3년",
+    "code": "114100",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 국고채3년선물인버스",
+    "code": "282000",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 국채30년레버리지(합성)",
+    "code": "451670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 국채선물10년",
+    "code": "295000",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 국채선물10년인버스",
+    "code": "295020",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 국채선물3년",
+    "code": "432600",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 국채선물5년추종",
+    "code": "397420",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 글로벌농업경제",
+    "code": "437370",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 글로벌데이터센터리츠(합성)",
+    "code": "375270",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 글로벌리얼티인컴",
+    "code": "475380",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 글로벌비만산업TOP2+",
+    "code": "476310",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 글로벌수소경제",
+    "code": "417450",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 글로벌원자력",
+    "code": "442320",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 글로벌자산배분액티브",
+    "code": "461490",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 글로벌주식분산액티브",
+    "code": "459750",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 글로벌클린에너지",
+    "code": "399580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 글로벌테크놀로지(합성 H)",
+    "code": "276650",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 금융채액티브",
+    "code": "336160",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 내수주플러스",
+    "code": "326230",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 네트워크인프라",
+    "code": "367760",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 단기국공채액티브",
+    "code": "272560",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 대형고배당10TR",
+    "code": "315960",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 머니마켓액티브",
+    "code": "455890",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 메타버스",
+    "code": "401170",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국30년국채액티브",
+    "code": "481340",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국30년국채엔화노출(합성 H)",
+    "code": "472870",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국30년국채커버드콜(합성)",
+    "code": "472830",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국고정배당우선증권",
+    "code": "354240",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국나스닥100",
+    "code": "368590",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국단기투자등급회사채액티브",
+    "code": "437350",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국달러선물인버스",
+    "code": "469530",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국달러SOFR금리액티브(합성)",
+    "code": "455960",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국반도체인버스(합성 H)",
+    "code": "491630",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국반도체NYSE",
+    "code": "469060",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국반도체NYSE(H)",
+    "code": "469050",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국배당100데일리고정커버드콜",
+    "code": "490600",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국장기국채선물(H)",
+    "code": "267440",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국장기국채선물레버리지(합성 H)",
+    "code": "267490",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국장기국채선물인버스(H)",
+    "code": "267450",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국테크100데일리고정커버드콜",
+    "code": "491620",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국AI밸류체인데일리고정커버드콜",
+    "code": "490590",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국AI밸류체인TOP3Plus",
+    "code": "485690",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국AI테크액티브",
+    "code": "495940",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국S&P500",
+    "code": "379780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국S&P500(H)",
+    "code": "453330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국S&P배당킹",
+    "code": "460660",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 미국S&P원유생산기업(합성 H)",
+    "code": "219390",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 배터리 리사이클링",
+    "code": "446700",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 버크셔포트폴리오TOP10",
+    "code": "475350",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 비메모리반도체액티브",
+    "code": "388420",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 삼성그룹Top3채권혼합",
+    "code": "448630",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 수소경제테마",
+    "code": "367770",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 수출주",
+    "code": "140570",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 우량업종대표주",
+    "code": "140580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 유로스탁스50(H)",
+    "code": "379790",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 인도디지털성장",
+    "code": "498610",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 일본섹터TOP4Plus",
+    "code": "488480",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 종합채권(A-이상)액티브",
+    "code": "385540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 주식혼합",
+    "code": "183710",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 중국본토대형주CSI100",
+    "code": "174360",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 중국본토CSI300",
+    "code": "463300",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 중국MSCI China(H)",
+    "code": "310080",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 중기우량회사채",
+    "code": "136340",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 중소형고배당",
+    "code": "281990",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 중장기국공채액티브",
+    "code": "272570",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 차이나항셍테크",
+    "code": "371150",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 차이나H선물인버스(H)",
+    "code": "291680",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 차이나HSCEI(H)",
+    "code": "250730",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 채권혼합",
+    "code": "183700",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 코리아금융고배당",
+    "code": "498860",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 코리아밸류업",
+    "code": "495050",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 코스닥150",
+    "code": "270810",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 코스닥150선물레버리지",
+    "code": "278240",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 코스닥150선물인버스",
+    "code": "275750",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 코스피",
+    "code": "302450",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 테슬라애플아마존채권혼합",
+    "code": "449580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 팔라듐선물(H)",
+    "code": "334690",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 팔라듐선물인버스(H)",
+    "code": "334700",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 헬스케어",
+    "code": "253280",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE 헬스케어채권혼합",
+    "code": "253290",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE AI플랫폼",
+    "code": "427120",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE CD금리액티브(합성)",
+    "code": "477080",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE ESG사회책임투자",
+    "code": "290130",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE IT플러스",
+    "code": "326240",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE K엔터&여행레저",
+    "code": "388280",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE KIS국고채30년Enhanced",
+    "code": "385560",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE KOFR금리액티브(합성)",
+    "code": "479520",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE KQ고배당",
+    "code": "270800",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE KRX300",
+    "code": "292050",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE TDF2030액티브",
+    "code": "442550",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE TDF2040액티브",
+    "code": "442560",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE TDF2050액티브",
+    "code": "442570",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE V&S셀렉트밸류",
+    "code": "234310",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "RISE V&S셀렉트밸류채권혼합",
+    "code": "241390",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 200 Top10",
+    "code": "411540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 200TR",
+    "code": "295040",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 26-12 회사채(AA-이상)액티브",
+    "code": "488980",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 2차전지소부장Fn",
+    "code": "455860",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 국고채10년",
+    "code": "438570",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 국고채30년액티브",
+    "code": "474390",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 국고채3년",
+    "code": "438560",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 글로벌탄소배출권선물ICE(합성)",
+    "code": "400590",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 글로벌AI반도체탑픽액티브",
+    "code": "423170",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 금융지주플러스고배당",
+    "code": "484880",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 머니마켓액티브",
+    "code": "484890",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국30년국채액티브(H)",
+    "code": "461600",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국30년국채커버드콜(합성)",
+    "code": "473330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국500타겟데일리커버드콜액티브",
+    "code": "494210",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국나스닥100",
+    "code": "476030",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국배당다우존스(H)",
+    "code": "452360",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국배당다우존스2호",
+    "code": "493420",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국배당미국채혼합50",
+    "code": "490490",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국테크TOP10",
+    "code": "481190",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국AI반도체칩메이커",
+    "code": "479620",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국AI소프트웨어",
+    "code": "481180",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국AI전력인프라",
+    "code": "486450",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국S&P500",
+    "code": "433330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국S&P500엔화노출(H)",
+    "code": "499150",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국S&P500ESG",
+    "code": "399110",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 미국TOP5채권혼합40 Solactive",
+    "code": "447620",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 반도체전공정",
+    "code": "475300",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 반도체후공정",
+    "code": "475310",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 유럽탄소배출권선물S&P(H)",
+    "code": "400580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 의료기기소부장Fn",
+    "code": "464610",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 자동차소부장Fn",
+    "code": "464600",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 자동차TOP3플러스",
+    "code": "466930",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 조선TOP3플러스",
+    "code": "466920",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 종합채권(AA-이상)액티브",
+    "code": "436140",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 차이나강소기업CSI500(합성 H)",
+    "code": "220130",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 차이나육성산업액티브(합성)",
+    "code": "415760",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 차이나태양광CSI(합성)",
+    "code": "413220",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 초단기채권액티브",
+    "code": "469830",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 코리아메가테크액티브",
+    "code": "444200",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 코리아밸류업TR",
+    "code": "495550",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 코스닥150",
+    "code": "450910",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL 한국형글로벌전기차&2차전지액티브",
+    "code": "429980",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL AI반도체소부장",
+    "code": "455850",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL CD금리&머니마켓액티브",
+    "code": "497880",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL K방산",
+    "code": "490480",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL KIS단기통안채",
+    "code": "363510",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL KRX300",
+    "code": "292500",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "SOL KRX기후변화솔루션",
+    "code": "404650",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200 건설",
+    "code": "139220",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200 경기소비재",
+    "code": "139290",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200 금융",
+    "code": "139270",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200 산업재",
+    "code": "227550",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200 생활소비재",
+    "code": "227560",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200 에너지화학",
+    "code": "139250",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200 중공업",
+    "code": "139230",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200 철강소재",
+    "code": "139240",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200 헬스케어",
+    "code": "227540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200 IT",
+    "code": "139260",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200동일가중",
+    "code": "252000",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200선물레버리지",
+    "code": "267770",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200선물인버스2X",
+    "code": "252710",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200에너지화학레버리지",
+    "code": "243890",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200커뮤니케이션서비스",
+    "code": "315270",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200커버드콜",
+    "code": "289480",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200커버드콜OTM",
+    "code": "166400",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200IT레버리지",
+    "code": "243880",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 200TR",
+    "code": "310960",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 27-04회사채(A+이상)액티브",
+    "code": "480260",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 2차전지소재Fn",
+    "code": "462010",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 2차전지TOP10",
+    "code": "364980",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 2차전지TOP10레버리지",
+    "code": "412570",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 게임TOP10",
+    "code": "364990",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 경기방어",
+    "code": "139280",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 경기방어채권혼합",
+    "code": "237440",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 골드선물(H)",
+    "code": "319640",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 구리실물",
+    "code": "160580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 국고채30년스트립액티브",
+    "code": "451530",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 국채3년",
+    "code": "114820",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌4차산업혁신기술(합성 H)",
+    "code": "275980",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌리튬&2차전지SOLACTIVE(합성)",
+    "code": "394670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌멀티에셋TIF액티브",
+    "code": "440340",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌비만치료제TOP2Plus",
+    "code": "476690",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌온디바이스AI",
+    "code": "480310",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌이노베이션액티브",
+    "code": "387270",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌자원생산기업(합성 H)",
+    "code": "276000",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌자율주행&전기차SOLACTIVE",
+    "code": "394660",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌클라우드컴퓨팅INDXX",
+    "code": "371450",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌혁신블루칩TOP10",
+    "code": "464930",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌AI&로보틱스 INDXX",
+    "code": "464310",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌AI사이버보안",
+    "code": "418670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌AI액티브",
+    "code": "466950",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌AI전력인프라액티브",
+    "code": "491010",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 글로벌AI플랫폼액티브",
+    "code": "412770",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 금은선물(H)",
+    "code": "139320",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 농산물선물Enhanced(H)",
+    "code": "137610",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 단기선진하이일드(합성 H)",
+    "code": "182490",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 단기채권액티브",
+    "code": "272580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 단기통안채",
+    "code": "157450",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 라틴35",
+    "code": "105010",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 레버리지",
+    "code": "123320",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 로우볼",
+    "code": "174350",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 리츠부동산인프라",
+    "code": "329200",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 리츠부동산인프라채권",
+    "code": "341850",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 모멘텀",
+    "code": "147970",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국30년국채스트립액티브(합성 H)",
+    "code": "458250",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국30년국채커버드콜액티브(H)",
+    "code": "476550",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국나스닥100(H)",
+    "code": "448300",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국나스닥100레버리지(합성)",
+    "code": "418660",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국나스닥100채권혼합Fn",
+    "code": "435420",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국나스닥100커버드콜(합성)",
+    "code": "441680",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국나스닥100타겟데일리커버드콜",
+    "code": "486290",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국나스닥100ETF선물",
+    "code": "483240",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국나스닥넥스트100",
+    "code": "429010",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국나스닥바이오",
+    "code": "203780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국다우존스30",
+    "code": "245340",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국달러단기채권액티브",
+    "code": "329750",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국달러선물레버리지",
+    "code": "261110",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국달러선물인버스2X",
+    "code": "261120",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국달러SOFR금리액티브(합성)",
+    "code": "456610",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국방산TOP10",
+    "code": "494840",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국배당다우존스",
+    "code": "458730",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국배당다우존스타겟커버드콜1호",
+    "code": "458750",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국배당다우존스타겟커버드콜2호",
+    "code": "458760",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국채10년선물",
+    "code": "305080",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국캐시카우100",
+    "code": "465670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국테크TOP10 INDXX(H)",
+    "code": "472160",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국테크TOP10채권혼합",
+    "code": "472170",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국테크TOP10타겟커버드콜",
+    "code": "474220",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국투자등급회사채액티브(H)",
+    "code": "458260",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국필라델피아반도체나스닥",
+    "code": "381180",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국필라델피아반도체레버리지(합성)",
+    "code": "423920",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국필라델피아AI반도체나스닥",
+    "code": "497570",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국AI반도체팹리스",
+    "code": "491830",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국AI빅테크10",
+    "code": "490090",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국AI빅테크10타겟데일리커버드콜",
+    "code": "493810",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국MSCI리츠(합성 H)",
+    "code": "182480",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국S&P500(H)",
+    "code": "448290",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국S&P500동일가중",
+    "code": "488500",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국S&P500레버리지(합성 H)",
+    "code": "225040",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국S&P500배당귀족",
+    "code": "429000",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국S&P500선물(H)",
+    "code": "143850",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국S&P500선물인버스(H)",
+    "code": "225030",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미국S&P500타겟데일리커버드콜",
+    "code": "482730",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 미디어컨텐츠",
+    "code": "228810",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 바이오TOP10",
+    "code": "364970",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 반도체",
+    "code": "091230",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 반도체TOP10",
+    "code": "396500",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 반도체TOP10레버리지",
+    "code": "488080",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 배당성장",
+    "code": "211560",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 배당커버드콜액티브",
+    "code": "472150",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 삼성그룹",
+    "code": "138520",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 소프트웨어",
+    "code": "157490",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 여행레저",
+    "code": "228800",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 우량가치",
+    "code": "227570",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 우량회사채액티브",
+    "code": "438330",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 우선주",
+    "code": "261140",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 원유선물인버스(H)",
+    "code": "217770",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 원유선물Enhanced(H)",
+    "code": "130680",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 유로스탁스50(합성 H)",
+    "code": "195930",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 유로스탁스레버리지(합성 H)",
+    "code": "225050",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 유로스탁스배당30",
+    "code": "245350",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 은행",
+    "code": "091220",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 은행고배당플러스TOP10",
+    "code": "466940",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 의료기기",
+    "code": "307510",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 이머징마켓MSCI레버리지(합성 H)",
+    "code": "225060",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 인도니프티50",
+    "code": "453870",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 인도니프티50레버리지(합성)",
+    "code": "236350",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 인도빌리언컨슈머",
+    "code": "479730",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 인버스",
+    "code": "123310",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 인터넷TOP10",
+    "code": "365000",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 일본니케이225",
+    "code": "241180",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 일본반도체FACTSET",
+    "code": "465660",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 일본엔선물",
+    "code": "292560",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 일본TOPIX(합성 H)",
+    "code": "195920",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 조선TOP10",
+    "code": "494670",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 종합채권(AA-이상)액티브",
+    "code": "451540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 중국소비테마",
+    "code": "150460",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 중장기국채",
+    "code": "302190",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 증권",
+    "code": "157500",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 지주회사",
+    "code": "307520",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나과창판STAR50(합성)",
+    "code": "414780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나바이오테크SOLACTIVE",
+    "code": "371470",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나반도체FACTSET",
+    "code": "396520",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나전기차레버리지(합성)",
+    "code": "456680",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나클린에너지SOLACTIVE",
+    "code": "396510",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나항셍30",
+    "code": "117690",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나항셍테크",
+    "code": "371160",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나항셍테크레버리지(합성 H)",
+    "code": "438320",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나CSI300",
+    "code": "192090",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나CSI300레버리지(합성)",
+    "code": "204480",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나CSI300인버스(합성)",
+    "code": "217780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 차이나HSCEI",
+    "code": "245360",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코리아밸류업",
+    "code": "496080",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코리아테크액티브",
+    "code": "471780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코스닥150바이오테크",
+    "code": "261070",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코스닥150선물인버스",
+    "code": "250780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코스닥150IT",
+    "code": "261060",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코스닥글로벌",
+    "code": "461580",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코스피",
+    "code": "277630",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코스피고배당",
+    "code": "210780",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코스피대형주",
+    "code": "277640",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 코스피중형주",
+    "code": "277650",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 탄소효율그린뉴딜",
+    "code": "376410",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 테슬라채권혼합Fn",
+    "code": "447770",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 퓨처모빌리티액티브",
+    "code": "387280",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 한중반도체(합성)",
+    "code": "449690",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 한중전기차(합성)",
+    "code": "449680",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 헬스케어",
+    "code": "143860",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 현대차그룹플러스",
+    "code": "138540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER 화장품",
+    "code": "228790",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER AI반도체핵심공정",
+    "code": "471760",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER AI코리아그로스액티브",
+    "code": "365040",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER BBIG",
+    "code": "364960",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER BBIG레버리지",
+    "code": "412560",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER CD1년금리액티브(합성)",
+    "code": "475630",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER CD금리플러스액티브(합성)",
+    "code": "499660",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER Fn메타버스",
+    "code": "400970",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER Fn신재생에너지",
+    "code": "377990",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER K게임",
+    "code": "300610",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER K방산&우주",
+    "code": "463250",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER KEDI혁신기업ESG30",
+    "code": "417630",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER KOFR금리액티브(합성)",
+    "code": "449170",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER KRX300",
+    "code": "292160",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER KRX기후변화솔루션",
+    "code": "404540",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER KTOP30",
+    "code": "228820",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER LG그룹플러스",
+    "code": "138530",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER MKF배당귀족",
+    "code": "445910",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER MSCI KOREA ESG리더스",
+    "code": "289260",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER MSCI KOREA ESG유니버설",
+    "code": "289250",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER MSCI Korea TR",
+    "code": "310970",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER S&P글로벌인프라(합성)",
+    "code": "269370",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER S&P글로벌헬스케어(합성)",
+    "code": "248270",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIGER TSMC파운드리밸류체인",
+    "code": "453950",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIME 글로벌바이오액티브",
+    "code": "485810",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIME 글로벌소비트렌드액티브",
+    "code": "494180",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIME 글로벌우주테크&방산액티브",
+    "code": "478150",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIME 글로벌AI인공지능액티브",
+    "code": "456600",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIME 미국나스닥100액티브",
+    "code": "426030",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIME 미국S&P500액티브",
+    "code": "426020",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIME 코리아밸류업액티브",
+    "code": "495060",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIME 코스피액티브",
+    "code": "385720",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIME K바이오액티브",
+    "code": "463050",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIME K신재생에너지액티브",
+    "code": "404120",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIME K컬처액티브",
+    "code": "410870",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TIME Korea플러스배당액티브",
+    "code": "441800",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TREX 200",
+    "code": "108590",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TREX 펀더멘탈 200",
+    "code": "145850",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TRUSTON 주주가치액티브",
+    "code": "472720",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "TRUSTON 코리아밸류업액티브",
+    "code": "496130",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "UNICORN 생성형AI강소기업액티브",
+    "code": "470310",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "UNICORN 포스트IPO액티브",
+    "code": "476000",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "UNICORN R&D 액티브",
+    "code": "433250",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "UNICORN SK하이닉스밸류체인액티브",
+    "code": "494220",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "VITA 밸류알파액티브",
+    "code": "452440",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "VITA MZ소비액티브",
+    "code": "422260",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "WON 200",
+    "code": "448100",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "WON 국공채머니마켓액티브",
+    "code": "458030",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "WON 대한민국국고채액티브",
+    "code": "426150",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "WON 미국빌리어네어",
+    "code": "489290",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "WON 미국우주항공방산",
+    "code": "440910",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "WON 미국S&P500",
+    "code": "444490",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "WON 반도체밸류체인액티브",
+    "code": "474590",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "WON 전단채플러스액티브",
+    "code": "496020",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "WON 종합채권(AA-이상)액티브",
+    "code": "488720",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "WON 한국부동산TOP3플러스",
+    "code": "480460",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  },
+  {
+    "canonical": "WON AI ESG액티브",
+    "code": "413930",
+    "turnover1d": 0,
+    "turnover5d": 0,
+    "turnover20d": 0,
+    "aliases": []
+  }
 ]
