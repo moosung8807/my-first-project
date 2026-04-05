@@ -10,6 +10,14 @@
   const currentTotalLabel = document.getElementById("currentTotalLabel");
   const targetTotalLabel = document.getElementById("targetTotalLabel");
   const targetTotalHint = document.getElementById("targetTotalHint");
+  const modeLabel = document.getElementById("dcaModeLabel");
+  const contributionSummary = document.getElementById("dcaContributionSummary");
+  const currentSummary = document.getElementById("dcaCurrentSummary");
+  const priceReadySummary = document.getElementById("dcaPriceReadySummary");
+  const rowCountSummary = document.getElementById("dcaRowCountSummary");
+  const targetProgressWrap = document.getElementById("dcaTargetProgressWrap");
+  const targetProgressBar = document.getElementById("dcaTargetProgressBar");
+  const targetProgressText = document.getElementById("dcaTargetProgressText");
   const errorBox = document.getElementById("dcaError");
   const staleBadge = document.getElementById("dcaStaleBadge");
   const saveStatusText = document.getElementById("dcaSaveStatusText");
@@ -99,6 +107,7 @@
       staleBadge.hidden = true;
       staleBadge.classList.remove("dirty", "clean");
       staleBadge.textContent = "입력 변경됨 · 다시 계산 필요";
+      updateWorkspaceSummary();
       return;
     }
     staleBadge.hidden = false;
@@ -107,6 +116,7 @@
     staleBadge.textContent = isDirtyAfterCalc
       ? "입력 변경됨 · 다시 계산 필요"
       : "최신 계산 결과가 반영됨";
+    updateWorkspaceSummary();
   }
 
   function setDirtyState(next) {
@@ -732,6 +742,75 @@
     targetTotalHint.textContent = isValidTargetTotal
       ? "합계가 100%입니다."
       : "목표 비중 합계를 100%로 맞춰야 합니다.";
+    updateWorkspaceSummary(rows, {
+      currentTotal,
+      targetTotal
+    });
+  }
+
+  function updateWorkspaceSummary(rowsArg, totalsArg) {
+    const rows = rowsArg || getRows();
+    const currentTotal = totalsArg && Number.isFinite(totalsArg.currentTotal)
+      ? totalsArg.currentTotal
+      : rows.reduce((sum, row) => sum + row.currentAmount, 0);
+    const targetTotal = totalsArg && Number.isFinite(totalsArg.targetTotal)
+      ? totalsArg.targetTotal
+      : rows.reduce((sum, row) => sum + (Number.isFinite(row.target) ? row.target : 0), 0);
+    const contribution = parseNum(contributionInput.value);
+    const namedRows = rows.filter((row) => row.name).length;
+    const pricedRows = rows.filter((row) => row.name && row.currentPrice > 0).length;
+    const progressValue = Math.max(0, Math.min(targetTotal, 100));
+    const modeText = !hasComputed
+      ? "입력 중"
+      : isDirtyAfterCalc
+        ? "다시 계산 필요"
+        : "계산 완료";
+
+    if (modeLabel) {
+      modeLabel.textContent = modeText;
+    }
+    if (contributionSummary) {
+      contributionSummary.textContent = fmtKRW(contribution);
+    }
+    if (currentSummary) {
+      currentSummary.textContent = fmtKRW(currentTotal);
+    }
+    if (priceReadySummary) {
+      priceReadySummary.textContent = `${pricedRows}/${Math.max(namedRows, 0)}`;
+    }
+    if (rowCountSummary) {
+      rowCountSummary.textContent = `${namedRows}개`;
+    }
+    if (targetProgressText) {
+      targetProgressText.textContent = `${targetTotal.toFixed(1)}%`;
+    }
+    if (targetProgressBar) {
+      targetProgressBar.style.width = `${progressValue}%`;
+    }
+    if (targetProgressWrap) {
+      targetProgressWrap.classList.toggle("over", targetTotal > 100 + TARGET_SUM_TOLERANCE);
+    }
+    if (modeLabel && modeLabel.parentElement) {
+      modeLabel.parentElement.classList.toggle("buy", hasComputed && !isDirtyAfterCalc);
+      modeLabel.parentElement.classList.toggle("sell", hasComputed && isDirtyAfterCalc);
+      modeLabel.parentElement.classList.toggle("hold", !hasComputed);
+    }
+    if (priceReadySummary && priceReadySummary.parentElement) {
+      const allReady = namedRows > 0 && pricedRows === namedRows;
+      priceReadySummary.parentElement.classList.toggle("buy", allReady);
+      priceReadySummary.parentElement.classList.toggle("hold", !allReady);
+      priceReadySummary.parentElement.classList.toggle("sell", false);
+    }
+    if (rowCountSummary && rowCountSummary.parentElement) {
+      rowCountSummary.parentElement.classList.toggle("hold", true);
+    }
+    if (contributionSummary && contributionSummary.parentElement) {
+      contributionSummary.parentElement.classList.toggle("cash", true);
+      contributionSummary.parentElement.classList.toggle("negative", contribution < 0);
+    }
+    if (currentSummary && currentSummary.parentElement) {
+      currentSummary.parentElement.classList.toggle("hold", true);
+    }
   }
 
   function averageDrift(items, key) {

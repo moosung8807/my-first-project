@@ -2,6 +2,13 @@
   const themeToggle = document.getElementById("themeToggle");
   const calcBtn = document.getElementById("monthlyHeroCalcBtn");
   const guideBtn = document.getElementById("monthlyHeroGuideBtn");
+  const guideTemplate = document.querySelector("#guideTemplate");
+  const guideTarget = document.querySelector("#desktopGuideContent");
+  const guidePanel = document.querySelector("#guidePanel");
+  const guidePanelToggle = document.querySelector("#guidePanelToggle");
+  const guidePanelClose = document.querySelector("#guidePanelClose");
+  const guidePanelOverlay = document.querySelector("#guidePanelOverlay");
+  const guidePanelArrow = document.querySelector("#guidePanelArrow");
   const setTheme = window.RebalancingThemeHelpers && window.RebalancingThemeHelpers.setTheme;
   const THEME_KEY = "rb-theme";
 
@@ -17,7 +24,22 @@
     target.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  function setGuidePanelOpen(nextOpen) {
+    const open = Boolean(nextOpen);
+    if (!guidePanel || !guidePanelToggle || !guidePanelOverlay || !guidePanelArrow) return;
+    guidePanel.classList.toggle("open", open);
+    guidePanelOverlay.hidden = !open;
+    guidePanelToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    guidePanelToggle.setAttribute("aria-label", open ? "월 적립식 매수 계산기 사용방법 닫기" : "월 적립식 매수 계산기 사용방법 열기");
+    guidePanelArrow.textContent = open ? "◀" : "▶";
+    document.body.classList.toggle("guide-panel-open", open);
+  }
+
   applyThemeButtonState();
+
+  if (guideTemplate && guideTarget) {
+    guideTarget.replaceChildren(guideTemplate.content.cloneNode(true));
+  }
 
   if (themeToggle && setTheme) {
     themeToggle.addEventListener("click", () => {
@@ -32,6 +54,27 @@
   }
 
   if (guideBtn) {
-    guideBtn.addEventListener("click", () => scrollToTarget("#monthlyGuide"));
+    guideBtn.addEventListener("click", () => setGuidePanelOpen(true));
   }
+
+  if (guidePanelToggle) {
+    guidePanelToggle.addEventListener("click", () => {
+      const isOpen = guidePanel && guidePanel.classList.contains("open");
+      setGuidePanelOpen(!isOpen);
+    });
+  }
+
+  if (guidePanelClose) {
+    guidePanelClose.addEventListener("click", () => setGuidePanelOpen(false));
+  }
+
+  if (guidePanelOverlay) {
+    guidePanelOverlay.addEventListener("click", () => setGuidePanelOpen(false));
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setGuidePanelOpen(false);
+    }
+  });
 })();

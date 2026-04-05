@@ -14,6 +14,10 @@
   margin-top: 28px;
 }
 
+.monthlyToolPage .guide-tab-button {
+  z-index: 70;
+}
+
 .monthlyHeroActions button {
   min-width: 156px;
   min-height: 48px;
@@ -46,6 +50,29 @@
 
 .monthlyPrimaryActions {
   align-items: center;
+}
+
+.monthlySummaryBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin: 6px 2px 18px;
+}
+
+.monthlySummaryBar .summaryLeft {
+  gap: 8px;
+}
+
+.monthlySummaryBar .summaryRight {
+  flex: 1 1 232px;
+  min-width: 232px;
+  justify-content: flex-end;
+}
+
+.monthlySummaryBar .pill .v {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .srOnly {
@@ -724,6 +751,19 @@ html[data-theme="light"] .monthlyCatchLink {
 
   .monthlyHeroActions {
     gap: 8px;
+  }
+
+  .monthlySummaryBar {
+    margin-left: 0;
+    margin-right: 0;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .monthlySummaryBar .summaryRight {
+    min-width: 0;
+    width: 100%;
+    justify-content: space-between;
   }
 
   .monthlyHeroActions button {

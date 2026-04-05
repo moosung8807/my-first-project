@@ -51,9 +51,29 @@
     ]
   </script>
   <link rel="stylesheet" href="../assets/css/main.css?v=20260405b" />
-  <link rel="stylesheet" href="../assets/css/monthly-dca.css?v=20260402a" />
+  <link rel="stylesheet" href="../assets/css/monthly-dca.css?v=20260405b" />
 </head>
 <body class="monthlyToolPage">
+  <button
+    class="guide-tab-button"
+    id="guidePanelToggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="guidePanel"
+    aria-label="월 적립식 매수 계산기 사용방법 열기"
+  >
+    <span class="guide-tab-arrow" id="guidePanelArrow" aria-hidden="true">▶</span>
+    <span class="guide-tab-label">사용방법</span>
+  </button>
+  <div class="guide-panel-overlay" id="guidePanelOverlay" hidden></div>
+  <aside class="guide-panel" id="guidePanel" aria-label="월 적립식 매수 계산기 사용 안내">
+    <div class="guide-panel-header">
+      <strong>월 적립식 매수 계산기 사용방법</strong>
+      <button class="guide-panel-close" id="guidePanelClose" type="button" aria-label="사용방법 닫기">✕</button>
+    </div>
+    <div class="sidePanelInner guideContent" id="desktopGuideContent"></div>
+  </aside>
+
   <div class="layoutShell monthlyPageShell">
     <main class="container monthlyPage">
       <section class="heroSection monthlyHeroSection" aria-labelledby="heroTitle">
@@ -122,7 +142,7 @@
 
         <div class="heroActions monthlyHeroActions">
           <button class="primary" id="monthlyHeroCalcBtn" type="button">계산기 시작</button>
-          <button class="secondary" id="monthlyHeroGuideBtn" type="button">계산 방식 보기</button>
+          <button class="secondary" id="monthlyHeroGuideBtn" type="button">사용 안내 열기</button>
         </div>
       </section>
 
@@ -131,6 +151,42 @@
         먼저 이번 달 신규 자금을 어떻게 배분할지 확인하고,
         필요하면 메인 도구에서 매수·매도까지 포함한 전체 리밸런싱으로 이어서 판단할 수 있습니다.
       </p>
+
+      <template id="guideTemplate">
+        <h2>■ 월 적립식 매수 계산기 사용 방법</h2>
+        <p>
+          이 도구는 현재 평가금액과 목표 비중, 이번 달 적립금을 기준으로
+          매도 없이 신규 자금을 어디에 먼저 넣어야 하는지 계산합니다.
+        </p>
+
+        <section>
+          <h3>■ 입력 항목 설명</h3>
+          <ul>
+            <li><strong>이번 달 적립금:</strong> 이번 달 새로 투자할 금액입니다.</li>
+            <li><strong>현재 평가금액:</strong> 각 종목의 현재 평가금액을 입력합니다.</li>
+            <li><strong>최근 종가:</strong> 정수 수량 계산에 쓰이는 최근 영업일 종가입니다.</li>
+            <li><strong>목표 비중:</strong> 적립 후 장기적으로 맞추고 싶은 비중이며 합계는 100%여야 합니다.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>■ 결과 해석</h3>
+          <ul>
+            <li><strong>목표 기준 배분액:</strong> 부족한 자산에 우선 배분된 이번 달 예산입니다.</li>
+            <li><strong>권장 매수 수량:</strong> 최근 종가 기준으로 계산한 정수 수량입니다.</li>
+            <li><strong>잔여 현금:</strong> 정수 수량으로 내림 처리한 뒤 남는 현금입니다.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>■ 이런 상황에서 특히 유용합니다</h3>
+          <ul>
+            <li>매도 없이 월 적립금만으로 비중을 천천히 정리하고 싶을 때</li>
+            <li>현재 과소 비중 자산이 무엇인지 바로 확인하고 싶을 때</li>
+            <li>메인 리밸런싱 전, 신규 자금 배분 우선순위를 먼저 보고 싶을 때</li>
+          </ul>
+        </section>
+      </template>
 
       <div class="calculatorArea monthlyCalculatorArea">
         <section class="card monthlyToolCard" id="dcaWorkspace" aria-labelledby="dcaToolTitle">
@@ -148,6 +204,38 @@
               <button class="primary" id="dcaCalcBtn" type="button"><span class="buttonGlyph calcGlyph" aria-hidden="true"></span>계산</button>
               <button class="secondary" id="dcaResetBtn" type="button"><span class="buttonGlyph" aria-hidden="true">↺</span>초기화</button>
               <span class="saveStatusText" id="dcaSaveStatusText" aria-live="polite">최근 저장 없음</span>
+            </div>
+          </div>
+
+          <div class="summaryBar monthlySummaryBar" id="dcaSummaryBar" aria-label="월 적립식 입력 요약">
+            <div class="summaryLeft">
+              <span class="pill">
+                <span class="k">상태</span>
+                <span class="v" id="dcaModeLabel">입력 중</span>
+              </span>
+              <span class="pill">
+                <span class="k">적립금</span>
+                <span class="v" id="dcaContributionSummary">₩ 0</span>
+              </span>
+              <span class="pill">
+                <span class="k">현재 평가액</span>
+                <span class="v" id="dcaCurrentSummary">₩ 0</span>
+              </span>
+              <span class="pill">
+                <span class="k">최근 종가 준비</span>
+                <span class="v" id="dcaPriceReadySummary">0/0</span>
+              </span>
+              <span class="pill">
+                <span class="k">입력 종목</span>
+                <span class="v" id="dcaRowCountSummary">0개</span>
+              </span>
+            </div>
+            <div class="summaryRight">
+              <span>목표 비중 합계</span>
+              <div class="progressWrap" id="dcaTargetProgressWrap" aria-label="목표 비중 합계 진행">
+                <div class="progressBar" id="dcaTargetProgressBar"></div>
+              </div>
+              <span id="dcaTargetProgressText">0.0%</span>
             </div>
           </div>
 
@@ -404,8 +492,8 @@
   <script src="../assets/js/core-utils.js"></script>
   <script src="../assets/js/core-symbols.js?v=20260405h"></script>
   <script src="../assets/js/theme-helpers.js"></script>
-  <script src="../assets/js/monthly-dca-shell.js"></script>
-  <script src="../assets/js/monthly-dca-page.js?v=20260405c"></script>
+  <script src="../assets/js/monthly-dca-shell.js?v=20260405a"></script>
+  <script src="../assets/js/monthly-dca-page.js?v=20260405d"></script>
   <script src="../assets/js/faq-renderer.js"></script>
   <script src="../assets/js/docs-page.js"></script>
 </body>
