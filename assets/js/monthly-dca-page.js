@@ -140,12 +140,16 @@
 
   function hasWorkspaceData() {
     if (parseNum(contributionInput.value) > 0) return true;
-    return getRows().some((row) => (
-      row.name ||
-      row.currentAmount > 0 ||
-      row.currentPrice > 0 ||
-      (Number.isFinite(row.target) && row.target > 0)
-    ));
+    return getRows().some((row) => row.name);
+  }
+
+  function isActiveRow(row) {
+    return Boolean(row && row.name);
+  }
+
+  function getActiveRows(rowsArg) {
+    const rows = rowsArg || getRows();
+    return rows.filter((row) => isActiveRow(row));
   }
 
   function updateTradeModeUi() {
@@ -741,10 +745,15 @@
     clearError();
 
     const rows = getRows();
-    const currentTotal = rows.reduce((sum, row) => sum + row.currentAmount, 0);
-    const targetTotal = rows.reduce((sum, row) => sum + (Number.isFinite(row.target) ? row.target : 0), 0);
+    const activeRows = getActiveRows(rows);
+    const currentTotal = activeRows.reduce((sum, row) => sum + row.currentAmount, 0);
+    const targetTotal = activeRows.reduce((sum, row) => sum + (Number.isFinite(row.target) ? row.target : 0), 0);
 
     rows.forEach((row) => {
+      if (!isActiveRow(row)) {
+        row.previewEl.textContent = "-";
+        return;
+      }
       const weight = currentTotal > 0 ? (row.currentAmount / currentTotal) * 100 : 0;
       row.previewEl.textContent = currentTotal > 0 ? `${weight.toFixed(1)}%` : "-";
     });
@@ -757,14 +766,14 @@
     targetTotalHint.textContent = isValidTargetTotal
       ? "합계가 100%입니다."
       : "목표 비중 합계를 100%로 맞춰야 합니다.";
-    updateWorkspaceSummary(rows, {
+    updateWorkspaceSummary(activeRows, {
       currentTotal,
       targetTotal
     });
   }
 
   function updateWorkspaceSummary(rowsArg, totalsArg) {
-    const rows = rowsArg || getRows();
+    const rows = getActiveRows(rowsArg || getRows());
     const currentTotal = totalsArg && Number.isFinite(totalsArg.currentTotal)
       ? totalsArg.currentTotal
       : rows.reduce((sum, row) => sum + row.currentAmount, 0);
@@ -970,6 +979,7 @@
 
   function validateRows(rows, contribution) {
     let firstInvalid = null;
+    const activeRows = getActiveRows(rows);
 
     if (!(contribution > 0)) {
       contributionInput.classList.add("invalidField");
@@ -977,27 +987,20 @@
       showError("이번 달 적립금은 0보다 큰 값이어야 합니다.");
     }
 
-    if (rows.length === 0) {
+    if (activeRows.length === 0) {
       showError("계산할 종목을 먼저 추가하세요.");
       return null;
     }
 
-    const targetTotal = rows.reduce((sum, row) => sum + (Number.isFinite(row.target) ? row.target : 0), 0);
+    const targetTotal = activeRows.reduce((sum, row) => sum + (Number.isFinite(row.target) ? row.target : 0), 0);
     if (Math.abs(targetTotal - 100) > TARGET_SUM_TOLERANCE) {
       if (!firstInvalid) {
-        firstInvalid = rows[0] ? rows[0].targetEl : contributionInput;
+        firstInvalid = activeRows[0] ? activeRows[0].targetEl : contributionInput;
       }
       showError("목표 비중 합계는 100%여야 합니다.");
     }
 
-    rows.forEach((row, index) => {
-      if (!row.name) {
-        row.nameEl.classList.add("invalidField");
-        if (!firstInvalid) firstInvalid = row.nameEl;
-        if (!errorBox.textContent) {
-          showError(`${index + 1}번째 종목의 이름을 입력하세요.`);
-        }
-      }
+    activeRows.forEach((row, index) => {
       if (row.currentAmount < 0) {
         row.amountEl.classList.add("invalidField");
         if (!firstInvalid) firstInvalid = row.amountEl;
@@ -1026,7 +1029,7 @@
       return null;
     }
 
-    const resultPreview = buildResultRows(rows, contribution);
+    const resultPreview = buildResultRows(activeRows, contribution);
     const needsPriceRow = resultPreview.find((row) => Math.abs(row.recommendedBudget) > 0 && !(row.currentPrice > 0));
     if (needsPriceRow) {
       needsPriceRow.priceEl.classList.add("invalidField");
@@ -1036,7 +1039,7 @@
     }
 
     clearError();
-    return rows;
+    return activeRows;
   }
 
   function formatTradeQty(value) {
