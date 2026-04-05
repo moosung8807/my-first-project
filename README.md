@@ -54,6 +54,34 @@ npx --yes serve -l 4173 .
 
 로컬 개인 테스트용 비밀값은 `.env.local` 같은 별도 파일로만 관리하고 커밋하지 않습니다.
 
+## ETF seed 갱신
+
+수동으로 ETF를 하나씩 로컬 seed에 추가하는 대신, 공공데이터포털 ETF 목록으로
+`data/kr-etf-source.seed.json` 을 갱신할 수 있습니다.
+
+```bash
+node scripts/sync-kr-etf-source-seed.js
+```
+
+환경변수는 `/api/quote` 와 동일하게 아래 이름을 순서대로 확인합니다.
+
+- `DATA_GO_KR_SERVICE_KEY`
+- `PUBLIC_DATA_PORTAL_SERVICE_KEY`
+- `SECURITIES_PRODUCT_SERVICE_KEY`
+- `SERVICE_KEY`
+
+alias seed까지 같이 갱신하려면:
+
+```bash
+node scripts/sync-kr-etf-source-seed.js --refresh-alias-seed --alias-top all
+```
+
+메모:
+
+- 기본적으로 공공데이터포털 `getETFPriceInfo` 목록을 페이지네이션으로 끝까지 읽습니다.
+- 기존 `data/kr-etf-source.seed.json` 에 있던 `aliases`, `turnover5d`, `turnover20d` 값은 같은 코드 기준으로 최대한 보존합니다.
+- `scripts/build-kr-etf-alias-seed.js --top 0` 또는 `--top all` 을 쓰면 상위 일부가 아니라 전체 alias seed를 만들 수 있습니다.
+
 ## Playwright 검증
 
 ### 기본 검증

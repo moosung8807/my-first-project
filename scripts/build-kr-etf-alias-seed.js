@@ -15,7 +15,8 @@ function parseArgs(argv) {
       out.output = argv[i + 1];
       i += 1;
     } else if (a === "--top" && argv[i + 1]) {
-      out.top = Math.max(1, Number(argv[i + 1]) || 40);
+      const raw = String(argv[i + 1] || "").trim().toLowerCase();
+      out.top = raw === "all" ? 0 : Math.max(0, Number(raw) || 0);
       i += 1;
     }
   }
@@ -89,7 +90,9 @@ function buildSeed(records, topN) {
     dedup.push(row);
   }
 
-  return dedup.slice(0, topN).map((r) => ({
+  const limited = topN > 0 ? dedup.slice(0, topN) : dedup;
+
+  return limited.map((r) => ({
     canonical: r.canonical,
     code: r.code,
     tickerCandidate: r.tickerCandidate,
