@@ -34,9 +34,8 @@
   } = window.RebalancingFormat;
   const RebalancingSymbols = window.RebalancingSymbols || {};
   const RebalancingUtils = window.RebalancingUtils || {};
-  const fetchRemoteSuggestionCandidates = RebalancingSymbols.fetchRemoteSuggestionCandidates || (async () => []);
   const getSuggestionCandidates = RebalancingSymbols.getSuggestionCandidates || (() => []);
-  const mergeSuggestionCandidates = RebalancingSymbols.mergeSuggestionCandidates || ((primaryItems, secondaryItems) => [...(primaryItems || []), ...(secondaryItems || [])]);
+  const getSuggestionCandidatesAsync = RebalancingSymbols.getSuggestionCandidatesAsync || (async (query) => getSuggestionCandidates(query));
   const resolveSecurityQuery = RebalancingSymbols.resolveSecurityQuery || (() => "");
   const formatReportDate = RebalancingUtils.formatReportDate || ((date) => {
     const yyyy = String(date.getFullYear());
@@ -411,8 +410,8 @@
     state.suggestController = controller;
     const currentSeq = ++state.suggestSeq;
 
-    fetchRemoteSuggestionCandidates(trimmedQuery, { signal: controller.signal })
-      .then((remoteItems) => {
+    getSuggestionCandidatesAsync(trimmedQuery, { signal: controller.signal })
+      .then((items) => {
         if (controller.signal.aborted || currentSeq !== state.suggestSeq) {
           return;
         }
@@ -420,8 +419,7 @@
         if (String(nameInput.value || "").trim() !== trimmedQuery) {
           return;
         }
-        const mergedItems = mergeSuggestionCandidates(localItems, remoteItems);
-        renderNameSuggestions(tr, mergedItems);
+        renderNameSuggestions(tr, items);
       })
       .catch(() => {});
   }

@@ -67,10 +67,9 @@
     withComma
   } = window.RebalancingFormat;
   const {
-    fetchRemoteSuggestionCandidates = async () => [],
     findKrEtfByAlias,
     getSuggestionCandidates,
-    mergeSuggestionCandidates = (primaryItems, secondaryItems) => [...(primaryItems || []), ...(secondaryItems || [])],
+    getSuggestionCandidatesAsync = async (query) => getSuggestionCandidates(query),
     resolveSecurityQuery
   } = window.RebalancingSymbols;
   const {
@@ -461,13 +460,12 @@
     state.controller = controller;
     const currentSeq = ++state.seq;
 
-    fetchRemoteSuggestionCandidates(trimmedQuery, { signal: controller.signal })
-      .then((remoteCandidates)=>{
+    getSuggestionCandidatesAsync(trimmedQuery, { signal: controller.signal })
+      .then((candidates)=>{
         if(controller.signal.aborted || currentSeq !== state.seq) return;
         state.controller = null;
         if(!nameEl || String(nameEl.value || "").trim() !== trimmedQuery) return;
-        const mergedCandidates = mergeSuggestionCandidates(localCandidates, remoteCandidates);
-        renderNameSuggestions(tr, mergedCandidates);
+        renderNameSuggestions(tr, candidates);
       })
       .catch(()=>{});
   }

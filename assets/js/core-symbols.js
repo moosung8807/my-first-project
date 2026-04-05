@@ -1,5 +1,6 @@
 (function () {
   const MAX_SUGGESTION_CANDIDATES = 20;
+  const GENERATED_ALIAS_SEED_URL = "/data/kr-etf-alias-seed.json?v=20260405h";
 
   function normalizeAliasKey(value) {
     return String(value || "")
@@ -39,7 +40,7 @@
     return /\d/.test(match[1]) ? match[1] : "";
   }
 
-  const KR_ETF_ALIAS_MAP = Object.freeze([
+  const CURATED_KR_ETF_ALIAS_MAP = Object.freeze([
     { ticker: "489250", canonical: "KODEX 미국배당다우존스", aliases: ["미국배당다우존스", "미국배당다우", "미배당다우", "코미당", "미국배당", "453850"] },
     { ticker: "069500", canonical: "KODEX 200", aliases: ["코덱스200", "국내200", "코스피200", "069500"] },
     { ticker: "102110", canonical: "TIGER 200", aliases: ["타이거200", "호랑이200", "102110"] },
@@ -73,18 +74,20 @@
     }
   ]);
 
-  const KR_ETF_ALIAS_INDEX = Object.freeze(
-    KR_ETF_ALIAS_MAP.map((entry) => {
-      const keySet = new Set([entry.canonical, entry.ticker, ...(entry.aliases || [])]);
-      const keys = [...keySet]
-        .map((value) => normalizeKrEtfAlias(value))
-        .filter(Boolean)
-        .sort((a, b) => b.length - a.length);
-      return { ticker: entry.ticker, canonical: entry.canonical, keys };
-    })
-  );
+  function buildKrEtfAliasIndex(aliasMap) {
+    return Object.freeze(
+      aliasMap.map((entry) => {
+        const keySet = new Set([entry.canonical, entry.ticker, ...(entry.aliases || [])]);
+        const keys = [...keySet]
+          .map((value) => normalizeKrEtfAlias(value))
+          .filter(Boolean)
+          .sort((a, b) => b.length - a.length);
+        return { ticker: entry.ticker, canonical: entry.canonical, keys };
+      })
+    );
+  }
 
-  const SYMBOL_ALIAS_MAP = Object.freeze({
+  const CURATED_SYMBOL_ALIAS_MAP = Object.freeze({
     "069500": "069500",
     "102110": "102110",
     "114800": "114800",
@@ -114,7 +117,7 @@
     "tiger미국sp500": "360750"
   });
 
-  const PRODUCT_SUGGESTIONS = Object.freeze([
+  const CURATED_PRODUCT_SUGGESTIONS = Object.freeze([
     { name: "KODEX 200", symbol: "069500", aliases: ["069500", "kodex200"] },
     { name: "TIGER 200", symbol: "102110", aliases: ["102110", "tiger200"] },
     { name: "KODEX 인버스", symbol: "114800", aliases: ["114800", "인버스"] },
@@ -138,11 +141,147 @@
     { name: "KODEX 미국배당다우존스", symbol: "489250", aliases: ["489250", "미국배당다우존스", "미국배당다우"] }
   ]);
 
+  function createSeedSuggestion(record) {
+    const code = normalizeSecurityCode(record?.code);
+    const name = String(record?.canonical || "").trim();
+    if (!code || !name) return null;
+    const aliases = Array.isArray(record?.aliases) ? record.aliases : [];
+    return {
+      name,
+      symbol: code,
+      aliases
+    };
+  }
+
+  function createSeedAliasEntry(record) {
+    const suggestion = createSeedSuggestion(record);
+    if (!suggestion) return null;
+    return {
+      ticker: suggestion.symbol,
+      canonical: suggestion.name,
+      aliases: suggestion.aliases
+    };
+  }
+
+  function buildSymbolAliasEntries(suggestions) {
+    const out = {};
+    suggestions.forEach((item) => {
+      const symbol = normalizeSymbol(item.symbol);
+      if (!symbol) return;
+      out[normalizeAliasKey(symbol)] = symbol;
+      out[normalizeAliasKey(item.name)] = symbol;
+      (item.aliases || []).forEach((alias) => {
+        const key = normalizeAliasKey(alias);
+        if (key) out[key] = symbol;
+      });
+    });
+    return out;
+  }
+
+  function mergeSuggestionCollections(primaryItems, secondaryItems, { limit = 0 } = {}) {
+    const merged = [];
+    const seen = new Set();
+
+    [...(primaryItems || []), ...(secondaryItems || [])].forEach((item) => {
+      if (!item || !item.name || !item.symbol) return;
+      const key = normalizeSymbol(item.symbol);
+      if (seen.has(key)) return;
+      seen.add(key);
+      const aliases = [...new Set((item.aliases || []).filter(Boolean).map((alias) => String(alias).trim()))];
+      merged.push({
+        name: String(item.name).trim(),
+        symbol: normalizeSymbol(item.symbol),
+        aliases
+      });
+    });
+
+    return limit > 0 ? merged.slice(0, limit) : merged;
+  }
+
+  function mergeSuggestionCandidates(primaryItems, secondaryItems) {
+    return mergeSuggestionCollections(primaryItems, secondaryItems, {
+      limit: MAX_SUGGESTION_CANDIDATES
+    });
+  }
+
+  function mergeAliasEntries(primaryItems, secondaryItems) {
+    const byTicker = new Map();
+
+    [...(secondaryItems || []), ...(primaryItems || [])].forEach((item) => {
+      if (!item || !item.ticker || !item.canonical) return;
+      const ticker = normalizeSymbol(item.ticker);
+      const previous = byTicker.get(ticker);
+      const aliases = [...new Set([...(previous?.aliases || []), ...(item.aliases || [])].filter(Boolean))];
+      byTicker.set(ticker, {
+        ticker,
+        canonical: String(item.canonical).trim(),
+        aliases
+      });
+    });
+
+    return [...byTicker.values()];
+  }
+
+  let activeProductSuggestions = [...CURATED_PRODUCT_SUGGESTIONS];
+  let activeKrEtfAliasMap = [...CURATED_KR_ETF_ALIAS_MAP];
+  let activeKrEtfAliasIndex = buildKrEtfAliasIndex(activeKrEtfAliasMap);
+  let activeSymbolAliasMap = {
+    ...CURATED_SYMBOL_ALIAS_MAP,
+    ...buildSymbolAliasEntries(activeProductSuggestions)
+  };
+  let aliasSeedLoaded = false;
+  let aliasSeedPromise = null;
+
+  function applyGeneratedSeedRecords(records) {
+    const generatedSuggestions = (Array.isArray(records) ? records : [])
+      .map(createSeedSuggestion)
+      .filter(Boolean);
+    const generatedAliasEntries = (Array.isArray(records) ? records : [])
+      .map(createSeedAliasEntry)
+      .filter(Boolean);
+
+    activeProductSuggestions = mergeSuggestionCollections(CURATED_PRODUCT_SUGGESTIONS, generatedSuggestions);
+    activeKrEtfAliasMap = mergeAliasEntries(CURATED_KR_ETF_ALIAS_MAP, generatedAliasEntries);
+    activeKrEtfAliasIndex = buildKrEtfAliasIndex(activeKrEtfAliasMap);
+    activeSymbolAliasMap = {
+      ...buildSymbolAliasEntries(generatedSuggestions),
+      ...CURATED_SYMBOL_ALIAS_MAP,
+      ...buildSymbolAliasEntries(CURATED_PRODUCT_SUGGESTIONS)
+    };
+    aliasSeedLoaded = true;
+    return activeProductSuggestions;
+  }
+
+  async function preloadKrEtfAliasSeed() {
+    if (aliasSeedLoaded) {
+      return activeProductSuggestions;
+    }
+    if (aliasSeedPromise) {
+      return aliasSeedPromise;
+    }
+
+    aliasSeedPromise = fetch(GENERATED_ALIAS_SEED_URL, {
+      headers: {
+        accept: "application/json,text/plain,*/*"
+      }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`ETF alias seed load failed: HTTP ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((records) => applyGeneratedSeedRecords(records))
+      .catch(() => activeProductSuggestions);
+
+    return aliasSeedPromise;
+  }
+
   function findKrEtfByAlias(rawInput) {
     const normalizedInput = normalizeKrEtfAlias(rawInput);
     if (!normalizedInput) return null;
 
-    for (const etf of KR_ETF_ALIAS_INDEX) {
+    for (const etf of activeKrEtfAliasIndex) {
       if (etf.keys.some((alias) => alias === normalizedInput)) {
         return { ticker: etf.ticker, canonical: etf.canonical };
       }
@@ -151,7 +290,7 @@
     let bestTicker = "";
     let bestCanonical = "";
     let bestScore = 0;
-    for (const etf of KR_ETF_ALIAS_INDEX) {
+    for (const etf of activeKrEtfAliasIndex) {
       for (const alias of etf.keys) {
         if (alias.length < 3 || normalizedInput.length < 3) continue;
         const matched = normalizedInput.includes(alias) || alias.includes(normalizedInput);
@@ -183,11 +322,11 @@
     }
 
     const aliasKey = normalizeAliasKey(input);
-    if (SYMBOL_ALIAS_MAP[aliasKey]) {
-      return SYMBOL_ALIAS_MAP[aliasKey];
+    if (activeSymbolAliasMap[aliasKey]) {
+      return activeSymbolAliasMap[aliasKey];
     }
 
-    const fromSuggestion = PRODUCT_SUGGESTIONS.find((item) => {
+    const fromSuggestion = activeProductSuggestions.find((item) => {
       if (normalizeAliasKey(item.name) === aliasKey) return true;
       return item.aliases.some((alias) => normalizeAliasKey(alias) === aliasKey);
     });
@@ -203,7 +342,7 @@
     const queryTokens = tokenizeSuggestionQuery(rawQuery);
     if (!query || !queryTokens.length) return [];
 
-    const results = PRODUCT_SUGGESTIONS.map((item) => {
+    const results = activeProductSuggestions.map((item) => {
       const keys = [
         normalizeAliasKey(item.name),
         normalizeAliasKey(item.symbol),
@@ -223,25 +362,6 @@
     });
 
     return results.slice(0, MAX_SUGGESTION_CANDIDATES);
-  }
-
-  function mergeSuggestionCandidates(primaryItems, secondaryItems) {
-    const merged = [];
-    const seen = new Set();
-
-    [...(primaryItems || []), ...(secondaryItems || [])].forEach((item) => {
-      if (!item || !item.name || !item.symbol) return;
-      const key = `${normalizeSymbol(item.symbol)}::${normalizeAliasKey(item.name)}`;
-      if (seen.has(key)) return;
-      seen.add(key);
-      merged.push({
-        name: String(item.name).trim(),
-        symbol: normalizeSymbol(item.symbol),
-        aliases: Array.isArray(item.aliases) ? item.aliases : []
-      });
-    });
-
-    return merged.slice(0, MAX_SUGGESTION_CANDIDATES);
   }
 
   async function fetchRemoteSuggestionCandidates(rawQuery, { signal } = {}) {
@@ -273,20 +393,27 @@
   }
 
   async function getSuggestionCandidatesAsync(rawQuery, { signal } = {}) {
+    await preloadKrEtfAliasSeed();
     const localItems = getSuggestionCandidates(rawQuery);
+    if (localItems.length) {
+      return localItems;
+    }
     const remoteItems = await fetchRemoteSuggestionCandidates(rawQuery, { signal });
     return mergeSuggestionCandidates(localItems, remoteItems);
   }
 
+  preloadKrEtfAliasSeed();
+
   window.RebalancingSymbols = Object.freeze({
-    KR_ETF_ALIAS_MAP,
-    PRODUCT_SUGGESTIONS,
-    SYMBOL_ALIAS_MAP,
+    KR_ETF_ALIAS_MAP: CURATED_KR_ETF_ALIAS_MAP,
+    PRODUCT_SUGGESTIONS: CURATED_PRODUCT_SUGGESTIONS,
+    SYMBOL_ALIAS_MAP: CURATED_SYMBOL_ALIAS_MAP,
     fetchRemoteSuggestionCandidates,
     findKrEtfByAlias,
     getSuggestionCandidates,
     getSuggestionCandidatesAsync,
     mergeSuggestionCandidates,
+    preloadKrEtfAliasSeed,
     normalizeAliasKey,
     normalizeKrEtfAlias,
     normalizeSecurityCode,
