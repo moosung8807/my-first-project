@@ -600,9 +600,9 @@ html[data-theme="light"] .dcaSuggestItem.isActive {
 }
 
 .monthlyResultHeading h2 {
-  font-size: clamp(28px, 3vw, 36px);
-  line-height: 1.12;
-  letter-spacing: -0.04em;
+  font-size: 18px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
 }
 
 .monthlyResultHeading p {
@@ -656,7 +656,8 @@ html[data-theme="light"] .monthlyResultCard .toolTableWrap {
 }
 
 .metricGridCompact {
-  margin-top: 12px;
+  margin-top: 14px;
+  margin-bottom: 10px;
   opacity: 0.9;
 }
 
@@ -957,10 +958,6 @@ html[data-theme="light"] .monthlyCatchLink {
 
   .metricGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .monthlyResultHeading h2 {
-    font-size: 28px;
   }
 
   .toolTable th,
