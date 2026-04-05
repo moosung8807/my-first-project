@@ -1542,6 +1542,9 @@
       border-radius:16px;
       border:1px solid var(--line);
     }
+    #tableCard.mode-current .tableWrap{
+      overflow:visible;
+    }
     table{
       width:100%;
       border-collapse:separate;
