@@ -20,7 +20,7 @@
 
   <meta property="og:type" content="article" />
   <meta property="og:title" content="월 적립식 매수 비중 계산기 | 매달 얼마씩 사야 목표 비중에 가까워질까" />
-  <meta property="og:description" content="현재 평가금액, 목표 비중, 이번 달 적립금을 넣으면 각 종목별 권장 매수 금액을 계산합니다." />
+  <meta property="og:description" content="현재 평가금액, 목표 비중, 이번 달 적립금을 넣으면 적립금 배분과 매도 포함 조정 결과를 함께 계산합니다." />
   <meta property="og:url" content="https://rebalancing.kr/pages/monthly-dca-rebalancing.html" />
   <meta property="og:site_name" content="Rebalancing Helper" />
   <meta property="og:locale" content="ko_KR" />
@@ -34,7 +34,7 @@
     [
       {
         "question": "적립식 매수만으로 목표 비중에 정확히 맞출 수 있나요?",
-        "answer": "과대 비중 자산을 매도하지 않는 조건에서는 이번 달 적립금만으로 정확히 목표 비중에 맞추기 어려울 수 있습니다. 이 계산기는 부족한 자산에 적립금을 배분해 목표 비중에 더 가까워지도록 돕습니다."
+        "answer": "기본 모드는 과대 비중 자산을 매도하지 않기 때문에 이번 달 적립금만으로 정확히 목표 비중에 맞추기 어려울 수 있습니다. 필요하면 매도 포함 모드를 켜서 더 정확한 조정안을 확인할 수 있습니다."
       },
       {
         "question": "현재 평가금액만 입력해도 되나요?",
@@ -51,7 +51,7 @@
     ]
   </script>
   <link rel="stylesheet" href="../assets/css/main.css?v=20260405b" />
-  <link rel="stylesheet" href="../assets/css/monthly-dca.css?v=20260405c" />
+  <link rel="stylesheet" href="../assets/css/monthly-dca.css?v=20260405d" />
 </head>
 <body class="monthlyToolPage">
   <button
@@ -87,7 +87,7 @@
         </h1>
         <p class="heroDesc">
           현재 평가금액과 목표 비중, 이번 달 적립금을 넣으면
-          매도 없이 어떤 종목을 얼마씩 사야 목표 비중에 더 가까워지는지 바로 계산합니다.
+          기본은 매도 없이 적립금 배분을 계산하고, 필요하면 매도 포함 모드로 더 정확한 비중 조정까지 바로 확인할 수 있습니다.
         </p>
 
         <nav class="toolModeSwitch" aria-label="관련 계산기 전환">
@@ -99,7 +99,7 @@
           <a class="toolModeCard isActive" href="./monthly-dca-rebalancing.html" aria-current="page">
             <span class="toolModeEyebrow">Sub Tool</span>
             <strong class="toolModeTitle">월 적립식 매수 계산기</strong>
-            <span class="toolModeDesc">매도 없이 새 적립금만 배분</span>
+            <span class="toolModeDesc">기본은 적립금 배분, 필요시 매도 포함</span>
           </a>
         </nav>
 
@@ -136,7 +136,7 @@
                 <circle cx="7" cy="7" r="3" />
               </svg>
             </span>
-            <span class="heroStepLabel">수량과 잔여 현금 확인</span>
+            <span class="heroStepLabel">수량과 조정 결과 확인</span>
           </li>
         </ul>
 
@@ -149,20 +149,22 @@
       <p class="introText monthlyIntroText">
         메인 계산기와 같은 흐름으로 구성한 월 적립 도구입니다.
         먼저 이번 달 신규 자금을 어떻게 배분할지 확인하고,
-        필요하면 메인 도구에서 매수·매도까지 포함한 전체 리밸런싱으로 이어서 판단할 수 있습니다.
+        초과 비중 종목을 함께 정리하고 싶다면 이 페이지 안에서 매도 포함 모드로 바로 전환할 수 있습니다.
       </p>
 
       <template id="guideTemplate">
         <h2>■ 월 적립식 매수 계산기 사용 방법</h2>
         <p>
           이 도구는 현재 평가금액과 목표 비중, 이번 달 적립금을 기준으로
-          매도 없이 신규 자금을 어디에 먼저 넣어야 하는지 계산합니다.
+          기본은 매도 없이 신규 자금을 어디에 먼저 넣어야 하는지 계산하고,
+          필요하면 매도 포함 모드로 목표 비중에 더 가깝게 조정할 수 있습니다.
         </p>
 
         <section>
           <h3>■ 입력 항목 설명</h3>
           <ul>
             <li><strong>이번 달 적립금:</strong> 이번 달 새로 투자할 금액입니다.</li>
+            <li><strong>계산 방식:</strong> 적립금만 배분할지, 초과 비중 종목 매도까지 포함할지 고릅니다.</li>
             <li><strong>현재 평가금액:</strong> 각 종목의 현재 평가금액을 입력합니다.</li>
             <li><strong>최근 종가:</strong> 정수 수량 계산에 쓰이는 최근 영업일 종가입니다.</li>
             <li><strong>목표 비중:</strong> 적립 후 장기적으로 맞추고 싶은 비중이며 합계는 100%여야 합니다.</li>
@@ -172,9 +174,9 @@
         <section>
           <h3>■ 결과 해석</h3>
           <ul>
-            <li><strong>목표 기준 배분액:</strong> 부족한 자산에 우선 배분된 이번 달 예산입니다.</li>
-            <li><strong>권장 매수 수량:</strong> 최근 종가 기준으로 계산한 정수 수량입니다.</li>
-            <li><strong>잔여 현금:</strong> 정수 수량으로 내림 처리한 뒤 남는 현금입니다.</li>
+            <li><strong>권장 거래액:</strong> 종목별 목표 비중에 맞추기 위해 계산된 매수 또는 매도 금액입니다.</li>
+            <li><strong>권장 거래 수량:</strong> 최근 종가 기준으로 계산한 정수 수량이며, 매도 포함 모드에서는 음수 대신 매도 방향으로 표시됩니다.</li>
+            <li><strong>남는 현금/추가 필요 자금:</strong> 정수 수량 반영 뒤 남거나 더 필요한 금액입니다.</li>
           </ul>
         </section>
 
@@ -183,7 +185,7 @@
           <ul>
             <li>매도 없이 월 적립금만으로 비중을 천천히 정리하고 싶을 때</li>
             <li>현재 과소 비중 자산이 무엇인지 바로 확인하고 싶을 때</li>
-            <li>메인 리밸런싱 전, 신규 자금 배분 우선순위를 먼저 보고 싶을 때</li>
+            <li>메인 리밸런싱 전, 신규 자금 배분이나 매도 포함 조정안을 먼저 보고 싶을 때</li>
           </ul>
         </section>
       </template>
@@ -193,7 +195,7 @@
           <div class="sectionHeading monthlyToolHeading">
             <div>
               <h2 id="dcaToolTitle">1. 이번 달 입력 설정</h2>
-              <p>적립금, 현재 평가금액, 목표 비중을 넣으면 매도 없이 신규 자금만으로 배분합니다.</p>
+              <p>적립금, 현재 평가금액, 목표 비중을 넣고 계산 방식을 고르면 매수 전용 또는 매수·매도 포함으로 계산합니다.</p>
             </div>
             <div class="sectionHeadingActions controlActions monthlyPrimaryActions">
               <span class="statusBadge" id="dcaStaleBadge" hidden>입력 변경됨 · 다시 계산 필요</span>
@@ -212,6 +214,10 @@
               <span class="pill">
                 <span class="k">상태</span>
                 <span class="v" id="dcaModeLabel">입력 중</span>
+              </span>
+              <span class="pill">
+                <span class="k">계산 방식</span>
+                <span class="v" id="dcaTradeModeSummary">적립금만</span>
               </span>
               <span class="pill">
                 <span class="k">적립금</span>
@@ -245,6 +251,20 @@
               <input id="monthlyContribution" class="moneyInput" inputmode="numeric" placeholder="예: 1,000,000" />
               <span class="fieldHint">원 단위 숫자만 입력하세요.</span>
             </label>
+
+            <div class="fieldCard compact tradeModeCard">
+              <span class="fieldLabel">계산 방식</span>
+              <label class="tradeModeToggle" for="dcaIncludeSell">
+                <input id="dcaIncludeSell" type="checkbox" />
+                <span class="tradeModeSwitch" aria-hidden="true">
+                  <span class="tradeModeThumb"></span>
+                </span>
+                <span class="tradeModeCopy">
+                  <strong class="tradeModeValue" id="dcaTradeModeText">적립금만 매수</strong>
+                  <span class="fieldHint" id="dcaTradeModeHint">기본값 · 초과 비중 종목은 팔지 않습니다.</span>
+                </span>
+              </label>
+            </div>
 
             <div class="fieldCard compact">
               <span class="fieldLabel">현재 총 평가금액</span>
@@ -297,8 +317,8 @@
         <section class="card monthlyResultCard" id="dcaResultSection" aria-labelledby="dcaResultTitle">
           <div class="sectionHeading monthlyResultHeading">
             <div>
-              <h2 id="dcaResultTitle">2. 권장 매수 결과</h2>
-              <p>부족한 자산에 적립금을 우선 배분한 결과와 주문 수량을 확인하세요.</p>
+              <h2 id="dcaResultTitle">2. 권장 거래 결과</h2>
+              <p id="dcaResultCopy">부족한 자산에 적립금을 우선 배분한 결과와 예상 주문 수량을 확인하세요.</p>
             </div>
             <span class="resultBadge" id="resultBadge">계산 전</span>
           </div>
@@ -310,12 +330,17 @@
               <span class="metricMeta">입력 전</span>
             </article>
             <article class="metricCard">
-              <span class="metricLabel">실제 매수 예정액</span>
+              <span class="metricLabel" id="metricBuyLabel">실제 매수 예정액</span>
               <strong class="metricValue" id="metricActualBuyTotal">₩ 0</strong>
-              <span class="metricMeta">정수 수량 기준 예상 주문액</span>
+              <span class="metricMeta" id="metricActualBuyMeta">정수 수량 기준 예상 주문액</span>
             </article>
             <article class="metricCard">
-              <span class="metricLabel">예상 잔여 현금</span>
+              <span class="metricLabel">예상 매도 금액</span>
+              <strong class="metricValue" id="metricSellTotal">₩ 0</strong>
+              <span class="metricMeta" id="metricSellMeta">매도 포함 모드에서만 반영됩니다.</span>
+            </article>
+            <article class="metricCard">
+              <span class="metricLabel" id="metricResidualLabel">예상 잔여 현금</span>
               <strong class="metricValue" id="metricResidualCash">₩ 0</strong>
               <span class="metricMeta" id="metricResidualCashMeta">수량 계산 후 남는 현금</span>
             </article>
@@ -325,14 +350,14 @@
               <span class="metricMeta">목표 대비 평균 절대 오차</span>
             </article>
             <article class="metricCard">
-              <span class="metricLabel">가장 많이 살 종목</span>
+              <span class="metricLabel" id="metricTopTradeLabel">가장 많이 살 종목</span>
               <strong class="metricValue" id="metricTopBuy">없음</strong>
               <span class="metricMeta" id="metricTopBuyMeta">계산 후 표시됩니다.</span>
             </article>
           </div>
 
           <p class="allocationNote" id="allocationNote">
-            계산하면 종목별 권장 매수 금액, 권장 매수 수량, 잔여 현금이 여기에 표시됩니다.
+            계산하면 종목별 권장 거래 금액, 권장 거래 수량, 남는 현금 또는 추가 필요 자금이 여기에 표시됩니다.
           </p>
 
           <div class="toolTableWrap">
@@ -354,12 +379,12 @@
                   <th>종목명</th>
                   <th class="num">현재 비중</th>
                   <th class="num">목표 비중</th>
-                  <th class="num">목표 배분액</th>
+                  <th class="num">권장 거래액</th>
                   <th class="num">최근 종가</th>
-                  <th class="num">매수 수량</th>
-                  <th class="num">실제 매수액</th>
-                  <th class="num">잔여 현금</th>
-                  <th class="num">매수 후 비중</th>
+                  <th class="num">거래 수량</th>
+                  <th class="num">실제 거래액</th>
+                  <th class="num">미반영 차액</th>
+                  <th class="num">거래 후 비중</th>
                 </tr>
               </thead>
               <tbody id="resultTableBody">
@@ -399,7 +424,7 @@
                 <p>
                   이번 달 적립금을 포함한 총자산 기준으로 각 자산이 목표 비중에 비해 얼마나 부족한지 계산한 뒤,
                   그 부족분 비율대로 적립금을 나눕니다.
-                  과대 비중 자산은 매도하지 않고 추가 매수 대상에서 제외합니다.
+                  매도 포함 모드를 켜면 과대 비중 자산은 매도 후보로 전환되어 더 정확한 조정안을 볼 수 있습니다.
                 </p>
               </section>
 
@@ -409,6 +434,7 @@
                 <ul class="monthlyInfoList">
                   <li>매달 ETF를 적립식으로 사면서 자연스럽게 비중을 관리하고 싶을 때</li>
                   <li>매도 없이 신규 자금만으로 포트폴리오를 정리하고 싶을 때</li>
+                  <li>초과 비중 종목까지 함께 정리한 조정안을 빠르게 보고 싶을 때</li>
                   <li>현재 평가금액 기준으로 어느 자산을 우선 매수해야 할지 빠르게 보고 싶을 때</li>
                 </ul>
               </section>
@@ -417,8 +443,8 @@
                 <p class="monthlyInfoEyebrow">한계와 다음 단계</p>
                 <h3>큰 비중 편차는 메인 리밸런싱 도구로 이어서 보세요</h3>
                 <p>
-                  월 적립식 매수만으로는 비중이 크게 어긋난 포트폴리오를 한 번에 바로잡기 어렵습니다.
-                  큰 편차가 있다면 메인 계산기로 이동해 매수·매도 기준을 함께 점검하는 편이 더 정확합니다.
+                  이 페이지에서도 매도 포함 조정안까지 볼 수 있지만,
+                  세금, 수수료, 실제 보유 수량까지 정밀하게 따져야 한다면 메인 계산기로 이어서 점검하는 편이 더 정확합니다.
                 </p>
               </section>
             </div>
@@ -504,7 +530,7 @@
   <script src="../assets/js/core-symbols.js?v=20260405h"></script>
   <script src="../assets/js/theme-helpers.js"></script>
   <script src="../assets/js/monthly-dca-shell.js?v=20260405a"></script>
-  <script src="../assets/js/monthly-dca-page.js?v=20260405e"></script>
+  <script src="../assets/js/monthly-dca-page.js?v=20260405f"></script>
   <script src="../assets/js/faq-renderer.js"></script>
   <script src="../assets/js/docs-page.js"></script>
 </body>

@@ -7,10 +7,14 @@
   const saveBtn = document.getElementById("dcaSaveBtn");
   const loadBtn = document.getElementById("dcaLoadBtn");
   const contributionInput = document.getElementById("monthlyContribution");
+  const includeSellInput = document.getElementById("dcaIncludeSell");
   const currentTotalLabel = document.getElementById("currentTotalLabel");
   const targetTotalLabel = document.getElementById("targetTotalLabel");
   const targetTotalHint = document.getElementById("targetTotalHint");
   const modeLabel = document.getElementById("dcaModeLabel");
+  const tradeModeSummary = document.getElementById("dcaTradeModeSummary");
+  const tradeModeText = document.getElementById("dcaTradeModeText");
+  const tradeModeHint = document.getElementById("dcaTradeModeHint");
   const contributionSummary = document.getElementById("dcaContributionSummary");
   const currentSummary = document.getElementById("dcaCurrentSummary");
   const priceReadySummary = document.getElementById("dcaPriceReadySummary");
@@ -22,14 +26,21 @@
   const staleBadge = document.getElementById("dcaStaleBadge");
   const saveStatusText = document.getElementById("dcaSaveStatusText");
   const resultSection = document.getElementById("dcaResultSection");
+  const resultCopy = document.getElementById("dcaResultCopy");
   const resultBadge = document.getElementById("resultBadge");
   const allocationNote = document.getElementById("allocationNote");
   const resultTableBody = document.getElementById("resultTableBody");
+  const metricBuyLabel = document.getElementById("metricBuyLabel");
   const metricContribution = document.getElementById("metricContribution");
   const metricActualBuyTotal = document.getElementById("metricActualBuyTotal");
+  const metricActualBuyMeta = document.getElementById("metricActualBuyMeta");
+  const metricSellTotal = document.getElementById("metricSellTotal");
+  const metricSellMeta = document.getElementById("metricSellMeta");
+  const metricResidualLabel = document.getElementById("metricResidualLabel");
   const metricResidualCash = document.getElementById("metricResidualCash");
   const metricResidualCashMeta = document.getElementById("metricResidualCashMeta");
   const metricDrift = document.getElementById("metricDrift");
+  const metricTopTradeLabel = document.getElementById("metricTopTradeLabel");
   const metricTopBuy = document.getElementById("metricTopBuy");
   const metricTopBuyMeta = document.getElementById("metricTopBuyMeta");
   const toast = document.getElementById("dcaToast");
@@ -141,6 +152,27 @@
     ));
   }
 
+  function getIncludeSellMode() {
+    return Boolean(includeSellInput && includeSellInput.checked);
+  }
+
+  function updateTradeModeUi() {
+    const includeSells = getIncludeSellMode();
+    if (tradeModeText) {
+      tradeModeText.textContent = includeSells ? "매도 포함 조정" : "적립금만 매수";
+    }
+    if (tradeModeHint) {
+      tradeModeHint.textContent = includeSells
+        ? "초과 비중 종목은 매도까지 포함해 목표 비중에 더 가깝게 맞춥니다."
+        : "기본값 · 초과 비중 종목은 팔지 않습니다.";
+    }
+    if (resultCopy) {
+      resultCopy.textContent = includeSells
+        ? "목표 비중에 맞추기 위한 예상 매수·매도 수량과 조정 결과를 확인하세요."
+        : "부족한 자산에 적립금을 우선 배분한 결과와 예상 주문 수량을 확인하세요.";
+    }
+  }
+
   function normalizeSavedWorkspace(raw) {
     if (!raw || typeof raw !== "object") return null;
     const rows = Array.isArray(raw.rows) ? raw.rows.map((row) => ({
@@ -152,6 +184,7 @@
     })) : [];
     return {
       contribution: String(raw.contribution || "").trim(),
+      includeSells: Boolean(raw.includeSells),
       rows,
       savedAt: String(raw.savedAt || "").trim(),
       resumeToResult: Boolean(raw.resumeToResult),
@@ -162,6 +195,7 @@
   function buildWorkspaceSnapshot() {
     return {
       contribution: String(contributionInput.value || "").trim(),
+      includeSells: getIncludeSellMode(),
       rows: getRows().map((row) => ({
         name: row.name,
         amount: row.amountEl.value,
@@ -171,7 +205,7 @@
       })),
       savedAt: new Date().toISOString(),
       resumeToResult: hasComputed && !isDirtyAfterCalc,
-      version: 1
+      version: 2
     };
   }
 
@@ -234,6 +268,10 @@
     }
 
     contributionInput.value = snapshot.contribution;
+    if (includeSellInput) {
+      includeSellInput.checked = Boolean(snapshot.includeSells);
+    }
+    updateTradeModeUi();
     replaceRows(snapshot.rows.length > 0 ? snapshot.rows : DEFAULT_ROWS, { preserveComputed: false });
     clearInvalidState();
     clearError();
@@ -751,6 +789,7 @@
 
   function updateWorkspaceSummary(rowsArg, totalsArg) {
     const rows = rowsArg || getRows();
+    const includeSells = getIncludeSellMode();
     const currentTotal = totalsArg && Number.isFinite(totalsArg.currentTotal)
       ? totalsArg.currentTotal
       : rows.reduce((sum, row) => sum + row.currentAmount, 0);
@@ -769,6 +808,9 @@
 
     if (modeLabel) {
       modeLabel.textContent = modeText;
+    }
+    if (tradeModeSummary) {
+      tradeModeSummary.textContent = includeSells ? "매도 포함" : "적립금만";
     }
     if (contributionSummary) {
       contributionSummary.textContent = fmtKRW(contribution);
@@ -795,6 +837,10 @@
       modeLabel.parentElement.classList.toggle("buy", hasComputed && !isDirtyAfterCalc);
       modeLabel.parentElement.classList.toggle("sell", hasComputed && isDirtyAfterCalc);
       modeLabel.parentElement.classList.toggle("hold", !hasComputed);
+    }
+    if (tradeModeSummary && tradeModeSummary.parentElement) {
+      tradeModeSummary.parentElement.classList.toggle("sell", includeSells);
+      tradeModeSummary.parentElement.classList.toggle("hold", !includeSells);
     }
     if (priceReadySummary && priceReadySummary.parentElement) {
       const allReady = namedRows > 0 && pricedRows === namedRows;
@@ -837,42 +883,122 @@
   }
 
   function buildResultRows(rows, contribution) {
+    const includeSells = getIncludeSellMode();
     const currentTotal = rows.reduce((sum, row) => sum + row.currentAmount, 0);
     const finalTotal = currentTotal + contribution;
     const enriched = rows.map((row) => {
       const targetRatio = row.target / 100;
       const currentWeight = currentTotal > 0 ? (row.currentAmount / currentTotal) * 100 : 0;
       const desiredAmount = finalTotal * targetRatio;
+      const tradeBudget = includeSells
+        ? desiredAmount - row.currentAmount
+        : Math.max(desiredAmount - row.currentAmount, 0);
       const gapAmount = Math.max(desiredAmount - row.currentAmount, 0);
       return {
         ...row,
         currentWeight,
         desiredAmount,
+        tradeBudget,
         gapAmount
       };
     });
 
-    const totalGap = enriched.reduce((sum, row) => sum + row.gapAmount, 0);
-    const rawAllocations = enriched.map((row) => (
-      totalGap > 0 ? (contribution * row.gapAmount) / totalGap : contribution * (row.target / 100)
-    ));
-    const roundedAllocations = roundAllocations(rawAllocations, contribution);
+    if (!includeSells) {
+      const totalGap = enriched.reduce((sum, row) => sum + row.gapAmount, 0);
+      const rawAllocations = enriched.map((row) => (
+        totalGap > 0 ? (contribution * row.gapAmount) / totalGap : contribution * (row.target / 100)
+      ));
+      const roundedAllocations = roundAllocations(rawAllocations, contribution);
 
-    return enriched.map((row, index) => {
-      const recommendedBudget = roundedAllocations[index];
-      const recommendedQty = row.currentPrice > 0 ? Math.floor(recommendedBudget / row.currentPrice) : 0;
-      const actualBuyAmount = row.currentPrice > 0 ? recommendedQty * row.currentPrice : 0;
-      const residualCash = Math.max(0, recommendedBudget - actualBuyAmount);
-      const afterAmount = row.currentAmount + actualBuyAmount;
-      const afterWeight = finalTotal > 0 ? (afterAmount / finalTotal) * 100 : 0;
+      return enriched.map((row, index) => {
+        const recommendedBudget = roundedAllocations[index];
+        const recommendedQty = row.currentPrice > 0 ? Math.floor(recommendedBudget / row.currentPrice) : 0;
+        const actualTradeAmount = row.currentPrice > 0 ? recommendedQty * row.currentPrice : 0;
+        const tradeGap = recommendedBudget - actualTradeAmount;
+        const afterAmount = row.currentAmount + actualTradeAmount;
+        const afterWeight = finalTotal > 0 ? (afterAmount / finalTotal) * 100 : 0;
+        return {
+          ...row,
+          recommendedBudget,
+          recommendedQty,
+          actualTradeAmount,
+          tradeGap,
+          afterAmount,
+          afterWeight,
+          tradeAction: actualTradeAmount > 0 ? "buy" : "hold"
+        };
+      });
+    }
+
+    const plannedRows = enriched.map((row) => {
+      const recommendedBudget = row.tradeBudget;
+      let recommendedQty = 0;
+      if (row.currentPrice > 0) {
+        if (recommendedBudget > 0) {
+          recommendedQty = Math.floor(recommendedBudget / row.currentPrice);
+        } else if (recommendedBudget < 0) {
+          const estimatedHoldQty = Math.max(0, Math.floor(row.currentAmount / row.currentPrice));
+          recommendedQty = -Math.min(estimatedHoldQty, Math.floor(Math.abs(recommendedBudget) / row.currentPrice));
+        }
+      }
       return {
         ...row,
         recommendedBudget,
         recommendedQty,
-        actualBuyAmount,
-        residualCash,
+        actualTradeAmount: recommendedQty * row.currentPrice
+      };
+    });
+
+    let cashBalance = contribution - plannedRows.reduce((sum, row) => sum + row.actualTradeAmount, 0);
+    while (cashBalance < 0) {
+      const fallbackCandidate = plannedRows
+        .filter((row) => row.recommendedQty > 0 && row.currentPrice > 0)
+        .map((row) => {
+          const currentGap = Math.abs((row.currentAmount + row.actualTradeAmount) - row.desiredAmount);
+          const nextTradeAmount = (row.recommendedQty - 1) * row.currentPrice;
+          const nextGap = Math.abs((row.currentAmount + nextTradeAmount) - row.desiredAmount);
+          return {
+            row,
+            penalty: nextGap - currentGap
+          };
+        })
+        .sort((a, b) => a.penalty - b.penalty || b.row.currentPrice - a.row.currentPrice)[0];
+      if (!fallbackCandidate) break;
+      fallbackCandidate.row.recommendedQty -= 1;
+      fallbackCandidate.row.actualTradeAmount = fallbackCandidate.row.recommendedQty * fallbackCandidate.row.currentPrice;
+      cashBalance += fallbackCandidate.row.currentPrice;
+    }
+
+    while (cashBalance > 0) {
+      const extraBuyCandidate = plannedRows
+        .filter((row) => row.currentPrice > 0 && row.currentPrice <= cashBalance && row.recommendedBudget > 0)
+        .map((row) => {
+          const currentGap = Math.abs((row.currentAmount + row.actualTradeAmount) - row.desiredAmount);
+          const nextTradeAmount = (row.recommendedQty + 1) * row.currentPrice;
+          const nextGap = Math.abs((row.currentAmount + nextTradeAmount) - row.desiredAmount);
+          return {
+            row,
+            improvement: currentGap - nextGap
+          };
+        })
+        .filter((candidate) => candidate.improvement > 0)
+        .sort((a, b) => b.improvement - a.improvement || a.row.currentPrice - b.row.currentPrice)[0];
+      if (!extraBuyCandidate) break;
+      extraBuyCandidate.row.recommendedQty += 1;
+      extraBuyCandidate.row.actualTradeAmount = extraBuyCandidate.row.recommendedQty * extraBuyCandidate.row.currentPrice;
+      cashBalance -= extraBuyCandidate.row.currentPrice;
+    }
+
+    return plannedRows.map((row) => {
+      const tradeGap = row.recommendedBudget - row.actualTradeAmount;
+      const afterAmount = row.currentAmount + row.actualTradeAmount;
+      const afterWeight = finalTotal > 0 ? (afterAmount / finalTotal) * 100 : 0;
+      return {
+        ...row,
+        tradeGap,
         afterAmount,
-        afterWeight
+        afterWeight,
+        tradeAction: row.actualTradeAmount > 0 ? "buy" : row.actualTradeAmount < 0 ? "sell" : "hold"
       };
     });
   }
@@ -935,12 +1061,15 @@
       return null;
     }
 
+    const includeSells = getIncludeSellMode();
     const resultPreview = buildResultRows(rows, contribution);
-    const needsPriceRow = resultPreview.find((row) => row.recommendedBudget > 0 && !(row.currentPrice > 0));
+    const needsPriceRow = resultPreview.find((row) => Math.abs(row.recommendedBudget) > 0 && !(row.currentPrice > 0));
     if (needsPriceRow) {
       needsPriceRow.priceEl.classList.add("invalidField");
       needsPriceRow.priceEl.focus();
-      showError(`${needsPriceRow.name}의 최근 종가를 입력하면 권장 매수 수량과 잔여 현금까지 계산할 수 있습니다.`);
+      showError(includeSells
+        ? `${needsPriceRow.name}의 최근 종가를 입력하면 권장 거래 수량과 거래 후 비중까지 계산할 수 있습니다.`
+        : `${needsPriceRow.name}의 최근 종가를 입력하면 권장 매수 수량과 잔여 현금까지 계산할 수 있습니다.`);
       return null;
     }
 
@@ -948,8 +1077,12 @@
     return rows;
   }
 
-  function formatShares(value) {
-    return `${Math.max(0, Math.floor(value)).toLocaleString("ko-KR")}주`;
+  function formatTradeQty(value) {
+    const absValue = Math.max(0, Math.floor(Math.abs(value)));
+    if (!(absValue > 0)) return "0주";
+    return value < 0
+      ? `매도 ${absValue.toLocaleString("ko-KR")}주`
+      : `매수 ${absValue.toLocaleString("ko-KR")}주`;
   }
 
   function scrollToResultSection() {
@@ -963,46 +1096,79 @@
   }
 
   function renderResults(rows, contribution) {
+    const includeSells = getIncludeSellMode();
     const resultRows = buildResultRows(rows, contribution);
-    const actualBuyTotal = resultRows.reduce((sum, row) => sum + row.actualBuyAmount, 0);
-    const residualCash = Math.max(0, contribution - actualBuyTotal);
+    const actualBuyTotal = resultRows.reduce((sum, row) => sum + (row.actualTradeAmount > 0 ? row.actualTradeAmount : 0), 0);
+    const actualSellTotal = resultRows.reduce((sum, row) => sum + (row.actualTradeAmount < 0 ? Math.abs(row.actualTradeAmount) : 0), 0);
+    const actualNetTrade = resultRows.reduce((sum, row) => sum + row.actualTradeAmount, 0);
+    const residualCash = contribution - actualNetTrade;
     const beforeDrift = averageDrift(resultRows, "currentWeight");
     const afterDrift = averageDrift(resultRows, "afterWeight");
-    const topBuyRow = [...resultRows].sort((a, b) => {
-      if (b.actualBuyAmount !== a.actualBuyAmount) return b.actualBuyAmount - a.actualBuyAmount;
-      return b.recommendedBudget - a.recommendedBudget;
+    const topTradeRow = [...resultRows].sort((a, b) => {
+      const amountDiff = Math.abs(b.actualTradeAmount) - Math.abs(a.actualTradeAmount);
+      if (amountDiff !== 0) return amountDiff;
+      return Math.abs(b.recommendedBudget) - Math.abs(a.recommendedBudget);
     })[0];
     const positiveGapCount = resultRows.filter((row) => row.gapAmount > 0).length;
-    const activeBuyCount = resultRows.filter((row) => row.actualBuyAmount > 0).length;
-    const exactMatchPossible = resultRows.every((row) => row.currentAmount <= row.desiredAmount + 0.01);
+    const activeBuyCount = resultRows.filter((row) => row.actualTradeAmount > 0).length;
+    const activeSellCount = resultRows.filter((row) => row.actualTradeAmount < 0).length;
+    const exactMatchPossible = afterDrift <= beforeDrift && Math.abs(residualCash) < 1;
 
     metricContribution.textContent = fmtKRW(contribution);
     metricActualBuyTotal.textContent = fmtKRW(actualBuyTotal);
-    metricResidualCash.textContent = fmtKRW(residualCash);
+    if (metricActualBuyMeta) {
+      metricActualBuyMeta.textContent = includeSells
+        ? "매수 예정 종목 합계"
+        : "정수 수량 기준 예상 주문액";
+    }
+    if (metricSellTotal) {
+      metricSellTotal.textContent = fmtKRW(actualSellTotal);
+    }
+    if (metricSellMeta) {
+      metricSellMeta.textContent = includeSells
+        ? (actualSellTotal > 0 ? "정수 수량 기준 예상 매도액" : "매도 없이도 목표에 가깝습니다.")
+        : "매도 포함 모드를 켜면 반영됩니다.";
+    }
+    if (metricResidualLabel) {
+      metricResidualLabel.textContent = residualCash >= 0 ? "남는 현금" : "추가 필요 자금";
+    }
+    metricResidualCash.textContent = fmtKRW(Math.abs(residualCash));
     metricResidualCashMeta.textContent = residualCash > 0
-      ? "정수 수량으로 내림 계산 후 남는 현금"
-      : "잔여 현금 없이 배분되었습니다.";
+      ? "정수 수량 반영 뒤 남는 현금"
+      : residualCash < 0
+        ? "현재 수량 기준으로는 이 금액이 더 필요합니다."
+        : "남는 현금 없이 배분되었습니다.";
     metricDrift.textContent = `${beforeDrift.toFixed(1)}%p → ${afterDrift.toFixed(1)}%p`;
-    metricTopBuy.textContent = topBuyRow && topBuyRow.actualBuyAmount > 0 ? topBuyRow.name : "없음";
-    metricTopBuyMeta.textContent = topBuyRow && topBuyRow.actualBuyAmount > 0
-      ? `${fmtKRW(topBuyRow.actualBuyAmount)} · ${formatShares(topBuyRow.recommendedQty)} 권장`
+    if (metricBuyLabel) {
+      metricBuyLabel.textContent = includeSells ? "예상 매수 금액" : "실제 매수 예정액";
+    }
+    if (metricTopTradeLabel) {
+      metricTopTradeLabel.textContent = includeSells ? "가장 크게 조정할 종목" : "가장 많이 살 종목";
+    }
+    metricTopBuy.textContent = topTradeRow && Math.abs(topTradeRow.actualTradeAmount) > 0 ? topTradeRow.name : "없음";
+    metricTopBuyMeta.textContent = topTradeRow && Math.abs(topTradeRow.actualTradeAmount) > 0
+      ? `${fmtKRW(Math.abs(topTradeRow.actualTradeAmount))} · ${formatTradeQty(topTradeRow.recommendedQty)}`
       : "계산 후 표시됩니다.";
-    resultBadge.textContent = residualCash > 0 ? "수량 반영 계산" : exactMatchPossible ? "목표 비중 근접" : "매수 우선순위 계산";
-    allocationNote.textContent = exactMatchPossible
-      ? `부족한 ${positiveGapCount}개 종목에 적립금을 배분했고, 실제 주문 기준으로 ${activeBuyCount}개 종목을 매수하면 됩니다. 정수 수량 기준 예상 잔여 현금은 ${fmtKRW(residualCash)}입니다.`
-      : `현재 과대 비중 자산이 있어 이번 달 적립금만으로는 정확한 복귀가 어렵습니다. 부족한 종목 위주로 ${activeBuyCount}개 종목의 매수 수량을 계산했고, 예상 잔여 현금은 ${fmtKRW(residualCash)}입니다.`;
+    resultBadge.textContent = includeSells
+      ? activeSellCount > 0 ? "매수·매도 반영" : "매수 중심 조정"
+      : residualCash > 0 ? "수량 반영 계산" : exactMatchPossible ? "목표 비중 근접" : "매수 우선순위 계산";
+    allocationNote.textContent = includeSells
+      ? `매수 ${activeBuyCount}개 종목, 매도 ${activeSellCount}개 종목 기준으로 목표 비중에 가깝게 조정했습니다. 정수 수량 반영 뒤 ${residualCash >= 0 ? `남는 현금은 ${fmtKRW(residualCash)}` : `추가로 필요한 금액은 ${fmtKRW(Math.abs(residualCash))}` }입니다.`
+      : exactMatchPossible
+        ? `부족한 ${positiveGapCount}개 종목에 적립금을 배분했고, 실제 주문 기준으로 ${activeBuyCount}개 종목을 매수하면 됩니다. 정수 수량 기준 예상 잔여 현금은 ${fmtKRW(Math.max(0, residualCash))}입니다.`
+        : `현재 과대 비중 자산이 있어 이번 달 적립금만으로는 정확한 복귀가 어렵습니다. 부족한 종목 위주로 ${activeBuyCount}개 종목의 매수 수량을 계산했고, 예상 잔여 현금은 ${fmtKRW(Math.max(0, residualCash))}입니다.`;
 
     resultTableBody.innerHTML = resultRows.map((row) => `
       <tr>
         <td data-label="종목명">${escapeHtml(row.name)}</td>
         <td class="num" data-label="현재 비중">${row.currentWeight.toFixed(1)}%</td>
         <td class="num" data-label="목표 비중">${row.target.toFixed(1)}%</td>
-        <td class="num" data-label="목표 배분액">${fmtKRW(row.recommendedBudget)}</td>
+        <td class="num ${row.recommendedBudget < 0 ? "sell" : row.recommendedBudget > 0 ? "buy" : ""}" data-label="권장 거래액">${fmtKRW(row.recommendedBudget)}</td>
         <td class="num" data-label="최근 종가">${row.currentPrice > 0 ? fmtKRW(row.currentPrice) : "-"}</td>
-        <td class="num emphasis" data-label="매수 수량">${row.currentPrice > 0 ? formatShares(row.recommendedQty) : "-"}</td>
-        <td class="num" data-label="실제 매수액">${fmtKRW(row.actualBuyAmount)}</td>
-        <td class="num" data-label="잔여 현금">${fmtKRW(row.residualCash)}</td>
-        <td class="num" data-label="매수 후 비중">${row.afterWeight.toFixed(1)}%</td>
+        <td class="num emphasis ${row.recommendedQty < 0 ? "sell" : row.recommendedQty > 0 ? "buy" : ""}" data-label="거래 수량">${row.currentPrice > 0 ? formatTradeQty(row.recommendedQty) : "-"}</td>
+        <td class="num ${row.actualTradeAmount < 0 ? "sell" : row.actualTradeAmount > 0 ? "buy" : ""}" data-label="실제 거래액">${fmtKRW(row.actualTradeAmount)}</td>
+        <td class="num ${row.tradeGap < 0 ? "sell" : row.tradeGap > 0 ? "buy" : ""}" data-label="미반영 차액">${fmtKRW(row.tradeGap)}</td>
+        <td class="num" data-label="거래 후 비중">${row.afterWeight.toFixed(1)}%</td>
       </tr>
     `).join("");
     hasComputed = true;
@@ -1011,17 +1177,40 @@
   }
 
   function clearResults({ preserveComputed = true } = {}) {
+    const includeSells = getIncludeSellMode();
     if (!preserveComputed) {
       hasComputed = false;
       isDirtyAfterCalc = false;
     }
     resultBadge.textContent = "계산 전";
-    allocationNote.textContent = "계산하면 종목별 권장 매수 금액, 권장 매수 수량, 잔여 현금이 여기에 표시됩니다.";
+    allocationNote.textContent = includeSells
+      ? "계산하면 종목별 권장 거래 금액, 거래 수량, 남는 현금 또는 추가 필요 자금이 여기에 표시됩니다."
+      : "계산하면 종목별 권장 거래 금액, 거래 수량, 남는 현금 또는 추가 필요 자금이 여기에 표시됩니다.";
     metricContribution.textContent = "₩ 0";
     metricActualBuyTotal.textContent = "₩ 0";
+    if (metricActualBuyMeta) {
+      metricActualBuyMeta.textContent = includeSells ? "매수 예정 종목 합계" : "정수 수량 기준 예상 주문액";
+    }
+    if (metricSellTotal) {
+      metricSellTotal.textContent = "₩ 0";
+    }
+    if (metricSellMeta) {
+      metricSellMeta.textContent = includeSells ? "매도 포함 모드에서 계산 후 표시됩니다." : "매도 포함 모드를 켜면 반영됩니다.";
+    }
+    if (metricBuyLabel) {
+      metricBuyLabel.textContent = includeSells ? "예상 매수 금액" : "실제 매수 예정액";
+    }
+    if (metricResidualLabel) {
+      metricResidualLabel.textContent = includeSells ? "남는 현금 / 추가 필요" : "예상 잔여 현금";
+    }
     metricResidualCash.textContent = "₩ 0";
-    metricResidualCashMeta.textContent = "수량 계산 후 남는 현금";
+    metricResidualCashMeta.textContent = includeSells
+      ? "수량 계산 후 남는 현금 또는 추가 필요 자금"
+      : "수량 계산 후 남는 현금";
     metricDrift.textContent = "0.0%p → 0.0%p";
+    if (metricTopTradeLabel) {
+      metricTopTradeLabel.textContent = includeSells ? "가장 크게 조정할 종목" : "가장 많이 살 종목";
+    }
     metricTopBuy.textContent = "없음";
     metricTopBuyMeta.textContent = "계산 후 표시됩니다.";
     resultTableBody.innerHTML = '<tr><td class="resultEmpty" colspan="9">입력 후 계산하면 결과가 나타납니다.</td></tr>';
@@ -1039,7 +1228,7 @@
 
     renderResults(validRows, contribution);
     if (notify) {
-      showToast("월 적립 매수 계산을 완료했어요.");
+      showToast(getIncludeSellMode() ? "월 적립 조정 계산을 완료했어요." : "월 적립 매수 계산을 완료했어요.");
     }
   }
 
@@ -1050,6 +1239,15 @@
     clearError();
   });
   contributionInput.addEventListener("focus", clearError);
+  if (includeSellInput) {
+    includeSellInput.addEventListener("change", () => {
+      updateTradeModeUi();
+      markDirtyIfNeeded();
+      clearResults();
+      clearError();
+      updateWorkspaceSummary();
+    });
+  }
   addRowBtn.addEventListener("click", () => {
     addRow();
     markDirtyIfNeeded();
@@ -1069,11 +1267,16 @@
   });
   demoBtn.addEventListener("click", () => {
     contributionInput.value = DEMO_STATE.contribution;
+    if (includeSellInput) {
+      includeSellInput.checked = false;
+    }
+    updateTradeModeUi();
     replaceRows(DEMO_STATE.rows, { preserveComputed: false });
     handleCalculate({ notify: false });
     showToast("기본 예시로 계산을 완료했어요.");
   });
 
+  updateTradeModeUi();
   replaceRows(DEFAULT_ROWS, { preserveComputed: false });
   updateSavedWorkspaceUi(readSavedWorkspace());
   updateStaleBadge();

@@ -89,7 +89,7 @@
 
 .controlGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.35fr) repeat(3, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 18px;
 }
@@ -125,6 +125,78 @@ html[data-theme="light"] .fieldCard {
 
 .fieldCard.compact {
   justify-content: center;
+}
+
+.tradeModeCard {
+  align-items: stretch;
+}
+
+.tradeModeToggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.tradeModeToggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tradeModeSwitch {
+  position: relative;
+  flex: 0 0 52px;
+  width: 52px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid rgba(154, 166, 186, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.tradeModeThumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.18s ease;
+}
+
+.tradeModeToggle input:checked + .tradeModeSwitch {
+  border-color: rgba(90, 162, 255, 0.4);
+  background: rgba(90, 162, 255, 0.28);
+}
+
+.tradeModeToggle input:checked + .tradeModeSwitch .tradeModeThumb {
+  transform: translateX(22px);
+}
+
+html[data-theme="light"] .tradeModeSwitch {
+  border-color: rgba(108, 127, 153, 0.24);
+  background: rgba(107, 130, 151, 0.08);
+}
+
+html[data-theme="light"] .tradeModeThumb {
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(35, 49, 69, 0.16);
+}
+
+.tradeModeCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.tradeModeValue {
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.35;
 }
 
 .fieldLabel {
@@ -371,6 +443,14 @@ html[data-theme="light"] .toolTable th {
   text-align: left;
 }
 
+.resultTable td.buy {
+  color: var(--buy);
+}
+
+.resultTable td.sell {
+  color: var(--sell);
+}
+
 .toolTable input,
 .moneyInput {
   width: 100%;
@@ -569,7 +649,7 @@ html[data-theme="light"] .dcaSuggestItem.isActive {
 
 .metricGrid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -755,6 +835,10 @@ html[data-theme="light"] .monthlyCatchLink {
 }
 
 @media (max-width: 1100px) {
+  .controlGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .metricGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -767,6 +851,10 @@ html[data-theme="light"] .monthlyCatchLink {
 @media (max-width: 860px) {
   .controlGrid {
     grid-template-columns: 1fr;
+  }
+
+  .tradeModeToggle {
+    align-items: flex-start;
   }
 
   .toolTableHeader,
