@@ -21,6 +21,7 @@
   const errorBox = document.getElementById("dcaError");
   const staleBadge = document.getElementById("dcaStaleBadge");
   const saveStatusText = document.getElementById("dcaSaveStatusText");
+  const resultSection = document.getElementById("dcaResultSection");
   const resultBadge = document.getElementById("resultBadge");
   const allocationNote = document.getElementById("allocationNote");
   const resultTableBody = document.getElementById("resultTableBody");
@@ -951,6 +952,16 @@
     return `${Math.max(0, Math.floor(value)).toLocaleString("ko-KR")}주`;
   }
 
+  function scrollToResultSection() {
+    if (!resultSection) return;
+    window.requestAnimationFrame(() => {
+      resultSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
+  }
+
   function renderResults(rows, contribution) {
     const resultRows = buildResultRows(rows, contribution);
     const actualBuyTotal = resultRows.reduce((sum, row) => sum + row.actualBuyAmount, 0);
@@ -983,19 +994,20 @@
 
     resultTableBody.innerHTML = resultRows.map((row) => `
       <tr>
-        <td>${escapeHtml(row.name)}</td>
-        <td class="num">${row.currentWeight.toFixed(1)}%</td>
-        <td class="num">${row.target.toFixed(1)}%</td>
-        <td class="num">${fmtKRW(row.recommendedBudget)}</td>
-        <td class="num">${row.currentPrice > 0 ? fmtKRW(row.currentPrice) : "-"}</td>
-        <td class="num emphasis">${row.currentPrice > 0 ? formatShares(row.recommendedQty) : "-"}</td>
-        <td class="num">${fmtKRW(row.actualBuyAmount)}</td>
-        <td class="num">${fmtKRW(row.residualCash)}</td>
-        <td class="num">${row.afterWeight.toFixed(1)}%</td>
+        <td data-label="종목명">${escapeHtml(row.name)}</td>
+        <td class="num" data-label="현재 비중">${row.currentWeight.toFixed(1)}%</td>
+        <td class="num" data-label="목표 비중">${row.target.toFixed(1)}%</td>
+        <td class="num" data-label="목표 배분액">${fmtKRW(row.recommendedBudget)}</td>
+        <td class="num" data-label="최근 종가">${row.currentPrice > 0 ? fmtKRW(row.currentPrice) : "-"}</td>
+        <td class="num emphasis" data-label="매수 수량">${row.currentPrice > 0 ? formatShares(row.recommendedQty) : "-"}</td>
+        <td class="num" data-label="실제 매수액">${fmtKRW(row.actualBuyAmount)}</td>
+        <td class="num" data-label="잔여 현금">${fmtKRW(row.residualCash)}</td>
+        <td class="num" data-label="매수 후 비중">${row.afterWeight.toFixed(1)}%</td>
       </tr>
     `).join("");
     hasComputed = true;
     setDirtyState(false);
+    scrollToResultSection();
   }
 
   function clearResults({ preserveComputed = true } = {}) {

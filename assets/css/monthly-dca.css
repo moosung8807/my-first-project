@@ -243,7 +243,33 @@ html[data-theme="light"] .toolTableWrap {
 }
 
 .resultTable {
-  min-width: 1180px;
+  min-width: 0;
+  table-layout: fixed;
+}
+
+.monthlyResultCard .toolTableWrap {
+  overflow-x: hidden;
+}
+
+.resultTable .result-col-name {
+  width: 19%;
+}
+
+.resultTable .result-col-weight,
+.resultTable .result-col-target,
+.resultTable .result-col-after {
+  width: 8%;
+}
+
+.resultTable .result-col-budget,
+.resultTable .result-col-price,
+.resultTable .result-col-buy,
+.resultTable .result-col-cash {
+  width: 11%;
+}
+
+.resultTable .result-col-qty {
+  width: 13%;
 }
 
 .toolTable th,
@@ -252,6 +278,13 @@ html[data-theme="light"] .toolTableWrap {
   border-bottom: 1px solid rgba(154, 166, 186, 0.18);
   vertical-align: middle;
   text-align: left;
+}
+
+.resultTable th,
+.resultTable td {
+  padding: 10px 8px;
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .toolTable th {
@@ -319,6 +352,23 @@ html[data-theme="light"] .toolTable th {
 
 .toolTable .num {
   text-align: right;
+}
+
+.resultTable th {
+  text-align: center;
+  white-space: normal;
+  word-break: keep-all;
+}
+
+.resultTable td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
+}
+
+.resultTable td:first-child {
+  text-align: left;
 }
 
 .toolTable input,
@@ -801,6 +851,85 @@ html[data-theme="light"] .monthlyCatchLink {
   .toolTable th,
   .toolTable td {
     padding: 11px 12px;
+  }
+
+  .monthlyResultCard .toolTableWrap {
+    overflow: visible;
+    border: 0;
+    padding-bottom: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .resultTable,
+  .resultTable tbody,
+  .resultTable tr,
+  .resultTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .resultTable {
+    min-width: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .resultTable thead {
+    display: none;
+  }
+
+  .resultTable tr {
+    margin-bottom: 12px;
+    border: 1px solid rgba(154, 166, 186, 0.2);
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015));
+  }
+
+  html[data-theme="light"] .resultTable tr {
+    border-color: rgba(106, 116, 126, 0.18);
+    background:
+      repeating-linear-gradient(108deg, rgba(255, 255, 255, 0.06) 0 2px, rgba(255, 255, 255, 0) 2px 8px),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(223, 229, 234, 0.9));
+  }
+
+  .resultTable td {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 14px;
+    white-space: normal;
+    text-align: right;
+  }
+
+  .resultTable td::before {
+    content: attr(data-label);
+    flex: 0 0 96px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.45;
+    text-align: left;
+  }
+
+  .resultTable td:first-child {
+    font-weight: 800;
+  }
+
+  .resultTable td:first-child::before {
+    color: var(--hero-eyebrow);
+  }
+
+  .resultTable td.resultEmpty {
+    display: block;
+    text-align: center;
+    padding: 16px 14px;
+  }
+
+  .resultTable td.resultEmpty::before {
+    content: none;
   }
 
   .monthlyCatchTitle {

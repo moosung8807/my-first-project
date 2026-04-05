@@ -51,7 +51,7 @@
     ]
   </script>
   <link rel="stylesheet" href="../assets/css/main.css?v=20260405b" />
-  <link rel="stylesheet" href="../assets/css/monthly-dca.css?v=20260405b" />
+  <link rel="stylesheet" href="../assets/css/monthly-dca.css?v=20260405c" />
 </head>
 <body class="monthlyToolPage">
   <button
@@ -294,7 +294,7 @@
           </div>
         </section>
 
-        <section class="card monthlyResultCard" aria-labelledby="dcaResultTitle">
+        <section class="card monthlyResultCard" id="dcaResultSection" aria-labelledby="dcaResultTitle">
           <div class="sectionHeading monthlyResultHeading">
             <div>
               <h2 id="dcaResultTitle">2. 권장 매수 결과</h2>
@@ -338,14 +338,25 @@
           <div class="toolTableWrap">
             <table class="toolTable resultTable" id="resultTable">
               <caption class="srOnly">월 적립식 매수 결과 표</caption>
+              <colgroup>
+                <col class="result-col-name" />
+                <col class="result-col-weight" />
+                <col class="result-col-target" />
+                <col class="result-col-budget" />
+                <col class="result-col-price" />
+                <col class="result-col-qty" />
+                <col class="result-col-buy" />
+                <col class="result-col-cash" />
+                <col class="result-col-after" />
+              </colgroup>
               <thead>
                 <tr>
                   <th>종목명</th>
                   <th class="num">현재 비중</th>
                   <th class="num">목표 비중</th>
-                  <th class="num">목표 기준 배분액</th>
+                  <th class="num">목표 배분액</th>
                   <th class="num">최근 종가</th>
-                  <th class="num">권장 매수 수량</th>
+                  <th class="num">매수 수량</th>
                   <th class="num">실제 매수액</th>
                   <th class="num">잔여 현금</th>
                   <th class="num">매수 후 비중</th>
@@ -493,7 +504,7 @@
   <script src="../assets/js/core-symbols.js?v=20260405h"></script>
   <script src="../assets/js/theme-helpers.js"></script>
   <script src="../assets/js/monthly-dca-shell.js?v=20260405a"></script>
-  <script src="../assets/js/monthly-dca-page.js?v=20260405d"></script>
+  <script src="../assets/js/monthly-dca-page.js?v=20260405e"></script>
   <script src="../assets/js/faq-renderer.js"></script>
   <script src="../assets/js/docs-page.js"></script>
 </body>
