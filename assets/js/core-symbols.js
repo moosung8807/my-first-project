@@ -128,6 +128,7 @@
     { name: "KODEX 종합채권(AA-이상)액티브", symbol: "273130", aliases: ["273130", "종합채권"] },
     { name: "TIGER 2차전지테마", symbol: "305540", aliases: ["305540", "2차전지테마"] },
     { name: "KODEX 2차전지산업", symbol: "305720", aliases: ["305720", "2차전지산업"] },
+    { name: "KODEX 유럽명품TOP10 STOXX", symbol: "456250", aliases: ["456250", "kodex유럽명품top10stoxx", "유럽명품top10stoxx", "유럽명품top10", "유럽명품"] },
     { name: "TIGER 미국S&P500", symbol: "360750", aliases: ["360750", "tiger미국sp500", "미국s&p500"] },
     { name: "KODEX 미국S&P500TR", symbol: "379800", aliases: ["379800", "sp500tr"] },
     { name: "KODEX 미국나스닥100TR", symbol: "379810", aliases: ["379810", "나스닥100tr"] },
