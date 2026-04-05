@@ -87,30 +87,33 @@ export async function onRequestGet(context) {
 async function fetchSecuritiesProductQuote(rawQuery, serviceKey) {
   const normalizedQuery = normalizeProductQuery(rawQuery);
   const isCodeQuery = isSecurityCodeQuery(normalizedQuery);
+  const queryVariants = getQueryVariants(normalizedQuery, { isCodeQuery });
   let lastApiError = null;
 
   for (const operation of PRODUCT_OPERATIONS) {
-    try {
-      const items = await fetchOperationItems(operation.path, normalizedQuery, serviceKey, { isCodeQuery });
-      const bestItem = pickBestItem(items, normalizedQuery, { isCodeQuery });
-      if (!bestItem) continue;
+    for (const query of queryVariants) {
+      try {
+        const items = await fetchOperationItems(operation.path, query, serviceKey, { isCodeQuery });
+        const bestItem = pickBestItem(items, normalizedQuery, { isCodeQuery });
+        if (!bestItem) continue;
 
-      const price = Number(bestItem.clpr);
-      if (!isFinite(price) || price <= 0) continue;
+        const price = Number(bestItem.clpr);
+        if (!isFinite(price) || price <= 0) continue;
 
-      return {
-        symbol: normalizeSecurityCode(bestItem.srtnCd) || normalizeSymbolText(bestItem.srtnCd || normalizedQuery),
-        name: String(bestItem.itmsNm || "").trim() || null,
-        market: operation.market,
-        price,
-        baseDate: String(bestItem.basDt || "").trim() || null
-      };
-    } catch (error) {
-      if (error && error.kind === "upstream_api") {
-        lastApiError = error;
-        continue;
+        return {
+          symbol: normalizeSecurityCode(bestItem.srtnCd) || normalizeSymbolText(bestItem.srtnCd || normalizedQuery),
+          name: String(bestItem.itmsNm || "").trim() || null,
+          market: operation.market,
+          price,
+          baseDate: String(bestItem.basDt || "").trim() || null
+        };
+      } catch (error) {
+        if (error && error.kind === "upstream_api") {
+          lastApiError = error;
+          continue;
+        }
+        throw error;
       }
-      throw error;
     }
   }
 
@@ -121,40 +124,43 @@ async function fetchSecuritiesProductQuote(rawQuery, serviceKey) {
 async function fetchSecuritiesProductSuggestions(rawQuery, serviceKey) {
   const normalizedQuery = normalizeProductQuery(rawQuery);
   const isCodeQuery = isSecurityCodeQuery(normalizedQuery);
+  const queryVariants = getQueryVariants(normalizedQuery, { isCodeQuery });
   const merged = [];
   const seen = new Set();
   let lastApiError = null;
 
   for (const operation of PRODUCT_OPERATIONS) {
-    try {
-      const items = await fetchOperationItems(operation.path, normalizedQuery, serviceKey, {
-        isCodeQuery,
-        numOfRows: isCodeQuery ? 20 : 60
-      });
-      const rankedItems = rankSuggestionItems(items, normalizedQuery, { isCodeQuery });
-
-      rankedItems.forEach((item) => {
-        const symbol = normalizeSecurityCode(item?.srtnCd) || normalizeSymbolText(item?.srtnCd);
-        const name = String(item?.itmsNm || "").trim();
-        if (!symbol || !name) return;
-
-        const dedupeKey = `${symbol}::${name}`;
-        if (seen.has(dedupeKey)) return;
-        seen.add(dedupeKey);
-        merged.push({
-          symbol,
-          name,
-          market: operation.market,
-          price: Number.isFinite(Number(item?.clpr)) ? Number(item.clpr) : null,
-          baseDate: String(item?.basDt || "").trim() || null
+    for (const query of queryVariants) {
+      try {
+        const items = await fetchOperationItems(operation.path, query, serviceKey, {
+          isCodeQuery,
+          numOfRows: isCodeQuery ? 20 : 60
         });
-      });
-    } catch (error) {
-      if (error && error.kind === "upstream_api") {
-        lastApiError = error;
-        continue;
+        const rankedItems = rankSuggestionItems(items, normalizedQuery, { isCodeQuery });
+
+        rankedItems.forEach((item) => {
+          const symbol = normalizeSecurityCode(item?.srtnCd) || normalizeSymbolText(item?.srtnCd);
+          const name = String(item?.itmsNm || "").trim();
+          if (!symbol || !name) return;
+
+          const dedupeKey = `${symbol}::${name}`;
+          if (seen.has(dedupeKey)) return;
+          seen.add(dedupeKey);
+          merged.push({
+            symbol,
+            name,
+            market: operation.market,
+            price: Number.isFinite(Number(item?.clpr)) ? Number(item.clpr) : null,
+            baseDate: String(item?.basDt || "").trim() || null
+          });
+        });
+      } catch (error) {
+        if (error && error.kind === "upstream_api") {
+          lastApiError = error;
+          continue;
+        }
+        throw error;
       }
-      throw error;
     }
   }
 
@@ -274,6 +280,19 @@ function normalizeProductQuery(value) {
   }
 
   return input.replace(/\s+/g, " ");
+}
+
+function getQueryVariants(query, { isCodeQuery }) {
+  if (!query) return [];
+  if (isCodeQuery) return [query];
+
+  const variants = new Set([query]);
+  variants.add(uppercaseLatin(query));
+  return [...variants].filter(Boolean);
+}
+
+function uppercaseLatin(value) {
+  return String(value || "").replace(/[a-z]/g, (char) => char.toUpperCase());
 }
 
 function normalizeSecurityCode(value) {

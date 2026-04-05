@@ -124,6 +124,7 @@
     { name: "KODEX 미국S&P500TR", symbol: "379800", aliases: ["379800", "sp500tr"] },
     { name: "KODEX 미국나스닥100TR", symbol: "379810", aliases: ["379810", "나스닥100tr"] },
     { name: "TIGER 미국테크TOP10 INDXX", symbol: "381170", aliases: ["381170", "미국테크top10"] },
+    { name: "KODEX 테슬라커버드콜채권혼합액티브", symbol: "475080", aliases: ["475080", "kodex테슬라", "테슬라커버드콜채권혼합액티브", "테슬라커버드콜채권혼합"] },
     { name: "ACE 미국배당퀄리티+커버드콜액티브", symbol: "0049M0", aliases: ["0049m0", "a0049m0", "미국배당퀄리티커버드콜액티브"] },
     { name: "KODEX 미국배당다우존스", symbol: "489250", aliases: ["489250", "미국배당다우존스", "미국배당다우"] }
   ]);
