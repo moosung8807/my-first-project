@@ -9,6 +9,14 @@
       .replace(/[^0-9a-zA-Z가-힣&().+-]/g, "");
   }
 
+  function tokenizeSuggestionQuery(value) {
+    return String(value || "")
+      .trim()
+      .split(/\s+/)
+      .map((part) => normalizeAliasKey(part))
+      .filter(Boolean);
+  }
+
   function normalizeKrEtfAlias(value) {
     return String(value || "")
       .trim()
@@ -191,7 +199,8 @@
 
   function getSuggestionCandidates(rawQuery) {
     const query = normalizeAliasKey(rawQuery);
-    if (!query) return [];
+    const queryTokens = tokenizeSuggestionQuery(rawQuery);
+    if (!query || !queryTokens.length) return [];
 
     const results = PRODUCT_SUGGESTIONS.map((item) => {
       const keys = [
@@ -199,6 +208,8 @@
         normalizeAliasKey(item.symbol),
         ...item.aliases.map(normalizeAliasKey)
       ];
+      const matchesAllTokens = queryTokens.every((token) => keys.some((key) => key.includes(token)));
+      if (!matchesAllTokens) return null;
       const starts = keys.some((key) => key.startsWith(query));
       const contains = keys.some((key) => key.includes(query));
       if (!starts && !contains) return null;
@@ -278,6 +289,7 @@
     normalizeKrEtfAlias,
     normalizeSecurityCode,
     normalizeSymbol,
+    tokenizeSuggestionQuery,
     resolveSecurityQuery
   });
 })();

@@ -244,11 +244,20 @@ function rankSuggestionItems(items, query, { isCodeQuery }) {
 
 function scoreProductItem(item, query, { isCodeQuery }) {
   const queryKey = normalizeSearchKey(query);
+  const queryTokens = tokenizeSearchTerms(query);
   const queryCode = normalizeSecurityCode(query);
   const code = normalizeSecurityCode(item?.srtnCd) || normalizeSymbolText(item?.srtnCd);
   const name = String(item?.itmsNm || "").trim();
   const nameKey = normalizeSearchKey(name);
+  const searchKeys = [nameKey, normalizeSearchKey(code)];
   let score = 0;
+
+  if (!isCodeQuery && queryTokens.length) {
+    const matchesAllTokens = queryTokens.every((token) => searchKeys.some((key) => key.includes(token)));
+    if (!matchesAllTokens) {
+      return 0;
+    }
+  }
 
   if (isCodeQuery) {
     if (code === queryCode) score += 1200;
@@ -311,6 +320,14 @@ function normalizeSearchKey(value) {
     .toLowerCase()
     .replace(/\s+/g, "")
     .replace(/[^0-9a-zA-Z가-힣]/g, "");
+}
+
+function tokenizeSearchTerms(value) {
+  return String(value || "")
+    .trim()
+    .split(/\s+/)
+    .map((part) => normalizeSearchKey(part))
+    .filter(Boolean);
 }
 
 function normalizeSymbolText(value) {
