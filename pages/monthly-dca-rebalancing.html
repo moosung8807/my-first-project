@@ -51,7 +51,7 @@
     ]
   </script>
   <link rel="stylesheet" href="../assets/css/main.css?v=20260405b" />
-  <link rel="stylesheet" href="../assets/css/monthly-dca.css?v=20260405e" />
+  <link rel="stylesheet" href="../assets/css/monthly-dca.css?v=20260405f" />
 </head>
 <body class="monthlyToolPage">
   <button
@@ -314,43 +314,6 @@
             <span class="resultBadge" id="resultBadge">계산 전</span>
           </div>
 
-          <div class="metricGrid" id="resultMetrics">
-            <article class="metricCard">
-              <span class="metricLabel">이번 달 적립금</span>
-              <strong class="metricValue" id="metricContribution">₩ 0</strong>
-              <span class="metricMeta">입력 전</span>
-            </article>
-            <article class="metricCard">
-              <span class="metricLabel" id="metricBuyLabel">예상 매수 금액</span>
-              <strong class="metricValue" id="metricActualBuyTotal">₩ 0</strong>
-              <span class="metricMeta" id="metricActualBuyMeta">정수 수량 기준 예상 주문액</span>
-            </article>
-            <article class="metricCard">
-              <span class="metricLabel">예상 매도 금액</span>
-              <strong class="metricValue" id="metricSellTotal">₩ 0</strong>
-              <span class="metricMeta" id="metricSellMeta">적립금으로 부족할 때만 자동 반영됩니다.</span>
-            </article>
-            <article class="metricCard">
-              <span class="metricLabel" id="metricResidualLabel">예상 잔여 현금</span>
-              <strong class="metricValue" id="metricResidualCash">₩ 0</strong>
-              <span class="metricMeta" id="metricResidualCashMeta">수량 계산 후 남는 현금</span>
-            </article>
-            <article class="metricCard">
-              <span class="metricLabel">평균 비중 오차</span>
-              <strong class="metricValue" id="metricDrift">0.0%p → 0.0%p</strong>
-              <span class="metricMeta">목표 대비 평균 절대 오차</span>
-            </article>
-            <article class="metricCard">
-              <span class="metricLabel" id="metricTopTradeLabel">가장 크게 조정할 종목</span>
-              <strong class="metricValue" id="metricTopBuy">없음</strong>
-              <span class="metricMeta" id="metricTopBuyMeta">계산 후 표시됩니다.</span>
-            </article>
-          </div>
-
-          <p class="allocationNote" id="allocationNote">
-            계산하면 종목별 권장 거래 금액, 권장 거래 수량, 남는 현금이 여기에 표시됩니다.
-          </p>
-
           <div class="toolTableWrap">
             <table class="toolTable resultTable" id="resultTable">
               <caption class="srOnly">월 적립식 매수 결과 표</caption>
@@ -384,6 +347,43 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <p class="allocationNote" id="allocationNote">
+            계산하면 종목별 권장 거래 금액, 권장 거래 수량, 남는 현금이 여기에 표시됩니다.
+          </p>
+
+          <div class="metricGrid metricGridCompact" id="resultMetrics">
+            <article class="metricCard">
+              <span class="metricLabel">이번 달 적립금</span>
+              <strong class="metricValue" id="metricContribution">₩ 0</strong>
+              <span class="metricMeta">입력 전</span>
+            </article>
+            <article class="metricCard">
+              <span class="metricLabel" id="metricBuyLabel">예상 매수 금액</span>
+              <strong class="metricValue" id="metricActualBuyTotal">₩ 0</strong>
+              <span class="metricMeta" id="metricActualBuyMeta">정수 수량 기준 예상 주문액</span>
+            </article>
+            <article class="metricCard">
+              <span class="metricLabel">예상 매도 금액</span>
+              <strong class="metricValue" id="metricSellTotal">₩ 0</strong>
+              <span class="metricMeta" id="metricSellMeta">적립금으로 부족할 때만 자동 반영됩니다.</span>
+            </article>
+            <article class="metricCard">
+              <span class="metricLabel" id="metricResidualLabel">예상 잔여 현금</span>
+              <strong class="metricValue" id="metricResidualCash">₩ 0</strong>
+              <span class="metricMeta" id="metricResidualCashMeta">수량 계산 후 남는 현금</span>
+            </article>
+            <article class="metricCard">
+              <span class="metricLabel">평균 비중 오차</span>
+              <strong class="metricValue" id="metricDrift">0.0%p → 0.0%p</strong>
+              <span class="metricMeta">목표 대비 평균 절대 오차</span>
+            </article>
+            <article class="metricCard">
+              <span class="metricLabel" id="metricTopTradeLabel">가장 크게 조정할 종목</span>
+              <strong class="metricValue" id="metricTopBuy">없음</strong>
+              <span class="metricMeta" id="metricTopBuyMeta">계산 후 표시됩니다.</span>
+            </article>
           </div>
         </section>
       </div>
