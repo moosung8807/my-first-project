@@ -51,7 +51,7 @@
     ]
   </script>
   <link rel="stylesheet" href="../assets/css/main.css?v=20260405b" />
-  <link rel="stylesheet" href="../assets/css/monthly-dca.css?v=20260405f" />
+  <link rel="stylesheet" href="../assets/css/monthly-dca.css?v=20260405g" />
 </head>
 <body class="monthlyToolPage">
   <button
@@ -308,10 +308,16 @@
         <section class="card monthlyResultCard" id="dcaResultSection" aria-labelledby="dcaResultTitle">
           <div class="sectionHeading monthlyResultHeading">
             <div>
+              <p class="resultLeadEyebrow">핵심 결과</p>
               <h2 id="dcaResultTitle">2. 권장 거래 결과</h2>
               <p id="dcaResultCopy">적립금으로 먼저 맞추고, 부족할 때만 초과 비중 종목 매도를 더한 예상 주문 수량을 확인하세요.</p>
             </div>
             <span class="resultBadge" id="resultBadge">계산 전</span>
+          </div>
+
+          <div class="resultTableLead" aria-hidden="true">
+            <strong>종목별 거래안</strong>
+            <span>이번 달 실행할 주문은 아래 표를 기준으로 보면 됩니다.</span>
           </div>
 
           <div class="toolTableWrap">
