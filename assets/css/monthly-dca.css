@@ -599,12 +599,6 @@ html[data-theme="light"] .dcaSuggestItem.isActive {
   text-transform: uppercase;
 }
 
-.monthlyResultHeading h2 {
-  font-size: 18px;
-  line-height: 1.4;
-  letter-spacing: 0.01em;
-}
-
 .monthlyResultHeading p {
   max-width: 760px;
   font-size: 14px;
