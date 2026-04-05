@@ -335,6 +335,10 @@ html[data-theme="light"] .toolTable th {
   font-size: 16px;
 }
 
+#monthlyContribution {
+  text-align: right;
+}
+
 .dcaNameField {
   position: relative;
   min-width: 0;
