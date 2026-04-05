@@ -67,9 +67,10 @@
     withComma
   } = window.RebalancingFormat;
   const {
+    fetchRemoteSuggestionCandidates = async () => [],
     findKrEtfByAlias,
     getSuggestionCandidates,
-    getSuggestionCandidatesAsync = async (query) => getSuggestionCandidates(query),
+    mergeSuggestionCandidates = (primaryItems, secondaryItems) => [...(primaryItems || []), ...(secondaryItems || [])],
     resolveSecurityQuery
   } = window.RebalancingSymbols;
   const {
@@ -404,31 +405,10 @@
     state.controller.abort();
     state.controller = null;
   }
-  async function showNameSuggestions(tr, query){
+  function renderNameSuggestions(tr, candidates){
     const suggestBox = getNameSuggestBox(tr);
     const nameEl = getNameInput(tr);
     if(!suggestBox) return;
-
-    const trimmedQuery = String(query || "").trim();
-    if(!trimmedQuery){
-      hideNameSuggestions(tr);
-      return;
-    }
-
-    const state = getRowSuggestionState(tr);
-    abortRowSuggestionRequest(tr);
-    const controller = new AbortController();
-    state.controller = controller;
-    const currentSeq = ++state.seq;
-
-    const candidates = await getSuggestionCandidatesAsync(trimmedQuery, { signal: controller.signal });
-    if(controller.signal.aborted || currentSeq !== state.seq){
-      return;
-    }
-    state.controller = null;
-    if(!nameEl || String(nameEl.value || "").trim() !== trimmedQuery){
-      return;
-    }
     if(!candidates.length){
       hideNameSuggestions(tr);
       return;
@@ -459,6 +439,37 @@
       nameEl.setAttribute("aria-expanded", "true");
       nameEl.setAttribute("aria-controls", suggestBox.id);
     }
+  }
+  function showNameSuggestions(tr, query){
+    const trimmedQuery = String(query || "").trim();
+    const nameEl = getNameInput(tr);
+    if(!trimmedQuery){
+      hideNameSuggestions(tr);
+      return;
+    }
+
+    const localCandidates = getSuggestionCandidates(trimmedQuery);
+    if(localCandidates.length){
+      renderNameSuggestions(tr, localCandidates);
+    }else{
+      hideNameSuggestions(tr);
+    }
+
+    const state = getRowSuggestionState(tr);
+    abortRowSuggestionRequest(tr);
+    const controller = new AbortController();
+    state.controller = controller;
+    const currentSeq = ++state.seq;
+
+    fetchRemoteSuggestionCandidates(trimmedQuery, { signal: controller.signal })
+      .then((remoteCandidates)=>{
+        if(controller.signal.aborted || currentSeq !== state.seq) return;
+        state.controller = null;
+        if(!nameEl || String(nameEl.value || "").trim() !== trimmedQuery) return;
+        const mergedCandidates = mergeSuggestionCandidates(localCandidates, remoteCandidates);
+        renderNameSuggestions(tr, mergedCandidates);
+      })
+      .catch(()=>{});
   }
   function hideAllNameSuggestions(){
     tbody.querySelectorAll("tr").forEach((tr)=>hideNameSuggestions(tr));

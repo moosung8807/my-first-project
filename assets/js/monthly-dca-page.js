@@ -34,8 +34,9 @@
   } = window.RebalancingFormat;
   const RebalancingSymbols = window.RebalancingSymbols || {};
   const RebalancingUtils = window.RebalancingUtils || {};
+  const fetchRemoteSuggestionCandidates = RebalancingSymbols.fetchRemoteSuggestionCandidates || (async () => []);
   const getSuggestionCandidates = RebalancingSymbols.getSuggestionCandidates || (() => []);
-  const getSuggestionCandidatesAsync = RebalancingSymbols.getSuggestionCandidatesAsync || (async (query) => getSuggestionCandidates(query));
+  const mergeSuggestionCandidates = RebalancingSymbols.mergeSuggestionCandidates || ((primaryItems, secondaryItems) => [...(primaryItems || []), ...(secondaryItems || [])]);
   const resolveSecurityQuery = RebalancingSymbols.resolveSecurityQuery || (() => "");
   const formatReportDate = RebalancingUtils.formatReportDate || ((date) => {
     const yyyy = String(date.getFullYear());
@@ -349,31 +350,10 @@
     requestQuoteForRow(tr, { symbolOverride: symbol, force: true });
   }
 
-  async function showNameSuggestions(tr, query) {
+  function renderNameSuggestions(tr, items) {
     const box = getSuggestBox(tr);
     const nameInput = tr.querySelector(".nameInput");
     if (!box || !nameInput) return;
-
-    const trimmedQuery = String(query || "").trim();
-    if (!trimmedQuery) {
-      hideNameSuggestions(tr);
-      return;
-    }
-
-    const state = ensureRowState(tr);
-    abortSuggestRequest(tr);
-    const controller = new AbortController();
-    state.suggestController = controller;
-    const currentSeq = ++state.suggestSeq;
-
-    const items = await getSuggestionCandidatesAsync(trimmedQuery, { signal: controller.signal });
-    if (controller.signal.aborted || currentSeq !== state.suggestSeq) {
-      return;
-    }
-    state.suggestController = null;
-    if (String(nameInput.value || "").trim() !== trimmedQuery) {
-      return;
-    }
     if (!items.length) {
       hideNameSuggestions(tr);
       return;
@@ -406,6 +386,44 @@
     nameInput.setAttribute("aria-controls", box.id);
     updateSuggestionPlacement(tr);
     setActiveSuggestionIndex(tr, 0);
+  }
+  function showNameSuggestions(tr, query) {
+    const box = getSuggestBox(tr);
+    const nameInput = tr.querySelector(".nameInput");
+    if (!box || !nameInput) return;
+
+    const trimmedQuery = String(query || "").trim();
+    if (!trimmedQuery) {
+      hideNameSuggestions(tr);
+      return;
+    }
+
+    const localItems = getSuggestionCandidates(trimmedQuery);
+    if (localItems.length) {
+      renderNameSuggestions(tr, localItems);
+    } else {
+      hideNameSuggestions(tr);
+    }
+
+    const state = ensureRowState(tr);
+    abortSuggestRequest(tr);
+    const controller = new AbortController();
+    state.suggestController = controller;
+    const currentSeq = ++state.suggestSeq;
+
+    fetchRemoteSuggestionCandidates(trimmedQuery, { signal: controller.signal })
+      .then((remoteItems) => {
+        if (controller.signal.aborted || currentSeq !== state.suggestSeq) {
+          return;
+        }
+        state.suggestController = null;
+        if (String(nameInput.value || "").trim() !== trimmedQuery) {
+          return;
+        }
+        const mergedItems = mergeSuggestionCandidates(localItems, remoteItems);
+        renderNameSuggestions(tr, mergedItems);
+      })
+      .catch(() => {});
   }
 
   async function fetchQuoteFromProxy(symbol, signal) {

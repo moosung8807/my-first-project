@@ -285,6 +285,7 @@
     findKrEtfByAlias,
     getSuggestionCandidates,
     getSuggestionCandidatesAsync,
+    mergeSuggestionCandidates,
     normalizeAliasKey,
     normalizeKrEtfAlias,
     normalizeSecurityCode,
