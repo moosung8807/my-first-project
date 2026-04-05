@@ -2464,7 +2464,7 @@
     tr.innerHTML = `
       <td class="left col-name">
         <div class="nameFieldWrap">
-          <input class="name" placeholder="ETF/ETN/ELW 종목명 또는 코드" aria-label="종목명" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false">
+          <input class="name" placeholder="종목명 또는 코드" aria-label="종목명" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false">
           <div class="nameSuggest" hidden role="listbox"></div>
           <div class="rowMetaPanel">
             <div class="rowMetaStatus">
