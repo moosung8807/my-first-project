@@ -1,4 +1,6 @@
 (function () {
+  const MAX_SUGGESTION_CANDIDATES = 20;
+
   function normalizeAliasKey(value) {
     return String(value || "")
       .trim()
@@ -207,7 +209,7 @@
       return a.name.localeCompare(b.name, "ko");
     });
 
-    return results.slice(0, 8);
+    return results.slice(0, MAX_SUGGESTION_CANDIDATES);
   }
 
   function mergeSuggestionCandidates(primaryItems, secondaryItems) {
@@ -226,7 +228,7 @@
       });
     });
 
-    return merged.slice(0, 8);
+    return merged.slice(0, MAX_SUGGESTION_CANDIDATES);
   }
 
   async function fetchRemoteSuggestionCandidates(rawQuery, { signal } = {}) {
@@ -251,7 +253,7 @@
           aliases: []
         }))
         .filter((item) => item.name && item.symbol)
-        .slice(0, 8);
+        .slice(0, MAX_SUGGESTION_CANDIDATES);
     } catch (_error) {
       return [];
     }
@@ -259,10 +261,6 @@
 
   async function getSuggestionCandidatesAsync(rawQuery, { signal } = {}) {
     const localItems = getSuggestionCandidates(rawQuery);
-    if (localItems.length) {
-      return localItems;
-    }
-
     const remoteItems = await fetchRemoteSuggestionCandidates(rawQuery, { signal });
     return mergeSuggestionCandidates(localItems, remoteItems);
   }

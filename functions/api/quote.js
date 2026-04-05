@@ -4,6 +4,7 @@ const PRODUCT_OPERATIONS = [
   { market: "ETN", path: "getETNPriceInfo" },
   { market: "ELW", path: "getELWPriceInfo" }
 ];
+const MAX_SUGGESTION_ITEMS = 20;
 const SUCCESS_RESPONSE_CACHE_CONTROL = "public, max-age=60, s-maxage=300, stale-while-revalidate=300";
 const SUGGESTION_RESPONSE_CACHE_CONTROL = "public, max-age=30, s-maxage=120, stale-while-revalidate=120";
 
@@ -128,7 +129,7 @@ async function fetchSecuritiesProductSuggestions(rawQuery, serviceKey) {
     try {
       const items = await fetchOperationItems(operation.path, normalizedQuery, serviceKey, {
         isCodeQuery,
-        numOfRows: isCodeQuery ? 12 : 30
+        numOfRows: isCodeQuery ? 20 : 60
       });
       const rankedItems = rankSuggestionItems(items, normalizedQuery, { isCodeQuery });
 
@@ -158,7 +159,7 @@ async function fetchSecuritiesProductSuggestions(rawQuery, serviceKey) {
   }
 
   if (merged.length) {
-    return merged.slice(0, 8);
+    return merged.slice(0, MAX_SUGGESTION_ITEMS);
   }
   if (lastApiError) throw lastApiError;
   return [];
