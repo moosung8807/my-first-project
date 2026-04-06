@@ -3561,6 +3561,104 @@ td.col-qty::after{
       scroll-margin-top:72px;
     }
 
+    @media (min-width:1025px){
+      .calculatorArea{
+        margin-top:104px;
+      }
+
+      #inputSection{
+        scroll-margin-top:22px;
+      }
+
+      body::before{
+        content:"";
+        position:fixed;
+        inset:0;
+        z-index:65;
+        pointer-events:none;
+        opacity:0;
+        background:
+          linear-gradient(180deg, rgba(7,16,30,.18), transparent 28%, transparent 72%, rgba(7,16,30,.14)),
+          radial-gradient(110% 80% at 50% 8%, rgba(79,127,240,.14), transparent 55%);
+        transition:opacity .24s ease;
+      }
+
+      html[data-theme="light"] body::before{
+        background:
+          linear-gradient(180deg, rgba(18,32,54,.08), transparent 30%, transparent 72%, rgba(18,32,54,.06)),
+          radial-gradient(110% 80% at 50% 8%, rgba(79,127,240,.12), transparent 55%);
+      }
+
+      .heroSection,
+      .desktopIntroText,
+      .calculatorArea{
+        transition:
+          transform .56s cubic-bezier(.18,.88,.18,1),
+          opacity .28s ease,
+          filter .56s cubic-bezier(.18,.88,.18,1);
+        will-change:transform, opacity, filter;
+      }
+
+      body.sectionTraveling::before{
+        opacity:1;
+      }
+
+      body.sectionTraveling .heroSection{
+        transform:translateY(-24px) scale(.985);
+        opacity:.68;
+        filter:blur(4px);
+      }
+
+      body.sectionTraveling .desktopIntroText{
+        transform:translateY(-18px);
+        opacity:.42;
+        filter:blur(2px);
+      }
+
+      body.sectionTraveling .calculatorArea{
+        transform:translateY(-10px);
+      }
+
+      .sectionTravelTarget{
+        position:relative;
+      }
+
+      .sectionTravelTarget::before{
+        content:"";
+        position:absolute;
+        inset:-22px -12px auto;
+        height:80px;
+        border-radius:28px;
+        pointer-events:none;
+        opacity:0;
+        background:linear-gradient(180deg, rgba(79,127,240,.20), rgba(79,127,240,0));
+        filter:blur(4px);
+        transform:translateY(18px);
+        transition:opacity .24s ease, transform .42s cubic-bezier(.18,.88,.18,1);
+      }
+
+      .sectionTravelArrived{
+        animation:sectionTravelArrive .78s cubic-bezier(.18,.88,.18,1);
+      }
+
+      body.sectionTraveling .sectionTravelTarget::before,
+      .sectionTravelArrived::before{
+        opacity:1;
+        transform:translateY(0);
+      }
+
+      @keyframes sectionTravelArrive{
+        0%{
+          transform:translateY(20px);
+          filter:blur(3px);
+        }
+        100%{
+          transform:translateY(0);
+          filter:blur(0);
+        }
+      }
+    }
+
     .presetSection{
       padding:24px;
       margin:72px 0 22px;

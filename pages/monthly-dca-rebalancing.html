@@ -141,8 +141,7 @@
         </ul>
 
         <div class="heroActions monthlyHeroActions">
-          <button class="primary" id="monthlyHeroCalcBtn" type="button">계산기 시작</button>
-          <button class="secondary" id="monthlyHeroGuideBtn" type="button">사용 안내 열기</button>
+          <button class="primary" id="monthlyHeroCalcBtn" type="button">시작하기</button>
         </div>
       </section>
 
@@ -189,7 +188,7 @@
         </section>
       </template>
 
-      <div class="calculatorArea monthlyCalculatorArea">
+      <div class="calculatorArea monthlyCalculatorArea mode-current" id="dcaCalculatorArea">
         <section class="card monthlyToolCard" id="dcaWorkspace" aria-labelledby="dcaToolTitle">
           <div class="sectionHeading monthlyToolHeading">
             <div>
@@ -208,245 +207,182 @@
             </div>
           </div>
 
-          <div class="summaryBar monthlySummaryBar" id="dcaSummaryBar" aria-label="월 적립식 입력 요약">
-            <div class="summaryLeft">
-              <span class="pill">
-                <span class="k">상태</span>
-                <span class="v" id="dcaModeLabel">입력 중</span>
-              </span>
-              <span class="pill">
-                <span class="k">조정 방식</span>
-                <span class="v" id="dcaTradeModeSummary">적립금 우선</span>
-              </span>
-              <span class="pill">
-                <span class="k">적립금</span>
-                <span class="v" id="dcaContributionSummary">₩ 0</span>
-              </span>
-              <span class="pill">
-                <span class="k">현재 평가액</span>
-                <span class="v" id="dcaCurrentSummary">₩ 0</span>
-              </span>
-              <span class="pill">
-                <span class="k">최근 종가 준비</span>
-                <span class="v" id="dcaPriceReadySummary">0/0</span>
-              </span>
-              <span class="pill">
-                <span class="k">입력 종목</span>
-                <span class="v" id="dcaRowCountSummary">0개</span>
-              </span>
-            </div>
-            <div class="summaryRight">
-              <span>목표 비중 합계</span>
-              <div class="progressWrap" id="dcaTargetProgressWrap" aria-label="목표 비중 합계 진행">
-                <div class="progressBar" id="dcaTargetProgressBar"></div>
+          <div class="monthlyToolBody" id="dcaToolBody">
+            <div class="controlGrid" aria-label="월 적립식 매수 입력">
+              <label class="fieldCard" for="monthlyContribution">
+                <span class="fieldLabel">이번 달 적립금</span>
+                <input id="monthlyContribution" class="moneyInput" inputmode="numeric" placeholder="예: 1,000,000" />
+                <span class="fieldHint">원 단위 숫자만 입력하세요.</span>
+              </label>
+
+              <div class="fieldCard compact">
+                <span class="fieldLabel">현재 총 평가금액</span>
+                <strong class="fieldValue" id="currentTotalLabel">₩ 0</strong>
+                <span class="fieldHint">입력한 종목 평가금액 합계</span>
               </div>
-              <span id="dcaTargetProgressText">0.0%</span>
+
+              <div class="fieldCard compact">
+                <span class="fieldLabel">목표 비중 합계</span>
+                <strong class="fieldValue" id="targetTotalLabel">0.0%</strong>
+                <span class="fieldHint" id="targetTotalHint">합계가 100%여야 합니다.</span>
+                <div class="targetProgressInline">
+                  <div class="progressWrap" id="dcaTargetProgressWrap" aria-label="목표 비중 합계 진행">
+                    <div class="progressBar" id="dcaTargetProgressBar"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fieldCard compact">
+                <span class="fieldLabel">계산 방식</span>
+                <div class="modeToggleGroup" role="group" aria-label="계산 방식 선택">
+                  <button class="modeToggleBtn" id="dcaModeContributionOnlyBtn" type="button" aria-pressed="false">적립금만</button>
+                  <button class="modeToggleBtn active" id="dcaModeRebalanceBtn" type="button" aria-pressed="true">적립금+매도</button>
+                </div>
+                <span class="fieldHint" id="dcaModeHint">적립금으로 먼저 맞추고, 부족할 때만 일부 매도를 반영합니다.</span>
+              </div>
             </div>
-          </div>
 
-          <div class="controlGrid" aria-label="월 적립식 매수 입력">
-            <label class="fieldCard" for="monthlyContribution">
-              <span class="fieldLabel">이번 달 적립금</span>
-              <input id="monthlyContribution" class="moneyInput" inputmode="numeric" placeholder="예: 1,000,000" />
-              <span class="fieldHint">원 단위 숫자만 입력하세요.</span>
-            </label>
-
-            <div class="fieldCard compact">
-              <span class="fieldLabel">현재 총 평가금액</span>
-              <strong class="fieldValue" id="currentTotalLabel">₩ 0</strong>
-              <span class="fieldHint">입력한 종목 평가금액 합계</span>
-            </div>
-
-            <div class="fieldCard compact">
-              <span class="fieldLabel">목표 비중 합계</span>
-              <strong class="fieldValue" id="targetTotalLabel">0.0%</strong>
-              <span class="fieldHint" id="targetTotalHint">합계가 100%여야 합니다.</span>
-            </div>
-
-            <div class="fieldCard compact">
-              <span class="fieldLabel">조정 원칙</span>
-              <strong class="fieldValue fieldValueCompact">적립금 우선</strong>
-              <span class="fieldHint">부족하면 초과 비중 종목을 필요한 만큼만 매도합니다.</span>
-            </div>
-          </div>
-
-          <div class="toolTableHeader">
-            <div>
-              <h3 class="toolSectionTitle">포트폴리오 입력</h3>
-              <p class="toolSectionCopy">현재 평가금액과 목표 비중을 입력하세요.</p>
-            </div>
-          </div>
-
-          <div class="toolError" id="dcaError" role="alert" aria-live="assertive" hidden></div>
-
-          <div class="toolTableWrap">
-            <table class="toolTable" id="dcaTable">
-              <caption class="srOnly">현재 평가금액과 목표 비중을 입력하는 표</caption>
-              <colgroup>
-                <col class="col-name" />
-                <col class="col-amount" />
-                <col class="col-price" />
-                <col class="col-weight" />
-                <col class="col-target" />
-                <col class="col-del" />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th class="col-name">종목명</th>
-                  <th class="num col-amount">현재 평가금액</th>
-                  <th class="num col-price">최근 종가</th>
-                  <th class="num col-weight">현재 비중</th>
-                  <th class="num col-target">목표 비중</th>
-                  <th class="col-del">삭제</th>
-                </tr>
-              </thead>
-              <tbody id="dcaTableBody"></tbody>
-            </table>
-          </div>
-        </section>
-
-        <section class="card monthlyResultCard" id="dcaResultSection" aria-labelledby="dcaResultTitle">
-          <div class="sectionHeading monthlyResultHeading">
-            <div>
-              <p class="resultLeadEyebrow">핵심 결과</p>
-              <h2 id="dcaResultTitle">2. 권장 거래 결과</h2>
-              <p id="dcaResultCopy">적립금으로 먼저 맞추고, 부족할 때만 초과 비중 종목 매도를 더한 예상 주문 수량을 확인하세요.</p>
-            </div>
-            <span class="resultBadge" id="resultBadge">계산 전</span>
-          </div>
-
-          <div class="resultTableLead" aria-hidden="true">
-            <strong>종목별 거래안</strong>
-            <span>이번 달 실행할 주문은 아래 표를 기준으로 보면 됩니다.</span>
-          </div>
-
-          <div class="toolTableWrap">
-            <table class="toolTable resultTable" id="resultTable">
-              <caption class="srOnly">월 적립식 매수 결과 표</caption>
-              <colgroup>
-                <col class="result-col-name" />
-                <col class="result-col-weight" />
-                <col class="result-col-target" />
-                <col class="result-col-budget" />
-                <col class="result-col-price" />
-                <col class="result-col-qty" />
-                <col class="result-col-buy" />
-                <col class="result-col-cash" />
-                <col class="result-col-after" />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>종목명</th>
-                  <th class="num">현재 비중</th>
-                  <th class="num">목표 비중</th>
-                  <th class="num">권장 거래액</th>
-                  <th class="num">최근 종가</th>
-                  <th class="num">거래 수량</th>
-                  <th class="num">실제 거래액</th>
-                  <th class="num">미반영 차액</th>
-                  <th class="num">거래 후 비중</th>
-                </tr>
-              </thead>
-              <tbody id="resultTableBody">
-                <tr>
-                  <td class="resultEmpty" colspan="9">입력 후 계산하면 결과가 나타납니다.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <p class="allocationNote" id="allocationNote">
-            계산하면 종목별 권장 거래 금액, 권장 거래 수량, 남는 현금이 여기에 표시됩니다.
-          </p>
-
-          <div class="metricGrid metricGridCompact" id="resultMetrics">
-            <article class="metricCard">
-              <span class="metricLabel">이번 달 적립금</span>
-              <strong class="metricValue" id="metricContribution">₩ 0</strong>
-              <span class="metricMeta">입력 전</span>
-            </article>
-            <article class="metricCard">
-              <span class="metricLabel" id="metricBuyLabel">예상 매수 금액</span>
-              <strong class="metricValue" id="metricActualBuyTotal">₩ 0</strong>
-              <span class="metricMeta" id="metricActualBuyMeta">정수 수량 기준 예상 주문액</span>
-            </article>
-            <article class="metricCard">
-              <span class="metricLabel">예상 매도 금액</span>
-              <strong class="metricValue" id="metricSellTotal">₩ 0</strong>
-              <span class="metricMeta" id="metricSellMeta">적립금으로 부족할 때만 자동 반영됩니다.</span>
-            </article>
-            <article class="metricCard">
-              <span class="metricLabel" id="metricResidualLabel">예상 잔여 현금</span>
-              <strong class="metricValue" id="metricResidualCash">₩ 0</strong>
-              <span class="metricMeta" id="metricResidualCashMeta">수량 계산 후 남는 현금</span>
-            </article>
-            <article class="metricCard">
-              <span class="metricLabel">평균 비중 오차</span>
-              <strong class="metricValue" id="metricDrift">0.0%p → 0.0%p</strong>
-              <span class="metricMeta">목표 대비 평균 절대 오차</span>
-            </article>
-            <article class="metricCard">
-              <span class="metricLabel" id="metricTopTradeLabel">가장 크게 조정할 종목</span>
-              <strong class="metricValue" id="metricTopBuy">없음</strong>
-              <span class="metricMeta" id="metricTopBuyMeta">계산 후 표시됩니다.</span>
-            </article>
-          </div>
-        </section>
-      </div>
-
-      <div class="contentLayout monthlySupportLayout" id="monthlyGuide">
-        <div class="monthlyGuideColumn">
-          <section class="card monthlyInfoCard" aria-labelledby="monthlyGuideTitle">
-            <div class="sectionHeading">
+            <div class="toolTableHeader">
               <div>
-                <h2 id="monthlyGuideTitle">3. 계산 방식과 활용 포인트</h2>
-                <p>월 적립식 매수 도구가 어떤 상황에서 유용한지 빠르게 파악할 수 있도록 정리했습니다.</p>
+                <h3 class="toolSectionTitle">포트폴리오 입력</h3>
+                <p class="toolSectionCopy">현재 평가금액과 목표 비중을 입력하세요.</p>
               </div>
             </div>
 
-            <div class="monthlyInfoGrid">
-              <section class="monthlyInfoBlock">
-                <p class="monthlyInfoEyebrow">무엇을 계산하나</p>
-                <h3>이번 달 돈을 어디에 먼저 넣을지 정합니다</h3>
-                <p>
-                  월급날마다 일정 금액을 적립식으로 투자할 때는
-                  단순히 목표 비중대로 나누는 것보다 현재 부족한 자산에 더 많이 배분하는 편이
-                  포트폴리오 비중을 정리하는 데 유리합니다.
-                </p>
-              </section>
+            <div class="toolError" id="dcaError" role="alert" aria-live="assertive" hidden></div>
 
-              <section class="monthlyInfoBlock">
-                <p class="monthlyInfoEyebrow">어떻게 배분하나</p>
-                <h3>부족분 비율대로 적립금을 우선 배분합니다</h3>
-                <p>
-                  이번 달 적립금을 포함한 총자산 기준으로 각 자산이 목표 비중에 비해 얼마나 부족한지 계산한 뒤,
-                  그 부족분 비율대로 적립금을 먼저 나눕니다.
-                  그래도 부족한 종목이 남으면 초과 비중 자산을 필요한 만큼만 매도해 추가 조정합니다.
-                </p>
-              </section>
+            <div class="toolTableWrap">
+              <table class="toolTable" id="dcaTable">
+                <caption class="srOnly">현재 평가금액과 목표 비중을 입력하는 표</caption>
+                <colgroup>
+                  <col class="col-name" />
+                  <col class="col-amount" />
+                  <col class="col-price" />
+                  <col class="col-weight" />
+                  <col class="col-target" />
+                  <col class="col-del" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th class="col-name">종목명</th>
+                    <th class="num col-amount">현재 평가금액</th>
+                    <th class="num col-price">최근 종가</th>
+                    <th class="num col-weight">현재 비중</th>
+                    <th class="num col-target">목표 비중</th>
+                    <th class="col-del">삭제</th>
+                  </tr>
+                </thead>
+                <tbody id="dcaTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
 
-              <section class="monthlyInfoBlock">
-                <p class="monthlyInfoEyebrow">이럴 때 유용함</p>
-                <h3>신규 자금만으로 포트폴리오를 정리하고 싶을 때</h3>
-                <ul class="monthlyInfoList">
-                  <li>매달 ETF를 적립식으로 사면서 자연스럽게 비중을 관리하고 싶을 때</li>
-                  <li>먼저 신규 자금으로 맞추고, 모자랄 때만 최소 매도를 반영하고 싶을 때</li>
-                  <li>초과 비중 종목까지 함께 정리한 조정안을 빠르게 보고 싶을 때</li>
-                  <li>현재 평가금액 기준으로 어느 자산을 우선 매수해야 할지 빠르게 보고 싶을 때</li>
-                </ul>
-              </section>
+        <div class="contentLayout monthlyResultLayout">
+          <section class="card monthlyResultCard" id="dcaResultSection" aria-labelledby="dcaResultTitle">
+            <div class="sectionHeading monthlyResultHeading">
+              <div>
+                <p class="resultLeadEyebrow">핵심 결과</p>
+                <h2 id="dcaResultTitle">2. 권장 거래 결과</h2>
+                <p id="dcaResultCopy">적립금으로 먼저 맞추고, 부족할 때만 초과 비중 종목 매도를 더한 예상 주문 수량을 확인하세요.</p>
+              </div>
+              <div class="sectionHeadingActions monthlyResultHeadingActions">
+                <span class="resultBadge" id="resultBadge">계산 전</span>
+                <button class="secondary" id="dcaBackToInputBtn" type="button">다시 입력</button>
+              </div>
+            </div>
 
-              <section class="monthlyInfoBlock">
-                <p class="monthlyInfoEyebrow">한계와 다음 단계</p>
-                <h3>큰 비중 편차는 메인 리밸런싱 도구로 이어서 보세요</h3>
-                <p>
-                  이 페이지에서도 자동 매도 조정안까지 볼 수 있지만,
-                  세금, 수수료, 실제 보유 수량까지 정밀하게 따져야 한다면 메인 계산기로 이어서 점검하는 편이 더 정확합니다.
-                </p>
-              </section>
+            <div class="resultTableLead" aria-hidden="true">
+              <strong>종목별 거래안</strong>
+              <span>이번 달 실행할 주문은 아래 표를 기준으로 보면 됩니다.</span>
+            </div>
+
+            <div class="toolTableWrap">
+              <table class="toolTable resultTable" id="resultTable">
+                <caption class="srOnly">월 적립식 매수 결과 표</caption>
+                <colgroup>
+                  <col class="result-col-name" />
+                  <col class="result-col-weight" />
+                  <col class="result-col-target" />
+                  <col class="result-col-qty" />
+                  <col class="result-col-after" />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th>종목명</th>
+                    <th class="num">현재 비중</th>
+                    <th class="num">목표 비중</th>
+                    <th class="num">거래 수량(거래액)</th>
+                    <th class="num">거래 후 비중</th>
+                  </tr>
+                </thead>
+                <tbody id="resultTableBody">
+                  <tr>
+                    <td class="resultEmpty" colspan="5">입력 후 계산하면 결과가 나타납니다.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="allocationNote" id="allocationNote">
+              계산하면 종목별 권장 거래 금액, 권장 거래 수량, 남는 현금이 여기에 표시됩니다.
+            </p>
+
+            <div class="metricGrid metricGridCompact" id="resultMetrics">
+              <article class="metricCard">
+                <span class="metricLabel">이번 달 적립금</span>
+                <strong class="metricValue" id="metricContribution">₩ 0</strong>
+                <span class="metricMeta">입력 전</span>
+              </article>
+              <article class="metricCard">
+                <span class="metricLabel" id="metricBuyLabel">예상 매수 금액</span>
+                <strong class="metricValue" id="metricActualBuyTotal">₩ 0</strong>
+                <span class="metricMeta" id="metricActualBuyMeta">정수 수량 기준 예상 주문액</span>
+              </article>
+              <article class="metricCard">
+                <span class="metricLabel">예상 매도 금액</span>
+                <strong class="metricValue" id="metricSellTotal">₩ 0</strong>
+                <span class="metricMeta" id="metricSellMeta">적립금으로 부족할 때만 자동 반영됩니다.</span>
+              </article>
+              <article class="metricCard">
+                <span class="metricLabel" id="metricResidualLabel">예상 잔여 현금</span>
+                <strong class="metricValue" id="metricResidualCash">₩ 0</strong>
+                <span class="metricMeta" id="metricResidualCashMeta">수량 계산 후 남는 현금</span>
+              </article>
+              <article class="metricCard">
+                <span class="metricLabel">평균 비중 오차</span>
+                <strong class="metricValue" id="metricDrift">0.0%p → 0.0%p</strong>
+                <span class="metricMeta">목표 대비 평균 절대 오차</span>
+              </article>
+              <article class="metricCard">
+                <span class="metricLabel" id="metricTopTradeLabel">가장 크게 조정할 종목</span>
+                <strong class="metricValue" id="metricTopBuy">없음</strong>
+                <span class="metricMeta" id="metricTopBuyMeta">계산 후 표시됩니다.</span>
+              </article>
             </div>
           </section>
 
+          <aside class="guideRail monthlyGuideRail" aria-labelledby="guideRailTitle">
+            <div class="guideRailInner">
+              <div class="guideRailHeader">
+                <p class="guideRailEyebrow">Guide</p>
+                <h2 class="guideRailTitle" id="guideRailTitle">리밸런싱 가이드</h2>
+                <p class="guideRailIntro">개념을 먼저 이해하고 계산기를 쓰면 결과 해석이 훨씬 쉬워집니다.</p>
+              </div>
+
+              <div class="guideRailToolbar">
+                <span class="guideRailMeta">랜덤 3편</span>
+                <button class="secondary guideRailRefreshBtn" id="guideRailRefreshBtn" type="button">다른 글 보기</button>
+              </div>
+
+              <div class="guideRailList" id="guideRailList" role="list" aria-live="polite"></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <div class="monthlySupportLayout" id="monthlyGuide">
+        <div class="monthlyGuideColumn">
           <section class="faqSection monthlyFaqSection" aria-labelledby="faqTitle">
             <h2 id="faqTitle">자주 묻는 질문</h2>
             <div id="faqList"></div>
@@ -458,61 +394,6 @@
             <a class="monthlyCatchLink" href="../index.html">메인 계산기로 전체 조정 보기</a>
           </section>
         </div>
-
-        <aside class="guideRail monthlyGuideRail" aria-label="관련 도구와 가이드">
-          <div class="guideRailInner">
-            <div class="guideRailHeader">
-              <p class="guideRailEyebrow">Tool Workflow</p>
-              <h2 class="guideRailTitle">같은 도구 흐름 안에서 이어서 판단하세요</h2>
-              <p class="guideRailIntro">
-                이번 달 적립금 배분을 본 뒤,
-                필요하면 메인 리밸런싱 계산기에서 매수·매도까지 포함한 전체 조정 규모를 이어서 확인할 수 있습니다.
-              </p>
-            </div>
-
-            <div class="guideRailToolbar">
-              <span class="guideRailMeta">월 적립식</span>
-            </div>
-
-            <div class="guideRailList">
-              <a class="guideRailCard" href="../index.html">
-                <div class="guideRailCardBody">
-                  <span class="guideRailCardTag">메인 도구</span>
-                  <strong>포트폴리오 리밸런싱 계산기</strong>
-                  <span>매수·매도를 포함한 전체 비중 조정 규모를 이어서 계산합니다.</span>
-                </div>
-                <span class="guideRailCardArrow">→</span>
-              </a>
-
-              <a class="guideRailCard" href="./why-rebalancing.html">
-                <div class="guideRailCardBody">
-                  <span class="guideRailCardTag">함께 읽기</span>
-                  <strong>리밸런싱을 해야 하는 이유</strong>
-                  <span>적립식 배분이 왜 장기 포트폴리오 관리에 도움이 되는지 배경을 정리합니다.</span>
-                </div>
-                <span class="guideRailCardArrow">→</span>
-              </a>
-
-              <a class="guideRailCard" href="./rebalancing-frequency.html">
-                <div class="guideRailCardBody">
-                  <span class="guideRailCardTag">주기 가이드</span>
-                  <strong>리밸런싱 주기 정하는 법</strong>
-                  <span>정기 점검과 비중 기준 점검을 언제 섞어 쓰면 좋은지 설명합니다.</span>
-                </div>
-                <span class="guideRailCardArrow">→</span>
-              </a>
-
-              <a class="guideRailCard" href="./rebalancing-calculation-difficulty.html">
-                <div class="guideRailCardBody">
-                  <span class="guideRailCardTag">확장 가이드</span>
-                  <strong>리밸런싱 계산이 어려운 이유</strong>
-                  <span>신규 자금만으로 맞추기 어려운 상황과 전체 계산이 필요한 이유를 설명합니다.</span>
-                </div>
-                <span class="guideRailCardArrow">→</span>
-              </a>
-            </div>
-          </div>
-        </aside>
       </div>
     </main>
   </div>
@@ -526,6 +407,8 @@
   <script src="../assets/js/core-utils.js"></script>
   <script src="../assets/js/core-symbols.js?v=20260405h"></script>
   <script src="../assets/js/theme-helpers.js"></script>
+  <script src="../assets/js/section-travel.js?v=20260406a"></script>
+  <script src="../assets/js/guide-rail.js?v=20260406a"></script>
   <script src="../assets/js/monthly-dca-shell.js?v=20260405a"></script>
   <script src="../assets/js/monthly-dca-page.js?v=20260405h"></script>
   <script src="../assets/js/faq-renderer.js"></script>

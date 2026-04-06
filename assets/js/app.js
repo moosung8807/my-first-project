@@ -100,6 +100,9 @@
     showToast: showToastHelper
   } = window.RebalancingFeedbackHelpers;
   const {
+    travelToElement: travelToElementHelper = null
+  } = window.RebalancingScrollHelpers || {};
+  const {
     markDirtyIfNeeded: markDirtyIfNeededHelper,
     setDirtyState: setDirtyStateHelper,
     showEditWarningNearInput: showEditWarningNearInputHelper,
@@ -109,6 +112,9 @@
   const {
     setTheme: setThemeHelper
   } = window.RebalancingThemeHelpers;
+  const {
+    initGuideRail: initGuideRailHelper = null
+  } = window.RebalancingGuideRail || {};
   const {
     attachTargetGuard: attachTargetGuardHelper,
     rowCount: rowCountHelper,
@@ -271,72 +277,9 @@
       ]
     }
   };
-  const GUIDE_RAIL_VISIBLE_COUNT = 3;
-  const GUIDE_RAIL_ITEMS = [
-    {
-      href: "pages/why-rebalancing.html",
-      tag: "개념",
-      title: "리밸런싱을 해야 하는 이유",
-      description: "목표 비중을 유지해야 하는 이유와 위험 관리 관점을 먼저 정리합니다."
-    },
-    {
-      href: "pages/monthly-dca-rebalancing.html",
-      tag: "적립식",
-      title: "월 적립식 매수 비중 계산기",
-      description: "매도 없이 이번 달 적립금을 어떤 종목에 얼마씩 넣을지 빠르게 계산합니다."
-    },
-    {
-      href: "pages/rebalancing-frequency.html",
-      tag: "주기",
-      title: "리밸런싱 주기 정하는 법",
-      description: "연 1회, 반기, 비중 기준 방식이 실제로 어떻게 다른지 빠르게 비교합니다."
-    },
-    {
-      href: "pages/rebalancing-calculation-difficulty.html",
-      tag: "계산",
-      title: "리밸런싱 계산이 어려운 이유",
-      description: "손계산이 복잡해지는 지점과 계산기가 필요한 이유를 짚어줍니다."
-    },
-    {
-      href: "https://blog.naver.com/rebalancing_/224236461413",
-      tag: "사용법",
-      title: "리밸런싱 계산기 사용법",
-      description: "ETF 비중 계산과 수량 자동 맞추는 흐름을 네이버 블로그 글로 자세히 안내합니다.",
-      external: true
-    },
-    {
-      href: "https://blog.naver.com/rebalancing_/224229403746",
-      tag: "사용법",
-      title: "엑셀없이 쉽게 ETF 리밸런싱 하는방법",
-      description: "엑셀 없이 리밸런싱 계산기를 활용해 ETF 비중을 쉽게 맞추는 흐름을 설명합니다.",
-      external: true
-    },
-    {
-      href: "https://blog.naver.com/rebalancing_/224225914521",
-      tag: "월배당",
-      title: "월배당 ETF로 월 30만원 만들기",
-      description: "월 30만원 배당을 목표로 할 때 필요한 자금 규모와 현실적인 계산 방법을 정리합니다.",
-      external: true
-    },
-    {
-      href: "https://blog.naver.com/rebalancing_/224220149514",
-      tag: "월배당",
-      title: "월배당 ETF 투자하면 생기는 착각",
-      description: "월배당 ETF 투자에서 자주 생기는 오해와 실제로 확인해야 할 포인트를 짚어봅니다.",
-      external: true
-    },
-    {
-      href: "https://blog.naver.com/rebalancing_/224220133118",
-      tag: "개념",
-      title: "리밸런싱 하면 수익률이 좋아질까?",
-      description: "리밸런싱이 수익률을 무조건 높여준다고 믿기 쉬운 지점과 실제로 봐야 할 기준을 설명합니다.",
-      external: true
-    }
-  ];
   let hasComputed = false;
   let isDirtyAfterCalc = false;
   let autoQuoteEnabled = true;
-  let guideRailSelectionKey = "";
   const rowQuoteStates = new Map();
   const rowSuggestionStates = new WeakMap();
   const quoteResultCache = new Map();
@@ -503,58 +446,6 @@
     return isMobileViewport() ? 2 : 7;
   }
   function setActivePreset(){
-  }
-  function shuffleItems(items){
-    const nextItems = [...items];
-    for(let i = nextItems.length - 1; i > 0; i--){
-      const j = Math.floor(Math.random() * (i + 1));
-      [nextItems[i], nextItems[j]] = [nextItems[j], nextItems[i]];
-    }
-    return nextItems;
-  }
-  function pickGuideRailItems(){
-    if(!GUIDE_RAIL_ITEMS.length){
-      return [];
-    }
-    if(GUIDE_RAIL_ITEMS.length <= GUIDE_RAIL_VISIBLE_COUNT){
-      return shuffleItems(GUIDE_RAIL_ITEMS);
-    }
-
-    let nextItems = [];
-    let nextKey = "";
-    let attempt = 0;
-    do{
-      nextItems = shuffleItems(GUIDE_RAIL_ITEMS).slice(0, GUIDE_RAIL_VISIBLE_COUNT);
-      nextKey = nextItems.map((item)=>item.href).sort().join("|");
-      attempt += 1;
-    }while(nextKey === guideRailSelectionKey && attempt < 8);
-
-    return nextItems;
-  }
-  function renderGuideRail(){
-    if(!guideRailList) return;
-    const items = pickGuideRailItems();
-    if(!items.length){
-      guideRailList.innerHTML = "";
-      if(guideRailRefreshBtn){
-        guideRailRefreshBtn.disabled = true;
-      }
-      return;
-    }
-    guideRailSelectionKey = items.map((item)=>item.href).sort().join("|");
-    guideRailList.innerHTML = items.map((item)=>`
-      <a class="guideRailCard" href="${item.href}" role="listitem"${item.external ? ' target="_blank" rel="noopener noreferrer"' : ""}>
-        <span class="guideRailCardBody">
-          <span class="guideRailCardTag">${escapeHtml(item.tag)}</span>
-          <strong>${escapeHtml(item.title)}</strong>
-          <span>${escapeHtml(item.description)}</span>
-        </span>
-        <span class="guideRailCardArrow" aria-hidden="true">→</span>
-      </a>
-    `).join("");
-    if(guideRailRefreshBtn){
-      guideRailRefreshBtn.disabled = GUIDE_RAIL_ITEMS.length < 2;
-    }
   }
   function syncRowPriceInputMode(tr){
     if(!tr) return;
@@ -2160,6 +2051,17 @@
     scrollToElHelper(el);
   }
 
+  function travelToEl(el, options){
+    if(travelToElementHelper){
+      travelToElementHelper(el, options);
+      return;
+    }
+    scrollToEl(el);
+    if(options && typeof options.onComplete === "function"){
+      options.onComplete();
+    }
+  }
+
   function clearInvalidMarks(){
     clearInvalidMarksHelper();
   }
@@ -3133,21 +3035,26 @@ return { tr, target: targetPctRaw/100, price, qty, value, active, targetPctRaw }
   }
   if(heroCalcBtn){
     heroCalcBtn.addEventListener("click", ()=>{
-      scrollToEl(inputSection);
       const firstInput = tbody.querySelector("tr .name");
-      if(firstInput) firstInput.focus({ preventScroll: true });
+      travelToEl(inputSection, {
+        desktopOnly: true,
+        onComplete: ()=>{
+          if(firstInput) firstInput.focus({ preventScroll: true });
+        }
+      });
     });
   }
   if(heroDemoBtn){
     heroDemoBtn.addEventListener("click", fillDemoAndRun);
   }
-  if(guideRailRefreshBtn){
-    guideRailRefreshBtn.addEventListener("click", ()=>renderGuideRail());
-  }
-
   for(let i=0;i<getInitialRowCount();i++) addRow();
   ensureMinimumRows();
-  renderGuideRail();
+  if(initGuideRailHelper){
+    initGuideRailHelper({
+      listEl: guideRailList,
+      refreshBtn: guideRailRefreshBtn
+    });
+  }
   setActivePreset(null);
   setMode("current");
   setTotalSummary("현재 보유액", fmtKRW(0));

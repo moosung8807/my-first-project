@@ -2,11 +2,15 @@
   const tbody = document.getElementById("dcaTableBody");
   const addRowBtn = document.getElementById("dcaAddRowBtn");
   const calcBtn = document.getElementById("dcaCalcBtn");
+  const backToInputBtn = document.getElementById("dcaBackToInputBtn");
   const resetBtn = document.getElementById("dcaResetBtn");
   const demoBtn = document.getElementById("dcaDemoBtn");
   const saveBtn = document.getElementById("dcaSaveBtn");
   const loadBtn = document.getElementById("dcaLoadBtn");
   const contributionInput = document.getElementById("monthlyContribution");
+  const contributionOnlyModeBtn = document.getElementById("dcaModeContributionOnlyBtn");
+  const rebalanceModeBtn = document.getElementById("dcaModeRebalanceBtn");
+  const modeHint = document.getElementById("dcaModeHint");
   const currentTotalLabel = document.getElementById("currentTotalLabel");
   const targetTotalLabel = document.getElementById("targetTotalLabel");
   const targetTotalHint = document.getElementById("targetTotalHint");
@@ -22,6 +26,8 @@
   const errorBox = document.getElementById("dcaError");
   const staleBadge = document.getElementById("dcaStaleBadge");
   const saveStatusText = document.getElementById("dcaSaveStatusText");
+  const calculatorArea = document.getElementById("dcaCalculatorArea");
+  const workspaceSection = document.getElementById("dcaWorkspace");
   const resultSection = document.getElementById("dcaResultSection");
   const resultCopy = document.getElementById("dcaResultCopy");
   const resultBadge = document.getElementById("resultBadge");
@@ -65,13 +71,11 @@
   const TARGET_SUM_TOLERANCE = 0.05;
   const QUOTE_ENDPOINT = "/api/quote";
   const WORKSPACE_SAVE_KEY = "rb-monthly-dca-saved-workspace-v1";
+  const CALCULATION_MODE_CONTRIBUTION_ONLY = "contribution_only";
+  const CALCULATION_MODE_REBALANCE = "rebalance";
   const rowStates = new WeakMap();
-  const DEFAULT_ROWS = [
-    { name: "", amount: "", price: "", target: "" },
-    { name: "", amount: "", price: "", target: "" },
-    { name: "", amount: "", price: "", target: "" },
-    { name: "", amount: "", price: "", target: "" }
-  ];
+  const MOBILE_ROW_COUNT = 4;
+  const DESKTOP_ROW_COUNT = 5;
   const DEMO_STATE = {
     contribution: "1,000,000",
     rows: [
@@ -84,6 +88,32 @@
   let hasComputed = false;
   let isDirtyAfterCalc = false;
   let toastTimer = null;
+  let viewMode = "current";
+  let calculationMode = CALCULATION_MODE_REBALANCE;
+
+  function isMobileViewport() {
+    return window.matchMedia("(max-width: 768px)").matches;
+  }
+
+  function createBlankRows(count) {
+    return Array.from({ length: count }, () => ({ name: "", amount: "", price: "", target: "" }));
+  }
+
+  function getDefaultRows() {
+    return createBlankRows(isMobileViewport() ? MOBILE_ROW_COUNT : DESKTOP_ROW_COUNT);
+  }
+
+  function syncViewMode() {
+    if (calculatorArea) {
+      calculatorArea.classList.toggle("mode-current", viewMode === "current");
+      calculatorArea.classList.toggle("mode-result", viewMode === "result");
+    }
+  }
+
+  function setViewMode(nextMode) {
+    viewMode = nextMode === "result" ? "result" : "current";
+    syncViewMode();
+  }
 
   function ensureRowState(tr) {
     let state = rowStates.get(tr);
@@ -152,10 +182,51 @@
     return rows.filter((row) => isActiveRow(row));
   }
 
+  function normalizeCalculationMode(value) {
+    return value === CALCULATION_MODE_CONTRIBUTION_ONLY
+      ? CALCULATION_MODE_CONTRIBUTION_ONLY
+      : CALCULATION_MODE_REBALANCE;
+  }
+
+  function isSellAdjustmentEnabled() {
+    return calculationMode === CALCULATION_MODE_REBALANCE;
+  }
+
   function updateTradeModeUi() {
-    if (resultCopy) {
-      resultCopy.textContent = "적립금으로 먼저 맞추고, 부족할 때만 초과 비중 종목 매도를 더한 예상 주문 수량을 확인하세요.";
+    const sellAdjustmentEnabled = isSellAdjustmentEnabled();
+    if (contributionOnlyModeBtn) {
+      const active = !sellAdjustmentEnabled;
+      contributionOnlyModeBtn.classList.toggle("active", active);
+      contributionOnlyModeBtn.setAttribute("aria-pressed", active ? "true" : "false");
     }
+    if (rebalanceModeBtn) {
+      const active = sellAdjustmentEnabled;
+      rebalanceModeBtn.classList.toggle("active", active);
+      rebalanceModeBtn.setAttribute("aria-pressed", active ? "true" : "false");
+    }
+    if (modeHint) {
+      modeHint.textContent = sellAdjustmentEnabled
+        ? "적립금으로 먼저 맞추고, 부족할 때만 일부 매도를 반영합니다."
+        : "매도 없이 이번 달 적립금만 부족 비중 종목에 우선 배분합니다.";
+    }
+    if (resultCopy) {
+      resultCopy.textContent = sellAdjustmentEnabled
+        ? "적립금으로 먼저 맞추고, 부족할 때만 초과 비중 종목 매도를 더한 예상 주문 수량을 확인하세요."
+        : "매도 없이 이번 달 적립금만으로 계산한 예상 주문 수량을 확인하세요.";
+    }
+  }
+
+  function setCalculationMode(nextMode, { preserveResults = false } = {}) {
+    const normalized = normalizeCalculationMode(nextMode);
+    const changed = normalized !== calculationMode;
+    calculationMode = normalized;
+    updateTradeModeUi();
+    if (!changed || preserveResults) {
+      return;
+    }
+    markDirtyIfNeeded();
+    clearResults();
+    clearError();
   }
 
   function normalizeSavedWorkspace(raw) {
@@ -168,6 +239,7 @@
       symbol: String(row && row.symbol || "").trim()
     })) : [];
     return {
+      calculationMode: normalizeCalculationMode(raw.calculationMode),
       contribution: String(raw.contribution || "").trim(),
       rows,
       savedAt: String(raw.savedAt || "").trim(),
@@ -178,6 +250,7 @@
 
   function buildWorkspaceSnapshot() {
     return {
+      calculationMode,
       contribution: String(contributionInput.value || "").trim(),
       rows: getRows().map((row) => ({
         name: row.name,
@@ -188,7 +261,7 @@
       })),
       savedAt: new Date().toISOString(),
       resumeToResult: hasComputed && !isDirtyAfterCalc,
-      version: 2
+      version: 3
     };
   }
 
@@ -251,8 +324,8 @@
     }
 
     contributionInput.value = snapshot.contribution;
-    updateTradeModeUi();
-    replaceRows(snapshot.rows.length > 0 ? snapshot.rows : DEFAULT_ROWS, { preserveComputed: false });
+    setCalculationMode(snapshot.calculationMode, { preserveResults: true });
+    replaceRows(snapshot.rows.length > 0 ? snapshot.rows : getDefaultRows(), { preserveComputed: false });
     clearInvalidState();
     clearError();
 
@@ -261,6 +334,8 @@
       const validRows = validateRows(getRows(), contribution);
       if (validRows) {
         renderResults(validRows, contribution);
+        setViewMode("result");
+        scrollToResultSection();
         showToast("최근 저장 작업을 결과 화면으로 불러왔어요.");
         return;
       }
@@ -867,7 +942,7 @@
     return rounded;
   }
 
-  function buildResultRows(rows, contribution) {
+  function buildResultRows(rows, contribution, { allowSellAdjustments = isSellAdjustmentEnabled() } = {}) {
     const currentTotal = rows.reduce((sum, row) => sum + row.currentAmount, 0);
     const finalTotal = currentTotal + contribution;
     const enriched = rows.map((row) => {
@@ -909,7 +984,7 @@
 
     const totalRemainingDeficit = afterContributionRows.reduce((sum, row) => sum + row.remainingDeficit, 0);
     const totalExcess = afterContributionRows.reduce((sum, row) => sum + row.excessAmount, 0);
-    const sellBudgetTotal = Math.min(totalRemainingDeficit, totalExcess);
+    const sellBudgetTotal = allowSellAdjustments ? Math.min(totalRemainingDeficit, totalExcess) : 0;
     const sellAllocations = roundAllocations(
       afterContributionRows.map((row) => (
         totalExcess > 0 ? (sellBudgetTotal * row.excessAmount) / totalExcess : 0
@@ -1029,7 +1104,9 @@
       return null;
     }
 
-    const resultPreview = buildResultRows(activeRows, contribution);
+    const resultPreview = buildResultRows(activeRows, contribution, {
+      allowSellAdjustments: isSellAdjustmentEnabled()
+    });
     const needsPriceRow = resultPreview.find((row) => Math.abs(row.recommendedBudget) > 0 && !(row.currentPrice > 0));
     if (needsPriceRow) {
       needsPriceRow.priceEl.classList.add("invalidField");
@@ -1050,18 +1127,59 @@
       : `매수 ${absValue.toLocaleString("ko-KR")}주`;
   }
 
-  function scrollToResultSection() {
-    if (!resultSection) return;
+  function getTradeDirectionIcon(value) {
+    if (value < 0) return "↘";
+    if (value > 0) return "↗";
+    return "−";
+  }
+
+  function formatTradeSummary(row) {
+    const qtyValue = row.recommendedQty;
+    const absQty = Math.max(0, Math.floor(Math.abs(qtyValue)));
+    const hasTrade = row.currentPrice > 0 && absQty > 0;
+    const decisionText = qtyValue < 0 ? "매도" : qtyValue > 0 ? "매수" : "유지";
+    const qtyText = hasTrade ? `${absQty.toLocaleString("ko-KR")}주` : (row.currentPrice > 0 ? formatTradeQty(qtyValue) : "-");
+    if (!(row.currentPrice > 0) || !(Math.abs(row.recommendedQty) > 0)) {
+      return `<span class="tradeSummaryMain">${qtyText}</span>`;
+    }
+    return `
+      <span class="tradeSummaryMain">
+        <span class="decisionLabel tradeSummaryDecision ${qtyValue < 0 ? "sell" : "buy"}">
+          <span class="decisionIcon" aria-hidden="true">${getTradeDirectionIcon(qtyValue)}</span>
+          <span class="decisionText">${decisionText}</span>
+        </span>
+        <span class="tradeSummaryQty">${qtyText}</span>
+      </span>
+      <span class="tradeSummaryMeta">(${fmtKRW(Math.abs(row.recommendedBudget))})</span>
+    `;
+  }
+
+  function scrollToWorkspaceSection() {
+    if (!workspaceSection) return;
     window.requestAnimationFrame(() => {
-      resultSection.scrollIntoView({
+      workspaceSection.scrollIntoView({
         behavior: "smooth",
         block: "start"
       });
     });
   }
 
+  function scrollToResultSection() {
+    if (!resultSection) return;
+    window.requestAnimationFrame(() => {
+      const top = Math.max(0, window.scrollY + resultSection.getBoundingClientRect().top - 22);
+      window.scrollTo({
+        top,
+        behavior: "auto"
+      });
+    });
+  }
+
   function renderResults(rows, contribution) {
-    const resultRows = buildResultRows(rows, contribution);
+    const sellAdjustmentEnabled = isSellAdjustmentEnabled();
+    const resultRows = buildResultRows(rows, contribution, {
+      allowSellAdjustments: sellAdjustmentEnabled
+    });
     const actualBuyTotal = resultRows.reduce((sum, row) => sum + (row.actualTradeAmount > 0 ? row.actualTradeAmount : 0), 0);
     const actualSellTotal = resultRows.reduce((sum, row) => sum + (row.actualTradeAmount < 0 ? Math.abs(row.actualTradeAmount) : 0), 0);
     const actualNetTrade = resultRows.reduce((sum, row) => sum + row.actualTradeAmount, 0);
@@ -1081,7 +1199,7 @@
     metricContribution.textContent = fmtKRW(contribution);
     metricActualBuyTotal.textContent = fmtKRW(actualBuyTotal);
     if (metricActualBuyMeta) {
-      metricActualBuyMeta.textContent = sellTriggered
+      metricActualBuyMeta.textContent = sellAdjustmentEnabled && sellTriggered
         ? "적립금과 매도 대금으로 집행되는 매수 합계"
         : "정수 수량 기준 예상 주문액";
     }
@@ -1089,7 +1207,9 @@
       metricSellTotal.textContent = fmtKRW(actualSellTotal);
     }
     if (metricSellMeta) {
-      metricSellMeta.textContent = sellTriggered
+      metricSellMeta.textContent = !sellAdjustmentEnabled
+        ? "이 모드에서는 매도를 계산하지 않습니다."
+        : sellTriggered
         ? "적립금만으로 부족해 자동 반영된 매도액"
         : "적립금만으로도 목표 비중에 가깝게 맞췄습니다.";
     }
@@ -1102,33 +1222,33 @@
       metricBuyLabel.textContent = "예상 매수 금액";
     }
     if (metricTopTradeLabel) {
-      metricTopTradeLabel.textContent = "가장 크게 조정할 종목";
+      metricTopTradeLabel.textContent = sellAdjustmentEnabled ? "가장 크게 조정할 종목" : "가장 크게 매수할 종목";
     }
     metricTopBuy.textContent = topTradeRow && Math.abs(topTradeRow.actualTradeAmount) > 0 ? topTradeRow.name : "없음";
     metricTopBuyMeta.textContent = topTradeRow && Math.abs(topTradeRow.actualTradeAmount) > 0
       ? `${fmtKRW(Math.abs(topTradeRow.actualTradeAmount))} · ${formatTradeQty(topTradeRow.recommendedQty)}`
       : "계산 후 표시됩니다.";
-    resultBadge.textContent = sellTriggered ? "적립금+매도 조정" : residualCash > 0 ? "적립금 우선 조정" : "목표 비중 근접";
-    allocationNote.textContent = sellTriggered
-      ? `적립금으로 먼저 매수한 뒤에도 부족한 비중이 남아 매수 ${activeBuyCount}개 종목, 매도 ${activeSellCount}개 종목으로 추가 조정했습니다. 정수 수량 반영 뒤 남는 현금은 ${fmtKRW(Math.max(0, residualCash))}입니다.`
-      : `적립금만으로 부족한 ${positiveGapCount}개 종목을 우선 배분했고, 실제 주문 기준으로 ${activeBuyCount}개 종목을 매수하면 됩니다. 정수 수량 기준 예상 잔여 현금은 ${fmtKRW(Math.max(0, residualCash))}입니다.`;
+    if (sellAdjustmentEnabled) {
+      resultBadge.textContent = sellTriggered ? "적립금+매도 조정" : residualCash > 0 ? "적립금 우선 조정" : "목표 비중 근접";
+      allocationNote.textContent = sellTriggered
+        ? `적립금으로 먼저 매수한 뒤에도 부족한 비중이 남아 매수 ${activeBuyCount}개 종목, 매도 ${activeSellCount}개 종목으로 추가 조정했습니다. 정수 수량 반영 뒤 남는 현금은 ${fmtKRW(Math.max(0, residualCash))}입니다.`
+        : `적립금만으로 부족한 ${positiveGapCount}개 종목을 우선 배분했고, 실제 주문 기준으로 ${activeBuyCount}개 종목을 매수하면 됩니다. 정수 수량 기준 예상 잔여 현금은 ${fmtKRW(Math.max(0, residualCash))}입니다.`;
+    } else {
+      resultBadge.textContent = "적립금만 반영";
+      allocationNote.textContent = `매도 없이 이번 달 적립금만으로 부족한 ${positiveGapCount}개 종목을 우선 배분했습니다. 실제 주문 기준으로 ${activeBuyCount}개 종목을 매수하면 되고, 정수 수량 기준 예상 잔여 현금은 ${fmtKRW(Math.max(0, residualCash))}입니다.`;
+    }
 
     resultTableBody.innerHTML = resultRows.map((row) => `
       <tr>
         <td data-label="종목명">${escapeHtml(row.name)}</td>
         <td class="num" data-label="현재 비중">${row.currentWeight.toFixed(1)}%</td>
         <td class="num" data-label="목표 비중">${row.target.toFixed(1)}%</td>
-        <td class="num ${row.recommendedBudget < 0 ? "sell" : row.recommendedBudget > 0 ? "buy" : ""}" data-label="권장 거래액">${fmtKRW(row.recommendedBudget)}</td>
-        <td class="num" data-label="최근 종가">${row.currentPrice > 0 ? fmtKRW(row.currentPrice) : "-"}</td>
-        <td class="num emphasis ${row.recommendedQty < 0 ? "sell" : row.recommendedQty > 0 ? "buy" : ""}" data-label="거래 수량">${row.currentPrice > 0 ? formatTradeQty(row.recommendedQty) : "-"}</td>
-        <td class="num ${row.actualTradeAmount < 0 ? "sell" : row.actualTradeAmount > 0 ? "buy" : ""}" data-label="실제 거래액">${fmtKRW(row.actualTradeAmount)}</td>
-        <td class="num ${row.tradeGap < 0 ? "sell" : row.tradeGap > 0 ? "buy" : ""}" data-label="미반영 차액">${fmtKRW(row.tradeGap)}</td>
+        <td class="num emphasis tradeSummaryCell ${row.recommendedQty < 0 ? "sell" : row.recommendedQty > 0 ? "buy" : ""}" data-label="거래 수량(거래액)">${formatTradeSummary(row)}</td>
         <td class="num" data-label="거래 후 비중">${row.afterWeight.toFixed(1)}%</td>
       </tr>
     `).join("");
     hasComputed = true;
     setDirtyState(false);
-    scrollToResultSection();
   }
 
   function clearResults({ preserveComputed = true } = {}) {
@@ -1137,7 +1257,7 @@
       isDirtyAfterCalc = false;
     }
     resultBadge.textContent = "계산 전";
-    allocationNote.textContent = "계산하면 종목별 권장 거래 금액, 거래 수량, 남는 현금이 여기에 표시됩니다.";
+    allocationNote.textContent = "계산하면 종목별 거래 수량과 거래 금액, 남는 현금이 여기에 표시됩니다.";
     metricContribution.textContent = "₩ 0";
     metricActualBuyTotal.textContent = "₩ 0";
     if (metricActualBuyMeta) {
@@ -1147,7 +1267,9 @@
       metricSellTotal.textContent = "₩ 0";
     }
     if (metricSellMeta) {
-      metricSellMeta.textContent = "적립금으로 부족할 때만 자동 반영됩니다.";
+      metricSellMeta.textContent = isSellAdjustmentEnabled()
+        ? "적립금으로 부족할 때만 자동 반영됩니다."
+        : "이 모드에서는 매도를 계산하지 않습니다.";
     }
     if (metricBuyLabel) {
       metricBuyLabel.textContent = "예상 매수 금액";
@@ -1156,11 +1278,12 @@
     metricResidualCashMeta.textContent = "수량 계산 후 남는 현금";
     metricDrift.textContent = "0.0%p → 0.0%p";
     if (metricTopTradeLabel) {
-      metricTopTradeLabel.textContent = "가장 크게 조정할 종목";
+      metricTopTradeLabel.textContent = isSellAdjustmentEnabled() ? "가장 크게 조정할 종목" : "가장 크게 매수할 종목";
     }
     metricTopBuy.textContent = "없음";
     metricTopBuyMeta.textContent = "계산 후 표시됩니다.";
-    resultTableBody.innerHTML = '<tr><td class="resultEmpty" colspan="9">입력 후 계산하면 결과가 나타납니다.</td></tr>';
+    resultTableBody.innerHTML = '<tr><td class="resultEmpty" colspan="5">입력 후 계산하면 결과가 나타납니다.</td></tr>';
+    setViewMode("current");
     updateStaleBadge();
   }
 
@@ -1174,6 +1297,8 @@
     if (!validRows) return;
 
     renderResults(validRows, contribution);
+    setViewMode("result");
+    scrollToResultSection();
     if (notify) {
       showToast("월 적립 조정 계산을 완료했어요.");
     }
@@ -1186,12 +1311,24 @@
     clearError();
   });
   contributionInput.addEventListener("focus", clearError);
+  if (contributionOnlyModeBtn) {
+    contributionOnlyModeBtn.addEventListener("click", () => setCalculationMode(CALCULATION_MODE_CONTRIBUTION_ONLY));
+  }
+  if (rebalanceModeBtn) {
+    rebalanceModeBtn.addEventListener("click", () => setCalculationMode(CALCULATION_MODE_REBALANCE));
+  }
   addRowBtn.addEventListener("click", () => {
     addRow();
     markDirtyIfNeeded();
     clearResults();
   });
   calcBtn.addEventListener("click", handleCalculate);
+  if (backToInputBtn) {
+    backToInputBtn.addEventListener("click", () => {
+      setViewMode("current");
+      scrollToWorkspaceSection();
+    });
+  }
   if (saveBtn) {
     saveBtn.addEventListener("click", saveWorkspaceSnapshot);
   }
@@ -1200,19 +1337,19 @@
   }
   resetBtn.addEventListener("click", () => {
     contributionInput.value = "";
-    replaceRows(DEFAULT_ROWS, { preserveComputed: false });
+    replaceRows(getDefaultRows(), { preserveComputed: false });
     showToast("입력값을 초기화했어요.");
   });
   demoBtn.addEventListener("click", () => {
     contributionInput.value = DEMO_STATE.contribution;
-    updateTradeModeUi();
     replaceRows(DEMO_STATE.rows, { preserveComputed: false });
     handleCalculate({ notify: false });
     showToast("기본 예시로 계산을 완료했어요.");
   });
 
   updateTradeModeUi();
-  replaceRows(DEFAULT_ROWS, { preserveComputed: false });
+  replaceRows(getDefaultRows(), { preserveComputed: false });
   updateSavedWorkspaceUi(readSavedWorkspace());
   updateStaleBadge();
+  syncViewMode();
 })();

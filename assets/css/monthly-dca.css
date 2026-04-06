@@ -33,6 +33,99 @@
   margin-bottom: 22px;
 }
 
+.monthlyToolBody {
+  display: block;
+}
+
+.monthlyCalculatorArea.mode-current .monthlyResultCard {
+  display: none;
+}
+
+.monthlyCalculatorArea.mode-result .monthlyToolCard {
+  display: none;
+}
+
+.monthlyCalculatorArea.mode-result .monthlyResultCard {
+  display: block;
+}
+
+@media (min-width: 1025px) {
+  .monthlyToolPage .monthlyHeroSection,
+  .monthlyToolPage .monthlyIntroText,
+  .monthlyToolPage .monthlyCalculatorArea {
+    transition:
+      transform .56s cubic-bezier(.18,.88,.18,1),
+      opacity .28s ease,
+      filter .56s cubic-bezier(.18,.88,.18,1);
+    will-change: transform, opacity, filter;
+  }
+
+  .monthlyToolPage.sectionTraveling .monthlyHeroSection {
+    transform: translateY(-24px) scale(.985);
+    opacity: .68;
+    filter: blur(4px);
+  }
+
+  .monthlyToolPage.sectionTraveling .monthlyIntroText {
+    transform: translateY(-18px);
+    opacity: .42;
+    filter: blur(2px);
+  }
+
+  .monthlyToolPage.sectionTraveling .monthlyCalculatorArea {
+    transform: translateY(-10px);
+  }
+
+  .monthlyToolPage #dcaWorkspace {
+    scroll-margin-top: 32px;
+  }
+
+  .monthlyToolPage .monthlyCalculatorArea {
+    position: relative;
+  }
+
+  .monthlyToolPage .monthlyToolCard,
+  .monthlyToolPage .monthlyResultCard {
+    transition:
+      transform .42s cubic-bezier(.18,.88,.18,1),
+      box-shadow .32s ease,
+      border-color .32s ease,
+      opacity .24s ease,
+      filter .24s ease;
+  }
+
+  .monthlyToolPage .monthlyCalculatorArea.mode-current .monthlyResultCard {
+    display: none;
+  }
+
+  .monthlyToolPage .monthlyCalculatorArea.mode-result .monthlyToolCard {
+    display: none;
+  }
+
+  .monthlyToolPage .monthlyCalculatorArea.mode-result .monthlyResultCard {
+    display: block;
+    animation: monthlyResultScreenReveal .3s cubic-bezier(.18,.88,.18,1);
+    box-shadow: 0 26px 56px rgba(4, 9, 17, 0.34);
+  }
+
+  html[data-theme="light"] .monthlyToolPage .monthlyCalculatorArea.mode-result .monthlyResultCard {
+    box-shadow: 0 24px 46px rgba(37, 51, 71, 0.14);
+  }
+
+  @keyframes monthlyResultScreenReveal {
+    0% {
+      opacity: 0;
+      transform: translateY(18px);
+      filter: blur(3px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+}
+
 .monthlyToolCard,
 .monthlyResultCard {
   margin-bottom: 18px;
@@ -52,27 +145,15 @@
   align-items: center;
 }
 
-.monthlySummaryBar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  margin: 6px 2px 18px;
+.targetProgressInline {
+  width: 100%;
+  margin-top: 2px;
 }
 
-.monthlySummaryBar .summaryLeft {
-  gap: 8px;
-}
-
-.monthlySummaryBar .summaryRight {
-  flex: 1 1 232px;
-  min-width: 232px;
-  justify-content: flex-end;
-}
-
-.monthlySummaryBar .pill .v {
-  max-width: 140px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.targetProgressInline .progressWrap {
+  width: 100%;
+  height: 8px;
+  box-shadow: none;
 }
 
 .srOnly {
@@ -148,6 +229,97 @@ html[data-theme="light"] .fieldCard {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.55;
+}
+
+.modeToggleGroup {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.modeToggleBtn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  border: 1px solid rgba(154, 166, 186, 0.24);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(217, 225, 239, 0.78);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    color .18s ease,
+    transform .18s ease,
+    box-shadow .18s ease,
+    opacity .18s ease;
+}
+
+.modeToggleBtn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 60%);
+  opacity: 0;
+  transition: opacity .18s ease;
+  pointer-events: none;
+}
+
+.modeToggleBtn:hover {
+  border-color: rgba(154, 166, 186, 0.4);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.modeToggleBtn:focus-visible {
+  outline: 2px solid var(--signal-chip-line);
+  outline-offset: 2px;
+}
+
+.modeToggleBtn.active {
+  color: #f7fbff;
+  border-color: rgba(120, 212, 255, 0.72);
+  background:
+    radial-gradient(140% 160% at 0% 0%, rgba(120, 212, 255, 0.32), transparent 58%),
+    linear-gradient(180deg, rgba(72, 132, 255, 0.72), rgba(37, 89, 196, 0.88));
+  box-shadow:
+    0 0 0 1px rgba(120, 212, 255, 0.24),
+    0 14px 30px rgba(56, 111, 233, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.modeToggleBtn.active::after {
+  opacity: 1;
+}
+
+.modeToggleBtn:not(.active) {
+  opacity: 0.82;
+}
+
+html[data-theme="light"] .modeToggleBtn {
+  border-color: rgba(108, 127, 153, 0.24);
+  background: rgba(255, 255, 255, 0.82);
+  color: rgba(29, 43, 57, 0.72);
+}
+
+html[data-theme="light"] .modeToggleBtn.active {
+  color: #10203a;
+  border-color: rgba(79, 127, 240, 0.5);
+  background:
+    radial-gradient(140% 160% at 0% 0%, rgba(79, 127, 240, 0.22), transparent 58%),
+    linear-gradient(180deg, rgba(126, 164, 255, 0.58), rgba(228, 238, 255, 0.98));
+  box-shadow:
+    0 0 0 1px rgba(79, 127, 240, 0.16),
+    0 12px 24px rgba(79, 127, 240, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
 #targetTotalLabel.isInvalid {
@@ -256,24 +428,17 @@ html[data-theme="light"] .toolTableWrap {
 }
 
 .resultTable .result-col-name {
-  width: 19%;
+  width: 22%;
 }
 
 .resultTable .result-col-weight,
 .resultTable .result-col-target,
 .resultTable .result-col-after {
-  width: 8%;
-}
-
-.resultTable .result-col-budget,
-.resultTable .result-col-price,
-.resultTable .result-col-buy,
-.resultTable .result-col-cash {
-  width: 11%;
+  width: 12%;
 }
 
 .resultTable .result-col-qty {
-  width: 13%;
+  width: 24%;
 }
 
 .toolTable th,
@@ -372,13 +537,74 @@ html[data-theme="light"] .toolTable th {
   overflow: hidden;
   text-overflow: ellipsis;
   font-variant-numeric: tabular-nums;
+  font-size: 13px;
   font-weight: 700;
 }
 
 .resultTable td:first-child {
   text-align: left;
-  font-size: 14.5px;
+  font-size: 15px;
   font-weight: 800;
+}
+
+.tradeSummaryCell {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.tradeSummaryMain,
+.tradeSummaryMeta {
+  display: block;
+}
+
+.tradeSummaryMain {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.tradeSummaryDecision {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.tradeSummaryDecision.buy {
+  color: var(--buy);
+  background: rgba(47, 122, 75, 0.1);
+  border-color: rgba(47, 122, 75, 0.32);
+}
+
+.tradeSummaryDecision.sell {
+  color: var(--sell);
+  background: rgba(156, 62, 51, 0.1);
+  border-color: rgba(156, 62, 51, 0.32);
+}
+
+.tradeSummaryQty {
+  font-variant-numeric: tabular-nums;
+}
+
+.tradeSummaryMeta {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .resultTable td.buy {
@@ -590,6 +816,14 @@ html[data-theme="light"] .dcaSuggestItem.isActive {
   margin-bottom: 10px;
 }
 
+.monthlyResultHeadingActions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .resultLeadEyebrow {
   margin: 0 0 6px;
   color: var(--hero-eyebrow);
@@ -650,6 +884,7 @@ html[data-theme="light"] .monthlyResultCard .toolTableWrap {
 }
 
 .metricGridCompact {
+  display: none;
   margin-top: 14px;
   margin-bottom: 10px;
   opacity: 0.9;
@@ -723,7 +958,12 @@ html[data-theme="light"] .allocationNote {
   color: var(--muted);
 }
 
+.monthlyResultLayout {
+  margin-bottom: 18px;
+}
+
 .monthlySupportLayout {
+  display: block;
   margin-bottom: 8px;
 }
 
@@ -913,17 +1153,12 @@ html[data-theme="light"] .monthlyCatchLink {
     gap: 8px;
   }
 
-  .monthlySummaryBar {
-    margin-left: 0;
-    margin-right: 0;
-    align-items: stretch;
-    gap: 12px;
+  .targetProgressInline {
+    margin-top: 4px;
   }
 
-  .monthlySummaryBar .summaryRight {
-    min-width: 0;
-    width: 100%;
-    justify-content: space-between;
+  .modeToggleGroup {
+    grid-template-columns: 1fr;
   }
 
   .monthlyHeroActions button {
@@ -1026,6 +1261,20 @@ html[data-theme="light"] .monthlyCatchLink {
 
   .resultTable td:first-child::before {
     color: var(--hero-eyebrow);
+  }
+
+  .tradeSummaryMain {
+    gap: 6px;
+    font-size: 13.5px;
+  }
+
+  .tradeSummaryDecision {
+    padding: 3px 8px;
+    font-size: 11.5px;
+  }
+
+  .tradeSummaryMeta {
+    font-size: 11px;
   }
 
   .resultTable td.resultEmpty {

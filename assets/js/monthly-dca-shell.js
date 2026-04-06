@@ -1,7 +1,6 @@
 (() => {
   const themeToggle = document.getElementById("themeToggle");
   const calcBtn = document.getElementById("monthlyHeroCalcBtn");
-  const guideBtn = document.getElementById("monthlyHeroGuideBtn");
   const guideTemplate = document.querySelector("#guideTemplate");
   const guideTarget = document.querySelector("#desktopGuideContent");
   const guidePanel = document.querySelector("#guidePanel");
@@ -9,7 +8,11 @@
   const guidePanelClose = document.querySelector("#guidePanelClose");
   const guidePanelOverlay = document.querySelector("#guidePanelOverlay");
   const guidePanelArrow = document.querySelector("#guidePanelArrow");
+  const guideRailList = document.querySelector("#guideRailList");
+  const guideRailRefreshBtn = document.querySelector("#guideRailRefreshBtn");
   const setTheme = window.RebalancingThemeHelpers && window.RebalancingThemeHelpers.setTheme;
+  const travelToElement = window.RebalancingScrollHelpers && window.RebalancingScrollHelpers.travelToElement;
+  const initGuideRail = window.RebalancingGuideRail && window.RebalancingGuideRail.initGuideRail;
   const THEME_KEY = "rb-theme";
 
   function applyThemeButtonState() {
@@ -21,6 +24,10 @@
   function scrollToTarget(selector) {
     const target = document.querySelector(selector);
     if (!target) return;
+    if (travelToElement) {
+      travelToElement(target, { desktopOnly: true });
+      return;
+    }
     target.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -37,6 +44,14 @@
 
   applyThemeButtonState();
 
+  if (initGuideRail) {
+    initGuideRail({
+      listEl: guideRailList,
+      refreshBtn: guideRailRefreshBtn,
+      pathPrefix: "../"
+    });
+  }
+
   if (guideTemplate && guideTarget) {
     guideTarget.replaceChildren(guideTemplate.content.cloneNode(true));
   }
@@ -51,10 +66,6 @@
 
   if (calcBtn) {
     calcBtn.addEventListener("click", () => scrollToTarget("#dcaWorkspace"));
-  }
-
-  if (guideBtn) {
-    guideBtn.addEventListener("click", () => setGuidePanelOpen(true));
   }
 
   if (guidePanelToggle) {
