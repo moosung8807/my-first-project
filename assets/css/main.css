@@ -1661,6 +1661,12 @@
       max-width:none;
       padding-left:14px;
       box-sizing:border-box;
+      font-family:var(--font-body);
+      font-size:14px;
+      font-weight:500;
+      line-height:1.4;
+      letter-spacing:-.01em;
+      color:var(--text);
     }
     .nameFieldWrap{
       position:relative;
@@ -1715,10 +1721,25 @@
       letter-spacing:.02em;
       flex:0 0 auto;
     }
-    td.col-target input, td.col-price input, td.col-qty input{width:100%;text-align:right}
+    td.col-target input, td.col-price input, td.col-qty input{
+      width:100%;
+      text-align:right;
+      font-family:var(--font-body);
+      font-size:14px;
+      font-weight:500;
+      line-height:1.4;
+      letter-spacing:-.01em;
+      color:var(--text);
+      font-variant-numeric:tabular-nums;
+    }
     td.col-target input, td.col-price input, td.col-qty input{min-width:0;box-sizing:border-box}
+    td.col-name input::placeholder,
     td.col-target input::placeholder, td.col-price input::placeholder, td.col-qty input::placeholder{
-      font-size:12px;
+      font-family:var(--font-body);
+      font-size:14px;
+      font-weight:500;
+      letter-spacing:-.01em;
+      color:var(--muted);
     }
     .rowMetaPanel{
       display:none;
@@ -2140,24 +2161,24 @@ td.col-qty::after{
         font-size:16px !important;
       }
       .guide-tab-button{
-        top:23%;
-        left:-10px;
-        width:32px;
-        min-height:104px;
-        padding:7px 4px;
-        gap:6px;
-        border-radius:0 9px 9px 0;
+        top:20%;
+        left:-12px;
+        width:28px;
+        min-height:88px;
+        padding:6px 3px;
+        gap:5px;
+        border-radius:0 8px 8px 0;
       }
       .guide-tab-arrow{
-        font-size:10px;
+        font-size:9px;
         position:relative;
-        left:5px;
+        left:4px;
       }
       .guide-tab-label{
-        font-size:10px;
+        font-size:9px;
         line-height:1.1;
         position:relative;
-        left:3px;
+        left:2px;
       }
       body{padding:20px 14px calc(132px + env(safe-area-inset-bottom, 0px))}
       body,
@@ -2425,12 +2446,11 @@ td.col-qty::after{
         width:100%;
         max-width:none;
         min-height:38px;
-        font-size:12px;
+        font-size:13px;
       }
       #tableCard.mode-current #tbl tbody td.col-name input::placeholder{
-        font-size:12px;
-        font-weight:400;
-        color:var(--muted);
+        font-size:13px;
+        font-weight:500;
       }
       td.col-target input,
       td.col-price input,
@@ -2439,7 +2459,7 @@ td.col-qty::after{
         min-height:38px;
         min-width:0;
         padding:0 10px;
-        font-size:12px;
+        font-size:13px;
       }
       .rowMetaPanel{
         display:none;
@@ -2447,12 +2467,6 @@ td.col-qty::after{
       .rowAutoQuoteControl,
       .rowManualPriceControl{
         display:none;
-      }
-      #tbl tbody tr td.col-price{
-        display:none;
-      }
-      #tbl tbody tr.manual-price-on td.col-price{
-        display:block;
       }
       td.col-target,
       td.col-price,
@@ -3844,6 +3858,35 @@ td.col-qty::after{
       margin-left:0;
     }
 
+    #inputSection .sectionHeading p,
+    #inputSection .sectionHeadingActions button,
+    #inputSection .statusBadge,
+    #inputSection .saveStatusText,
+    #inputSection table,
+    #inputSection thead th,
+    #inputSection tbody td,
+    #inputSection tfoot th,
+    #inputSection .nameSuggestItem,
+    #inputSection .rowPriceStatus{
+      font-family:var(--font-body);
+      letter-spacing:-.01em;
+    }
+
+    #inputSection .sectionHeading p,
+    #inputSection .saveStatusText,
+    #inputSection .rowPriceStatus,
+    #inputSection tbody td{
+      font-weight:400;
+    }
+
+    #inputSection .sectionHeadingActions button,
+    #inputSection .statusBadge,
+    #inputSection thead th,
+    #inputSection tfoot th,
+    #inputSection .nameSuggestItem{
+      font-weight:500;
+    }
+
     @media (min-width: 769px){
       #inputSection .sectionHeading{
         align-items:center;
@@ -4130,9 +4173,9 @@ td.col-qty::after{
       }
 
       .heroSection{
-        min-height:calc(100svh - 146px);
-        padding:34px 18px 92px;
-        margin-bottom:92px;
+        min-height:auto;
+        padding:28px 16px 56px;
+        margin-bottom:44px;
         border:0;
         border-radius:0;
         box-shadow:none;
@@ -4145,7 +4188,7 @@ td.col-qty::after{
         justify-content:flex-start;
         min-height:44px;
         gap:12px;
-        margin-bottom:26px;
+        margin-bottom:20px;
       }
 
       .heroSection .themeToggle{
@@ -4161,9 +4204,9 @@ td.col-qty::after{
 
       .heroSection h1{
         max-width:none;
-        margin:0 0 22px;
+        margin:0 0 18px;
         width:100%;
-        font-size:clamp(2.2rem, 11.3vw, 2.9rem);
+        font-size:clamp(2.05rem, 10.8vw, 2.75rem);
         line-height:1.15;
         letter-spacing:-.04em;
         text-align:center;
@@ -4175,14 +4218,14 @@ td.col-qty::after{
 
       .heroDesc{
         max-width:none;
-        margin:0 0 34px;
+        margin:0 0 26px;
         font-size:13px;
         text-align:left;
       }
 
       .heroActions{
         display:flex;
-        margin-top:24px;
+        margin-top:18px;
         gap:10px;
         justify-content:flex-start;
       }
@@ -4203,7 +4246,7 @@ td.col-qty::after{
       .heroSteps{
         display:grid;
         grid-template-columns:repeat(3, minmax(0, 1fr));
-        gap:14px 10px;
+        gap:10px 8px;
         max-width:none;
         margin:0;
         padding:0;
@@ -4211,7 +4254,7 @@ td.col-qty::after{
       }
 
       .heroSteps li{
-        gap:10px;
+        gap:8px;
         min-width:0;
       }
 
@@ -4220,30 +4263,30 @@ td.col-qty::after{
       }
 
       .heroStepCard{
-        width:54px;
-        height:54px;
-        border-radius:16px;
+        width:50px;
+        height:50px;
+        border-radius:15px;
       }
 
       .heroStepBadge{
-        right:8px;
+        right:6px;
       }
 
       .heroStepLabel{
-        font-size:13px;
+        font-size:12px;
       }
 
       .introText{
         max-width:none;
-        margin:12px 0 0;
+        margin:10px 0 0;
         padding:0;
-        font-size:12px;
-        line-height:1.58;
+        font-size:11.5px;
+        line-height:1.55;
         text-align:left;
       }
 
       .calculatorArea{
-        margin-top:136px;
+        margin-top:56px;
       }
 
       #inputSection{
@@ -4290,6 +4333,39 @@ td.col-qty::after{
 
       .guideRailInner{
         padding:18px 16px;
+      }
+
+      .guideRailToolbar{
+        display:grid;
+        grid-template-columns:auto auto;
+        justify-content:start;
+        align-items:center;
+        column-gap:8px;
+        row-gap:0;
+      }
+
+      .guideRailMeta,
+      .guideRailRefreshBtn{
+        flex:0 0 auto;
+      }
+
+      .guideRailMeta{
+        min-height:34px;
+        height:34px;
+        padding:0 10px;
+        font-size:11px;
+        line-height:34px;
+      }
+
+      .guideRailRefreshBtn{
+        width:auto;
+        min-width:0;
+        min-height:34px;
+        height:34px;
+        padding:0 10px;
+        font-size:11px;
+        line-height:34px;
+        justify-self:start;
       }
 
       .card{
@@ -4349,7 +4425,7 @@ td.col-qty::after{
       }
 
       .tableWrap{
-        margin:0 16px 13px;
+        margin:0 16px 11px;
       }
 
       #tableCard.mode-current .tableWrap{
@@ -4359,8 +4435,8 @@ td.col-qty::after{
       .mobileInlineActions{
         display:grid;
         grid-template-columns:repeat(2, minmax(0, 1fr));
-        gap:10px;
-        margin:0 16px 14px;
+        gap:8px;
+        margin:0 16px 12px;
       }
 
       .mobileInlineActions #mobileCalcBtn,
@@ -4372,11 +4448,11 @@ td.col-qty::after{
 
       #tbl tbody tr{
         border-color:var(--line);
-        border-radius:18px;
-        padding:14px;
-        margin-bottom:10px;
+        border-radius:16px;
+        padding:12px;
+        margin-bottom:8px;
         background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-        box-shadow:0 14px 26px rgba(0,0,0,.16);
+        box-shadow:0 10px 22px rgba(0,0,0,.14);
       }
 
       html[data-theme="light"] #tbl tbody tr{
@@ -4387,9 +4463,13 @@ td.col-qty::after{
       td.col-target input,
       td.col-price input,
       td.col-qty input{
-        min-height:44px;
+        min-height:42px;
         border-radius:14px;
         font-size:13px;
+        font-family:var(--font-body);
+        font-weight:500;
+        line-height:1.4;
+        letter-spacing:-.01em;
       }
 
       .mobileResultList{
@@ -4476,7 +4556,7 @@ td.col-qty::after{
 
     @media (max-width: 640px){
       .heroSection h1{
-        font-size:clamp(2.2rem, 11.3vw, 2.9rem);
+        font-size:clamp(1.95rem, 10.6vw, 2.55rem);
       }
 
       .heroEyebrow{
@@ -4493,22 +4573,21 @@ td.col-qty::after{
       }
 
       .heroSection{
-        min-height:calc(100svh - 132px);
-        padding:30px 16px 78px;
-        margin-bottom:72px;
+        padding:24px 16px 44px;
+        margin-bottom:32px;
       }
 
       .heroTopRow{
-        margin-bottom:24px;
-        padding-right:124px;
+        margin-bottom:18px;
+        padding-right:116px;
       }
 
       .heroDesc{
-        margin-bottom:30px;
+        margin-bottom:22px;
       }
 
       .heroActions{
-        margin-top:22px;
+        margin-top:16px;
       }
 
       .introText{
@@ -4518,40 +4597,43 @@ td.col-qty::after{
 
     @media (max-width: 390px){
       .guide-tab-button{
-        left:-12px;
-        width:28px;
-        min-height:90px;
-        padding:5px 3px;
+        left:-10px;
+        width:24px;
+        min-height:76px;
+        padding:4px 2px;
       }
 
       .guide-tab-label{
-        font-size:8.5px;
+        font-size:7.5px;
         position:relative;
-        left:3px;
+        left:2px;
       }
 
       .heroSection{
-        min-height:calc(100svh - 124px);
-        padding:24px 16px 64px;
-        margin-bottom:64px;
+        padding:22px 14px 36px;
+        margin-bottom:24px;
       }
 
       .heroSection h1{
-        font-size:clamp(2.2rem, 11.3vw, 2.9rem);
+        font-size:clamp(1.85rem, 10vw, 2.35rem);
       }
 
       .heroTopRow{
-        margin-bottom:20px;
-        padding-right:116px;
+        margin-bottom:16px;
+        padding-right:104px;
       }
 
       .heroSteps li{
-        padding:11px 12px;
-        font-size:12.5px;
+        padding:10px 10px;
+        font-size:12px;
       }
 
       .introText{
         font-size:11px;
+      }
+
+      .calculatorArea{
+        margin-top:40px;
       }
 
       .sectionHeading{
@@ -4563,6 +4645,17 @@ td.col-qty::after{
       .mobileDetailToggle{
         margin-left:14px;
         margin-right:14px;
+      }
+
+      #tbl tbody tr{
+        padding:10px;
+      }
+
+      td.col-name input,
+      td.col-target input,
+      td.col-price input,
+      td.col-qty input{
+        min-height:40px;
       }
 
       .mobileLimitFloat{
