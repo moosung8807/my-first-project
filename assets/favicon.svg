@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="faviconTitle faviconDesc">
+  <title id="faviconTitle">Rebalancing Helper calculator favicon</title>
+  <desc id="faviconDesc">A clean calculator icon with a soft blue display and light button grid.</desc>
+  <defs>
+    <linearGradient id="body" x1="12" y1="7" x2="50" y2="57" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f7fafc" />
+      <stop offset=".55" stop-color="#e5ebf2" />
+      <stop offset="1" stop-color="#d5dee8" />
+    </linearGradient>
+    <linearGradient id="display" x1="18" y1="12" x2="44" y2="27" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8fd3ff" />
+      <stop offset="1" stop-color="#4b88d9" />
+    </linearGradient>
+    <linearGradient id="key" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset="1" stop-color="#dbe4ee" />
+    </linearGradient>
+  </defs>
+  <rect x="9" y="5" width="46" height="54" rx="12" fill="#b9c7d6" opacity=".32" />
+  <rect x="10" y="4" width="44" height="54" rx="12" fill="url(#body)" />
+  <rect x="10.75" y="4.75" width="42.5" height="52.5" rx="11.25" fill="none" stroke="#94a6ba" stroke-opacity=".45" stroke-width="1.5" />
+
+  <rect x="16" y="11" width="32" height="15" rx="4.5" fill="url(#display)" />
+  <rect x="16.75" y="11.75" width="30.5" height="13.5" rx="3.75" fill="none" stroke="#ffffff" stroke-opacity=".45" stroke-width="1" />
+  <path d="M21 19h10" stroke="#ffffff" stroke-opacity=".88" stroke-width="3" stroke-linecap="round" />
+  <circle cx="39" cy="19" r="2.4" fill="#ffffff" fill-opacity=".92" />
+  <circle cx="44" cy="19" r="2.4" fill="#ffffff" fill-opacity=".58" />
+
+  <g fill="url(#key)">
+    <rect x="16" y="31" width="9" height="8" rx="2.3" />
+    <rect x="27.5" y="31" width="9" height="8" rx="2.3" />
+    <rect x="39" y="31" width="9" height="8" rx="2.3" />
+    <rect x="16" y="41.5" width="9" height="8" rx="2.3" />
+    <rect x="27.5" y="41.5" width="9" height="8" rx="2.3" />
+    <rect x="39" y="41.5" width="9" height="8" rx="2.3" />
+  </g>
+  <g fill="none" stroke="#9fb0c3" stroke-opacity=".55" stroke-width=".9">
+    <rect x="16.5" y="31.5" width="8" height="7" rx="1.8" />
+    <rect x="28" y="31.5" width="8" height="7" rx="1.8" />
+    <rect x="39.5" y="31.5" width="8" height="7" rx="1.8" />
+    <rect x="16.5" y="42" width="8" height="7" rx="1.8" />
+    <rect x="28" y="42" width="8" height="7" rx="1.8" />
+    <rect x="39.5" y="42" width="8" height="7" rx="1.8" />
+  </g>
+</svg>
