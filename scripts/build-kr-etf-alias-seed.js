@@ -48,8 +48,9 @@ function inferCategory(canonical, categoryHint) {
 }
 
 function normalizeCode(code) {
-  const digits = String(code || "").replace(/[^0-9]/g, "");
-  return /^\d{6}$/.test(digits) ? digits : "";
+  const compact = String(code || "").trim().toUpperCase().replace(/[^0-9A-Z]/g, "");
+  if (!/^[0-9A-Z]{6}$/.test(compact)) return "";
+  return /\d/.test(compact) ? compact : "";
 }
 
 function buildSeed(records, topN) {

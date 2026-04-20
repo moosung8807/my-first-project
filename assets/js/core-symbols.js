@@ -51,6 +51,7 @@
     { ticker: "148070", canonical: "KOSEF 국고채10년", aliases: ["국고채10년", "국채10년", "148070"] },
     { ticker: "273130", canonical: "KODEX 종합채권(AA-이상)액티브", aliases: ["종합채권", "채권액티브", "273130"] },
     { ticker: "132030", canonical: "KODEX 골드선물(H)", aliases: ["골드선물", "금etf", "금선물", "132030"] },
+    { ticker: "0138Y0", canonical: "PLUS 금채권혼합", aliases: ["0138y0", "금채권혼합"] },
     { ticker: "114800", canonical: "KODEX 인버스", aliases: ["인버스", "114800"] },
     { ticker: "122630", canonical: "KODEX 레버리지", aliases: ["레버리지", "122630"] },
     { ticker: "233740", canonical: "KODEX 코스닥150레버리지", aliases: ["코스닥150레버리지", "코스닥레버리지", "233740"] },
@@ -93,6 +94,7 @@
     "114800": "114800",
     "122630": "122630",
     "132030": "132030",
+    "0138y0": "0138Y0",
     "148070": "148070",
     "214980": "214980",
     "229200": "229200",
@@ -123,6 +125,7 @@
     { name: "KODEX 인버스", symbol: "114800", aliases: ["114800", "인버스"] },
     { name: "KODEX 레버리지", symbol: "122630", aliases: ["122630", "레버리지"] },
     { name: "KODEX 골드선물(H)", symbol: "132030", aliases: ["132030", "kodex골드선물h"] },
+    { name: "PLUS 금채권혼합", symbol: "0138Y0", aliases: ["0138y0", "금채권혼합"] },
     { name: "KOSEF 국고채10년", symbol: "148070", aliases: ["148070", "국고채10년"] },
     { name: "KODEX 단기채권PLUS", symbol: "214980", aliases: ["214980", "단기채권", "파킹etf"] },
     { name: "KODEX 코스닥150", symbol: "229200", aliases: ["229200", "코스닥150"] },
@@ -293,7 +296,7 @@
     for (const etf of activeKrEtfAliasIndex) {
       for (const alias of etf.keys) {
         if (alias.length < 3 || normalizedInput.length < 3) continue;
-        const matched = normalizedInput.includes(alias) || alias.includes(normalizedInput);
+        const matched = normalizedInput.startsWith(alias) || alias.startsWith(normalizedInput);
         if (!matched) continue;
         if (alias.length > bestScore) {
           bestScore = alias.length;

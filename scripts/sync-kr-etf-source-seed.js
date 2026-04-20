@@ -69,8 +69,9 @@ function toNum(value) {
 }
 
 function normalizeCode(value) {
-  const digits = String(value || "").replace(/[^0-9]/g, "");
-  return /^\d{6}$/.test(digits) ? digits : "";
+  const compact = String(value || "").trim().toUpperCase().replace(/[^0-9A-Z]/g, "");
+  if (!/^[0-9A-Z]{6}$/.test(compact)) return "";
+  return /\d/.test(compact) ? compact : "";
 }
 
 function readJsonArray(filePath) {

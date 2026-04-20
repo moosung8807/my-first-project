@@ -280,7 +280,10 @@ function scoreProductItem(item, query, { isCodeQuery }) {
 }
 
 function normalizeProductQuery(value) {
-  const input = String(value || "").trim();
+  const input = String(value || "")
+    .trim()
+    .replace(/\s+(ETF|ETN|ELW)$/i, "")
+    .replace(/\s+/g, " ");
   if (!input) return "";
 
   const securityCode = normalizeSecurityCode(input);
@@ -288,7 +291,7 @@ function normalizeProductQuery(value) {
     return securityCode;
   }
 
-  return input.replace(/\s+/g, " ");
+  return input;
 }
 
 function getQueryVariants(query, { isCodeQuery }) {
