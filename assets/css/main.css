@@ -1376,11 +1376,14 @@
     .mobileInlineActions{
       display:none;
     }
-    .mobileAutoRowHint{
-      display:none;
-    }
     .mobileCalcBar{
       display:none;
+    }
+    .autoRowGuideNote{
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size:12.5px;
+      line-height:1.6;
     }
     .autoQuoteToggle{
       display:inline-flex;
@@ -4442,14 +4445,12 @@ td.col-qty::after{
         margin:0 16px 12px;
       }
 
-      .tableWrap .mobileAutoRowHint{
-        display:block;
-        margin:0 0 12px;
+      .autoRowGuideNote{
+        margin:12px 0 0;
         padding:10px 12px;
         border-radius:12px;
         border:1px solid var(--line);
         background:rgba(255,255,255,.04);
-        color:var(--muted);
         font-size:12px;
         line-height:1.55;
       }
