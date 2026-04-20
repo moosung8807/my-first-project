@@ -634,7 +634,7 @@
         <input class="percentInput" data-field="target" inputmode="decimal" placeholder="0" value="${escapeHtml(row.target || "")}" />
       </td>
       <td class="col-del">
-        <button class="iconButton" type="button" aria-label="종목 삭제">삭제</button>
+        <button class="delBtn" type="button" aria-label="종목 삭제" title="행 삭제">×</button>
       </td>
     `;
 
@@ -642,7 +642,7 @@
     const amountInput = tr.querySelector('[data-field="amount"]');
     const priceInput = tr.querySelector('[data-field="price"]');
     const targetInput = tr.querySelector('[data-field="target"]');
-    const deleteBtn = tr.querySelector(".iconButton");
+    const deleteBtn = tr.querySelector(".delBtn");
     const suggestBox = tr.querySelector(".dcaSuggest");
     if (suggestBox && !suggestBox.id) {
       suggestBox.id = `dcaSuggest-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
