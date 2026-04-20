@@ -18,6 +18,7 @@
   const tableWrap = document.querySelector(".tableWrap");
   const mobileInlineActions = document.querySelector(".mobileInlineActions");
   const mobileCurrentMount = document.querySelector("#mobileCurrentMount");
+  const mobileAutoRowHint = document.querySelector("#mobileAutoRowHint");
   const tableCardErrorMount = document.querySelector("#tableCardErrorMount");
   const tableCardInputMount = document.querySelector("#tableCardInputMount");
   const staleBadge = document.querySelector("#staleBadge");
@@ -2133,10 +2134,14 @@
     if(shouldInlineCurrent){
       if(mobileCurrentMount){
         if(errorSummary) mobileCurrentMount.append(errorSummary);
+        if(mobileAutoRowHint) mobileCurrentMount.append(mobileAutoRowHint);
         if(tableWrap) mobileCurrentMount.append(tableWrap);
         if(mobileInlineActions) mobileCurrentMount.append(mobileInlineActions);
       }
       return;
+    }
+    if(inputSection && mobileAutoRowHint && mobileCurrentMount){
+      inputSection.insertBefore(mobileAutoRowHint, mobileCurrentMount.nextSibling);
     }
     if(tableCardErrorMount && errorSummary){
       tableCardErrorMount.append(errorSummary);
