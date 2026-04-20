@@ -658,6 +658,28 @@ html[data-theme="light"] .toolTable th {
   min-width: 0;
 }
 
+.quoteStatus {
+  margin: 6px 2px 0;
+  color: var(--muted);
+  font-size: 11.5px;
+  line-height: 1.45;
+  white-space: normal;
+}
+
+.quoteStatus[data-tone="error"],
+.quoteStatus[data-tone="warn"] {
+  color: var(--sell);
+}
+
+.quoteStatus[data-tone="loading"] {
+  color: var(--hero-eyebrow);
+}
+
+.quoteStatus[data-tone="manual"],
+.quoteStatus[data-tone="success"] {
+  color: var(--buy);
+}
+
 #dcaTable tbody td.col-name {
   overflow: visible;
 }
@@ -1247,6 +1269,10 @@ html[data-theme="light"] .monthlyCatchLink {
     margin-left: 0;
   }
 
+  .monthlyPrimaryActions #dcaAddRowBtn {
+    display: none !important;
+  }
+
   .monthlyPrimaryActions > * {
     width: 100%;
   }
@@ -1269,6 +1295,206 @@ html[data-theme="light"] .monthlyCatchLink {
   .toolTable th,
   .toolTable td {
     padding: 11px 12px;
+  }
+
+  .monthlyToolCard .toolTableWrap {
+    overflow: visible;
+    border: 0;
+    padding-bottom: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  #dcaTable {
+    min-width: 0;
+    table-layout: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  #dcaTable colgroup,
+  #dcaTable thead {
+    display: none;
+  }
+
+  #dcaTable,
+  #dcaTable tbody,
+  #dcaTable tbody tr,
+  #dcaTable tbody td {
+    display: block;
+    width: 100%;
+  }
+
+  #dcaTable tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name name del"
+      "amount price del"
+      "target weight del";
+    gap: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(154, 166, 186, 0.2);
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015));
+  }
+
+  html[data-theme="light"] #dcaTable tbody tr {
+    border-color: rgba(106, 116, 126, 0.18);
+    background:
+      repeating-linear-gradient(108deg, rgba(255, 255, 255, 0.06) 0 2px, rgba(255, 255, 255, 0) 2px 8px),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(223, 229, 234, 0.9));
+  }
+
+  #dcaTable tbody td {
+    border-bottom: 0;
+    padding: 0;
+    text-align: left;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    min-width: 0;
+  }
+
+  #dcaTable tbody tr:hover td {
+    background: transparent;
+  }
+
+  #dcaTable tbody td.col-name {
+    grid-area: name;
+  }
+
+  #dcaTable tbody td.col-amount {
+    grid-area: amount;
+  }
+
+  #dcaTable tbody td.col-price {
+    grid-area: price;
+  }
+
+  #dcaTable tbody td.col-target {
+    grid-area: target;
+  }
+
+  #dcaTable tbody td.col-weight {
+    grid-area: weight;
+  }
+
+  #dcaTable tbody td.col-del {
+    grid-area: del;
+    width: auto;
+    justify-self: end;
+    align-self: start;
+    padding-right: 0;
+  }
+
+  #dcaTable tbody td.col-name::before,
+  #dcaTable tbody td.col-weight::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 4px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  #dcaTable tbody td.col-amount::before,
+  #dcaTable tbody td.col-price::before,
+  #dcaTable tbody td.col-target::before {
+    display: block;
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    color: var(--muted);
+    font-size: 11.5px;
+    font-weight: 500;
+    line-height: 1.2;
+    pointer-events: none;
+  }
+
+  #dcaTable tbody td.col-amount::before {
+    content: "평가금액:";
+  }
+
+  #dcaTable tbody td.col-price::before {
+    content: "최근 종가:";
+  }
+
+  #dcaTable tbody td.col-target::before {
+    content: "목표 비중:";
+  }
+
+  #dcaTable tbody td.col-del::before {
+    content: none;
+  }
+
+  #dcaTable tbody td.col-name input {
+    width: 100%;
+    min-height: 38px;
+    max-width: none;
+    font-size: 13px;
+  }
+
+  #dcaTable tbody td.col-amount input,
+  #dcaTable tbody td.col-price input,
+  #dcaTable tbody td.col-target input {
+    width: 100%;
+    min-height: 38px;
+    min-width: 0;
+    padding-right: 34px;
+    font-size: 13px;
+  }
+
+  #dcaTable tbody td.col-amount input {
+    padding-left: 68px;
+  }
+
+  #dcaTable tbody td.col-price input {
+    padding-left: 64px;
+  }
+
+  #dcaTable tbody td.col-target input {
+    padding-left: 72px;
+  }
+
+  #dcaTable tbody td.col-price::after,
+  #dcaTable tbody td.col-target::after {
+    right: 12px;
+    font-size: 12px;
+  }
+
+  #dcaTable tbody td.col-weight {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  #dcaTable .weightPreview {
+    width: 100%;
+    min-height: 38px;
+    padding: 0 12px;
+    border: 1px solid rgba(154, 166, 186, 0.22);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    box-sizing: border-box;
+  }
+
+  html[data-theme="light"] #dcaTable .weightPreview {
+    border-color: rgba(108, 127, 153, 0.18);
+    background: #f9fbfe;
+  }
+
+  #dcaTable .delBtn {
+    opacity: 0.9;
   }
 
   .monthlyResultCard .toolTableWrap {

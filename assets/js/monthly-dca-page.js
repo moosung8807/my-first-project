@@ -392,6 +392,29 @@
     statusEl.hidden = !nextMessage;
   }
 
+  function rowHasAnyInput(tr) {
+    if (!tr) return false;
+    return ["name", "amount", "price", "target"].some((field) => {
+      const el = tr.querySelector(`[data-field="${field}"]`);
+      return Boolean(el && String(el.value || "").trim());
+    });
+  }
+
+  function ensureTrailingEmptyRow() {
+    if (!isMobileViewport()) return;
+    const lastRow = tbody.lastElementChild;
+    if (!lastRow || rowHasAnyInput(lastRow)) {
+      addRow();
+    }
+  }
+
+  function maybeAppendAutoRow(tr) {
+    if (!isMobileViewport()) return;
+    if (!tr || tr !== tbody.lastElementChild) return;
+    if (!rowHasAnyInput(tr)) return;
+    ensureTrailingEmptyRow();
+  }
+
   function abortQuoteRequest(tr) {
     const state = ensureRowState(tr);
     if (state.controller) {
@@ -606,7 +629,7 @@
     const tr = document.createElement("tr");
     tr.dataset.resolvedSymbol = row.symbol || "";
     tr.innerHTML = `
-      <td class="col-name">
+      <td class="col-name" data-label="종목명">
         <div class="dcaNameField">
           <input
             class="nameInput"
@@ -619,18 +642,19 @@
             aria-expanded="false"
           />
           <div class="dcaSuggest" hidden role="listbox"></div>
+          <p class="quoteStatus" hidden></p>
         </div>
       </td>
-      <td class="num col-amount">
+      <td class="num col-amount" data-label="현재 평가금액">
         <input class="moneyInput" data-field="amount" inputmode="numeric" placeholder="0" value="${escapeHtml(row.amount || "")}" />
       </td>
-      <td class="num col-price">
+      <td class="num col-price" data-label="최근 종가">
         <input class="moneyInput priceInput" data-field="price" inputmode="numeric" placeholder="예: 12,345" value="${escapeHtml(row.price || "")}" />
       </td>
-      <td class="num col-weight">
+      <td class="num col-weight" data-label="현재 비중">
         <span class="weightPreview">0.0%</span>
       </td>
-      <td class="num col-target">
+      <td class="num col-target" data-label="목표 비중">
         <input class="percentInput" data-field="target" inputmode="decimal" placeholder="0" value="${escapeHtml(row.target || "")}" />
       </td>
       <td class="col-del">
@@ -658,6 +682,7 @@
       updateInputSummary();
       markDirtyIfNeeded();
       clearResults();
+      maybeAppendAutoRow(tr);
     });
     amountInput.addEventListener("focus", clearError);
 
@@ -672,6 +697,7 @@
       markDirtyIfNeeded();
       clearResults();
       clearError();
+      maybeAppendAutoRow(tr);
     });
     priceInput.addEventListener("focus", clearError);
 
@@ -679,6 +705,7 @@
       updateInputSummary();
       markDirtyIfNeeded();
       clearResults();
+      maybeAppendAutoRow(tr);
     });
     targetInput.addEventListener("focus", clearError);
 
@@ -687,6 +714,7 @@
       markDirtyIfNeeded();
       clearResults();
       tr.dataset.resolvedSymbol = "";
+      maybeAppendAutoRow(tr);
       if (!String(nameInput.value || "").trim()) {
         hideNameSuggestions(tr);
         if (!priceInput.dataset.edited) {
@@ -754,6 +782,7 @@
       }
       abortQuoteRequest(tr);
       tr.remove();
+      ensureTrailingEmptyRow();
       updateInputSummary();
       markDirtyIfNeeded();
       clearResults();
@@ -764,6 +793,7 @@
 
   function replaceRows(rows, { preserveComputed = false } = {}) {
     tbody.replaceChildren(...rows.map((row) => createRow(row)));
+    ensureTrailingEmptyRow();
     updateInputSummary();
     clearResults({ preserveComputed });
   }
@@ -1352,4 +1382,5 @@
   updateSavedWorkspaceUi(readSavedWorkspace());
   updateStaleBadge();
   syncViewMode();
+  window.addEventListener("resize", ensureTrailingEmptyRow);
 })();
