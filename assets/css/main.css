@@ -4442,9 +4442,9 @@ td.col-qty::after{
         margin:0 16px 12px;
       }
 
-      #inputSection .mobileAutoRowHint{
+      .tableWrap .mobileAutoRowHint{
         display:block;
-        margin:12px 16px 0;
+        margin:0 0 12px;
         padding:10px 12px;
         border-radius:12px;
         border:1px solid var(--line);
