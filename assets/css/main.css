@@ -1376,6 +1376,9 @@
     .mobileInlineActions{
       display:none;
     }
+    .mobileAutoRowHint{
+      display:none;
+    }
     .mobileCalcBar{
       display:none;
     }
@@ -4437,6 +4440,19 @@ td.col-qty::after{
         grid-template-columns:repeat(2, minmax(0, 1fr));
         gap:8px;
         margin:0 16px 12px;
+      }
+
+      #tableCard.mode-current .mobileAutoRowHint{
+        display:block;
+        grid-column:1 / -1;
+        margin:0;
+        padding:10px 12px;
+        border-radius:12px;
+        border:1px solid var(--line);
+        background:rgba(255,255,255,.04);
+        color:var(--muted);
+        font-size:12px;
+        line-height:1.55;
       }
 
       .mobileInlineActions #mobileCalcBtn,
