@@ -1,5 +1,5 @@
 .monthlyToolPage .monthlyPage {
-  max-width: 1200px;
+  max-width: 1288px;
 }
 
 .monthlyToolPage .monthlyHeroSection {
@@ -26,11 +26,15 @@
 }
 
 .monthlyIntroText {
-  margin-bottom: 22px;
+  margin-bottom: 14px;
 }
 
 .monthlyCalculatorArea {
-  margin-bottom: 22px;
+  margin-bottom: 18px;
+}
+
+.monthlyCalculatorColumn {
+  min-width: 0;
 }
 
 .monthlyToolBody {
@@ -208,6 +212,10 @@ html[data-theme="light"] .fieldCard {
   justify-content: center;
 }
 
+.fieldCardCentered {
+  justify-content: center;
+}
+
 .fieldLabel {
   color: var(--muted);
   font-size: 13px;
@@ -229,6 +237,11 @@ html[data-theme="light"] .fieldCard {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.55;
+}
+
+#dcaModeHint {
+  font-size: 12px;
+  line-height: 1.45;
 }
 
 .modeToggleGroup {
@@ -385,37 +398,37 @@ html[data-theme="light"] .toolTableWrap {
 
 .toolTable {
   width: 100%;
-  min-width: 920px;
+  min-width: 860px;
   border-collapse: collapse;
 }
 
 #dcaTable {
-  min-width: 940px;
+  min-width: 860px;
   table-layout: fixed;
 }
 
 #dcaTable .col-name {
-  width: 232px;
+  width: 214px;
 }
 
 #dcaTable .col-amount {
-  width: 138px;
+  width: 130px;
 }
 
 #dcaTable .col-price {
-  width: 126px;
+  width: 116px;
 }
 
 #dcaTable .col-weight {
-  width: 76px;
+  width: 72px;
 }
 
 #dcaTable .col-target {
-  width: 92px;
+  width: 84px;
 }
 
 #dcaTable .col-del {
-  width: 58px;
+  width: 62px;
 }
 
 .resultTable {
@@ -487,9 +500,16 @@ html[data-theme="light"] .toolTable th {
   text-overflow: ellipsis;
 }
 
+#dcaTable tbody td.col-weight,
+#dcaTable tbody td.col-del {
+  overflow: visible;
+  text-overflow: clip;
+}
+
 #dcaTable th.col-del,
 #dcaTable td.col-del {
   text-align: center;
+  padding-right: 18px;
 }
 
 #dcaTable th.col-name {
@@ -716,6 +736,42 @@ html[data-theme="light"] #dcaTable td.col-target input {
 #dcaTable .iconButton {
   min-width: 60px;
   padding: 0 10px;
+}
+
+#dcaTable .delBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  border: 1px solid var(--del-border);
+  background: var(--del-bg);
+  color: var(--del-color);
+  cursor: pointer;
+  line-height: 28px;
+  font-weight: 900;
+  font-size: 14px;
+  padding: 0;
+  opacity: 0.25;
+  transition:
+    opacity .12s ease,
+    transform .12s ease,
+    background .12s ease,
+    border-color .12s ease,
+    color .12s ease;
+}
+
+#dcaTable tbody tr:hover .delBtn {
+  opacity: 0.9;
+}
+
+#dcaTable .delBtn:hover {
+  background: rgba(224, 90, 90, 0.14);
+  border-color: rgba(224, 90, 90, 0.55);
+  color: rgba(224, 90, 90, 0.95);
+  transform: translateY(-1px);
+}
+
+#dcaTable .delBtn:active {
+  transform: translateY(0) scale(.98);
 }
 
 .dcaSuggest {
@@ -962,6 +1018,21 @@ html[data-theme="light"] .allocationNote {
   margin-bottom: 18px;
 }
 
+.monthlyCalculatorLayout {
+  grid-template-columns: minmax(0, 1fr) 308px;
+  gap: 24px;
+  align-items: start;
+}
+
+.monthlyGuideRail {
+  align-self: start;
+}
+
+.monthlyGuideRail .guideRailInner {
+  height: fit-content;
+  min-height: 0;
+}
+
 .monthlySupportLayout {
   display: block;
   margin-bottom: 8px;
@@ -1029,6 +1100,7 @@ html[data-theme="light"] .monthlyInfoBlock {
 }
 
 .monthlyFaqSection {
+  margin-top: 12px;
   margin-bottom: 18px;
 }
 
@@ -1091,6 +1163,11 @@ html[data-theme="light"] .monthlyCatchLink {
 }
 
 @media (max-width: 1100px) {
+  .monthlyCalculatorLayout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
   .controlGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

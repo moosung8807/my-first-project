@@ -33,6 +33,13 @@
       external: true
     },
     {
+      href: "https://blog.naver.com/rebalancing_/224249366126",
+      tag: "적립식",
+      title: "월 30만원 적립식 투자, 리밸런싱 계산기로 몇주 살지 해결한 방법(실사용 후기)",
+      description: "월 30만원 적립식 투자에서 종목별 몇 주를 살지 계산기로 정리한 실제 사용 흐름을 소개합니다.",
+      external: true
+    },
+    {
       href: "https://blog.naver.com/rebalancing_/224229403746",
       tag: "사용법",
       title: "엑셀없이 쉽게 ETF 리밸런싱 하는방법",
