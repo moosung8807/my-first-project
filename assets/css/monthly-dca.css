@@ -1433,11 +1433,12 @@ html[data-theme="light"] .monthlyCatchLink {
     margin-top: 0;
   }
 
-  #dcaTable .mobileStackField {
+  #dcaTable .mobileStackField,
+  #dcaTable .dcaNameField {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 0;
+    gap: 6px;
     width: min(100%, 236px);
     text-align: left;
   }
@@ -1455,17 +1456,14 @@ html[data-theme="light"] .monthlyCatchLink {
   }
 
   #dcaTable .mobileCellLabel {
-    display: none;
+    display: block;
     align-self: stretch;
+    margin: 0;
     color: var(--muted);
     font-size: 11px;
     font-weight: 700;
     line-height: 1.35;
     text-align: left;
-  }
-
-  #dcaTable .dcaNameField {
-    width: min(100%, 236px);
   }
 
   #dcaTable .dcaNameField > .mobileCellLabel {
@@ -1537,16 +1535,7 @@ html[data-theme="light"] .monthlyCatchLink {
   }
 
   #dcaTable .weightPreview[data-empty="true"] {
-    justify-content: flex-start;
-    color: transparent;
-  }
-
-  #dcaTable .weightPreview[data-empty="true"]::before {
-    content: "현재 비중";
     color: var(--muted);
-    font-size: 13px;
-    font-weight: 600;
-    line-height: 1;
   }
 
   html[data-theme="light"] #dcaTable .weightPreview {
