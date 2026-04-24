@@ -680,6 +680,19 @@ html[data-theme="light"] .toolTable th {
   color: var(--buy);
 }
 
+.mobileStackField {
+  display: block;
+  width: 100%;
+}
+
+.mobileStackField.unitSuffixField {
+  position: relative;
+}
+
+.mobileCellLabel {
+  display: none;
+}
+
 #dcaTable tbody td.col-name {
   overflow: visible;
 }
@@ -1312,6 +1325,15 @@ html[data-theme="light"] .monthlyCatchLink {
     border-spacing: 0;
   }
 
+  #dcaTable col.col-name,
+  #dcaTable col.col-amount,
+  #dcaTable col.col-price,
+  #dcaTable col.col-weight,
+  #dcaTable col.col-target,
+  #dcaTable col.col-del {
+    width: auto !important;
+  }
+
   #dcaTable colgroup,
   #dcaTable thead {
     display: none;
@@ -1326,14 +1348,9 @@ html[data-theme="light"] .monthlyCatchLink {
   }
 
   #dcaTable tbody tr {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
-    grid-template-areas:
-      "name name del"
-      "amount price del"
-      "target weight del";
-    gap: 8px;
-    padding: 10px;
+    display: block;
+    position: relative;
+    padding: 10px 52px 10px 10px;
     margin-bottom: 8px;
     border: 1px solid rgba(154, 166, 186, 0.2);
     border-radius: 16px;
@@ -1362,71 +1379,98 @@ html[data-theme="light"] .monthlyCatchLink {
   }
 
   #dcaTable tbody td.col-name {
-    grid-area: name;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
   }
 
   #dcaTable tbody td.col-amount {
-    grid-area: amount;
+    position: relative;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
   }
 
   #dcaTable tbody td.col-price {
-    grid-area: price;
+    position: relative;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
   }
 
   #dcaTable tbody td.col-target {
-    grid-area: target;
+    position: relative;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
   }
 
   #dcaTable tbody td.col-weight {
-    grid-area: weight;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
   }
 
   #dcaTable tbody td.col-del {
-    grid-area: del;
+    position: absolute;
+    top: 10px;
+    right: 10px;
     width: auto;
-    justify-self: end;
-    align-self: start;
     padding-right: 0;
   }
 
-  #dcaTable tbody td.col-name::before,
-  #dcaTable tbody td.col-weight::before {
-    content: attr(data-label);
-    display: block;
-    margin-bottom: 4px;
-    color: var(--muted);
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 1.4;
+  #dcaTable tbody td.col-name,
+  #dcaTable tbody td.col-amount,
+  #dcaTable tbody td.col-price,
+  #dcaTable tbody td.col-target,
+  #dcaTable tbody td.col-weight {
+    margin-top: 8px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  #dcaTable tbody td.col-name {
+    margin-top: 0;
+  }
+
+  #dcaTable .mobileStackField {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    width: min(100%, 236px);
     text-align: left;
   }
 
-  #dcaTable tbody td.col-amount::before,
-  #dcaTable tbody td.col-price::before,
-  #dcaTable tbody td.col-target::before {
-    display: block;
+  #dcaTable .mobileStackField.unitSuffixField::after {
+    content: attr(data-unit);
     position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    margin: 0;
+    right: 12px;
+    bottom: 11px;
     color: var(--muted);
-    font-size: 11.5px;
-    font-weight: 500;
-    line-height: 1.2;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
     pointer-events: none;
   }
 
-  #dcaTable tbody td.col-amount::before {
-    content: "평가금액:";
+  #dcaTable .mobileCellLabel {
+    display: none;
+    align-self: stretch;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.35;
+    text-align: left;
   }
 
-  #dcaTable tbody td.col-price::before {
-    content: "최근 종가:";
+  #dcaTable .dcaNameField {
+    width: min(100%, 236px);
   }
 
-  #dcaTable tbody td.col-target::before {
-    content: "목표 비중:";
+  #dcaTable .dcaNameField > .mobileCellLabel {
+    margin-bottom: 0;
+    padding-right: 0;
   }
 
   #dcaTable tbody td.col-del::before {
@@ -1434,50 +1478,53 @@ html[data-theme="light"] .monthlyCatchLink {
   }
 
   #dcaTable tbody td.col-name input {
-    width: 100%;
+    display: block;
+    width: 100% !important;
+    inline-size: 100% !important;
     min-height: 38px;
-    max-width: none;
+    min-width: 0 !important;
+    max-width: none !important;
     font-size: 13px;
+  }
+
+  #dcaTable tbody td.col-name input::placeholder,
+  #dcaTable tbody td.col-amount input::placeholder,
+  #dcaTable tbody td.col-price input::placeholder,
+  #dcaTable tbody td.col-target input::placeholder {
+    color: var(--muted);
+    opacity: 1;
+    font-weight: 600;
   }
 
   #dcaTable tbody td.col-amount input,
   #dcaTable tbody td.col-price input,
   #dcaTable tbody td.col-target input {
-    width: 100%;
+    display: block;
+    width: 100% !important;
+    inline-size: 100% !important;
     min-height: 38px;
-    min-width: 0;
+    min-width: 0 !important;
+    max-width: none !important;
     padding-right: 34px;
+    padding-left: 14px;
     font-size: 13px;
-  }
-
-  #dcaTable tbody td.col-amount input {
-    padding-left: 68px;
-  }
-
-  #dcaTable tbody td.col-price input {
-    padding-left: 64px;
-  }
-
-  #dcaTable tbody td.col-target input {
-    padding-left: 72px;
   }
 
   #dcaTable tbody td.col-price::after,
   #dcaTable tbody td.col-target::after {
-    right: 12px;
-    font-size: 12px;
+    content: none;
   }
 
   #dcaTable tbody td.col-weight {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   #dcaTable .weightPreview {
     width: 100%;
     min-height: 38px;
-    padding: 0 12px;
+    padding: 0 14px;
     border: 1px solid rgba(154, 166, 186, 0.22);
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.03);
@@ -1485,7 +1532,21 @@ html[data-theme="light"] .monthlyCatchLink {
     align-items: center;
     font-size: 13px;
     font-weight: 700;
+    text-align: right;
     box-sizing: border-box;
+  }
+
+  #dcaTable .weightPreview[data-empty="true"] {
+    justify-content: flex-start;
+    color: transparent;
+  }
+
+  #dcaTable .weightPreview[data-empty="true"]::before {
+    content: "현재 비중";
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
   }
 
   html[data-theme="light"] #dcaTable .weightPreview {
@@ -1494,7 +1555,32 @@ html[data-theme="light"] .monthlyCatchLink {
   }
 
   #dcaTable .delBtn {
-    opacity: 0.9;
+    opacity: 0.82;
+    transition:
+      opacity .12s ease,
+      transform .12s ease,
+      background .12s ease,
+      border-color .12s ease,
+      color .12s ease,
+      box-shadow .12s ease;
+  }
+
+  #dcaTable tbody td.col-del:hover .delBtn,
+  #dcaTable tbody td.col-del:focus-within .delBtn {
+    opacity: 1;
+    background: rgba(224, 90, 90, 0.14);
+    border-color: rgba(224, 90, 90, 0.55);
+    color: rgba(224, 90, 90, 0.95);
+    box-shadow: 0 0 0 1px rgba(224, 90, 90, 0.18);
+  }
+
+  #dcaTable .delBtn:focus-visible {
+    outline: none;
+    opacity: 1;
+    background: rgba(224, 90, 90, 0.14);
+    border-color: rgba(224, 90, 90, 0.55);
+    color: rgba(224, 90, 90, 0.95);
+    box-shadow: 0 0 0 1px rgba(224, 90, 90, 0.18);
   }
 
   .monthlyResultCard .toolTableWrap {

@@ -631,10 +631,11 @@
     tr.innerHTML = `
       <td class="col-name" data-label="종목명">
         <div class="dcaNameField">
+          <span class="mobileCellLabel">종목명</span>
           <input
             class="nameInput"
             data-field="name"
-            placeholder="예: TIGER 미국S&P500"
+            placeholder="종목명"
             value="${escapeHtml(row.name || "")}"
             autocomplete="off"
             role="combobox"
@@ -646,16 +647,28 @@
         </div>
       </td>
       <td class="num col-amount" data-label="현재 평가금액">
-        <input class="moneyInput" data-field="amount" inputmode="numeric" placeholder="0" value="${escapeHtml(row.amount || "")}" />
+        <label class="mobileStackField">
+          <span class="mobileCellLabel">현재 평가금액</span>
+          <input class="moneyInput" data-field="amount" inputmode="numeric" placeholder="현재 평가금액" value="${escapeHtml(row.amount || "")}" />
+        </label>
       </td>
       <td class="num col-price" data-label="최근 종가">
-        <input class="moneyInput priceInput" data-field="price" inputmode="numeric" placeholder="예: 12,345" value="${escapeHtml(row.price || "")}" />
+        <label class="mobileStackField unitSuffixField" data-unit="원">
+          <span class="mobileCellLabel">최근 종가</span>
+          <input class="moneyInput priceInput" data-field="price" inputmode="numeric" placeholder="최근 종가" value="${escapeHtml(row.price || "")}" />
+        </label>
       </td>
       <td class="num col-weight" data-label="현재 비중">
-        <span class="weightPreview">0.0%</span>
+        <div class="mobileStackField">
+          <span class="mobileCellLabel">현재 비중</span>
+          <span class="weightPreview" data-empty="true">-</span>
+        </div>
       </td>
       <td class="num col-target" data-label="목표 비중">
-        <input class="percentInput" data-field="target" inputmode="decimal" placeholder="0" value="${escapeHtml(row.target || "")}" />
+        <label class="mobileStackField unitSuffixField" data-unit="%">
+          <span class="mobileCellLabel">목표 비중</span>
+          <input class="percentInput" data-field="target" inputmode="decimal" placeholder="목표 비중" value="${escapeHtml(row.target || "")}" />
+        </label>
       </td>
       <td class="col-del">
         <button class="delBtn" type="button" aria-label="종목 삭제" title="행 삭제">×</button>
@@ -857,10 +870,12 @@
     rows.forEach((row) => {
       if (!isActiveRow(row)) {
         row.previewEl.textContent = "-";
+        row.previewEl.dataset.empty = "true";
         return;
       }
       const weight = currentTotal > 0 ? (row.currentAmount / currentTotal) * 100 : 0;
       row.previewEl.textContent = currentTotal > 0 ? `${weight.toFixed(1)}%` : "-";
+      row.previewEl.dataset.empty = currentTotal > 0 ? "false" : "true";
     });
 
     currentTotalLabel.textContent = fmtKRW(currentTotal);

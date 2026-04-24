@@ -2168,8 +2168,8 @@ td.col-qty::after{
       }
       .guide-tab-button{
         top:20%;
-        left:-12px;
-        width:28px;
+        left:-16px;
+        width:26px;
         min-height:88px;
         padding:6px 3px;
         gap:5px;
@@ -3023,8 +3023,8 @@ td.col-qty::after{
       body{padding:18px 12px calc(132px + env(safe-area-inset-bottom, 0px));}
       .guide-tab-button{
         top:23%;
-        left:-11px;
-        width:30px;
+        left:-15px;
+        width:28px;
         min-height:96px;
         padding:6px 4px;
         gap:5px;
@@ -4613,7 +4613,7 @@ td.col-qty::after{
 
     @media (max-width: 390px){
       .guide-tab-button{
-        left:-10px;
+        left:-14px;
         width:24px;
         min-height:76px;
         padding:4px 2px;
