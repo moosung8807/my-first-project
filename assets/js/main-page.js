@@ -44,15 +44,5 @@
     if (event.key === "Escape") setGuidePanelOpen(false);
   });
 
-  const faqButtons = document.querySelectorAll(".faqQuestion button");
-  faqButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const isOpen = button.getAttribute("aria-expanded") === "true";
-      const answerId = button.getAttribute("aria-controls");
-      const answer = answerId ? document.getElementById(answerId) : null;
-
-      button.setAttribute("aria-expanded", isOpen ? "false" : "true");
-      if (answer) answer.hidden = isOpen;
-    });
-  });
+  bindFaqToggles(faqList);
 })();

@@ -635,7 +635,7 @@
           <input
             class="nameInput"
             data-field="name"
-            placeholder="종목명"
+            placeholder="종목명 또는 코드"
             value="${escapeHtml(row.name || "")}"
             autocomplete="off"
             role="combobox"
@@ -649,13 +649,13 @@
       <td class="num col-amount" data-label="현재 평가금액">
         <label class="mobileStackField">
           <span class="mobileCellLabel">현재 평가금액</span>
-          <input class="moneyInput" data-field="amount" inputmode="numeric" placeholder="현재 평가금액" value="${escapeHtml(row.amount || "")}" />
+          <input class="moneyInput" data-field="amount" inputmode="numeric" placeholder="예: 1,234,000" value="${escapeHtml(row.amount || "")}" />
         </label>
       </td>
       <td class="num col-price" data-label="최근 종가">
         <label class="mobileStackField unitSuffixField" data-unit="원">
           <span class="mobileCellLabel">최근 종가</span>
-          <input class="moneyInput priceInput" data-field="price" inputmode="numeric" placeholder="최근 종가" value="${escapeHtml(row.price || "")}" />
+          <input class="moneyInput priceInput" data-field="price" inputmode="numeric" placeholder="예: 1,234" value="${escapeHtml(row.price || "")}" />
         </label>
       </td>
       <td class="num col-weight" data-label="현재 비중">
@@ -667,7 +667,7 @@
       <td class="num col-target" data-label="목표 비중">
         <label class="mobileStackField unitSuffixField" data-unit="%">
           <span class="mobileCellLabel">목표 비중</span>
-          <input class="percentInput" data-field="target" inputmode="decimal" placeholder="목표 비중" value="${escapeHtml(row.target || "")}" />
+          <input class="percentInput" data-field="target" inputmode="decimal" placeholder="예: 30%" value="${escapeHtml(row.target || "")}" />
         </label>
       </td>
       <td class="col-del">

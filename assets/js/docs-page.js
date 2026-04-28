@@ -1,3 +1,12 @@
 const docsFaqItems = parseFaqData();
 upsertFaqLdJson(docsFaqItems);
-renderFaqList(document.getElementById("faqList"), docsFaqItems);
+const docsFaqList = document.getElementById("faqList");
+const isToolFaq = document.body.classList.contains("monthlyToolPage");
+
+renderFaqList(
+  docsFaqList,
+  docsFaqItems,
+  isToolFaq ? { interactive: true, answerPrefix: "A. " } : {}
+);
+
+if (isToolFaq) bindFaqToggles(docsFaqList);

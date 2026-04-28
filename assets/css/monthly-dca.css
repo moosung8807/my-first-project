@@ -646,7 +646,7 @@ html[data-theme="light"] .toolTable th {
 }
 
 .moneyInput {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 #monthlyContribution {
@@ -715,8 +715,25 @@ html[data-theme="light"] .toolTable th {
   background: rgba(14, 20, 31, 0.92);
   background-clip: padding-box;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-family: var(--font-body);
   font-size: 14px;
-  line-height: normal;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+#dcaTable td.col-name input::placeholder,
+#dcaTable td.col-amount input::placeholder,
+#dcaTable td.col-price input::placeholder,
+#dcaTable td.col-target input::placeholder {
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  opacity: 1;
 }
 
 html[data-theme="light"] #dcaTable td.col-name input,
@@ -1139,14 +1156,6 @@ html[data-theme="light"] .monthlyInfoBlock {
   margin-bottom: 18px;
 }
 
-.monthlyFaqSection .faqQuestion {
-  cursor: default;
-}
-
-.monthlyFaqSection .faqQuestion::after {
-  content: none;
-}
-
 .monthlyCatchCard {
   display: flex;
   flex-direction: column;
@@ -1490,8 +1499,10 @@ html[data-theme="light"] .monthlyCatchLink {
   #dcaTable tbody td.col-price input::placeholder,
   #dcaTable tbody td.col-target input::placeholder {
     color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
     opacity: 1;
-    font-weight: 600;
   }
 
   #dcaTable tbody td.col-amount input,
@@ -1506,6 +1517,7 @@ html[data-theme="light"] .monthlyCatchLink {
     padding-right: 34px;
     padding-left: 14px;
     font-size: 13px;
+    font-weight: 500;
   }
 
   #dcaTable tbody td.col-price::after,

@@ -50,7 +50,7 @@ function renderFaqList(container, faqItems, options = {}) {
     article.className = "faqItem";
 
     const heading = document.createElement("h3");
-    heading.className = "faqQuestion";
+    heading.className = interactive ? "faqQuestionHeading" : "faqQuestion";
 
     const questionLabel = `Q${index + 1}. ${item.question}`;
     const answerLabel = `${answerPrefix}${item.answer}`;
@@ -87,4 +87,20 @@ function renderFaqList(container, faqItems, options = {}) {
   });
 
   container.replaceChildren(fragment);
+}
+
+function bindFaqToggles(container = document) {
+  if (!container) return;
+
+  const faqButtons = container.querySelectorAll(".faqQuestion[aria-controls]");
+  faqButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const isOpen = button.getAttribute("aria-expanded") === "true";
+      const answerId = button.getAttribute("aria-controls");
+      const answer = answerId ? document.getElementById(answerId) : null;
+
+      button.setAttribute("aria-expanded", isOpen ? "false" : "true");
+      if (answer) answer.hidden = isOpen;
+    });
+  });
 }

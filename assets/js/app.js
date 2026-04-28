@@ -501,6 +501,13 @@
     if(!/^\d{8}$/.test(raw)) return "";
     return `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)} 기준`;
   }
+  function setRowPriceStatus(tr, message, tone = "idle"){
+    const statusEl = tr ? tr.querySelector(".rowPriceStatus") : null;
+    if(!statusEl) return;
+    statusEl.textContent = message;
+    statusEl.dataset.tone = tone;
+    tr.classList.toggle("quote-status-visible", Boolean(message) && (tone === "error" || tone === "warn"));
+  }
   function setAutoQuoteEnabled(nextEnabled, { notify = false } = {}){
     autoQuoteEnabled = hasAutoQuoteControl ? Boolean(nextEnabled) : true;
     if(autoQuoteToggle){
@@ -522,26 +529,28 @@
   }
   function applyFetchedPriceToRow(tr, price){
     const priceEl = tr.querySelector(".price");
-    const statusEl = tr.querySelector(".rowPriceStatus");
     if(!priceEl) return;
     const rounded = Math.round(Number(price));
     if(!isFinite(rounded) || rounded <= 0) return;
     priceEl.value = withComma(String(rounded));
     priceEl.classList.remove("invalidField");
-    if(statusEl && !tr.classList.contains("manual-price-on")){
-      statusEl.textContent = "최근 종가를 반영했습니다.";
+    if(!tr.classList.contains("manual-price-on")){
+      setRowPriceStatus(tr, "최근 종가를 반영했습니다.", "success");
     }
     if(mode === "current") updateCurrentUI();
     markDirtyIfNeeded();
   }
-  function clearFetchedPriceFromRow(tr){
+  function clearFetchedPriceFromRow(tr, options = {}){
     const priceEl = tr.querySelector(".price");
-    const statusEl = tr.querySelector(".rowPriceStatus");
     if(!priceEl) return;
     priceEl.value = "";
     priceEl.classList.remove("invalidField");
-    if(statusEl && !tr.classList.contains("manual-price-on")){
-      statusEl.textContent = "최근 종가를 직접 입력하세요 · 보유금액 자동 계산";
+    if(!tr.classList.contains("manual-price-on")){
+      setRowPriceStatus(
+        tr,
+        options.message || "최근 종가를 직접 입력하세요 · 보유금액 자동 계산",
+        options.tone || "idle"
+      );
     }
     if(mode === "current") updateCurrentUI();
     markDirtyIfNeeded();
@@ -577,9 +586,18 @@
     if(tr && tr.classList.contains("manual-price-on")) return;
     const nameEl = tr.querySelector(".name");
     if(!nameEl) return;
-    const aliasMatch = symbolOverride ? null : findKrEtfByAlias(nameEl.value);
-    const symbol = symbolOverride || (aliasMatch ? aliasMatch.ticker : resolveSecurityQuery(nameEl.value));
+    const query = String(nameEl.value || "").trim();
+    if(!query && !symbolOverride){
+      clearFetchedPriceFromRow(tr);
+      return;
+    }
+    const aliasMatch = symbolOverride ? null : findKrEtfByAlias(query);
+    const symbol = symbolOverride || (aliasMatch ? aliasMatch.ticker : resolveSecurityQuery(query));
     if(!symbol){
+      clearFetchedPriceFromRow(tr, {
+        message: "지원되는 ETF/ETN/ELW 종목명이나 종목코드를 입력해 주세요.",
+        tone: "warn"
+      });
       return;
     }
 
@@ -593,6 +611,7 @@
       if(state.controller) state.controller.abort();
       state.controller = new AbortController();
       const currentSeq = ++state.seq;
+      setRowPriceStatus(tr, "최근 종가를 조회하고 있습니다...", "loading");
 
       try{
         const result = await fetchQuoteFromProxy(symbol, state.controller.signal);
@@ -605,14 +624,19 @@
         const statusEl = tr.querySelector(".rowPriceStatus");
         if(statusEl && !tr.classList.contains("manual-price-on")){
           const baseDateLabel = formatBaseDateLabel(result.baseDate);
-          statusEl.textContent = baseDateLabel
+          setRowPriceStatus(tr, baseDateLabel
             ? `${baseDateLabel} 최근 종가 반영 · 보유금액 자동 계산`
-            : "최근 종가 반영 · 보유금액 자동 계산";
+            : "최근 종가 반영 · 보유금액 자동 계산", "success");
         }
       }catch(err){
         if(err && (err.name === "AbortError")) return;
         tr.dataset.resolvedSymbol = "";
-        clearFetchedPriceFromRow(tr);
+        clearFetchedPriceFromRow(tr, {
+          message: err instanceof Error
+            ? `${err.message} 직접 입력으로 계속할 수 있습니다.`
+            : "최근 종가 자동조회에 실패했습니다. 직접 입력해 주세요.",
+          tone: "error"
+        });
         if(aliasMatch){
           console.warn("Unsupported securities product alias:", aliasMatch.ticker, aliasMatch.canonical);
         }
