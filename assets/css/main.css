@@ -1326,35 +1326,21 @@
       font-size:14px;
     }
     .calcGlyph{
-      position:relative;
       width:18px;
       height:18px;
-      border:1.5px solid currentColor;
-      border-radius:5px;
-      background:rgba(255,255,255,.18);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.16);
+      color:currentColor;
       opacity:1;
       transform:none;
     }
-    .calcGlyph::before,
-    .calcGlyph::after{
-      content:"";
-      position:absolute;
-      left:3px;
-      right:3px;
-      height:2px;
-      border-radius:999px;
-      background:currentColor;
-    }
-    .calcGlyph::before{
-      top:5px;
-    }
-    .calcGlyph::after{
-      top:10px;
-    }
-    html[data-theme="light"] .calcGlyph{
-      background:rgba(22,58,120,.12);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.18);
+    .calcGlyph svg{
+      display:block;
+      width:18px;
+      height:18px;
+      fill:none;
+      stroke:currentColor;
+      stroke-width:1.7;
+      stroke-linecap:round;
+      stroke-linejoin:round;
     }
     .saveStatusText{
       display:inline-flex;
@@ -4696,4 +4682,44 @@ td.col-qty::after{
         padding:9px 11px;
         font-size:11.5px;
       }
+    }
+
+    #heroDemoBtn,
+    #dcaDemoBtn{
+      border-color:#d2a15b;
+      color:#f8e8d0;
+      background:linear-gradient(180deg, rgba(169,114,44,.45), rgba(120,79,28,.52));
+      box-shadow:0 6px 14px rgba(171,110,35,.24);
+    }
+
+    html[data-theme="light"] #heroDemoBtn,
+    html[data-theme="light"] #dcaDemoBtn{
+      border-color:#c89c5c;
+      color:#4b3822;
+      background:
+        repeating-linear-gradient(108deg, rgba(255,255,255,.08) 0 2px, rgba(255,255,255,0) 2px 8px),
+        linear-gradient(102deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.12) 26%, rgba(255,255,255,.42) 35%, rgba(255,255,255,.72) 39%, rgba(255,255,255,.18) 46%, rgba(255,255,255,0) 54%),
+        linear-gradient(180deg, #fff8ec, #f3dfbd);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.9), 0 6px 14px rgba(154,109,43,.16);
+    }
+
+    #heroDemoBtn:hover,
+    #dcaDemoBtn:hover{
+      border-color:#c98a34;
+      filter:brightness(1.03);
+      box-shadow:0 8px 16px rgba(177,117,35,.28);
+    }
+
+    html[data-theme="light"] #heroDemoBtn:hover,
+    html[data-theme="light"] #dcaDemoBtn:hover{
+      border-color:#bb9052;
+      filter:brightness(1.01);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.95), 0 8px 18px rgba(154,109,43,.2);
+    }
+
+    #heroDemoBtn:focus-visible,
+    #dcaDemoBtn:focus-visible{
+      outline:2px solid #d69a46;
+      outline-offset:2px;
+      box-shadow:0 0 0 3px rgba(214,154,70,.22), 0 8px 16px rgba(177,117,35,.24);
     }

@@ -52,8 +52,8 @@
       }
     ]
   </script>
-  <link rel="stylesheet" href="../assets/css/main.css?v=20260423h" />
-  <link rel="stylesheet" href="../assets/css/monthly-dca.css?v=20260428a" />
+  <link rel="stylesheet" href="../assets/css/main.css?v=20260430b" />
+  <link rel="stylesheet" href="../assets/css/monthly-dca.css?v=20260430b" />
 </head>
 <body class="monthlyToolPage">
   <button
@@ -191,26 +191,28 @@
       </template>
 
       <div class="calculatorArea monthlyCalculatorArea mode-current" id="dcaCalculatorArea">
+        <section class="card monthlyToolCard monthlyInputSection" id="dcaWorkspace" aria-labelledby="dcaToolTitle">
+          <div class="sectionHeading monthlyToolHeading">
+            <div>
+              <h2 id="dcaToolTitle">1. 이번 달 입력 설정</h2>
+              <p>적립금, 현재 평가금액, 목표 비중을 넣으면 적립금으로 먼저 맞추고 부족할 때만 초과 비중 종목을 매도해 추가 조정합니다.</p>
+            </div>
+            <div class="sectionHeadingActions controlActions monthlyPrimaryActions">
+              <span class="statusBadge" id="dcaStaleBadge" hidden>입력 변경됨 · 다시 계산 필요</span>
+              <button class="secondary" id="dcaAddRowBtn" type="button"><span class="buttonGlyph" aria-hidden="true">＋</span>종목 추가</button>
+              <button class="secondary" id="dcaSaveBtn" type="button"><span class="buttonGlyph" aria-hidden="true">💾</span>현재 작업 저장</button>
+              <button class="secondary" id="dcaLoadBtn" type="button" disabled><span class="buttonGlyph" aria-hidden="true">⤴</span>최근 저장 불러오기</button>
+              <button class="secondary" id="dcaDemoBtn" type="button"><span class="buttonGlyph" aria-hidden="true">▷</span>예시 불러오기</button>
+              <button class="primary" id="dcaCalcBtn" type="button"><span class="buttonGlyph calcGlyph" aria-hidden="true"><svg viewBox="0 0 18 18" focusable="false"><rect x="3" y="2.5" width="12" height="13" rx="3"></rect><path d="M6 6h6M6 9h1.5M10.5 9H12M6 12h1.5M10.5 12H12"></path></svg></span>계산</button>
+              <button class="secondary" id="dcaResetBtn" type="button"><span class="buttonGlyph" aria-hidden="true">↺</span>초기화</button>
+              <span class="saveStatusText" id="dcaSaveStatusText" aria-live="polite">최근 저장 없음</span>
+            </div>
+          </div>
+        </section>
+
         <div class="contentLayout monthlyCalculatorLayout">
           <div class="monthlyCalculatorColumn">
-            <section class="card monthlyToolCard" id="dcaWorkspace" aria-labelledby="dcaToolTitle">
-              <div class="sectionHeading monthlyToolHeading">
-                <div>
-                  <h2 id="dcaToolTitle">1. 이번 달 입력 설정</h2>
-                  <p>적립금, 현재 평가금액, 목표 비중을 넣으면 적립금으로 먼저 맞추고 부족할 때만 초과 비중 종목을 매도해 추가 조정합니다.</p>
-                </div>
-                <div class="sectionHeadingActions controlActions monthlyPrimaryActions">
-                  <span class="statusBadge" id="dcaStaleBadge" hidden>입력 변경됨 · 다시 계산 필요</span>
-                  <button class="secondary" id="dcaAddRowBtn" type="button"><span class="buttonGlyph" aria-hidden="true">＋</span>종목 추가</button>
-                  <button class="secondary" id="dcaSaveBtn" type="button"><span class="buttonGlyph" aria-hidden="true">💾</span>현재 작업 저장</button>
-                  <button class="secondary" id="dcaLoadBtn" type="button" disabled><span class="buttonGlyph" aria-hidden="true">⤴</span>최근 저장 불러오기</button>
-                  <button class="secondary" id="dcaDemoBtn" type="button"><span class="buttonGlyph" aria-hidden="true">▷</span>예시 불러오기</button>
-                  <button class="primary" id="dcaCalcBtn" type="button"><span class="buttonGlyph calcGlyph" aria-hidden="true"></span>계산</button>
-                  <button class="secondary" id="dcaResetBtn" type="button"><span class="buttonGlyph" aria-hidden="true">↺</span>초기화</button>
-                  <span class="saveStatusText" id="dcaSaveStatusText" aria-live="polite">최근 저장 없음</span>
-                </div>
-              </div>
-
+            <section class="card monthlyToolCard monthlyInputTableCard" aria-labelledby="dcaToolTitle">
               <div class="monthlyToolBody" id="dcaToolBody">
                 <div class="controlGrid" aria-label="월 적립식 매수 입력">
                   <label class="fieldCard fieldCardCentered" for="monthlyContribution">
@@ -218,23 +220,6 @@
                     <input id="monthlyContribution" class="moneyInput" inputmode="numeric" placeholder="예: 1,000,000" />
                     <span class="fieldHint">원 단위 숫자만 입력하세요.</span>
                   </label>
-
-                  <div class="fieldCard compact">
-                    <span class="fieldLabel">현재 총 평가금액</span>
-                    <strong class="fieldValue" id="currentTotalLabel">₩ 0</strong>
-                    <span class="fieldHint">입력한 종목 평가금액 합계</span>
-                  </div>
-
-                  <div class="fieldCard compact">
-                    <span class="fieldLabel">목표 비중 합계</span>
-                    <strong class="fieldValue" id="targetTotalLabel">0.0%</strong>
-                    <span class="fieldHint" id="targetTotalHint">합계가 100%여야 합니다.</span>
-                    <div class="targetProgressInline">
-                      <div class="progressWrap" id="dcaTargetProgressWrap" aria-label="목표 비중 합계 진행">
-                        <div class="progressBar" id="dcaTargetProgressBar"></div>
-                      </div>
-                    </div>
-                  </div>
 
                   <div class="fieldCard compact">
                     <span class="fieldLabel">계산 방식</span>
@@ -418,7 +403,7 @@
   <script src="../assets/js/section-travel.js?v=20260406a"></script>
   <script src="../assets/js/guide-rail.js?v=20260418a"></script>
   <script src="../assets/js/monthly-dca-shell.js?v=20260405a"></script>
-  <script src="../assets/js/monthly-dca-page.js?v=20260428a"></script>
+  <script src="../assets/js/monthly-dca-page.js?v=20260430a"></script>
   <script src="../assets/js/faq-renderer.js?v=20260428a"></script>
   <script src="../assets/js/docs-page.js?v=20260428a"></script>
 </body>

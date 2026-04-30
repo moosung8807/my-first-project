@@ -10,6 +10,16 @@
     }
   }
 
+  function setButtonLabel(button, label) {
+    if (!button) return;
+    const glyph = button.querySelector(".buttonGlyph");
+    if (!glyph) {
+      button.textContent = label;
+      return;
+    }
+    button.replaceChildren(glyph, document.createTextNode(label));
+  }
+
   function setMode(refs, nextMode, state, callbacks) {
     state.mode = nextMode;
     callbacks.hideAllNameSuggestions();
@@ -22,8 +32,8 @@
       inputEls.forEach((el) => el.classList.remove("hide"));
       currentEls.forEach((el) => el.classList.add("hide"));
       resultEls.forEach((el) => el.classList.add("hide"));
-      refs.calcBtn.textContent = "계산";
-      if (refs.mobileCalcBtn) refs.mobileCalcBtn.textContent = "계산하기";
+      setButtonLabel(refs.calcBtn, "계산");
+      setButtonLabel(refs.mobileCalcBtn, "계산하기");
       refs.tableCard.classList.add("mode-current");
       refs.tableCard.classList.remove("mode-result");
       refs.modeLabel.textContent = "입력";
@@ -48,8 +58,8 @@
       inputEls.forEach((el) => el.classList.add("hide"));
       currentEls.forEach((el) => el.classList.add("hide"));
       resultEls.forEach((el) => el.classList.remove("hide"));
-      refs.calcBtn.textContent = "현재 보기";
-      if (refs.mobileCalcBtn) refs.mobileCalcBtn.textContent = "입력 보기";
+      setButtonLabel(refs.calcBtn, "현재 보기");
+      setButtonLabel(refs.mobileCalcBtn, "입력 보기");
       refs.tableCard.classList.add("mode-result");
       refs.tableCard.classList.remove("mode-current");
       refs.modeLabel.textContent = "결과";

@@ -878,14 +878,22 @@
       row.previewEl.dataset.empty = currentTotal > 0 ? "false" : "true";
     });
 
-    currentTotalLabel.textContent = fmtKRW(currentTotal);
-    targetTotalLabel.textContent = `${targetTotal.toFixed(1)}%`;
+    if (currentTotalLabel) {
+      currentTotalLabel.textContent = fmtKRW(currentTotal);
+    }
+    if (targetTotalLabel) {
+      targetTotalLabel.textContent = `${targetTotal.toFixed(1)}%`;
+    }
 
     const isValidTargetTotal = Math.abs(targetTotal - 100) <= TARGET_SUM_TOLERANCE;
-    targetTotalLabel.classList.toggle("isInvalid", !isValidTargetTotal);
-    targetTotalHint.textContent = isValidTargetTotal
-      ? "합계가 100%입니다."
-      : "목표 비중 합계를 100%로 맞춰야 합니다.";
+    if (targetTotalLabel) {
+      targetTotalLabel.classList.toggle("isInvalid", !isValidTargetTotal);
+    }
+    if (targetTotalHint) {
+      targetTotalHint.textContent = isValidTargetTotal
+        ? "합계가 100%입니다."
+        : "목표 비중 합계를 100%로 맞춰야 합니다.";
+    }
     updateWorkspaceSummary(activeRows, {
       currentTotal,
       targetTotal
