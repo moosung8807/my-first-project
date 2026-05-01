@@ -938,6 +938,11 @@
       gap:8px;
       flex-wrap:wrap;
     }
+    #inputSection .sectionHeadingActions{
+      flex:1 0 100%;
+      justify-content:flex-start;
+      margin-left:0;
+    }
     .mobileCurrentMount,
     .tableCardErrorMount,
     .tableCardInputMount{
@@ -2072,6 +2077,55 @@ td.col-qty::after{
       gap:14px;
       flex-wrap:wrap;
     }
+    .backToTopButton{
+      position:fixed;
+      right:24px;
+      bottom:calc(88px + env(safe-area-inset-bottom, 0px));
+      z-index:999;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      min-width:72px;
+      min-height:42px;
+      padding:0 14px;
+      border:1px solid rgba(90,140,255,.34);
+      border-radius:999px;
+      color:var(--text);
+      background:rgba(13,21,36,.82);
+      box-shadow:0 12px 26px rgba(0,0,0,.24);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.02em;
+      opacity:0;
+      pointer-events:none;
+      transform:translateY(8px);
+      transition:opacity .18s ease, transform .18s ease, border-color .18s ease, background-color .18s ease;
+    }
+    .backToTopButton.isVisible{
+      opacity:1;
+      pointer-events:auto;
+      transform:translateY(0);
+    }
+    .backToTopButton:hover{
+      border-color:rgba(90,140,255,.55);
+      background:rgba(20,31,52,.94);
+      transform:translateY(-1px);
+    }
+    .backToTopButton:focus-visible{
+      outline:2px solid var(--signal-accent);
+      outline-offset:3px;
+    }
+    html[data-theme="light"] .backToTopButton{
+      color:#17212a;
+      border-color:rgba(79,127,240,.28);
+      background:rgba(248,251,255,.92);
+      box-shadow:0 12px 26px rgba(32,43,59,.16);
+    }
+    html[data-theme="light"] .backToTopButton:hover{
+      border-color:rgba(79,127,240,.44);
+      background:rgba(255,255,255,.98);
+    }
 
     @media (min-width: 1024px){
       body{
@@ -2186,6 +2240,9 @@ td.col-qty::after{
         line-height:1.1;
         position:relative;
         left:2px;
+      }
+      .backToTopButton{
+        display:none;
       }
       body{padding:20px 14px calc(132px + env(safe-area-inset-bottom, 0px))}
       body,

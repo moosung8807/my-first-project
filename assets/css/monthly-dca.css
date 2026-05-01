@@ -157,8 +157,9 @@
 
 .monthlyPrimaryActions {
   align-items: center;
-  flex: 0 1 auto;
-  justify-content: flex-end;
+  flex: 1 0 100%;
+  justify-content: flex-start;
+  margin-left: 0;
   max-width: 100%;
   min-width: 0;
 }
