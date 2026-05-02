@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>한눈에 보는 금융기준 (한눈금) | Rebalancing Helper</title>
+  <meta name="description" content="중위소득, 순자산 상위 기준, 부자의 기준, 은퇴 필요자금 등 자주 궁금한 금융 기준을 한 장씩 넘겨보는 초간단 금융기준 뷰어입니다." />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://rebalancing.kr/pages/financial-standards.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="한눈에 보는 금융기준 (한눈금)" />
+  <meta property="og:description" content="궁금한 금융 기준을 제목, 큰 숫자, 짧은 설명으로 바로 확인하세요." />
+  <meta property="og:url" content="https://rebalancing.kr/pages/financial-standards.html" />
+  <meta property="og:site_name" content="Rebalancing Helper" />
+  <meta property="og:locale" content="ko_KR" />
+  <meta property="og:image" content="https://rebalancing.kr/assets/og/sample.png" />
+  <meta property="og:image:alt" content="한눈에 보는 금융기준 썸네일" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="한눈에 보는 금융기준 (한눈금)" />
+  <meta name="twitter:description" content="중위소득, 순자산, 부자 기준, 은퇴 생활비를 한 장씩 넘겨보는 금융기준 뷰어입니다." />
+  <meta name="twitter:image" content="https://rebalancing.kr/assets/og/sample.png" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+  <link rel="shortcut icon" href="../assets/favicon.svg" />
+  <link rel="stylesheet" href="../assets/css/financial-standards.css?v=20260502q" />
+</head>
+<body>
+  <main class="standardShell">
+    <div class="standardTopRow">
+      <header class="standardHeader">
+        <h1>한눈금</h1>
+        <p class="standardSubtitle">한눈에 보는 금융기준</p>
+      </header>
+
+      <div class="standardCarousel" aria-label="금융기준 선택">
+        <button class="carouselArrow" id="prevStandard" type="button" aria-label="이전 금융기준 보기">
+          <span aria-hidden="true">‹</span>
+        </button>
+        <div class="carouselTrack" id="standardTrack" aria-live="polite"></div>
+        <button class="carouselArrow" id="nextStandard" type="button" aria-label="다음 금융기준 보기">
+          <span aria-hidden="true">›</span>
+        </button>
+      </div>
+    </div>
+
+    <section class="standardViewer" aria-label="금융기준 슬라이드 뷰어">
+      <article class="standardPanel" id="standardPanel">
+        <div class="standardContent">
+          <p class="standardLabel" id="standardLabel"></p>
+          <h2 class="standardValue" id="standardValue"></h2>
+          <p class="standardSummary" id="standardSummary"></p>
+
+          <dl class="standardFacts" id="standardFacts"></dl>
+        </div>
+
+        <div class="standardVisual" aria-hidden="true">
+          <div class="visualRing">
+            <span class="visualMetric" id="visualMetric"></span>
+          </div>
+          <div class="visualBars" id="visualBars"></div>
+        </div>
+      </article>
+
+      <div class="optionStrip" id="optionStrip" aria-label="세부 조건 선택"></div>
+    </section>
+
+  </main>
+
+  <script src="../assets/js/financial-standards-page.js?v=20260502q"></script>
+</body>
+</html>

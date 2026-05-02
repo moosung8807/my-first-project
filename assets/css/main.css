@@ -3635,6 +3635,41 @@ td.col-qty::after{
       margin-top:128px;
     }
 
+    .calculatorPromoSlot{
+      display:none;
+    }
+
+    .financialStandardsPromo{
+      display:block;
+      width:160px;
+      height:600px;
+      border-radius:22px;
+      text-decoration:none;
+      background:var(--card2);
+      box-shadow:0 22px 48px var(--card-shadow);
+      transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+
+    .financialStandardsPromo:hover{
+      transform:translateY(-3px);
+      filter:saturate(1.04);
+      box-shadow:0 28px 58px var(--card-shadow);
+    }
+
+    .financialStandardsPromo:focus-visible{
+      outline:3px solid var(--signal-accent);
+      outline-offset:4px;
+    }
+
+    .financialStandardsPromo img{
+      display:block;
+      width:100%;
+      height:100%;
+      border-radius:22px;
+      object-fit:cover;
+      object-position:center;
+    }
+
     #inputSection{
       scroll-margin-top:72px;
     }
@@ -3642,6 +3677,30 @@ td.col-qty::after{
     @media (min-width:1025px){
       .calculatorArea{
         margin-top:104px;
+      }
+
+      @media (min-width:1280px){
+        .calculatorArea{
+          display:grid;
+          grid-template-columns:160px minmax(0, 1fr);
+          column-gap:28px;
+          align-items:start;
+        }
+
+        .calculatorPromoSlot{
+          display:block;
+          grid-column:1;
+          grid-row:1 / span 2;
+          position:sticky;
+          top:28px;
+          width:160px;
+          height:600px;
+        }
+
+        #inputSection,
+        .contentLayout{
+          grid-column:2;
+        }
       }
 
       #inputSection{
