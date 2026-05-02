@@ -354,11 +354,61 @@
   const options = document.getElementById("optionStrip");
   const visualMetric = document.getElementById("visualMetric");
   const visualBars = document.getElementById("visualBars");
+  const shareButton = document.getElementById("shareStandard");
+  const shareStatus = document.getElementById("shareStatus");
+  const intro = document.getElementById("standardIntro");
+  const introStartButton = document.getElementById("introStartButton");
+  const shell = document.querySelector(".standardShell");
+  const initialParams = new URLSearchParams(window.location.search);
 
   let activeIndex = 0;
   const optionIndexes = standards.map((item) => item.defaultOption || 0);
   let touchStartX = 0;
   let touchStartY = 0;
+  let shareStatusTimer = 0;
+
+  function readInitialState() {
+    const params = initialParams;
+    const standardIndex = params.has("standard") ? Number(params.get("standard")) : NaN;
+    const optionIndex = params.has("option") ? Number(params.get("option")) : NaN;
+
+    if (Number.isInteger(standardIndex) && standardIndex >= 0 && standardIndex < standards.length) {
+      activeIndex = standardIndex;
+    }
+
+    const item = standards[activeIndex];
+    if (
+      item.options
+      && Number.isInteger(optionIndex)
+      && optionIndex >= 0
+      && optionIndex < item.options.length
+    ) {
+      optionIndexes[activeIndex] = optionIndex;
+    }
+  }
+
+  function shouldShowIntro() {
+    return Boolean(intro);
+  }
+
+  function showMainAfterIntro({ immediate = false } = {}) {
+    if (immediate) {
+      document.body.classList.remove("standardIntroActive", "standardIntroClosing");
+      document.body.classList.add("standardIntroReady");
+      intro?.setAttribute("hidden", "");
+      shell?.removeAttribute("aria-hidden");
+      return;
+    }
+
+    document.body.classList.add("standardIntroClosing");
+    window.setTimeout(() => {
+      document.body.classList.remove("standardIntroActive", "standardIntroClosing");
+      document.body.classList.add("standardIntroReady");
+      intro?.setAttribute("hidden", "");
+      shell?.removeAttribute("aria-hidden");
+      track?.focus?.();
+    }, 420);
+  }
 
   function wrapIndex(index) {
     return (index + standards.length) % standards.length;
@@ -377,6 +427,11 @@
   function getCurrentValue(item) {
     if (!item.options) return item.value;
     return item.options[optionIndexes[activeIndex]]?.value || item.value;
+  }
+
+  function getCurrentOption(item) {
+    if (!item.options) return null;
+    return item.options[optionIndexes[activeIndex]] || null;
   }
 
   function getCurrentValueParts(item) {
@@ -441,6 +496,95 @@
     )).join("");
   }
 
+  function getShareUrl() {
+    const url = new URL(window.location.href);
+    url.searchParams.set("standard", String(activeIndex));
+
+    if (standards[activeIndex].options) {
+      url.searchParams.set("option", String(optionIndexes[activeIndex]));
+    } else {
+      url.searchParams.delete("option");
+    }
+
+    url.hash = "";
+    return url.toString();
+  }
+
+  function syncShareUrl() {
+    window.history.replaceState(null, "", getShareUrl());
+  }
+
+  function getShareText(includeUrl = true) {
+    const item = standards[activeIndex];
+    const option = getCurrentOption(item);
+    const optionLabel = option ? ` (${option.label})` : "";
+    const factLines = Object.entries(item.facts)
+      .slice(0, 2)
+      .map(([key, fact]) => `${key}: ${fact}`)
+      .join("\n");
+
+    return [
+      `한눈금 - ${item.title}${optionLabel}`,
+      getCurrentValue(item),
+      item.summary,
+      factLines,
+      includeUrl ? getShareUrl() : ""
+    ].filter(Boolean).join("\n");
+  }
+
+  async function copyToClipboard(text) {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    textarea.remove();
+  }
+
+  function showShareStatus(message) {
+    if (!shareStatus) return;
+    window.clearTimeout(shareStatusTimer);
+    shareStatus.textContent = message;
+    shareStatusTimer = window.setTimeout(() => {
+      shareStatus.textContent = "";
+    }, 1800);
+  }
+
+  async function shareCurrentStandard() {
+    const item = standards[activeIndex];
+    const shareData = {
+      title: `한눈금 - ${item.title}`,
+      text: getShareText(false),
+      url: getShareUrl()
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+
+      await copyToClipboard(getShareText());
+      showShareStatus("복사됨");
+    } catch (error) {
+      if (error?.name === "AbortError") return;
+      try {
+        await copyToClipboard(getShareUrl());
+        showShareStatus("링크 복사됨");
+      } catch {
+        showShareStatus("복사 실패");
+      }
+    }
+  }
+
   function renderPanel() {
     const item = standards[activeIndex];
     label.textContent = item.title;
@@ -456,6 +600,8 @@
     window.requestAnimationFrame(() => {
       panel.classList.add("isChanging");
     });
+
+    syncShareUrl();
   }
 
   function render() {
@@ -486,6 +632,9 @@
     renderPanel();
   });
 
+  shareButton?.addEventListener("click", shareCurrentStandard);
+  introStartButton?.addEventListener("click", () => showMainAfterIntro());
+
   function bindSwipe(element) {
     element.addEventListener("touchstart", (event) => {
       const touch = event.changedTouches[0];
@@ -510,5 +659,13 @@
     if (event.key === "ArrowRight") move(1);
   });
 
+  readInitialState();
   render();
+
+  if (shouldShowIntro()) {
+    shell?.setAttribute("aria-hidden", "true");
+    introStartButton?.focus({ preventScroll: true });
+  } else {
+    showMainAfterIntro({ immediate: true });
+  }
 })();

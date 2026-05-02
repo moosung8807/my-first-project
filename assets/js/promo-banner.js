@@ -2,9 +2,10 @@
   const promoImage = document.getElementById("financialStandardsPromoImage");
   if (!promoImage) return;
 
+  const bannerBasePath = promoImage.dataset.bannerBasePath || "data/";
   const bannerImages = [
-    "data/ChatGPT Image 2026년 5월 2일 오후 04_40_23 (2).png",
-    "data/ChatGPT Image 2026년 5월 2일 오후 04_40_23 (3).png"
+    "ChatGPT Image 2026년 5월 2일 오후 04_40_23 (2).png",
+    "ChatGPT Image 2026년 5월 2일 오후 04_40_23 (3).png"
   ];
 
   let currentBannerIndex = -1;
@@ -20,7 +21,7 @@
     }
     
     currentBannerIndex = newIndex;
-    promoImage.src = bannerImages[currentBannerIndex];
+    promoImage.src = `${bannerBasePath}${bannerImages[currentBannerIndex]}`;
   };
 
   // 페이지 로드 시 첫 배너 설정

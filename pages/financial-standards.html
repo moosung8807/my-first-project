@@ -21,9 +21,27 @@
   <meta name="twitter:image" content="https://rebalancing.kr/assets/og/sample.png" />
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
   <link rel="shortcut icon" href="../assets/favicon.svg" />
-  <link rel="stylesheet" href="../assets/css/financial-standards.css?v=20260502q" />
+  <link rel="stylesheet" href="../assets/css/financial-standards.css?v=20260502u" />
 </head>
-<body>
+<body class="standardIntroActive">
+  <section class="standardIntro" id="standardIntro" aria-labelledby="standardIntroTitle">
+    <div class="introNumberField" aria-hidden="true">
+      <span>50%</span>
+      <span>10억</span>
+      <span>298만원</span>
+      <span>1,979조</span>
+    </div>
+    <div class="introContent">
+      <p class="introKicker">한눈에 보는 금융기준</p>
+      <h1 id="standardIntroTitle">한눈금</h1>
+      <p class="introCopy">
+        <span>중위소득, 순자산, 은퇴자금.</span>
+        <span>자주 묻는 기준을 한 장씩 넘겨보세요.</span>
+      </p>
+      <button class="introStartButton" id="introStartButton" type="button">기준 보러가기</button>
+    </div>
+  </section>
+
   <main class="standardShell">
     <div class="standardTopRow">
       <header class="standardHeader">
@@ -44,6 +62,10 @@
 
     <section class="standardViewer" aria-label="금융기준 슬라이드 뷰어">
       <article class="standardPanel" id="standardPanel">
+        <div class="standardPanelActions">
+          <button class="standardShareButton" id="shareStandard" type="button">공유</button>
+          <span class="shareStatus" id="shareStatus" aria-live="polite"></span>
+        </div>
         <div class="standardContent">
           <p class="standardLabel" id="standardLabel"></p>
           <h2 class="standardValue" id="standardValue"></h2>
@@ -65,6 +87,6 @@
 
   </main>
 
-  <script src="../assets/js/financial-standards-page.js?v=20260502q"></script>
+  <script src="../assets/js/financial-standards-page.js?v=20260502t"></script>
 </body>
 </html>

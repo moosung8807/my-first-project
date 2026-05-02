@@ -3641,11 +3641,11 @@ td.col-qty::after{
 
     .financialStandardsPromo{
       display:block;
-      width:160px;
-      height:600px;
+      width:240px;
+      height:900px;
       border-radius:22px;
       text-decoration:none;
-      background:var(--card2);
+      background:transparent;
       box-shadow:0 22px 48px var(--card-shadow);
       transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
     }
@@ -3666,7 +3666,7 @@ td.col-qty::after{
       width:100%;
       height:100%;
       border-radius:22px;
-      object-fit:cover;
+      object-fit:contain;
       object-position:center;
     }
 
@@ -3677,29 +3677,25 @@ td.col-qty::after{
     @media (min-width:1025px){
       .calculatorArea{
         margin-top:104px;
+        position:relative;
       }
 
       @media (min-width:1280px){
-        .calculatorArea{
-          display:grid;
-          grid-template-columns:160px minmax(0, 1fr);
-          column-gap:28px;
-          align-items:start;
-        }
-
         .calculatorPromoSlot{
           display:block;
-          grid-column:1;
-          grid-row:1 / span 2;
-          position:sticky;
-          top:28px;
-          width:160px;
-          height:600px;
+          position:absolute;
+          top:0;
+          right:calc(100% + 28px);
+          bottom:0;
+          width:240px;
+          min-height:900px;
+          pointer-events:none;
         }
 
-        #inputSection,
-        .contentLayout{
-          grid-column:2;
+        .calculatorPromoSlot .financialStandardsPromo{
+          position:sticky;
+          top:28px;
+          pointer-events:auto;
         }
       }
 
